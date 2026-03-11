@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "uds-orchestrator",
-      "source": ".",
+      "source": "./",
       "description": "UDS project setup, component/token best practices, Figma-to-code orchestration, and browser verification.",
       "version": "1.0.0"
     }
