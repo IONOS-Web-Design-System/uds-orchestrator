@@ -1,0 +1,15 @@
+{
+  "name": "ionos-uds",
+  "description": "IONOS Web Design System plugins for Claude Code",
+  "owner": {
+    "name": "IONOS Web Design System"
+  },
+  "plugins": [
+    {
+      "name": "uds-orchestrator",
+      "source": ".",
+      "description": "UDS project setup, component/token best practices, Figma-to-code orchestration, and browser verification.",
+      "version": "1.0.0"
+    }
+  ]
+}
