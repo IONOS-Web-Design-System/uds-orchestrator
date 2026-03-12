@@ -87,11 +87,17 @@ import ThemeProvider from '@ionos-web-design-system/react/theme-provider';
 export default function App() {
   return (
     <ThemeProvider>
-      {/* All UDS components go inside ThemeProvider */}
+      <div className="text-base">
+        {/* All UDS components go inside ThemeProvider */}
+      </div>
     </ThemeProvider>
   );
 }
 ```
+
+> **Important:** The `text-base` class on the root wrapper sets the UDS base
+> text color (`--text-base`). Without it, all text inherits the browser default
+> `#000` black because the `Text` component does not set a color by default.
 
 ### Minimal Working Example
 
@@ -108,9 +114,11 @@ import Button from '@ionos-web-design-system/react/button';
 function App() {
   return (
     <ThemeProvider>
-      <Button variant="primary" size="medium">
-        Get Started
-      </Button>
+      <div className="text-base">
+        <Button variant="primary" size="medium">
+          Get Started
+        </Button>
+      </div>
     </ThemeProvider>
   );
 }
@@ -194,6 +202,7 @@ Before building, confirm Tailwind v4 is wired up correctly:
 - [ ] `@import '@ionos-web-design-system/react/style.css'` is present
 - [ ] `data-brand`, `data-platform`, `data-color-scheme` set on `<html>`
 - [ ] `<ThemeProvider>` wraps all UDS component usage in React
+- [ ] Root element has `text-base` class for base text color fallback
 - [ ] Brand font is loaded (via Google Fonts link or local import)
 
 ## 6. Audit Workflow

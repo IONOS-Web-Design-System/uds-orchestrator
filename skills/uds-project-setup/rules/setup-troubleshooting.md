@@ -152,6 +152,36 @@ proper styling.
 For sections that should always be dark regardless of page scheme, use
 `ThemeInverter` with `forceColorScheme="dark"`.
 
+## Text Renders as Black (#000)
+
+**Symptom:** All text appears as pure black (`#000`) instead of the expected UDS
+themed text color, even though UDS components and tokens are loaded.
+
+**Cause:** The UDS `Text` component does not set a text color by default — it
+inherits from its parent. If no ancestor defines a base text color, the browser
+default (`#000`) takes effect.
+
+**Fix:** Add a `text-base` class on the root element (e.g., `<body>` or the
+app's outermost `<div>`) so all text inherits the UDS `--text-base` token:
+
+```tsx
+// In App.tsx or layout root
+<ThemeProvider>
+  <div className="text-base">
+    {/* All children now inherit the correct UDS text color */}
+  </div>
+</ThemeProvider>
+```
+
+Or in `index.html`:
+
+```html
+<body class="text-base">
+```
+
+> **Reminder:** In UDS, `text-base` is a **text color** token (maps to
+> `var(--text-base)`), NOT a font-size utility. This is the correct usage here.
+
 ## Spacing Values Don't Match Figma
 
 **Symptom:** Using `p-4` expecting 16px but getting 24px.
