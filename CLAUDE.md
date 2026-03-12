@@ -59,12 +59,22 @@ claude --plugin-dir .
 
 ## Release Workflow
 
-1. Bump `version` in `.claude-plugin/plugin.json` AND `.claude-plugin/marketplace.json`
-2. Commit and push to `main`
-3. Tag the release: `git tag v1.0.0 && git push --tags`
-4. Users update via: `/plugin update uds-orchestrator@ionos-uds`
+Releases are automated via [release-please](https://github.com/googleapis/release-please).
 
-**Version bumping rules (semver):**
-- PATCH (1.0.x): Rule file updates, typo fixes, minor SKILL.md edits
-- MINOR (1.x.0): New commands, new rule files, new skills
-- MAJOR (x.0.0): Breaking changes to command arguments or skill structure
+**How it works:**
+
+1. Use [Conventional Commits](https://www.conventionalcommits.org/) in all commit messages:
+   - `feat: ...` → MINOR bump (new commands, rules, skills)
+   - `fix: ...` → PATCH bump (rule fixes, typos, minor edits)
+   - `feat!: ...` or `BREAKING CHANGE:` footer → MAJOR bump (breaking changes)
+   - `chore: ...`, `docs: ...`, `refactor: ...` → no version bump
+2. Merge to `main` — release-please auto-creates/updates a **Release PR**
+3. Review the Release PR (version bump, CHANGELOG, version file changes)
+4. Merge the Release PR to trigger the release:
+   - Git tag (`vX.Y.Z`) created automatically
+   - GitHub Release with changelog published automatically
+   - `plugin.json` and `marketplace.json` versions bumped automatically
+5. Users update via: `/plugin update uds-orchestrator@ionos-uds`
+
+**Important:** Do NOT manually edit version numbers in `.claude-plugin/plugin.json`
+or `.claude-plugin/marketplace.json`. Let release-please handle all version bumps.
