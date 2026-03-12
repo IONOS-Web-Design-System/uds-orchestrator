@@ -25,6 +25,16 @@ auditing existing projects for configuration issues.
 
 ## 2. Project Creation Quickstart
 
+### Prerequisites
+
+The `@ionos-web-design-system/*` packages are published on an internal JFrog registry,
+not the public npm registry. Before installing:
+
+- **npm must be configured** with an auth token for the `@ionos-web-design-system` scope
+- If `npm install` fails with **401**, **403**, or **E404** errors, the registry auth
+  token is missing or invalid
+- Contact **bowei.xiao@ionos.com** to obtain JFrog registry access
+
 ### Install Packages
 
 ```bash

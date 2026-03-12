@@ -2,6 +2,19 @@
 
 Solutions for the most frequently encountered UDS setup issues.
 
+## Package Installation Failed
+
+**Symptom:** `npm install @ionos-web-design-system/*` fails with 401 Unauthorized,
+403 Forbidden, or E404 Not Found errors.
+
+**Cause:** The `@ionos-web-design-system` packages are published on an internal JFrog
+registry, not the public npm registry. A missing or invalid auth token will cause
+installation to fail.
+
+**Fix:**
+1. Configure npm with the proper auth token for the `@ionos-web-design-system` scope
+2. Contact **bowei.xiao@ionos.com** to obtain JFrog registry access and token setup instructions
+
 ## Tokens Not Resolving
 
 **Symptom:** UDS token classes (`bg-surface-base`, `text-muted`) have no effect.

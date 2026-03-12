@@ -30,6 +30,11 @@ Scaffold a new UDS project or add UDS to an existing project.
    npm install @ionos-web-design-system/icon
    ```
 
+   > **If installation fails** with 401, 403, or E404 errors: the `@ionos-web-design-system`
+   > packages are hosted on an internal JFrog registry. The user's npm must be configured
+   > with an auth token for the `@ionos-web-design-system` scope. Inform the user and
+   > suggest contacting **bowei.xiao@ionos.com** for registry access.
+
 5. **Configure CSS entry file** (`index.css` or `globals.css`):
    - Read `rules/setup-css-imports.md` for the correct import order
    - Add imports in order: tailwindcss → brand → platform → react/style.css

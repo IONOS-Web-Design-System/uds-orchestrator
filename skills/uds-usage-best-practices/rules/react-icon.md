@@ -22,7 +22,7 @@ import { bell, plus, checkmark } from '@ionos-web-design-system/icon/system';
 
 ### Size mapping
 
-**System icons** (system, navigation groups):
+**System icons** (system group):
 
 | Size     | Pixels |
 | -------- | ------ |
@@ -79,12 +79,8 @@ import { warning } from '@ionos-web-design-system/icon/system';
 
 ## Icon groups
 
-Icons are organized by group in the icon package:
-
-```tsx
-import { bell } from '@ionos-web-design-system/icon/system';
-import { arrowLeft } from '@ionos-web-design-system/icon/navigation';
-```
+Icons are organized into 9 groups. See `rules/icon-groups.md` for all groups
+and `rules/core-icon-name-lookup.md` for name verification.
 
 ## Do
 
@@ -100,3 +96,4 @@ import { arrowLeft } from '@ionos-web-design-system/icon/navigation';
 - Use `xLarge` system icons in compact UI — reserve large sizes for feature
   displays.
 - Import icons from the wrong group — check the icon catalog for correct paths.
+- Guess icon names — verify against `icon-names.json` first (see `rules/core-icon-name-lookup.md`).

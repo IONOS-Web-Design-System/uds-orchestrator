@@ -133,36 +133,56 @@ Regional groups also available: `arab`, `asean`, `eu`.
 
 ## fasthosts (484 icons)
 
-Fasthosts brand-specific icons.
+Fasthosts brand-specific icons with light and dark variants.
 
 ```ts
-import { bell, globe, home } from '@ionos-web-design-system/icon/fasthosts';
+import {
+  airplayLight,
+  airplayDark,
+  anchorLight,
+  appsLight,
+} from '@ionos-web-design-system/icon/fasthosts';
 ```
 
-Purpose: UI and product icons tailored to the Fasthosts brand. May share icon
-names with the `system` group but with brand-specific designs.
+Naming pattern: `{name}Light` / `{name}Dark`. Always use the variant matching
+the active color scheme.
+
+Purpose: UI and product icons tailored to the Fasthosts brand.
 
 ---
 
 ## homepl (520 icons)
 
-Home.pl brand-specific icons.
+Home.pl brand-specific icons with light and dark variants.
 
 ```ts
-import { bell, globe, home } from '@ionos-web-design-system/icon/homepl';
+import {
+  accountSecurityLight,
+  accountSecurityDark,
+  addressBookLight,
+} from '@ionos-web-design-system/icon/homepl';
 ```
+
+Naming pattern: `{name}Light` / `{name}Dark`. Always use the variant matching
+the active color scheme.
 
 Purpose: UI and product icons tailored to the Home.pl brand.
 
 ---
 
-## strato (109 icons)
+## strato (110 icons)
 
-Strato brand product icons.
+Strato brand product icons. All icons use the `ProductIcons` suffix.
 
 ```ts
-import { mail, cloud, server } from '@ionos-web-design-system/icon/strato';
+import {
+  iconAdvantagesAwardProductIcons,
+  iconAdvantagesComfortableProductIcons,
+  iconBackupControlProductIcons,
+} from '@ionos-web-design-system/icon/strato';
 ```
+
+Naming pattern: `{name}ProductIcons`.
 
 Purpose: Product and service icons for the Strato brand.
 
@@ -197,10 +217,10 @@ checkmark.
 | --------- | ----------------------------------------- | ----- | -------------- |
 | system    | `@ionos-web-design-system/icon/system`    | 674   | Weight (`300`) |
 | social    | `@ionos-web-design-system/icon/social`    | 15    | None           |
-| ionos     | `@ionos-web-design-system/icon/ionos`     | 844   | Light/Dark     |
+| ionos     | `@ionos-web-design-system/icon/ionos`     | 851   | Light/Dark     |
 | brandmark | `@ionos-web-design-system/icon/brandmark` | 57    | Light/Dark     |
 | flags     | `@ionos-web-design-system/icon/flags`     | 270   | None           |
-| fasthosts | `@ionos-web-design-system/icon/fasthosts` | 484   | None           |
-| homepl    | `@ionos-web-design-system/icon/homepl`    | 520   | None           |
-| strato    | `@ionos-web-design-system/icon/strato`    | 109   | None           |
+| fasthosts | `@ionos-web-design-system/icon/fasthosts` | 484   | Light/Dark     |
+| homepl    | `@ionos-web-design-system/icon/homepl`    | 520   | Light/Dark     |
+| strato    | `@ionos-web-design-system/icon/strato`    | 110   | ProductIcons   |
 | checkmark | `@ionos-web-design-system/icon/checkmark` | 6     | Light/Dark     |

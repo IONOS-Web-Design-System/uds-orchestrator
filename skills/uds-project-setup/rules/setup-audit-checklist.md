@@ -5,6 +5,7 @@ Run through each section to identify and fix configuration issues.
 
 ## 1. Package Installation
 
+- [ ] npm is configured with JFrog registry auth for the `@ionos-web-design-system` scope
 - [ ] `@ionos-web-design-system/core` is installed
 - [ ] `@ionos-web-design-system/react` is installed
 - [ ] Versions are compatible (same major version)

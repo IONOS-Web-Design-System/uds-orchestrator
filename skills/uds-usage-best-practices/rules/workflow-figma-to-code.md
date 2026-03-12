@@ -119,6 +119,9 @@ import { bell } from '@ionos-web-design-system/icon/system';
 Icon groups: `system`, `ionos`, `fasthosts`, `homepl`, `strato`, `social`,
 `flags`, `checkmark`. See `rules/icon-groups.md` and `rules/react-icon.md`.
 
+> Before importing any icon, verify the name in `rules/core-icon-name-lookup.md`
+> or `icon-names.json`. Never guess based on Figma layer names.
+
 ### Category 4: Brand Logos (`brandmark` icon group)
 
 **Wrap a native `<img>` inside a sized `<div>` — do NOT use the `Icon`

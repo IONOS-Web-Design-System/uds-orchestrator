@@ -180,6 +180,23 @@ in the brand CSS file.
 
 ---
 
+## Action Interaction Utilities
+
+Compound interaction classes that bundle cursor, transition, and optional
+shadow/border effects for idle, hover, and active states.
+
+| Class                  | Transition   | Description                                   |
+| ---------------------- | ------------ | --------------------------------------------- |
+| `uds-action-loud`     | duration-300 | Maximum emphasis — border + shadow effects     |
+| `uds-action-moderate` | duration-300 | Balanced — subtle to medium shadow effects     |
+| `uds-action-quiet`    | duration-200 | Low-key — minimal shadow, slight lift on hover |
+| `uds-action-whisper`  | duration-200 | Cursor + transition only, no visual decoration |
+
+> For decision tree, brand-specific behavior, and full usage guide — see
+> `rules/core-action-utilities.md`.
+
+---
+
 ## Tailwind v3 Differences
 
 In Tailwind v3 (via the `udsTokens` plugin), these custom `@utility` classes are

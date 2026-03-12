@@ -18,19 +18,25 @@ import Badge from '@ionos-web-design-system/react/badge';
 ### Price badge
 
 ```tsx
-<Badge variant="price">-30%</Badge>
+<div>
+  <Badge variant="price">-30%</Badge>
+</div>
 ```
 
 ### Promotional badge
 
 ```tsx
-<Badge variant="promo">New</Badge>
+<div>
+  <Badge variant="promo">New</Badge>
+</div>
 ```
 
 ### Neutral badge
 
 ```tsx
-<Badge variant="neutral">Beta</Badge>
+<div>
+  <Badge variant="neutral">Beta</Badge>
+</div>
 ```
 
 ### Alongside other components
@@ -50,12 +56,15 @@ import Badge from '@ionos-web-design-system/react/badge';
 
 ## Do
 
-- Keep badge text short (1-3 words).
+- **Always wrap `<Badge>` in a `<div>`** — without a wrapper, Badge stretches to
+  full width of its parent container.
+- Keep badge text to a **single line** (1-3 words).
 - Use `variant="price"` specifically for pricing-related labels.
 - Place badges adjacent to the content they describe.
 
 ## Don't
 
-- Use badges for long text or sentences.
+- Render `<Badge>` without a `<div>` wrapper — it will expand to full width.
+- Use multi-line text or sentences inside a Badge.
 - Stack multiple badges of the same variant next to each other.
 - Use badges as interactive elements — they are display-only.

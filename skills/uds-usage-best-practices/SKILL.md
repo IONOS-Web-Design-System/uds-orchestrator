@@ -27,7 +27,8 @@ when theme attributes change.
    - `rules/core-spacing-tokens.md` — full spacing table with px values
    - `rules/core-corner-radius.md` — corner radius tokens and decision tree
    - `rules/core-gradient-tokens.md` — gradient tokens, directions, and advanced usage
-4. **For icons**: `rules/icon-groups.md`
+   - `rules/core-action-utilities.md` — action interaction utilities (hover/active compound classes)
+4. **For icons**: `rules/icon-groups.md` and `rules/core-icon-name-lookup.md`
 5. **For Shop-UI organisms**: `rules/shop-ui-*.md`
 6. **For Figma-to-code workflow** (token mapping, asset handling, custom components): `rules/workflow-figma-to-code.md`
 7. **For post-build verification** (checklist, Playwright MCP snippets): `rules/workflow-verification.md`
@@ -57,6 +58,8 @@ when theme attributes change.
 - Use UDS token classes for all colors, spacing, and borders.
 - Use the `Text` component with `asChild` for all styled text (headings, body, inline).
 - Use the border double-dash convention in Tailwind v4: `border--base`, not `border-base`.
+- Verify icon names against `icon-names.json` before importing — NEVER guess.
+  See `rules/core-icon-name-lookup.md` for inline lists and the lookup procedure.
 - Pass icon inject functions directly to `icon` props as references: `icon={plus}`.
 - Use `Button` or `Link` with `asChild` for all anchor (`<a>`) elements; apply all
   styling on the component itself, never on the `<a>` child:
@@ -89,6 +92,7 @@ when theme attributes change.
 - Use `text-base` for font sizing — in UDS, `text-base` is a text **color** token.
   Use the `Text` component with `variant="body"` for body text.
 - Call icon functions manually — pass as reference: `icon={bell}` not `icon={bell()}`.
+- Assume or guess icon import names — always verify first.
 - Hardcode color values (`#fff`, `rgb(...)`) — use token classes instead.
 - Use wildcard CSS imports (`brands/*`, `platforms/*`) when deploying for a single brand
   — import only the specific brand/platform.
@@ -151,6 +155,7 @@ Find the component name, then use the corresponding import and rule file.
 | button-icon | `import ButtonIcon from '.../react/button-icon'` | `rules/react-button-icon.md` |
 | button-link | `import ButtonLink from '.../react/button-link'` | `rules/react-button-link.md` |
 | card | `import Card from '.../react/card'` | `rules/react-card.md` |
+| card-media | `import CardMedia from '.../react/card-media'` | `rules/react-card-media.md` |
 | checkbox | `import Checkbox from '.../react/checkbox'` | `rules/react-checkbox.md` |
 | content-tabs | `import ContentTabs from '.../react/content-tabs'` | `rules/react-content-tabs.md` |
 | disclosure | `import Disclosure from '.../react/disclosure'` | `rules/react-disclosure.md` |
@@ -377,6 +382,9 @@ apply dark surface classes to create visual inversion.
 | `gap-gap-8` for a layout gap of 64px | `gap-8` | `gap-gap-8` = `--gap-8` = 8px; `gap-8` = `--space-8` = 64px. Use space tokens for layout gaps |
 | `p-4` assuming 16px padding | `p-3` for 16px | UDS `p-4` = 24px (comfortable). For 16px, use `p-3`. Always look up the token table |
 | `<img src="/photo.jpg" />` (raster photo) | `<AspectRatio src="/photo.jpg" ratio="16/9" alt="Photo" />` | Use AspectRatio for raster images. For SVGs/logos see `rules/workflow-figma-to-code.md` |
+| `<Box className="hover:shadow-bottom-md active:shadow-bottom-sm cursor-pointer transition-all ...">` | `<Box className="uds-action-moderate ...">` | Use compound action utilities instead of manually wiring interaction states |
+| `import { notifications } from '.../icon/system'` | Read `icon-names.json` first → `import { bell } from '.../icon/system'` | Never guess icon names — verify against `icon-names.json` |
+| `<Badge variant="promo">New</Badge>` (unwrapped) | `<div><Badge variant="promo">New</Badge></div>` | Badge stretches to full width without a `<div>` wrapper |
 
 ## 10. Figma-to-Code Workflow
 
