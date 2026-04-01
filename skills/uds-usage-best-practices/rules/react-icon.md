@@ -79,8 +79,14 @@ import { warning } from '@ionos-web-design-system/icon/system';
 
 ## Icon groups
 
-Icons are organized into 9 groups. See `rules/icon-groups.md` for all groups
-and `rules/core-icon-name-lookup.md` for name verification.
+Icons are organized into 9 groups. See `rules/icon-groups.md` for all groups and
+`rules/core-icon-name-lookup.md` for name verification.
+
+## Dynamic icon loading
+
+For icon names determined at runtime (from CMS, API, or configuration data), use
+the `useDynamicIcon` hook instead of static imports. See
+`rules/react-use-dynamic-icon.md`.
 
 ## Do
 
@@ -96,4 +102,5 @@ and `rules/core-icon-name-lookup.md` for name verification.
 - Use `xLarge` system icons in compact UI — reserve large sizes for feature
   displays.
 - Import icons from the wrong group — check the icon catalog for correct paths.
-- Guess icon names — verify against `icon-names.json` first (see `rules/core-icon-name-lookup.md`).
+- Guess icon names — verify against `icon-names.json` first (see
+  `rules/core-icon-name-lookup.md`).

@@ -17,7 +17,7 @@ import ButtonIcon from '@ionos-web-design-system/react/button-icon';
 | `iconTitle` | `string`                                     | —            | Accessibility label (aria-label)     |
 | `count`     | `number`                                     | —            | Badge counter (capped at 99+)        |
 | `ai`        | `boolean`                                    | `false`      | AI gradient styling                  |
-| `loading`   | `boolean`                                    | `false`      | Shows loading spinner                |
+| `loading`   | `boolean`                                    | `false`      | Shows loading state (spinner or AI comet animation) |
 
 ## Usage
 
@@ -42,6 +42,13 @@ import { plus } from '@ionos-web-design-system/icon/system';
 
 <ButtonIcon icon={plus} ai loading />;
 ```
+
+### Loading behavior
+
+- Non-AI: replaces icon with a spinner
+- AI (`ai` + `loading`): keeps icon with pulse animation + rotating comet border
+- Both set `aria-busy="true"` and disable pointer events
+- Animations respect `prefers-reduced-motion`
 
 ### Size variants
 
