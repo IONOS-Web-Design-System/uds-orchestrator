@@ -22,7 +22,8 @@ adapt automatically when theme attributes change.
 ## 1. Reading Order
 
 1. **Read this file first** — critical rules and navigation pointers.
-2. **For each component or hook**, read its rule file: `rules/react-{kebab-name}.md`
+2. **For each component or hook**, read its rule file:
+   `rules/react-{kebab-name}.md`
 3. **For component/hook lookup table**: `rules/quick-ref-components.md`
 4. **For tokens**: `rules/quick-ref-tokens.md` (quick reference) and
    `rules/core-*.md` (detailed):
@@ -80,10 +81,10 @@ adapt automatically when theme attributes change.
   procedure.
 - Pass icon inject functions directly to `icon` props as references:
   `icon={plus}`.
-- For **dynamic/data-driven icon names** (CMS content, API responses, configurable
-  dashboards), use `useDynamicIcon` instead of static imports. Define the barrel
-  loader at module scope and pass the kebab-case name string. See
-  `rules/react-use-dynamic-icon.md` and `rules/quick-ref-icons.md` for the
+- For **dynamic/data-driven icon names** (CMS content, API responses,
+  configurable dashboards), use `useDynamicIcon` instead of static imports.
+  Define the barrel loader at module scope and pass the kebab-case name string.
+  See `rules/react-use-dynamic-icon.md` and `rules/quick-ref-icons.md` for the
   decision tree.
 - **Distinguish `ButtonIcon` from `Button` icon-only mode.** They look similar
   but are different components with different sizes, tokens, and features. When
@@ -150,8 +151,8 @@ Icon-only button detected in Figma -->
 - Custom-style child elements inside `asChild` — `Text`, `Button`, `Link`, and
   all `asChild` components must have all visual customization on the component
   itself, not its child.
-- Use `useDynamicIcon` for icons known at build time — it loads the entire barrel
-  (no tree-shaking). Use static named imports instead:
+- Use `useDynamicIcon` for icons known at build time — it loads the entire
+  barrel (no tree-shaking). Use static named imports instead:
   `import { bell } from '.../icon/system'`.
 - Create barrel loader functions inside component render bodies — define them at
   module scope for stable WeakMap caching.
@@ -196,16 +197,16 @@ Configured in this plugin's `.mcp.json`. Use for browser-based verification:
 
 Detailed reference tables are in dedicated rule files (loaded on-demand):
 
-- **Component & hook lookup** — `rules/quick-ref-components.md`
-  (35+ React components, Shop-UI, hooks with imports and rule file paths)
-- **Token naming & Tailwind mapping** — `rules/quick-ref-tokens.md`
-  (variable translation, category prefixes, border double-dash convention)
-- **Typography** — `rules/quick-ref-typography.md`
-  (Text decision tree, color props, markdown list syntax)
-- **Icons** — `rules/quick-ref-icons.md`
-  (9 groups, static vs dynamic loading decision tree)
-- **Common mistakes** — `rules/common-mistakes.md`
-  (27 WRONG/CORRECT pairs with explanations)
+- **Component & hook lookup** — `rules/quick-ref-components.md` (35+ React
+  components, Shop-UI, hooks with imports and rule file paths)
+- **Token naming & Tailwind mapping** — `rules/quick-ref-tokens.md` (variable
+  translation, category prefixes, border double-dash convention)
+- **Typography** — `rules/quick-ref-typography.md` (Text decision tree, color
+  props, markdown list syntax)
+- **Icons** — `rules/quick-ref-icons.md` (9 groups, static vs dynamic loading
+  decision tree)
+- **Common mistakes** — `rules/common-mistakes.md` (27 WRONG/CORRECT pairs with
+  explanations)
 
 ## 5. Theme Variants
 
@@ -242,7 +243,8 @@ rules instead.
 - Map every Figma component to the closest UDS React component first
 - Use `Price` for ALL pricing displays — never recreate manually
 - For assets, follow the 4-category decision tree (raster -> AspectRatio, vector
-  SVG -> `<div>` wrapper, icon -> Icon component, brand logo -> `<img>` in `<div>`)
+  SVG -> `<div>` wrapper, icon -> Icon component, brand logo -> `<img>` in
+  `<div>`)
 - For custom components with no UDS equivalent, compose UDS atoms + tokens
 
 > **Full reference with asset decision tree, code examples, spacing

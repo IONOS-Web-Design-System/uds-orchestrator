@@ -20,6 +20,7 @@ import CardTariff from '@ionos-web-design-system/react/card-tariff';
 | `badgeText`     | `React.ReactNode`                | —        | When truthy, wraps card in an accent-colored promotional frame with badge                          |
 | `promotion`     | `boolean`                        | `false`  | Inverts the color scheme on the card content area (light↔dark)                                     |
 | `priceEmphasis` | `boolean`                        | `false`  | Renders the Price component with emphasis styling                                                  |
+| `underTitle`    | `string`                         | —        | Promotional text below the title. **homepl brand only**, visible only at `size="full"`             |
 | `subtitle`      | `string`                         | —        | Text below the title. Hidden for compact size                                                      |
 | `priceData`     | `PriceData`                      | —        | Price data object. See [price.md](price.md) for `PriceData` structure                              |
 | `onButtonClick` | `() => void`                     | —        | Click handler for the default button. Only used when `button` is a string                          |
@@ -145,6 +146,28 @@ title, price, button, children) align across columns:
 </div>
 ```
 
+### Home.pl brand with underTitle
+
+The `underTitle` prop renders promotional text below the title, styled with
+`color="promotion"`. It is brand-specific to homepl and only visible at
+`size="full"`:
+
+```tsx
+<CardTariff
+  size="full"
+  title="Premium"
+  underTitle="+ SSL w niskiej cenie"
+  subtitle="Dla początkujących"
+  badgeText="Oferta specjalna"
+  priceEmphasis
+  priceData={premiumPrice}
+  button="Zamów"
+>
+  <Divider />
+  <HomeplFeatureList />
+</CardTariff>
+```
+
 ### Custom CTA button
 
 Pass a ReactNode for full control over the button:
@@ -166,19 +189,6 @@ Pass a ReactNode for full control over the button:
 />
 ```
 
-## Migration from TariffCard
-
-`TariffCard` is deprecated and will be removed in a future version. It is a thin
-wrapper that renders `<CardTariff size="light" />`.
-
-```diff
-- import TariffCard from '@ionos-web-design-system/react/tariff-card';
-+ import CardTariff from '@ionos-web-design-system/react/card-tariff';
-
-- <TariffCard title="Plan" button="Select" priceData={data} />
-+ <CardTariff size="light" title="Plan" button="Select" priceData={data} />
-```
-
 ## Do
 
 - Use `size="full"` for core product showrooms (hosting, domains, etc.) where
@@ -191,6 +201,8 @@ wrapper that renders `<CardTariff size="light" />`.
 - Pass `w-full` on custom Button elements to match the default full-width style.
 - Combine `badgeText`, `promotion`, and `priceEmphasis` independently based on
   how prominently the plan should stand out.
+- Use `underTitle` for homepl brand promotional highlights (e.g. upsell text
+  like "+ SSL w niskiej cenie") — it renders with `color="promotion"` styling.
 
 ## Don't
 
@@ -201,3 +213,5 @@ wrapper that renders `<CardTariff size="light" />`.
   by side — without it, subgrid alignment breaks.
 - Use `size="compact"` with `subtitle` or `disclaimer` — they are not rendered.
 - Manually style price displays — use the `priceData` prop with `PriceData`.
+- Use `underTitle` with non-homepl brands or with `size="light"` / `size="compact"`
+  — it only renders for homepl at `size="full"`.
