@@ -3,23 +3,25 @@
 ## Import
 
 ```jsx
-import CellSelect, { CellSelectGroup } from '@ionos-web-design-system/react/cell-select';
+import CellSelect, {
+  CellSelectGroup,
+} from '@ionos-web-design-system/react/cell-select';
 ```
 
 ## Props
 
 ### CellSelect
 
-| Prop       | Type                  | Default   | Description                                |
-| ---------- | --------------------- | --------- | ------------------------------------------ |
-| `label`    | `string`              | —         | Display text (alternative to children)     |
-| `children` | `React.ReactNode`     | —         | Content (takes precedence over label)      |
-| `value`    | `string`              | —         | **Required.** Option value                 |
-| `icon`     | `InjectIconFunction`  | —         | Leading icon                               |
-| `size`     | `'base' \| 'loose'`  | `'base'`  | Padding density                            |
-| `selected` | `boolean`             | `false`   | Shows checkmark indicator                  |
-| `disabled` | `boolean`             | `false`   | Disables interaction                       |
-| `onClick`  | `() => void`          | —         | Click handler (not called when disabled)   |
+| Prop       | Type                 | Default  | Description                              |
+| ---------- | -------------------- | -------- | ---------------------------------------- |
+| `label`    | `string`             | —        | Display text (alternative to children)   |
+| `children` | `React.ReactNode`    | —        | Content (takes precedence over label)    |
+| `value`    | `string`             | —        | **Required.** Option value               |
+| `icon`     | `InjectIconFunction` | —        | Leading icon                             |
+| `size`     | `'base' \| 'loose'`  | `'base'` | Padding density                          |
+| `selected` | `boolean`            | `false`  | Shows checkmark indicator                |
+| `disabled` | `boolean`            | `false`  | Disables interaction                     |
+| `onClick`  | `() => void`         | —        | Click handler (not called when disabled) |
 
 Extends `React.HTMLAttributes<HTMLDivElement>` (excluding `onClick`).
 
@@ -27,10 +29,10 @@ Ref forwarding: `React.Ref<HTMLDivElement>`.
 
 ### CellSelectGroup
 
-| Prop       | Type              | Default  | Description                         |
-| ---------- | ----------------- | -------- | ----------------------------------- |
-| `children` | `React.ReactNode` | —        | **Required.** Group header text     |
-| `size`     | `'base' \| 'loose'` | `'base'` | Padding density                  |
+| Prop       | Type                | Default  | Description                     |
+| ---------- | ------------------- | -------- | ------------------------------- |
+| `children` | `React.ReactNode`   | —        | **Required.** Group header text |
+| `size`     | `'base' \| 'loose'` | `'base'` | Padding density                 |
 
 Non-interactive group header for organizing options.
 

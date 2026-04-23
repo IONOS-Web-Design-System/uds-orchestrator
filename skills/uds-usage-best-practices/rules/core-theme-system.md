@@ -5,11 +5,11 @@ token resolves based on the active combination, producing 24 total theme states.
 
 ## The Theming Matrix
 
-| Dimension        | Options                                        | Controls                        |
-| ---------------- | ---------------------------------------------- | ------------------------------- |
+| Dimension        | Options                                                          | Controls                        |
+| ---------------- | ---------------------------------------------------------------- | ------------------------------- |
 | **Brand**        | ionos, strato, fasthosts, homepl, strefa, udag, world4you, arsys | Colors, fonts, brand identity   |
-| **Platform**     | comfortable, compact                           | Spacing, sizing, density        |
-| **Color Scheme** | light, dark                                    | Surface and text color palettes |
+| **Platform**     | comfortable, compact                                             | Spacing, sizing, density        |
+| **Color Scheme** | light, dark                                                      | Surface and text color palettes |
 
 ## HTML Attribute Setup
 
@@ -45,9 +45,9 @@ packages/core (CSS custom properties)
 Framework packages (React / Web Components)
 ```
 
-Design tokens are extracted from the source files, processed through the interpreter
-which resolves aliases and applies transforms, then compiled into CSS custom
-properties scoped by `data-*` attribute selectors.
+Design tokens are extracted from the source files, processed through the
+interpreter which resolves aliases and applies transforms, then compiled into
+CSS custom properties scoped by `data-*` attribute selectors.
 
 ## Color Space
 

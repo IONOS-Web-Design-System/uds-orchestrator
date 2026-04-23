@@ -37,13 +37,12 @@ adapt automatically when theme attributes change.
 5. **For typography**: `rules/quick-ref-typography.md`
 6. **For icons**: `rules/quick-ref-icons.md`, `rules/icon-groups.md`, and
    `rules/core-icon-name-lookup.md`
-7. **For Shop-UI organisms**: `rules/shop-ui-*.md`
-8. **For Figma-to-code workflow** (token mapping, asset handling, custom
+7. **For Figma-to-code workflow** (token mapping, asset handling, custom
    components): `rules/workflow-figma-to-code.md`
-9. **For post-build verification** (checklist, Playwright MCP snippets):
+8. **For post-build verification** (checklist, Playwright MCP snippets):
    `rules/workflow-verification.md`
-10. **For common mistakes**: `rules/common-mistakes.md`
-11. **For full compiled reference**: `AGENTS.md`
+9. **For common mistakes**: `rules/common-mistakes.md`
+10. **For full compiled reference**: `AGENTS.md`
 
 ## 2. Critical Rules
 
@@ -108,13 +107,16 @@ adapt automatically when theme attributes change.
   child elements inside `asChild`.
 - Use the `Price` component for all pricing displays — never build price layouts
   manually. See `rules/react-price.md`.
-- Use `AspectRatio` for all **raster** images/media from Figma (photos,
-  screenshots, PNGs, JPGs) — never raw `<img>` tags for raster assets. Match the
-  `ratio` prop to the Figma frame's proportions and verify size accuracy after
-  implementation. See `rules/react-aspect-ratio.md`.
+- Use `Picture` for all **raster** images/media from Figma (photos, screenshots,
+  PNGs, JPGs) — never raw `<img>` tags for raster assets. Provide multi-format
+  variants (AVIF/WebP/JPEG) via `ImageProps` for LCP/hero images and set
+  `width`/`height` to prevent CLS. Use `AspectRatio` **only** for fixed-ratio
+  containers, video, or when you need the `decorative`/`fallback` props (compose
+  `Picture` inside an aspect-ratio wrapper when you need both). See
+  `rules/react-picture.md` and `rules/react-aspect-ratio.md`.
 - For vector SVG assets NOT in the UDS icon package (illustrations, decorative
   graphics), download the SVG from Figma and use inline SVG or `<img>` per the
-  Figma MCP suggestions. Do NOT wrap SVGs in `AspectRatio`.
+  Figma MCP suggestions. Do NOT wrap SVGs in `AspectRatio` or `Picture`.
 
 ### ButtonIcon vs Button Icon-Only — Decision Tree
 
@@ -159,8 +161,11 @@ Icon-only button detected in Figma -->
 - Build price displays manually — always use the `Price` component (see
   `rules/react-price.md`).
 - Use raw `<img>` tags for **raster** assets from Figma (photos, screenshots,
-  PNGs, JPGs) — always use `AspectRatio` for raster images. For other asset
-  types (vector SVGs, brand logos), see `rules/workflow-figma-to-code.md`.
+  PNGs, JPGs) — always use `Picture` for raster images (see
+  `rules/react-picture.md`). Reach for `AspectRatio` only when a fixed
+  aspect-ratio container, video, or the `decorative`/`fallback` props are
+  required. For other asset types (vector SVGs, brand logos), see
+  `rules/workflow-figma-to-code.md`.
 
 ## 3. MCP Tools
 
@@ -197,8 +202,8 @@ Configured in this plugin's `.mcp.json`. Use for browser-based verification:
 
 Detailed reference tables are in dedicated rule files (loaded on-demand):
 
-- **Component & hook lookup** — `rules/quick-ref-components.md` (35+ React
-  components, Shop-UI, hooks with imports and rule file paths)
+- **Component & hook lookup** — `rules/quick-ref-components.md` (50+ React
+  components, hooks with imports and rule file paths)
 - **Token naming & Tailwind mapping** — `rules/quick-ref-tokens.md` (variable
   translation, category prefixes, border double-dash convention)
 - **Typography** — `rules/quick-ref-typography.md` (Text decision tree, color
@@ -242,9 +247,10 @@ rules instead.
 - Every spacing value MUST be pixel-accurate (token numbers != pixel values)
 - Map every Figma component to the closest UDS React component first
 - Use `Price` for ALL pricing displays — never recreate manually
-- For assets, follow the 4-category decision tree (raster -> AspectRatio, vector
-  SVG -> `<div>` wrapper, icon -> Icon component, brand logo -> `<img>` in
-  `<div>`)
+- For assets, follow the 4-category decision tree (raster -> Picture, vector SVG
+  -> `<div>` wrapper, icon -> Icon component, brand logo -> `<img>` in `<div>`).
+  Use AspectRatio only when a fixed ratio, video, or the `decorative`/`fallback`
+  props are required.
 - For custom components with no UDS equivalent, compose UDS atoms + tokens
 
 > **Full reference with asset decision tree, code examples, spacing

@@ -10,17 +10,17 @@ import Form, { FormField } from '@ionos-web-design-system/react/form';
 
 ### Form
 
-| Prop                  | Type                                   | Default    | Description                                               |
-| --------------------- | -------------------------------------- | ---------- | --------------------------------------------------------- |
-| `onSubmit`            | `(e: React.FormEvent) => void`         | —          | Form submission handler                                   |
-| `submit`              | `React.ReactNode`                      | —          | String → default Button; ReactNode → custom submit button |
-| `reset`               | `React.ReactNode`                      | —          | String → reset Button; ReactNode → custom reset button    |
-| `labelPosition`       | `'inside' \| 'top' \| 'left'`         | `'inside'` | Default label position for all child fields               |
-| `labelWidth`          | `string`                               | `'100px'`  | Label column width when labelPosition="left"              |
-| `onClearServerErrors` | `() => void`                           | —          | Callback to clear server errors on submit                 |
-| `className`           | `string`                               | —          | Additional CSS classes                                    |
-| `children`            | `React.ReactNode`                      | —          | **Required.** Form content                                |
-| `testId`              | `string`                               | —          | Test identifier                                           |
+| Prop                  | Type                           | Default    | Description                                               |
+| --------------------- | ------------------------------ | ---------- | --------------------------------------------------------- |
+| `onSubmit`            | `(e: React.FormEvent) => void` | —          | Form submission handler                                   |
+| `submit`              | `React.ReactNode`              | —          | String → default Button; ReactNode → custom submit button |
+| `reset`               | `React.ReactNode`              | —          | String → reset Button; ReactNode → custom reset button    |
+| `labelPosition`       | `'inside' \| 'top' \| 'left'`  | `'inside'` | Default label position for all child fields               |
+| `labelWidth`          | `string`                       | `'100px'`  | Label column width when labelPosition="left"              |
+| `onClearServerErrors` | `() => void`                   | —          | Callback to clear server errors on submit                 |
+| `className`           | `string`                       | —          | Additional CSS classes                                    |
+| `children`            | `React.ReactNode`              | —          | **Required.** Form content                                |
+| `testId`              | `string`                       | —          | Test identifier                                           |
 
 Extends `React.FormHTMLAttributes<HTMLFormElement>` (excluding `onSubmit`).
 
@@ -84,8 +84,8 @@ Set `labelPosition` on Form to apply to all child inputs.
 
 ### Client validation
 
-FormField provides constraint validation messages mapped to native HTML
-validity states.
+FormField provides constraint validation messages mapped to native HTML validity
+states.
 
 ```jsx
 <Form submit="Submit">
@@ -112,7 +112,11 @@ Use `serverInvalid` and `serverErrorMessage` on FormField, and
 `onClearServerErrors` on Form to clear them on re-submit.
 
 ```jsx
-<Form onSubmit={handleSubmit} onClearServerErrors={() => setErrors(null)} submit="Login">
+<Form
+  onSubmit={handleSubmit}
+  onClearServerErrors={() => setErrors(null)}
+  submit="Login"
+>
   <FormField
     name="email"
     serverInvalid={!!errors?.email}

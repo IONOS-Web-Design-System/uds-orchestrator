@@ -1,27 +1,27 @@
 # Advanced Project Setup
 
-Details for CSS import optimization, Tailwind v3, `useTheme` hook, and component conventions.
-Referenced from SKILL.md section 3.
+Details for CSS import optimization, Tailwind v3, `useTheme` hook, and component
+conventions. Referenced from SKILL.md section 3.
 
 ## CSS Import Optimization (Single Brand)
 
 When deploying for a single brand, import only that brand and platform CSS:
 
-| Brand       | CSS Import                                                  |
-| ----------- | ----------------------------------------------------------- |
-| `ionos`     | `@ionos-web-design-system/core/brands/ionos`                |
-| `strato`    | `@ionos-web-design-system/core/brands/strato`               |
-| `fasthosts` | `@ionos-web-design-system/core/brands/fasthosts`            |
-| `homepl`    | `@ionos-web-design-system/core/brands/homepl`               |
-| `strefa`    | `@ionos-web-design-system/core/brands/strefa`               |
-| `udag`      | `@ionos-web-design-system/core/brands/udag`                 |
-| `world4you` | `@ionos-web-design-system/core/brands/world4you`            |
-| `arsys`     | `@ionos-web-design-system/core/brands/arsys`                |
+| Brand       | CSS Import                                       |
+| ----------- | ------------------------------------------------ |
+| `ionos`     | `@ionos-web-design-system/core/brands/ionos`     |
+| `strato`    | `@ionos-web-design-system/core/brands/strato`    |
+| `fasthosts` | `@ionos-web-design-system/core/brands/fasthosts` |
+| `homepl`    | `@ionos-web-design-system/core/brands/homepl`    |
+| `strefa`    | `@ionos-web-design-system/core/brands/strefa`    |
+| `udag`      | `@ionos-web-design-system/core/brands/udag`      |
+| `world4you` | `@ionos-web-design-system/core/brands/world4you` |
+| `arsys`     | `@ionos-web-design-system/core/brands/arsys`     |
 
-| Platform      | CSS Import                                                    |
-| ------------- | ------------------------------------------------------------- |
-| `comfortable` | `@ionos-web-design-system/core/platforms/comfortable`         |
-| `compact`     | `@ionos-web-design-system/core/platforms/compact`             |
+| Platform      | CSS Import                                            |
+| ------------- | ----------------------------------------------------- |
+| `comfortable` | `@ionos-web-design-system/core/platforms/comfortable` |
+| `compact`     | `@ionos-web-design-system/core/platforms/compact`     |
 
 ## Tailwind v3 Setup
 
@@ -53,7 +53,9 @@ function MyComponent() {
 
 All UDS React components follow these patterns:
 
-- **CSS custom properties** — Every component reads visual tokens from core. No hardcoded values.
+- **CSS custom properties** — Every component reads visual tokens from core. No
+  hardcoded values.
 - **Ref forwarding** — All components forward refs to their root DOM element.
-- **Polymorphic rendering** — Components with `asChild` render their child element
-  instead of the default wrapper, passing all props and behavior through.
+- **Polymorphic rendering** — Components with `asChild` render their child
+  element instead of the default wrapper, passing all props and behavior
+  through.

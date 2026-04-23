@@ -59,19 +59,38 @@ display a play button overlay.
 </AspectRatio>
 ```
 
-## SUPER CRITICAL: Raster Asset Size & Proportion Accuracy
+## When to use AspectRatio (vs Picture)
 
-When the Figma design contains **raster images** (photos, screenshots, product
-images, PNGs, JPGs) that are NOT from the UDS icon library, they MUST be
-rendered using `AspectRatio` — never a raw `<img>` tag. After implementation,
-the displayed size and proportions must match the original Figma design exactly.
+`AspectRatio` is the right choice **only** when you need one of:
 
-> **Note:** This rule applies to **raster images only**. Vector SVGs
+- **(a)** a guaranteed aspect-ratio container (tile, card media, square
+  thumbnail) whose size is defined by the ratio rather than the image's natural
+  dimensions;
+- **(b)** video playback with the built-in play/pause overlay; or
+- **(c)** the `decorative` prop or a custom `fallback` node on error.
+
+For **plain raster images** (photos, screenshots, PNG/JPG), use `Picture`. It
+delivers multi-format (AVIF/WebP/JPEG) with retina, responsive breakpoint
+sources, `IntersectionObserver` lazy loading, a built-in `Skeleton`, and a
+broken-image fallback — none of which AspectRatio provides. See
+[`picture.md`](./picture.md).
+
+If a raster image must appear inside a fixed-ratio frame, **compose**: wrap
+`<Picture />` in an aspect-ratio wrapper (`AspectRatio` in wrapper mode via
+`asChild` / `children`, or a plain `<div className="aspect-[16/9]">`).
+
+> **Note:** This section applies to **raster images only**. Vector SVGs
 > (illustrations, graphics) and brand logos (`brandmark` group) have different
 > handling — see SKILL.md section 10 for the full 4-category asset decision
 > tree.
 
-### Figma-to-AspectRatio Workflow
+### Figma-to-AspectRatio Workflow (fixed-ratio / video only)
+
+> Skip this workflow for plain raster images — use `Picture` instead (see
+> [`picture.md`](./picture.md)).
+
+Apply the steps below when the Figma frame mandates a fixed aspect-ratio
+container, or when the asset is a video.
 
 1. **Identify the asset in Figma** — note its width, height, and any aspect
    ratio constraint from the Auto Layout or frame properties.
@@ -90,22 +109,28 @@ the displayed size and proportions must match the original Figma design exactly.
    - Image fills the frame (cropped) → `objectFit="cover"` (default)
    - Image fits inside with letterboxing → `objectFit="contain"`
    - Image stretches to fill → `objectFit="fill"`
-5. **Control the container width** — `AspectRatio` fills its parent's width.
-   Use a wrapper with explicit width to match the Figma design's dimensions:
+5. **Control the container width** — `AspectRatio` fills its parent's width. Use
+   a wrapper with explicit width to match the Figma design's dimensions:
 
 ```tsx
-{/* Figma shows a 320×180 hero image (16:9) */}
+{
+  /* Figma shows a 320×180 hero image (16:9) */
+}
 <div className="w-full max-w-[320px]">
   <AspectRatio src="/hero.jpg" ratio="16/9" alt="Hero image" />
-</div>
+</div>;
 
-{/* Figma shows a 200×200 avatar (1:1) */}
+{
+  /* Figma shows a 200×200 avatar (1:1) */
+}
 <div className="w-[200px]">
   <AspectRatio src="/avatar.jpg" ratio="1/1" alt="User avatar" />
-</div>
+</div>;
 
-{/* Figma shows a full-width banner (3:1) */}
-<AspectRatio src="/banner.jpg" ratio="3/1" decorative />
+{
+  /* Figma shows a full-width banner (3:1) */
+}
+<AspectRatio src="/banner.jpg" ratio="3/1" decorative />;
 ```
 
 ### Ratio Reference
@@ -128,14 +153,18 @@ After rendering, verify these against the Figma design:
 1. **Aspect ratio matches** — the displayed image has the same width:height
    proportion as in Figma. No stretching, no unexpected cropping.
 2. **Container width matches** — the wrapper constrains the image to the same
-   width as in the Figma design (or scales proportionally in responsive layouts).
+   width as in the Figma design (or scales proportionally in responsive
+   layouts).
 3. **Object-fit matches** — the image fills/fits the frame the same way as in
    Figma (cropped edges match, no unexpected letterboxing).
-4. **No raw `<img>` tags for raster images** — every raster asset uses `AspectRatio`.
+4. **Raster images use `Picture`** — `AspectRatio` is only wrapping media here
+   because a fixed ratio or video playback is required.
 
 ## Do
 
-- Use `AspectRatio` for all **raster** images and media — never raw `<img>` tags for raster assets.
+- Reach for `Picture` first for any raster image asset (see
+  [`picture.md`](./picture.md)). Use `AspectRatio` only when you need a
+  guaranteed ratio container, video, or the `decorative`/`fallback` props.
 - Set `fetchPriority="high"` and `loading="eager"` for above-the-fold images.
 - Use `decorative` for background or purely visual images.
 - Provide `fallback` for images that may fail to load.
@@ -146,7 +175,10 @@ After rendering, verify these against the Figma design:
 
 ## Don't
 
-- Use raw `<img>` tags for **raster** assets — always use `AspectRatio` for raster images.
+- Reach for `AspectRatio` when a simple raster image would work — use `Picture`
+  instead; compose the two only when the design locks a fixed ratio.
+- Use raw `<img>` tags for **raster** assets — always use `Picture` (or
+  `Picture` composed inside an aspect-ratio wrapper).
 - Omit `alt` text for meaningful images — use `decorative` only for
   non-informative visuals.
 - Use `asChild` with `src` — they are mutually exclusive modes.

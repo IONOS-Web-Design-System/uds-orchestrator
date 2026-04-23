@@ -114,19 +114,20 @@ If the file is not found, the icon package may not be installed.
 
 The JSON groups have different shapes:
 
-| Groups | Structure | Example |
-| --- | --- | --- |
-| `system`, `social`, `flags` | Flat array of kebab-case names | `["arrow-down", "bell"]` |
+| Groups                                                   | Structure                           | Example                                                           |
+| -------------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------- |
+| `system`, `social`, `flags`                              | Flat array of kebab-case names      | `["arrow-down", "bell"]`                                          |
 | `ionos`, `brandmark`, `fasthosts`, `homepl`, `checkmark` | `{ "light": [...], "dark": [...] }` | `{ "light": ["account-security"], "dark": ["account-security"] }` |
-| `strato` | `{ "product-icons": [...] }` | `{ "product-icons": ["icon-advantages-award"] }` |
+| `strato`                                                 | `{ "product-icons": [...] }`        | `{ "product-icons": ["icon-advantages-award"] }`                  |
 
 ## Naming Conversion (JSON → JS Import)
 
-The JSON file uses **kebab-case**. JS exports use **camelCase** + a group-specific suffix:
+The JSON file uses **kebab-case**. JS exports use **camelCase** + a
+group-specific suffix:
 
-| Group type | Conversion | Example |
-| --- | --- | --- |
-| Flat arrays (`system`, `social`, `flags`) | camelCase only | `arrow-down` → `arrowDown` |
-| Light/Dark groups (`ionos`, `brandmark`, `fasthosts`, `homepl`, `checkmark`) | camelCase + `Light`/`Dark` | `account-security` (light) → `accountSecurityLight` |
-| Strato | camelCase + `ProductIcons` | `icon-advantages-award` → `iconAdvantagesAwardProductIcons` |
-| System `300` weight | camelCase, numeric suffix | `arrow-down-300` → `arrowDown300` |
+| Group type                                                                   | Conversion                 | Example                                                     |
+| ---------------------------------------------------------------------------- | -------------------------- | ----------------------------------------------------------- |
+| Flat arrays (`system`, `social`, `flags`)                                    | camelCase only             | `arrow-down` → `arrowDown`                                  |
+| Light/Dark groups (`ionos`, `brandmark`, `fasthosts`, `homepl`, `checkmark`) | camelCase + `Light`/`Dark` | `account-security` (light) → `accountSecurityLight`         |
+| Strato                                                                       | camelCase + `ProductIcons` | `icon-advantages-award` → `iconAdvantagesAwardProductIcons` |
+| System `300` weight                                                          | camelCase, numeric suffix  | `arrow-down-300` → `arrowDown300`                           |

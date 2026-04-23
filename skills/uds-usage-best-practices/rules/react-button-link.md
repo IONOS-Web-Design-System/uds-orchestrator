@@ -77,31 +77,31 @@ import { arrowRight } from '@ionos-web-design-system/icon/system';
 
 ### Concept Decision (color)
 
-| Design Observation                                    | Concept   |
-| ----------------------------------------------------- | --------- |
-| Link uses the brand/accent color (blue, green, etc.)  | `brand`   |
-| Link is neutral/gray, blends with body text           | `mono`    |
-| Link is in a footer, breadcrumb, or secondary nav     | `mono`    |
-| Link is a primary call-to-action or main navigation   | `brand`   |
+| Design Observation                                   | Concept |
+| ---------------------------------------------------- | ------- |
+| Link uses the brand/accent color (blue, green, etc.) | `brand` |
+| Link is neutral/gray, blends with body text          | `mono`  |
+| Link is in a footer, breadcrumb, or secondary nav    | `mono`  |
+| Link is a primary call-to-action or main navigation  | `brand` |
 
 ### Variant Decision (underline style)
 
-| Design Observation                                    | Variant     |
-| ----------------------------------------------------- | ----------- |
-| Link has a solid underline visible at rest            | `underline` |
-| Link has a dashed/dotted underline                    | `dashline`  |
-| Link sits inline in a paragraph with no underline     | `inline`    |
-| Link shows underline only on hover                    | `inline`    |
+| Design Observation                                | Variant     |
+| ------------------------------------------------- | ----------- |
+| Link has a solid underline visible at rest        | `underline` |
+| Link has a dashed/dotted underline                | `dashline`  |
+| Link sits inline in a paragraph with no underline | `inline`    |
+| Link shows underline only on hover                | `inline`    |
 
 ### Common Combinations
 
-| Use Case                          | Props                                    |
-| --------------------------------- | ---------------------------------------- |
-| Primary standalone link           | `concept="brand" variant="underline"`    |
-| Secondary/footer link             | `concept="mono" variant="underline"`     |
-| Inline link in body text          | `concept="mono" variant="inline"`        |
-| Inline link in body (branded)     | `concept="brand" variant="inline"`       |
-| Tooltip trigger / decorative link | `concept="mono" variant="dashline"`      |
+| Use Case                          | Props                                            |
+| --------------------------------- | ------------------------------------------------ |
+| Primary standalone link           | `concept="brand" variant="underline"`            |
+| Secondary/footer link             | `concept="mono" variant="underline"`             |
+| Inline link in body text          | `concept="mono" variant="inline"`                |
+| Inline link in body (branded)     | `concept="brand" variant="inline"`               |
+| Tooltip trigger / decorative link | `concept="mono" variant="dashline"`              |
 | "Learn more" suffix link          | `concept="brand"` + `icon` + `position="suffix"` |
 
 ## Do

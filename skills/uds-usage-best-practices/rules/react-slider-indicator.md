@@ -8,13 +8,13 @@ import SliderIndicator from '@ionos-web-design-system/react/slider-indicator';
 
 ## Props
 
-| Prop            | Type                         | Default     | Description                                      |
-| --------------- | ---------------------------- | ----------- | ------------------------------------------------ |
-| `count`\*       | `number`                     | —           | Total number of dots                             |
-| `activeIndex`\* | `number`                     | —           | Zero-based index of the active dot               |
-| `onDotClick`\*  | `(index: number) => void`    | —           | Called when a dot or arrow is clicked             |
-| `getAriaLabel`  | `(index: number) => string`  | —           | Returns aria-label for each dot                  |
-| `variant`       | `'default' \| 'light'`      | `'default'` | Visual variant                                   |
+| Prop            | Type                        | Default     | Description                           |
+| --------------- | --------------------------- | ----------- | ------------------------------------- |
+| `count`\*       | `number`                    | —           | Total number of dots                  |
+| `activeIndex`\* | `number`                    | —           | Zero-based index of the active dot    |
+| `onDotClick`\*  | `(index: number) => void`   | —           | Called when a dot or arrow is clicked |
+| `getAriaLabel`  | `(index: number) => string` | —           | Returns aria-label for each dot       |
+| `variant`       | `'default' \| 'light'`      | `'default'` | Visual variant                        |
 
 ## Description
 
@@ -35,7 +35,7 @@ const [active, setActive] = useState(0);
   activeIndex={active}
   onDotClick={setActive}
   getAriaLabel={(i) => `Slide ${i + 1}`}
-/>
+/>;
 ```
 
 ### Light variant

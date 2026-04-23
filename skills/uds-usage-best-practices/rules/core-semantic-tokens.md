@@ -108,16 +108,16 @@ values per platform.
 
 ## Border Radius Tokens
 
-| Token               | Tailwind Class    | Shape                                    |
-| ------------------- | ----------------- | ---------------------------------------- |
-| `--rounded-xs`      | `rounded-xs`      | Barely rounded                           |
-| `--rounded-sm`      | `rounded-sm`      | Slightly rounded                         |
-| `--rounded-md`      | `rounded-md`      | Medium rounding                          |
-| `--rounded-lg`      | `rounded-lg`      | Large rounding                           |
-| `--rounded-xl`      | `rounded-xl`      | Extra large rounding                     |
-| `--rounded-2xl`     | `rounded-2xl`     | 2XL rounding                             |
+| Token               | Tailwind Class    | Shape                                       |
+| ------------------- | ----------------- | ------------------------------------------- |
+| `--rounded-xs`      | `rounded-xs`      | Barely rounded                              |
+| `--rounded-sm`      | `rounded-sm`      | Slightly rounded                            |
+| `--rounded-md`      | `rounded-md`      | Medium rounding                             |
+| `--rounded-lg`      | `rounded-lg`      | Large rounding                              |
+| `--rounded-xl`      | `rounded-xl`      | Extra large rounding                        |
+| `--rounded-2xl`     | `rounded-2xl`     | 2XL rounding                                |
 | `--rounded-default` | `rounded-default` | Standard 16px — common for cards/containers |
-| `--rounded-full`    | `rounded-full`    | Fully circular (999px)                   |
+| `--rounded-full`    | `rounded-full`    | Fully circular (999px)                      |
 
 > For cards and container elements, prefer
 > `rounded-(--protected-container-rounded)` which adapts to brand/platform
@@ -128,21 +128,21 @@ values per platform.
 ```html
 <!-- Success alert -->
 <div
-  class="bg-surface-semantic-success border--semantic-success p-4 rounded-md border"
+  class="bg-surface-semantic-success border--semantic-success rounded-md border p-4"
 >
   <p class="text-semantic-success-bolder">Operation completed successfully.</p>
 </div>
 
 <!-- Danger alert -->
 <div
-  class="bg-surface-semantic-danger border--semantic-danger p-4 rounded-md border"
+  class="bg-surface-semantic-danger border--semantic-danger rounded-md border p-4"
 >
   <p class="text-semantic-danger-bolder">Something went wrong.</p>
 </div>
 
 <!-- Caution banner -->
 <div
-  class="bg-surface-semantic-caution border--semantic-caution p-3 rounded-sm border"
+  class="bg-surface-semantic-caution border--semantic-caution rounded-sm border p-3"
 >
   <p class="text-semantic-caution">Please review before proceeding.</p>
 </div>

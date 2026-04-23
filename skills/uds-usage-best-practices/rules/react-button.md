@@ -39,6 +39,12 @@ Extends `React.ButtonHTMLAttributes<HTMLButtonElement>`.
 
 ### Icon-only
 
+> **CRITICAL:** Do NOT confuse `Button icon={...}` with `ButtonIcon`. They are
+> different components with different sizes and tokens. Use `Button icon={...}`
+> only when you need concept/variant styling (e.g., brand primary icon button)
+> or when it's part of a button group with text buttons. For standalone icon
+> actions, prefer `ButtonIcon` — see `rules/react-button-icon.md`.
+
 ```tsx
 import { plus } from '@ionos-web-design-system/icon/system';
 

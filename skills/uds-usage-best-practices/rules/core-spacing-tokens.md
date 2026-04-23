@@ -1,7 +1,7 @@
 # Spacing Tokens
 
-UDS provides two families of spacing tokens: `--space-*` (structural/layout)
-and `--gap-*` (fine-grained/decorative). They behave differently in Tailwind v4.
+UDS provides two families of spacing tokens: `--space-*` (structural/layout) and
+`--gap-*` (fine-grained/decorative). They behave differently in Tailwind v4.
 
 > **Unit note:** Figma designs use **px**, but UDS CSS custom properties use
 > **rem** (base: 16px = 1rem). All tables below show both units so the full
@@ -14,20 +14,20 @@ These tokens are **natively recognized** by Tailwind v4 — no alias needed.
 
 Values differ by platform (comfortable vs compact):
 
-| Token       | Comfortable (px) | Comfortable (rem) | Compact (px) | Compact (rem) | Tailwind (padding) | Tailwind (gap) | Tailwind (margin) |
-| ----------- | ---------------- | ------------------ | ------------ | ------------- | ------------------ | -------------- | ----------------- |
-| `--space-0` | 0                | 0                  | 0            | 0             | `p-0`              | `gap-0`        | `m-0`             |
-| `--space-1` | 4px              | 0.25rem            | 2px          | 0.125rem      | `p-1`              | `gap-1`        | `m-1`             |
-| `--space-2` | 8px              | 0.5rem             | 6px          | 0.375rem      | `p-2`              | `gap-2`        | `m-2`             |
-| `--space-3` | 16px             | 1rem               | 12px         | 0.75rem       | `p-3`              | `gap-3`        | `m-3`             |
-| `--space-4` | 24px             | 1.5rem             | 18px         | 1.125rem      | `p-4`              | `gap-4`        | `m-4`             |
-| `--space-5` | 32px             | 2rem               | 24px         | 1.5rem        | `p-5`              | `gap-5`        | `m-5`             |
-| `--space-6` | 40px             | 2.5rem             | 32px         | 2rem          | `p-6`              | `gap-6`        | `m-6`             |
-| `--space-7` | 48px             | 3rem               | 40px         | 2.5rem        | `p-7`              | `gap-7`        | `m-7`             |
-| `--space-8` | 64px             | 4rem               | 48px         | 3rem          | `p-8`              | `gap-8`        | `m-8`             |
-| `--space-9` | 80px             | 5rem               | 64px         | 4rem          | `p-9`              | `gap-9`        | `m-9`             |
-| `--space-10`| 96px             | 6rem               | 80px         | 5rem          | `p-10`             | `gap-10`       | `m-10`            |
-| `--space-11`| 128px            | 8rem               | 96px         | 6rem          | `p-11`             | `gap-11`       | `m-11`            |
+| Token        | Comfortable (px) | Comfortable (rem) | Compact (px) | Compact (rem) | Tailwind (padding) | Tailwind (gap) | Tailwind (margin) |
+| ------------ | ---------------- | ----------------- | ------------ | ------------- | ------------------ | -------------- | ----------------- |
+| `--space-0`  | 0                | 0                 | 0            | 0             | `p-0`              | `gap-0`        | `m-0`             |
+| `--space-1`  | 4px              | 0.25rem           | 2px          | 0.125rem      | `p-1`              | `gap-1`        | `m-1`             |
+| `--space-2`  | 8px              | 0.5rem            | 6px          | 0.375rem      | `p-2`              | `gap-2`        | `m-2`             |
+| `--space-3`  | 16px             | 1rem              | 12px         | 0.75rem       | `p-3`              | `gap-3`        | `m-3`             |
+| `--space-4`  | 24px             | 1.5rem            | 18px         | 1.125rem      | `p-4`              | `gap-4`        | `m-4`             |
+| `--space-5`  | 32px             | 2rem              | 24px         | 1.5rem        | `p-5`              | `gap-5`        | `m-5`             |
+| `--space-6`  | 40px             | 2.5rem            | 32px         | 2rem          | `p-6`              | `gap-6`        | `m-6`             |
+| `--space-7`  | 48px             | 3rem              | 40px         | 2.5rem        | `p-7`              | `gap-7`        | `m-7`             |
+| `--space-8`  | 64px             | 4rem              | 48px         | 3rem          | `p-8`              | `gap-8`        | `m-8`             |
+| `--space-9`  | 80px             | 5rem              | 64px         | 4rem          | `p-9`              | `gap-9`        | `m-9`             |
+| `--space-10` | 96px             | 6rem              | 80px         | 5rem          | `p-10`             | `gap-10`       | `m-10`            |
+| `--space-11` | 128px            | 8rem              | 96px         | 6rem          | `p-11`             | `gap-11`       | `m-11`            |
 
 Also supports directional variants: `px-4`, `py-4`, `pt-4`, `pb-4`, `pl-4`,
 `pr-4`, `mx-4`, `my-4`, etc.
@@ -43,16 +43,16 @@ Gap tokens use even-number suffixes and require an explicit `gap` alias in the
 Tailwind class. Unlike `--space-*`, gap values are identical across comfortable
 and compact.
 
-| Token      | Value (px) | Value (rem) | Tailwind (padding) | Tailwind (gap)  | Tailwind (margin) |
-| ---------- | ---------- | ----------- | ------------------ | --------------- | ----------------- |
-| `--gap-0`  | 0          | 0           | `p-gap-0`          | `gap-gap-0`     | `m-gap-0`         |
-| `--gap-2`  | 2px        | 0.125rem    | `p-gap-2`          | `gap-gap-2`     | `m-gap-2`         |
-| `--gap-4`  | 4px        | 0.25rem     | `p-gap-4`          | `gap-gap-4`     | `m-gap-4`         |
-| `--gap-6`  | 6px        | 0.375rem    | `p-gap-6`          | `gap-gap-6`     | `m-gap-6`         |
-| `--gap-8`  | 8px        | 0.5rem      | `p-gap-8`          | `gap-gap-8`     | `m-gap-8`         |
-| `--gap-10` | 10px       | 0.625rem    | `p-gap-10`         | `gap-gap-10`    | `m-gap-10`        |
-| `--gap-12` | 12px       | 0.75rem     | `p-gap-12`         | `gap-gap-12`    | `m-gap-12`        |
-| `--gap-14` | 14px       | 0.875rem    | `p-gap-14`         | `gap-gap-14`    | `m-gap-14`        |
+| Token      | Value (px) | Value (rem) | Tailwind (padding) | Tailwind (gap) | Tailwind (margin) |
+| ---------- | ---------- | ----------- | ------------------ | -------------- | ----------------- |
+| `--gap-0`  | 0          | 0           | `p-gap-0`          | `gap-gap-0`    | `m-gap-0`         |
+| `--gap-2`  | 2px        | 0.125rem    | `p-gap-2`          | `gap-gap-2`    | `m-gap-2`         |
+| `--gap-4`  | 4px        | 0.25rem     | `p-gap-4`          | `gap-gap-4`    | `m-gap-4`         |
+| `--gap-6`  | 6px        | 0.375rem    | `p-gap-6`          | `gap-gap-6`    | `m-gap-6`         |
+| `--gap-8`  | 8px        | 0.5rem      | `p-gap-8`          | `gap-gap-8`    | `m-gap-8`         |
+| `--gap-10` | 10px       | 0.625rem    | `p-gap-10`         | `gap-gap-10`   | `m-gap-10`        |
+| `--gap-12` | 12px       | 0.75rem     | `p-gap-12`         | `gap-gap-12`   | `m-gap-12`        |
+| `--gap-14` | 14px       | 0.875rem    | `p-gap-14`         | `gap-gap-14`   | `m-gap-14`        |
 
 Also supports directional variants: `px-gap-4`, `py-gap-2`, etc.
 
@@ -63,61 +63,61 @@ tables to translate any Figma spacing value to the exact Tailwind utility class.
 
 ### Figma `space/*` → Tailwind utility
 
-| Figma Token  | Comfortable (px) | CSS Variable   | Tailwind (padding) | Tailwind (margin) | Tailwind (gap) |
-| ------------ | ----------------- | -------------- | ------------------ | ----------------- | -------------- |
-| `space/0`    | 0                 | `--space-0`    | `p-0`              | `m-0`             | `gap-0`        |
-| `space/1`    | 4                 | `--space-1`    | `p-1`              | `m-1`             | `gap-1`        |
-| `space/2`    | 8                 | `--space-2`    | `p-2`              | `m-2`             | `gap-2`        |
-| `space/3`    | 16                | `--space-3`    | `p-3`              | `m-3`             | `gap-3`        |
-| `space/4`    | 24                | `--space-4`    | `p-4`              | `m-4`             | `gap-4`        |
-| `space/5`    | 32                | `--space-5`    | `p-5`              | `m-5`             | `gap-5`        |
-| `space/6`    | 40                | `--space-6`    | `p-6`              | `m-6`             | `gap-6`        |
-| `space/7`    | 48                | `--space-7`    | `p-7`              | `m-7`             | `gap-7`        |
-| `space/8`    | 64                | `--space-8`    | `p-8`              | `m-8`             | `gap-8`        |
-| `space/9`    | 80                | `--space-9`    | `p-9`              | `m-9`             | `gap-9`        |
-| `space/10`   | 96                | `--space-10`   | `p-10`             | `m-10`            | `gap-10`       |
-| `space/11`   | 128               | `--space-11`   | `p-11`             | `m-11`            | `gap-11`       |
+| Figma Token | Comfortable (px) | CSS Variable | Tailwind (padding) | Tailwind (margin) | Tailwind (gap) |
+| ----------- | ---------------- | ------------ | ------------------ | ----------------- | -------------- |
+| `space/0`   | 0                | `--space-0`  | `p-0`              | `m-0`             | `gap-0`        |
+| `space/1`   | 4                | `--space-1`  | `p-1`              | `m-1`             | `gap-1`        |
+| `space/2`   | 8                | `--space-2`  | `p-2`              | `m-2`             | `gap-2`        |
+| `space/3`   | 16               | `--space-3`  | `p-3`              | `m-3`             | `gap-3`        |
+| `space/4`   | 24               | `--space-4`  | `p-4`              | `m-4`             | `gap-4`        |
+| `space/5`   | 32               | `--space-5`  | `p-5`              | `m-5`             | `gap-5`        |
+| `space/6`   | 40               | `--space-6`  | `p-6`              | `m-6`             | `gap-6`        |
+| `space/7`   | 48               | `--space-7`  | `p-7`              | `m-7`             | `gap-7`        |
+| `space/8`   | 64               | `--space-8`  | `p-8`              | `m-8`             | `gap-8`        |
+| `space/9`   | 80               | `--space-9`  | `p-9`              | `m-9`             | `gap-9`        |
+| `space/10`  | 96               | `--space-10` | `p-10`             | `m-10`            | `gap-10`       |
+| `space/11`  | 128              | `--space-11` | `p-11`             | `m-11`            | `gap-11`       |
 
 Directional variants: `px-{n}`, `py-{n}`, `pt-{n}`, `pb-{n}`, `pl-{n}`,
 `pr-{n}`, `mx-{n}`, `my-{n}`, `mt-{n}`, `mb-{n}`, `ml-{n}`, `mr-{n}`.
 
 ### Figma `gap/*` → Tailwind utility
 
-| Figma Token | Value (px) | CSS Variable | Tailwind (padding) | Tailwind (margin) | Tailwind (gap)  |
-| ----------- | ---------- | ------------ | ------------------ | ----------------- | --------------- |
-| `gap/0`     | 0          | `--gap-0`    | `p-gap-0`          | `m-gap-0`         | `gap-gap-0`     |
-| `gap/2`     | 2          | `--gap-2`    | `p-gap-2`          | `m-gap-2`         | `gap-gap-2`     |
-| `gap/4`     | 4          | `--gap-4`    | `p-gap-4`          | `m-gap-4`         | `gap-gap-4`     |
-| `gap/6`     | 6          | `--gap-6`    | `p-gap-6`          | `m-gap-6`         | `gap-gap-6`     |
-| `gap/8`     | 8          | `--gap-8`    | `p-gap-8`          | `m-gap-8`         | `gap-gap-8`     |
-| `gap/10`    | 10         | `--gap-10`   | `p-gap-10`         | `m-gap-10`        | `gap-gap-10`    |
-| `gap/12`    | 12         | `--gap-12`   | `p-gap-12`         | `m-gap-12`        | `gap-gap-12`    |
-| `gap/14`    | 14         | `--gap-14`   | `p-gap-14`         | `m-gap-14`        | `gap-gap-14`    |
+| Figma Token | Value (px) | CSS Variable | Tailwind (padding) | Tailwind (margin) | Tailwind (gap) |
+| ----------- | ---------- | ------------ | ------------------ | ----------------- | -------------- |
+| `gap/0`     | 0          | `--gap-0`    | `p-gap-0`          | `m-gap-0`         | `gap-gap-0`    |
+| `gap/2`     | 2          | `--gap-2`    | `p-gap-2`          | `m-gap-2`         | `gap-gap-2`    |
+| `gap/4`     | 4          | `--gap-4`    | `p-gap-4`          | `m-gap-4`         | `gap-gap-4`    |
+| `gap/6`     | 6          | `--gap-6`    | `p-gap-6`          | `m-gap-6`         | `gap-gap-6`    |
+| `gap/8`     | 8          | `--gap-8`    | `p-gap-8`          | `m-gap-8`         | `gap-gap-8`    |
+| `gap/10`    | 10         | `--gap-10`   | `p-gap-10`         | `m-gap-10`        | `gap-gap-10`   |
+| `gap/12`    | 12         | `--gap-12`   | `p-gap-12`         | `m-gap-12`        | `gap-gap-12`   |
+| `gap/14`    | 14         | `--gap-14`   | `p-gap-14`         | `m-gap-14`        | `gap-gap-14`   |
 
 ### Figma pixel value → Token reverse lookup
 
 When Figma shows a raw pixel value (e.g., in Auto Layout gap or padding), find
 the matching token:
 
-| Pixel Value | Space Token (comfortable) | Gap Token | Preferred Tailwind    |
-| ----------- | ------------------------- | --------- | --------------------- |
-| 0           | `space/0`                 | `gap/0`   | `p-0` / `gap-0`      |
-| 2           | —                         | `gap/2`   | `gap-gap-2`           |
-| 4           | `space/1`                 | `gap/4`   | `p-1` / `gap-gap-4`  |
-| 6           | —                         | `gap/6`   | `gap-gap-6`           |
-| 8           | `space/2`                 | `gap/8`   | `p-2` / `gap-gap-8`  |
-| 10          | —                         | `gap/10`  | `gap-gap-10`          |
-| 12          | —                         | `gap/12`  | `gap-gap-12`          |
-| 14          | —                         | `gap/14`  | `gap-gap-14`          |
-| 16          | `space/3`                 | —         | `p-3` / `gap-3`      |
-| 24          | `space/4`                 | —         | `p-4` / `gap-4`      |
-| 32          | `space/5`                 | —         | `p-5` / `gap-5`      |
-| 40          | `space/6`                 | —         | `p-6` / `gap-6`      |
-| 48          | `space/7`                 | —         | `p-7` / `gap-7`      |
-| 64          | `space/8`                 | —         | `p-8` / `gap-8`      |
-| 80          | `space/9`                 | —         | `p-9` / `gap-9`      |
-| 96          | `space/10`                | —         | `p-10` / `gap-10`    |
-| 128         | `space/11`                | —         | `p-11` / `gap-11`    |
+| Pixel Value | Space Token (comfortable) | Gap Token | Preferred Tailwind  |
+| ----------- | ------------------------- | --------- | ------------------- |
+| 0           | `space/0`                 | `gap/0`   | `p-0` / `gap-0`     |
+| 2           | —                         | `gap/2`   | `gap-gap-2`         |
+| 4           | `space/1`                 | `gap/4`   | `p-1` / `gap-gap-4` |
+| 6           | —                         | `gap/6`   | `gap-gap-6`         |
+| 8           | `space/2`                 | `gap/8`   | `p-2` / `gap-gap-8` |
+| 10          | —                         | `gap/10`  | `gap-gap-10`        |
+| 12          | —                         | `gap/12`  | `gap-gap-12`        |
+| 14          | —                         | `gap/14`  | `gap-gap-14`        |
+| 16          | `space/3`                 | —         | `p-3` / `gap-3`     |
+| 24          | `space/4`                 | —         | `p-4` / `gap-4`     |
+| 32          | `space/5`                 | —         | `p-5` / `gap-5`     |
+| 40          | `space/6`                 | —         | `p-6` / `gap-6`     |
+| 48          | `space/7`                 | —         | `p-7` / `gap-7`     |
+| 64          | `space/8`                 | —         | `p-8` / `gap-8`     |
+| 80          | `space/9`                 | —         | `p-9` / `gap-9`     |
+| 96          | `space/10`                | —         | `p-10` / `gap-10`   |
+| 128         | `space/11`                | —         | `p-11` / `gap-11`   |
 
 > **Worked example:** Figma shows a price table with `gap: 8` between cards.
 > Look up 8px → `space/2` (comfortable). Use `gap-2` in Tailwind. This resolves
@@ -141,25 +141,25 @@ computed styles in DevTools or Playwright, browsers resolve rem back to **px**.
 
 **Quick reference:**
 
-| px   | rem      |
-| ---- | -------- |
-| 2px  | 0.125rem |
-| 4px  | 0.25rem  |
-| 6px  | 0.375rem |
-| 8px  | 0.5rem   |
-| 10px | 0.625rem |
-| 12px | 0.75rem  |
-| 14px | 0.875rem |
-| 16px | 1rem     |
-| 18px | 1.125rem |
-| 24px | 1.5rem   |
-| 32px | 2rem     |
-| 40px | 2.5rem   |
-| 48px | 3rem     |
-| 64px | 4rem     |
-| 80px | 5rem     |
-| 96px | 6rem     |
-| 128px| 8rem     |
+| px    | rem      |
+| ----- | -------- |
+| 2px   | 0.125rem |
+| 4px   | 0.25rem  |
+| 6px   | 0.375rem |
+| 8px   | 0.5rem   |
+| 10px  | 0.625rem |
+| 12px  | 0.75rem  |
+| 14px  | 0.875rem |
+| 16px  | 1rem     |
+| 18px  | 1.125rem |
+| 24px  | 1.5rem   |
+| 32px  | 2rem     |
+| 40px  | 2.5rem   |
+| 48px  | 3rem     |
+| 64px  | 4rem     |
+| 80px  | 5rem     |
+| 96px  | 6rem     |
+| 128px | 8rem     |
 
 > **Why this matters:** When verifying spacing with Playwright MCP or DevTools,
 > `getComputedStyle()` returns values in **px** (browsers resolve rem → px),
@@ -168,14 +168,14 @@ computed styles in DevTools or Playwright, browsers resolve rem back to **px**.
 
 ## Decision Guide
 
-| Situation                            | Use                        | Reason                           |
-| ------------------------------------ | -------------------------- | -------------------------------- |
-| Section/page layout padding          | `p-6`, `px-8`              | Space tokens, platform-adaptive  |
-| Component internal padding           | `p-4`                      | Space tokens, platform-adaptive  |
-| Flex/grid layout gaps                | `gap-4`, `gap-6`           | Space tokens, platform-adaptive  |
-| Small icon+label gap                 | `gap-gap-4`                | Gap token, 4px fixed             |
-| Tight row spacing                    | `gap-gap-2`                | Gap token, 2px fixed             |
-| Design value not in any token table  | `p-[value]`                | Arbitrary, last resort           |
+| Situation                           | Use              | Reason                          |
+| ----------------------------------- | ---------------- | ------------------------------- |
+| Section/page layout padding         | `p-6`, `px-8`    | Space tokens, platform-adaptive |
+| Component internal padding          | `p-4`            | Space tokens, platform-adaptive |
+| Flex/grid layout gaps               | `gap-4`, `gap-6` | Space tokens, platform-adaptive |
+| Small icon+label gap                | `gap-gap-4`      | Gap token, 4px fixed            |
+| Tight row spacing                   | `gap-gap-2`      | Gap token, 2px fixed            |
+| Design value not in any token table | `p-[value]`      | Arbitrary, last resort          |
 
 ## SUPER CRITICAL: Pixel-Accurate Spacing Verification
 
@@ -223,7 +223,7 @@ After implementing any layout, perform this spacing audit for **every** element:
        rowGap: s.rowGap,
        columnGap: s.columnGap,
      };
-   }
+   };
    ```
    > **Note:** `getComputedStyle()` returns values in **px** (browsers resolve
    > rem → px for computed values), so the result is directly comparable to
@@ -232,15 +232,15 @@ After implementing any layout, perform this spacing audit for **every** element:
 
 ### Common Pixel-Accuracy Mistakes
 
-| Figma Shows | WRONG                   | CORRECT              | Why                                                    |
-| ----------- | ----------------------- | -------------------- | ------------------------------------------------------ |
-| `space/2` (8px)  | `p-8` (64px)      | `p-2` (8px)          | Token number is 2, not the pixel value                 |
-| `space/4` (24px) | `p-24` or `p-6`   | `p-4` (24px)         | Use the token number, not px or Tailwind default scale |
-| `gap/8` (8px)    | `gap-8` (64px)    | `gap-gap-8` (8px)    | `gap-*` tokens need the `gap` alias prefix             |
-| `gap/4` (4px)    | `gap-4` (24px)    | `gap-gap-4` (4px)    | `gap-4` resolves to `--space-4` = 24px, not 4px        |
-| 8px raw value    | `gap-[8px]`       | `gap-2` (8px)        | Always use a token; 8px = `space/2`                    |
-| 16px padding     | `p-4` (24px)      | `p-3` (16px)         | UDS p-4 ≠ Tailwind default p-4; look up 16px → space/3 |
-| 2px inner gap    | `gap-2` (8px)     | `gap-gap-2` (2px)    | Small gaps use `--gap-*` tokens, not `--space-*`       |
+| Figma Shows      | WRONG           | CORRECT           | Why                                                    |
+| ---------------- | --------------- | ----------------- | ------------------------------------------------------ |
+| `space/2` (8px)  | `p-8` (64px)    | `p-2` (8px)       | Token number is 2, not the pixel value                 |
+| `space/4` (24px) | `p-24` or `p-6` | `p-4` (24px)      | Use the token number, not px or Tailwind default scale |
+| `gap/8` (8px)    | `gap-8` (64px)  | `gap-gap-8` (8px) | `gap-*` tokens need the `gap` alias prefix             |
+| `gap/4` (4px)    | `gap-4` (24px)  | `gap-gap-4` (4px) | `gap-4` resolves to `--space-4` = 24px, not 4px        |
+| 8px raw value    | `gap-[8px]`     | `gap-2` (8px)     | Always use a token; 8px = `space/2`                    |
+| 16px padding     | `p-4` (24px)    | `p-3` (16px)      | UDS p-4 ≠ Tailwind default p-4; look up 16px → space/3 |
+| 2px inner gap    | `gap-2` (8px)   | `gap-gap-2` (2px) | Small gaps use `--gap-*` tokens, not `--space-*`       |
 
 > **Warning:** The most dangerous mistake is confusing token numbers with pixel
 > values. `p-2` does NOT mean 2px — it means `var(--space-2)` = **8px**
@@ -256,8 +256,8 @@ After implementing any layout, perform this spacing audit for **every** element:
   comfortable platform after implementation.
 - Use `--space-*` for structural spacing (section padding, layout gaps,
   component internal spacing).
-- Use `--gap-*` for fine-grained/decorative spacing (icon-to-text gap, tight
-  row spacing, small inner gaps).
+- Use `--gap-*` for fine-grained/decorative spacing (icon-to-text gap, tight row
+  spacing, small inner gaps).
 - Prefer tokens over arbitrary values; use arbitrary only when the design value
   has no token match.
 

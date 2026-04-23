@@ -1,7 +1,8 @@
 # useDynamicIcon
 
-React hook for dynamically loading icons by string name at runtime. Use this when
-icon names come from data (CMS, API, database) rather than being hardcoded in JSX.
+React hook for dynamically loading icons by string name at runtime. Use this
+when icon names come from data (CMS, API, database) rather than being hardcoded
+in JSX.
 
 ## Import
 
@@ -55,11 +56,11 @@ Icon needed in the UI -->
 
 ## Parameters
 
-| Parameter | Type                      | Required | Description                                                                                          |
-| --------- | ------------------------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `loader`  | `IconBarrelLoader`        | Yes      | Arrow function with a **static** import path: `() => import('@ionos-web-design-system/icon/{group}')` |
-| `name`    | `string \| undefined \| null` | Yes  | Icon name in **kebab-case** (e.g., `"account-security"`, `"arrow-down"`). Pass `null`/`undefined` to skip loading. |
-| `options` | `UseDynamicIconOptions`   | No       | `{ variant?: string }` — override the color-scheme variant (default: auto-detected from ThemeProvider) |
+| Parameter | Type                          | Required | Description                                                                                                        |
+| --------- | ----------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
+| `loader`  | `IconBarrelLoader`            | Yes      | Arrow function with a **static** import path: `() => import('@ionos-web-design-system/icon/{group}')`              |
+| `name`    | `string \| undefined \| null` | Yes      | Icon name in **kebab-case** (e.g., `"account-security"`, `"arrow-down"`). Pass `null`/`undefined` to skip loading. |
+| `options` | `UseDynamicIconOptions`       | No       | `{ variant?: string }` — override the color-scheme variant (default: auto-detected from ThemeProvider)             |
 
 ### Loader definition
 
@@ -72,7 +73,8 @@ const loadIonosIcons = () => import('@ionos-web-design-system/icon/ionos');
 const loadSystemIcons = () => import('@ionos-web-design-system/icon/system');
 
 // WRONG — template literal prevents bundler resolution
-const loadIcons = (group: string) => import(`@ionos-web-design-system/icon/${group}`);
+const loadIcons = (group: string) =>
+  import(`@ionos-web-design-system/icon/${group}`);
 ```
 
 ## Return Value
@@ -80,22 +82,22 @@ const loadIcons = (group: string) => import(`@ionos-web-design-system/icon/${gro
 ```tsx
 interface UseDynamicIconResult {
   icon: InjectIconFunction | null; // Loaded icon inject function, or null
-  isLoading: boolean;              // true while barrel import is in progress
-  error: string | null;            // Error message if import or lookup failed
+  isLoading: boolean; // true while barrel import is in progress
+  error: string | null; // Error message if import or lookup failed
 }
 ```
 
-| Field       | When `null`/`false`           | When set                                    |
-| ----------- | ----------------------------- | ------------------------------------------- |
-| `icon`      | Loading, error, or null name  | Successfully resolved — pass to `<Icon>`    |
-| `isLoading` | Resolved or no name given     | Barrel import in progress                   |
-| `error`     | Success or still loading      | Icon not found in barrel, or import failed  |
+| Field       | When `null`/`false`          | When set                                   |
+| ----------- | ---------------------------- | ------------------------------------------ |
+| `icon`      | Loading, error, or null name | Successfully resolved — pass to `<Icon>`   |
+| `isLoading` | Resolved or no name given    | Barrel import in progress                  |
+| `error`     | Success or still loading     | Icon not found in barrel, or import failed |
 
 ## How It Works
 
-1. **Barrel caching** — Uses a `WeakMap` keyed by loader function reference. Each
-   barrel is loaded at most once, regardless of how many components use the same
-   loader.
+1. **Barrel caching** — Uses a `WeakMap` keyed by loader function reference.
+   Each barrel is loaded at most once, regardless of how many components use the
+   same loader.
 
 2. **Variant auto-detection** — Reads the current color scheme from
    `ThemeProvider` (`useTheme().color`). For groups with light/dark variants, it
@@ -111,8 +113,8 @@ interface UseDynamicIconResult {
 
 ## Variant Groups
 
-| Groups with Light/Dark variants         | Groups without variants          |
-| --------------------------------------- | -------------------------------- |
+| Groups with Light/Dark variants                          | Groups without variants               |
+| -------------------------------------------------------- | ------------------------------------- |
 | `ionos`, `brandmark`, `fasthosts`, `homepl`, `checkmark` | `system`, `social`, `flags`, `strato` |
 
 For variant groups, the hook automatically appends the active color scheme
@@ -187,7 +189,8 @@ function FeatureList({ features }: { features: Feature[] }) {
 function FeatureIcon({ name }: { name: string }) {
   const { icon, isLoading } = useDynamicIcon(loadIonosIcons, name);
 
-  if (isLoading || !icon) return <div className="h-5 w-5 animate-pulse rounded bg-gray-200" />;
+  if (isLoading || !icon)
+    return <div className="h-5 w-5 animate-pulse rounded bg-gray-200" />;
   return <Icon icon={icon} size="medium" />;
 }
 ```
@@ -225,8 +228,8 @@ function OptionalIcon({ name }: { name?: string }) {
 
 - Define barrel loaders at **module scope** (outside components) for stable
   WeakMap caching.
-- Use **static import paths** in the loader arrow function so bundlers can resolve
-  the barrel.
+- Use **static import paths** in the loader arrow function so bundlers can
+  resolve the barrel.
 - Handle **all three states** (`isLoading`, `error`, `icon`) in your UI.
 - Pass the returned `icon` to `<Icon icon={icon}>` — same pattern as static
   imports.
@@ -245,4 +248,4 @@ function OptionalIcon({ name }: { name?: string }) {
 - Call the returned icon function manually — pass it as a reference:
   `icon={icon}` not `icon={icon()}`.
 - Use template literal import paths in the loader — bundlers cannot resolve
-  dynamic paths like `` import(`.../${group}`) ``.
+  dynamic paths like ``import(`.../${group}`)``.

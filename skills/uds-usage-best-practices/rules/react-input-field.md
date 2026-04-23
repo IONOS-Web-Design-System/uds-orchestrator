@@ -8,17 +8,17 @@ import InputField from '@ionos-web-design-system/react/input-field';
 
 ## Props
 
-| Prop                | Type                                 | Default     | Description                                       |
-| ------------------- | ------------------------------------ | ----------- | ------------------------------------------------- |
+| Prop                | Type                                | Default     | Description                                       |
+| ------------------- | ----------------------------------- | ----------- | ------------------------------------------------- |
 | `variant`           | `'default' \| 'borderless'`         | `'default'` | Visual style — full border or bottom-only         |
-| `label`             | `string`                             | —           | Label text (floating, static, or inline)          |
+| `label`             | `string`                            | —           | Label text (floating, static, or inline)          |
 | `labelPosition`     | `'inside' \| 'top' \| 'left'`       | `'inside'`  | Label placement — overrides Form context value    |
 | `validationState`   | `'success' \| 'error' \| 'warning'` | —           | Visual state (auto-set to 'error' from FormField) |
-| `validationMessage` | `string`                             | —           | Message shown below input for error/warning       |
-| `clearable`         | `boolean`                            | `false`     | Show clear button when input has value            |
-| `onClear`           | `() => void`                         | —           | Callback when clear button is clicked             |
-| `loading`           | `boolean`                            | `false`     | Show inline loading spinner (hides clear button)  |
-| `testId`            | `string`                             | —           | Test identifier                                   |
+| `validationMessage` | `string`                            | —           | Message shown below input for error/warning       |
+| `clearable`         | `boolean`                           | `false`     | Show clear button when input has value            |
+| `onClear`           | `() => void`                        | —           | Callback when clear button is clicked             |
+| `loading`           | `boolean`                           | `false`     | Show inline loading spinner (hides clear button)  |
+| `testId`            | `string`                            | —           | Test identifier                                   |
 
 Extends `React.InputHTMLAttributes<HTMLInputElement>` (excluding `size`).
 Supports all native input props: `type`, `required`, `minLength`, `maxLength`,

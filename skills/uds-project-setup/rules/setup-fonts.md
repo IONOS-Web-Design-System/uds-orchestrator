@@ -1,21 +1,21 @@
 # Font Setup
 
-UDS brands declare `font-family` via design tokens, but the actual font files must
-be loaded by the project. Without loading the font, the browser falls back to system
-fonts and the design won't match.
+UDS brands declare `font-family` via design tokens, but the actual font files
+must be loaded by the project. Without loading the font, the browser falls back
+to system fonts and the design won't match.
 
 ## Brand-to-Font Mapping
 
-| Brand       | Font Family   | Google Fonts URL Parameter | Weights Needed       |
-| ----------- | ------------- | -------------------------- | -------------------- |
-| `ionos`     | Inter         | `Inter`                    | 400, 500, 600, 700  |
-| `strato`    | Nunito Sans   | `Nunito+Sans`              | 400, 600, 700       |
-| `fasthosts` | Poppins       | `Poppins`                  | 400, 500, 600, 700  |
-| `homepl`    | Lato          | `Lato`                     | 400, 700            |
-| `strefa`    | Lato          | `Lato`                     | 400, 700            |
-| `udag`      | Nunito Sans   | `Nunito+Sans`              | 400, 600, 700       |
-| `world4you` | Nunito Sans   | `Nunito+Sans`              | 400, 600, 700       |
-| `arsys`     | Inter         | `Inter`                    | 400, 500, 600, 700  |
+| Brand       | Font Family | Google Fonts URL Parameter | Weights Needed     |
+| ----------- | ----------- | -------------------------- | ------------------ |
+| `ionos`     | Inter       | `Inter`                    | 400, 500, 600, 700 |
+| `strato`    | Nunito Sans | `Nunito+Sans`              | 400, 600, 700      |
+| `fasthosts` | Poppins     | `Poppins`                  | 400, 500, 600, 700 |
+| `homepl`    | Lato        | `Lato`                     | 400, 700           |
+| `strefa`    | Lato        | `Lato`                     | 400, 700           |
+| `udag`      | Nunito Sans | `Nunito+Sans`              | 400, 600, 700      |
+| `world4you` | Nunito Sans | `Nunito+Sans`              | 400, 600, 700      |
+| `arsys`     | Inter       | `Inter`                    | 400, 500, 600, 700 |
 
 ## Google Fonts (Recommended)
 
@@ -23,23 +23,32 @@ Add to `index.html` `<head>`:
 
 ```html
 <!-- Example for ionos brand (Inter) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
 ```
 
 ```html
 <!-- Example for strato brand (Nunito Sans) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap"
+  rel="stylesheet"
+/>
 ```
 
 ```html
 <!-- Example for fasthosts brand (Poppins) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
 ```
 
 ## Local Font Import (Alternative)
@@ -78,7 +87,12 @@ const inter = Inter({
 
 export default function RootLayout({ children }) {
   return (
-    <html className={inter.variable} data-brand="ionos" data-platform="comfortable" data-color-scheme="light">
+    <html
+      className={inter.variable}
+      data-brand="ionos"
+      data-platform="comfortable"
+      data-color-scheme="light"
+    >
       <body>{children}</body>
     </html>
   );
@@ -88,6 +102,7 @@ export default function RootLayout({ children }) {
 ## Verification
 
 Check that fonts are loading correctly:
+
 1. Open browser DevTools → Network tab → filter by "Font"
 2. Verify the correct font files are downloaded
 3. Inspect body `font-family` — should show the brand font, not system fallbacks

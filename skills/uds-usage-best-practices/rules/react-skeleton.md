@@ -8,14 +8,14 @@ import Skeleton from '@ionos-web-design-system/react/skeleton';
 
 ## Props
 
-| Prop      | Type                                      | Default       | Description                                      |
-| --------- | ----------------------------------------- | ------------- | ------------------------------------------------ |
-| `variant` | `'rectangle' \| 'circle' \| 'text'`      | `'rectangle'` | Shape of the placeholder                         |
-| `width`   | `string \| number`                        | variant-based | Width (number = px). rectangle=100%, circle=40px |
-| `height`  | `string \| number`                        | variant-based | Height (number = px). rect/circle=40px, text=16px |
-| `lines`   | `number`                                  | `1`           | Number of text lines (text variant only)         |
-| `rounded` | `string`                                  | —             | Border-radius override                           |
-| `animate` | `boolean`                                 | `true`        | Enable shimmer animation                         |
+| Prop      | Type                                | Default       | Description                                       |
+| --------- | ----------------------------------- | ------------- | ------------------------------------------------- |
+| `variant` | `'rectangle' \| 'circle' \| 'text'` | `'rectangle'` | Shape of the placeholder                          |
+| `width`   | `string \| number`                  | variant-based | Width (number = px). rectangle=100%, circle=40px  |
+| `height`  | `string \| number`                  | variant-based | Height (number = px). rect/circle=40px, text=16px |
+| `lines`   | `number`                            | `1`           | Number of text lines (text variant only)          |
+| `rounded` | `string`                            | —             | Border-radius override                            |
+| `animate` | `boolean`                           | `true`        | Enable shimmer animation                          |
 
 ## Usage
 
@@ -63,8 +63,8 @@ Last line renders at 70% width for a natural look.
 - Use Skeleton as a placeholder while content is loading.
 - Match the Skeleton shape and size to the content it replaces.
 - Use `variant="text"` with `lines` for paragraph placeholders.
-- Skeleton respects `prefers-reduced-motion` — animation disabled
-  automatically for users who prefer reduced motion.
+- Skeleton respects `prefers-reduced-motion` — animation disabled automatically
+  for users who prefer reduced motion.
 
 ## Don't
 

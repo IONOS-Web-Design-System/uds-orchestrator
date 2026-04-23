@@ -119,12 +119,13 @@ automatically:
 - Ordered list (`1. item`): renders `BulletIndex` (numbered bullets)
 - Checkmark list (`- [c] item`): renders `BrandCheckmark` icons
 - Lists with bullet points and checkmarks
-- Icon bullet (`- [icon:name] text`): renders an Icon component as the bullet marker.
-  Icons auto-resolve from `@ionos-web-design-system/icon/system`. Supports kebab-case
-  (`cloud-upload`) and camelCase (`cloudUpload`). Falls back to dot bullet if icon not found.
-- Tooltip info icon (`[?](tooltip text)`): renders a small info ButtonIcon wrapped
-  in a Tooltip. Works in all list types (unordered, ordered, checkmark) and inline
-  in paragraphs.
+- Icon bullet (`- [icon:name] text`): renders an Icon component as the bullet
+  marker. Icons auto-resolve from `@ionos-web-design-system/icon/system`.
+  Supports kebab-case (`cloud-upload`) and camelCase (`cloudUpload`). Falls back
+  to dot bullet if icon not found.
+- Tooltip info icon (`[?](tooltip text)`): renders a small info ButtonIcon
+  wrapped in a Tooltip. Works in all list types (unordered, ordered, checkmark)
+  and inline in paragraphs.
 - Tooltip dashline link (`[text](~tooltip content)`): renders a dashline Link
   wrapped in a Tooltip. The `~` prefix distinguishes from regular links.
 
@@ -241,7 +242,7 @@ on the Text component itself, or via a text color token on a parent container:
 
 ```tsx
 <Text>
-  {"Learn about [our pricing](~Flexible plans starting at $5/mo) today."}
+  {'Learn about [our pricing](~Flexible plans starting at $5/mo) today.'}
 </Text>
 ```
 

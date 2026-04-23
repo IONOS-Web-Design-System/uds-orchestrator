@@ -37,7 +37,8 @@ gradient-end                   --color-gradient-end               to-gradient-en
 | `font/...`     | `font-{rest}`                           | Font families                              |
 
 **Important:** The `text/` category maps to text **colors**, not font sizes. For
-typography, always use the `Text` component (see `rules/quick-ref-typography.md`).
+typography, always use the `Text` component (see
+`rules/quick-ref-typography.md`).
 
 ## Border Double-Dash Convention
 

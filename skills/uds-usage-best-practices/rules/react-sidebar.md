@@ -40,74 +40,75 @@ import Sidebar, {
 
 ## SidebarProvider Props
 
-| Prop                 | Type                           | Default | Description                                                                                |
-| -------------------- | ------------------------------ | ------- | ------------------------------------------------------------------------------------------ |
-| `children`           | `React.ReactNode`              | —       | **Required.** Tree wrapped by the provider                                                 |
-| `activeHref`         | `string`                       | —       | Controlled active href — auto-applies `aria-current="page"` on the matching `SidebarItem`  |
-| `onActiveHrefChange` | `(href: string) => void`       | —       | Callback when the active href changes                                                      |
-| `open`               | `boolean`                      | —       | Controlled mobile popover open state                                                       |
-| `defaultOpen`        | `boolean`                      | `false` | Initial mobile open state (uncontrolled)                                                   |
-| `onOpenChange`       | `(open: boolean) => void`      | —       | Callback when the mobile open state changes                                                |
-| `collapsed`          | `boolean`                      | —       | Force the desktop rail collapse regardless of viewport                                     |
-| `onCollapsedChange`  | `(collapsed: boolean) => void` | —       | Callback when the collapsed state changes                                                  |
+| Prop                 | Type                           | Default | Description                                                                               |
+| -------------------- | ------------------------------ | ------- | ----------------------------------------------------------------------------------------- |
+| `children`           | `React.ReactNode`              | —       | **Required.** Tree wrapped by the provider                                                |
+| `activeHref`         | `string`                       | —       | Controlled active href — auto-applies `aria-current="page"` on the matching `SidebarItem` |
+| `onActiveHrefChange` | `(href: string) => void`       | —       | Callback when the active href changes                                                     |
+| `open`               | `boolean`                      | —       | Controlled mobile popover open state                                                      |
+| `defaultOpen`        | `boolean`                      | `false` | Initial mobile open state (uncontrolled)                                                  |
+| `onOpenChange`       | `(open: boolean) => void`      | —       | Callback when the mobile open state changes                                               |
+| `collapsed`          | `boolean`                      | —       | Force the desktop rail collapse regardless of viewport                                    |
+| `onCollapsedChange`  | `(collapsed: boolean) => void` | —       | Callback when the collapsed state changes                                                 |
 
 ## Sidebar Props
 
-| Prop             | Type                 | Default             | Description                                                                      |
-| ---------------- | -------------------- | ------------------- | -------------------------------------------------------------------------------- |
-| `children`       | `React.ReactNode`    | —                   | **Required.** `SidebarItem` / `SidebarGroup` children                            |
-| `aria-label`     | `string`             | `'Main navigation'` | Accessible label for the `<nav>` landmark                                        |
-| `collapsedWidth` | `number \| string`   | `'52px'`            | Rail width. Exposed as `--sidebar-rail-width` for override                       |
-| `responsive`     | `boolean`            | `true`              | Auto rail at `md`, full at `lg`. Set `false` to let `collapsed` drive the state  |
-| `className`      | `string`             | —                   | —                                                                                |
-| `testId`         | `string`             | —                   | —                                                                                |
+| Prop             | Type               | Default             | Description                                                                     |
+| ---------------- | ------------------ | ------------------- | ------------------------------------------------------------------------------- |
+| `children`       | `React.ReactNode`  | —                   | **Required.** `SidebarItem` / `SidebarGroup` children                           |
+| `aria-label`     | `string`           | `'Main navigation'` | Accessible label for the `<nav>` landmark                                       |
+| `collapsedWidth` | `number \| string` | `'52px'`            | Rail width. Exposed as `--sidebar-rail-width` for override                      |
+| `responsive`     | `boolean`          | `true`              | Auto rail at `md`, full at `lg`. Set `false` to let `collapsed` drive the state |
+| `className`      | `string`           | —                   | —                                                                               |
+| `testId`         | `string`           | —                   | —                                                                               |
 
 Extends `React.HTMLAttributes<HTMLElement>`.
 
 ## SidebarGroup Props
 
-| Prop            | Type              | Default | Description                                                                          |
-| --------------- | ----------------- | ------- | ------------------------------------------------------------------------------------ |
-| `children`      | `React.ReactNode` | —       | **Required.** `SidebarItem` children                                                 |
-| `label`         | `string`          | —       | Group label displayed above the items                                                |
-| `isSidebarItem` | `boolean`         | `false` | Internal flag — set when nested directly inside an expandable `SidebarItem`          |
-| `className`     | `string`          | —       | —                                                                                    |
-| `testId`        | `string`          | —       | —                                                                                    |
+| Prop            | Type              | Default | Description                                                                 |
+| --------------- | ----------------- | ------- | --------------------------------------------------------------------------- |
+| `children`      | `React.ReactNode` | —       | **Required.** `SidebarItem` children                                        |
+| `label`         | `string`          | —       | Group label displayed above the items                                       |
+| `isSidebarItem` | `boolean`         | `false` | Internal flag — set when nested directly inside an expandable `SidebarItem` |
+| `className`     | `string`          | —       | —                                                                           |
+| `testId`        | `string`          | —       | —                                                                           |
 
 ## SidebarItem Props
 
-| Prop              | Type                                                              | Default  | Description                                                                         |
-| ----------------- | ----------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------- |
-| `children`        | `React.ReactNode`                                                 | —        | **Required.** Label text (leaf) or nested `SidebarItem`/`SidebarGroup` (expandable) |
-| `label`           | `string`                                                          | —        | Visible label when `children` are nested items                                      |
-| `href`            | `string`                                                          | —        | Link URL. Required for leaf items; optional on expandable parents                   |
-| `type`            | `'link' \| 'button'`                                              | `'link'` | Rendered element (`<a>` vs `<button>`)                                              |
-| `asChild`         | `boolean`                                                         | `false`  | Polymorphic rendering via Radix Slot (e.g. Next.js `<Link>`, React Router)          |
-| `prefix`          | `React.ReactNode`                                                 | —        | Leading node, typically an `Icon`. Required for rail collapse                       |
-| `suffix`          | `React.ReactNode`                                                 | —        | Trailing node aligned to the end                                                    |
-| `description`     | `string`                                                          | —        | Secondary text rendered below the label                                             |
-| `actions`         | `React.ReactNode`                                                 | —        | Persistent action elements (e.g. `Badge`, counter)                                  |
-| `actionsOnHover`  | `React.ReactNode`                                                 | —        | Action elements that replace `suffix` on hover                                      |
-| `open`            | `boolean`                                                         | —        | Controlled expand state (expandable items only)                                     |
-| `defaultOpen`     | `boolean`                                                         | `false`  | Initial expand state (uncontrolled)                                                 |
-| `onOpenChange`    | `(open: boolean) => void`                                         | —        | Callback when the expand state changes                                              |
-| `tooltip`         | `React.ReactNode`                                                 | —        | Tooltip override; defaults to the label in rail mode                                |
-| `onClick`         | `React.MouseEventHandler<HTMLAnchorElement \| HTMLButtonElement>` | —        | —                                                                                   |
-| `target`          | `string`                                                          | —        | `<a target>` pass-through                                                           |
-| `disabled`        | `boolean`                                                         | `false`  | Disables interaction; keyboard navigation skips the item                            |
-| `className`       | `string`                                                          | —        | —                                                                                   |
-| `testId`          | `string`                                                          | —        | —                                                                                   |
+| Prop             | Type                                                              | Default  | Description                                                                         |
+| ---------------- | ----------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------- |
+| `children`       | `React.ReactNode`                                                 | —        | **Required.** Label text (leaf) or nested `SidebarItem`/`SidebarGroup` (expandable) |
+| `label`          | `string`                                                          | —        | Visible label when `children` are nested items                                      |
+| `href`           | `string`                                                          | —        | Link URL. Required for leaf items; optional on expandable parents                   |
+| `type`           | `'link' \| 'button'`                                              | `'link'` | Rendered element (`<a>` vs `<button>`)                                              |
+| `asChild`        | `boolean`                                                         | `false`  | Polymorphic rendering via Radix Slot (e.g. Next.js `<Link>`, React Router)          |
+| `prefix`         | `React.ReactNode`                                                 | —        | Leading node, typically an `Icon`. Required for rail collapse                       |
+| `suffix`         | `React.ReactNode`                                                 | —        | Trailing node aligned to the end                                                    |
+| `description`    | `string`                                                          | —        | Secondary text rendered below the label                                             |
+| `actions`        | `React.ReactNode`                                                 | —        | Persistent action elements (e.g. `Badge`, counter)                                  |
+| `actionsOnHover` | `React.ReactNode`                                                 | —        | Action elements that replace `suffix` on hover                                      |
+| `open`           | `boolean`                                                         | —        | Controlled expand state (expandable items only)                                     |
+| `defaultOpen`    | `boolean`                                                         | `false`  | Initial expand state (uncontrolled)                                                 |
+| `onOpenChange`   | `(open: boolean) => void`                                         | —        | Callback when the expand state changes                                              |
+| `tooltip`        | `React.ReactNode`                                                 | —        | Tooltip override; defaults to the label in rail mode                                |
+| `onClick`        | `React.MouseEventHandler<HTMLAnchorElement \| HTMLButtonElement>` | —        | —                                                                                   |
+| `target`         | `string`                                                          | —        | `<a target>` pass-through                                                           |
+| `disabled`       | `boolean`                                                         | `false`  | Disables interaction; keyboard navigation skips the item                            |
+| `className`      | `string`                                                          | —        | —                                                                                   |
+| `testId`         | `string`                                                          | —        | —                                                                                   |
 
-Extends `Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'prefix' | 'type'>`.
+Extends
+`Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'prefix' | 'type'>`.
 
 ## SidebarSkeleton Props
 
-| Prop         | Type      | Default | Description                                                   |
-| ------------ | --------- | ------- | ------------------------------------------------------------- |
-| `items`      | `number`  | `4`     | Number of skeleton rows to render                             |
-| `showGroups` | `boolean` | `false` | Render some rows as expandable groups with indented children  |
-| `className`  | `string`  | —       | —                                                             |
-| `testId`     | `string`  | —       | —                                                             |
+| Prop         | Type      | Default | Description                                                  |
+| ------------ | --------- | ------- | ------------------------------------------------------------ |
+| `items`      | `number`  | `4`     | Number of skeleton rows to render                            |
+| `showGroups` | `boolean` | `false` | Render some rows as expandable groups with indented children |
+| `className`  | `string`  | —       | —                                                            |
+| `testId`     | `string`  | —       | —                                                            |
 
 ## Hooks
 
@@ -218,11 +219,13 @@ single source of truth.
 ### Loading state
 
 ```tsx
-{isLoading ? (
-  <SidebarSkeleton items={6} showGroups />
-) : (
-  <Sidebar>{/* real items */}</Sidebar>
-)}
+{
+  isLoading ? (
+    <SidebarSkeleton items={6} showGroups />
+  ) : (
+    <Sidebar>{/* real items */}</Sidebar>
+  );
+}
 ```
 
 ## Accessibility
@@ -255,8 +258,8 @@ single source of truth.
 
 ## Don't
 
-- Force `collapsed={true}` when some top-level items lack a `prefix` icon —
-  the rail would be unusable and the component will keep it at full width.
+- Force `collapsed={true}` when some top-level items lack a `prefix` icon — the
+  rail would be unusable and the component will keep it at full width.
 - Apply custom classes to the child inside `asChild` (e.g. `<a className="…">`);
   put styling on `SidebarItem` itself.
 - Set `aria-current` manually on items — drive it via `activeHref` on

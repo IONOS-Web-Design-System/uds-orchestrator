@@ -101,15 +101,15 @@ Strato, Fasthosts, Home.pl, World4You, Arsys, and other group brands.
 // CORRECT — div controls size, img fills container
 import ionosLightSrc from '@ionos-web-design-system/icon/brandmark/ionosLight?url';
 
-<div className="w-[120px] h-[32px]">
+<div className="h-[32px] w-[120px]">
   <img src={ionosLightSrc} className="h-full w-full" alt="IONOS" />
-</div>
+</div>;
 
 // WRONG — Icon component distorts logo proportions
 import { ionosLight } from '@ionos-web-design-system/icon/brandmark';
 import Icon from '@ionos-web-design-system/react/icon';
 
-<Icon icon={ionosLight} size="xLarge" />  // ← distorted, don't do this
+<Icon icon={ionosLight} size="xLarge" />; // ← distorted, don't do this
 ```
 
 See SKILL.md section 10 (Category 4) for the full brand logo workflow.

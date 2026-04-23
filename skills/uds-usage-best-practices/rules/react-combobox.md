@@ -8,28 +8,28 @@ import Combobox from '@ionos-web-design-system/react/combobox';
 
 ## Props
 
-| Prop               | Type                                        | Default           | Description                                            |
-| ------------------ | ------------------------------------------- | ------------------ | ------------------------------------------------------ |
-| `options`          | `(ComboboxOption \| ComboboxGroup)[]`       | —                  | **Required.** Flat or grouped option list               |
-| `value`            | `string \| string[]`                        | —                  | Controlled selection (string for single, array for multi) |
-| `defaultValue`     | `string \| string[]`                        | —                  | Initial selection (uncontrolled)                        |
-| `onValueChange`    | `(value: string \| string[]) => void`       | —                  | Selection change handler                                |
-| `variant`          | `'default' \| 'borderless'`                 | `'default'`        | Visual style — full border or bottom-only               |
-| `label`            | `string`                                    | —                  | Floating/static label text                              |
-| `labelPosition`    | `'inside' \| 'top' \| 'left'`              | `'inside'`         | Label placement — overrides Form context                |
-| `placeholder`      | `string`                                    | —                  | Placeholder when no value selected                      |
-| `multiSelect`      | `boolean`                                   | `false`            | Enable multi-select with Pills                          |
-| `searchable`       | `boolean`                                   | `true`             | Enable type-to-filter. `false` = closed select.         |
-| `noMatchText`      | `string`                                    | `'No results found'` | Message when search yields no matches                 |
-| `onSearchChange`   | `(query: string) => void`                   | —                  | Callback for async/server-side filtering                |
-| `disabled`         | `boolean`                                   | `false`            | Disable all interaction                                 |
-| `loading`          | `boolean`                                   | `false`            | Show Skeleton placeholder in popup                      |
-| `validationState`  | `'success' \| 'error' \| 'warning'`         | —                  | Visual state (auto-set to 'error' from FormField)       |
-| `validationMessage`| `string`                                    | —                  | Message shown below input for error/warning             |
-| `clearable`        | `boolean`                                   | `false`            | Show clear button when has value                        |
-| `cellSize`         | `'base' \| 'loose'`                         | `'base'`           | Density of option items in popup                        |
-| `contentMaxHeight` | `string`                                    | `'340px'`          | Max height of popup panel                               |
-| `name`             | `string`                                    | —                  | Form field name for native submission                   |
+| Prop                | Type                                  | Default              | Description                                               |
+| ------------------- | ------------------------------------- | -------------------- | --------------------------------------------------------- |
+| `options`           | `(ComboboxOption \| ComboboxGroup)[]` | —                    | **Required.** Flat or grouped option list                 |
+| `value`             | `string \| string[]`                  | —                    | Controlled selection (string for single, array for multi) |
+| `defaultValue`      | `string \| string[]`                  | —                    | Initial selection (uncontrolled)                          |
+| `onValueChange`     | `(value: string \| string[]) => void` | —                    | Selection change handler                                  |
+| `variant`           | `'default' \| 'borderless'`           | `'default'`          | Visual style — full border or bottom-only                 |
+| `label`             | `string`                              | —                    | Floating/static label text                                |
+| `labelPosition`     | `'inside' \| 'top' \| 'left'`         | `'inside'`           | Label placement — overrides Form context                  |
+| `placeholder`       | `string`                              | —                    | Placeholder when no value selected                        |
+| `multiSelect`       | `boolean`                             | `false`              | Enable multi-select with Pills                            |
+| `searchable`        | `boolean`                             | `true`               | Enable type-to-filter. `false` = closed select.           |
+| `noMatchText`       | `string`                              | `'No results found'` | Message when search yields no matches                     |
+| `onSearchChange`    | `(query: string) => void`             | —                    | Callback for async/server-side filtering                  |
+| `disabled`          | `boolean`                             | `false`              | Disable all interaction                                   |
+| `loading`           | `boolean`                             | `false`              | Show Skeleton placeholder in popup                        |
+| `validationState`   | `'success' \| 'error' \| 'warning'`   | —                    | Visual state (auto-set to 'error' from FormField)         |
+| `validationMessage` | `string`                              | —                    | Message shown below input for error/warning               |
+| `clearable`         | `boolean`                             | `false`              | Show clear button when has value                          |
+| `cellSize`          | `'base' \| 'loose'`                   | `'base'`             | Density of option items in popup                          |
+| `contentMaxHeight`  | `string`                              | `'340px'`            | Max height of popup panel                                 |
+| `name`              | `string`                              | —                    | Form field name for native submission                     |
 
 ### Option Data Structure
 
@@ -93,13 +93,14 @@ Ref forwarding: `React.Ref<HTMLInputElement>`.
 <Combobox
   label="Food"
   options={[
-    { label: 'Fruits', options: [
-      { label: 'Apple', value: 'apple' },
-      { label: 'Banana', value: 'banana' },
-    ]},
-    { label: 'Vegetables', options: [
-      { label: 'Carrot', value: 'carrot' },
-    ]},
+    {
+      label: 'Fruits',
+      options: [
+        { label: 'Apple', value: 'apple' },
+        { label: 'Banana', value: 'banana' },
+      ],
+    },
+    { label: 'Vegetables', options: [{ label: 'Carrot', value: 'carrot' }] },
   ]}
 />
 ```
@@ -121,7 +122,7 @@ const [loading, setLoading] = useState(false);
       setLoading(false);
     });
   }}
-/>
+/>;
 ```
 
 ### Inside a Form with validation
@@ -145,7 +146,7 @@ const [value, setValue] = useState('de');
   value={value}
   onValueChange={setValue}
   clearable
-/>
+/>;
 ```
 
 ## Do

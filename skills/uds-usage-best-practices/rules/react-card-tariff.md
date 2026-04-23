@@ -213,5 +213,5 @@ Pass a ReactNode for full control over the button:
   by side — without it, subgrid alignment breaks.
 - Use `size="compact"` with `subtitle` or `disclaimer` — they are not rendered.
 - Manually style price displays — use the `priceData` prop with `PriceData`.
-- Use `underTitle` with non-homepl brands or with `size="light"` / `size="compact"`
-  — it only renders for homepl at `size="full"`.
+- Use `underTitle` with non-homepl brands or with `size="light"` /
+  `size="compact"` — it only renders for homepl at `size="full"`.

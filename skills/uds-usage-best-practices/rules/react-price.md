@@ -84,8 +84,8 @@ import Price from '@ionos-web-design-system/react/price';
 
 - Tax or regulatory information displayed within the main price block (not in
   postlines).
-- Used in countries requiring tax disclosure: France (`'(3,60 € TTC)'`),
-  UK (`'excl. VAT'`), etc.
+- Used in countries requiring tax disclosure: France (`'(3,60 € TTC)'`), UK
+  (`'excl. VAT'`), etc.
 - Only include when legally required for the target market.
 
 ### `prelines`
@@ -156,7 +156,10 @@ import Price from '@ionos-web-design-system/react/price';
     },
     postlines: [
       { content: 'pour 6 mois', weight: 'black' },
-      { content: 'Introduction offer', tooltip: 'Price valid for first 6 months' },
+      {
+        content: 'Introduction offer',
+        tooltip: 'Price valid for first 6 months',
+      },
     ],
   }}
 />
@@ -183,6 +186,6 @@ import Price from '@ionos-web-design-system/react/price';
 - Use `size="large"` for inline/simple prices — use `"small"` or `"medium"`.
 - Build price displays manually with Text/spans — always use the Price
   component.
-- Put billing period text (e.g., '/month') in `additionalInfo` — use the
-  `range` field instead.
+- Put billing period text (e.g., '/month') in `additionalInfo` — use the `range`
+  field instead.
 - Hardcode price values — pass dynamic data from your pricing API/CMS.
