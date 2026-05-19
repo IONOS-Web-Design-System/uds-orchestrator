@@ -1,3 +1,12 @@
+# Changelog
+
+## [1.4.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.3.0...v1.4.0) (2026-05-19)
+
+
+### Features
+
+* **skills:** sync from UDS — May 2026 component changes ([ed03cf6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ed03cf6e8b9e3a88c525d0c7e6dd406e2dbe7061))
+
 ## [1.3.0] - 2026-04-23
 
 ### Features
