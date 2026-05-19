@@ -20,13 +20,34 @@ import Accordion, {
 
 ## AccordionItem Props
 
-| Prop       | Type              | Default      | Description                    |
-| ---------- | ----------------- | ------------ | ------------------------------ |
-| `value`    | `string`          | —            | Unique identifier for the item |
-| `trigger`  | `React.ReactNode` | **required** | Header content                 |
-| `children` | `React.ReactNode` | **required** | Panel content                  |
+| Prop           | Type                                    | Default      | Description                                      |
+| -------------- | --------------------------------------- | ------------ | ------------------------------------------------ |
+| `value`        | `string`                                | —            | Unique identifier for the item                   |
+| `trigger`      | `React.ReactNode`                       | **required** | Header content                                   |
+| `children`     | `React.ReactNode`                       | **required** | Panel content                                    |
+| `icon`         | `InjectIconFunction \| React.ReactNode` | —            | Optional leading icon before the trigger label   |
+| `openIcon`     | `InjectIconFunction`                    | chevronUp    | Toggle icon when the item is open                |
+| `closeIcon`    | `InjectIconFunction`                    | chevronDown  | Toggle icon when the item is closed              |
+| `headerProps`  | `AccordionHeaderProps`                  | —            | Pass-through props to the Header primitive       |
+| `triggerProps` | `AccordionTriggerProps`                 | —            | Pass-through props to the Trigger primitive      |
+| `contentProps` | `AccordionContentProps`                 | —            | Pass-through props to the Content primitive      |
 
 ## Usage
+
+### With leading icon
+
+```tsx
+import { cloudLight } from '@ionos-web-design-system/icon/system';
+
+<Accordion type="single" collapsible>
+  <AccordionItem value="cloud" icon={cloudLight} trigger="Cloud Services">
+    Manage your cloud infrastructure.
+  </AccordionItem>
+  <AccordionItem value="domain" trigger="Domains">
+    Search and register domains.
+  </AccordionItem>
+</Accordion>
+```
 
 ### Single collapsible (FAQ)
 

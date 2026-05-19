@@ -127,6 +127,25 @@ Use `serverInvalid` and `serverErrorMessage` on FormField, and
 </Form>
 ```
 
+### With Selectbox
+
+`Selectbox` reads `FormField` validation context automatically — just wrap it in
+a `FormField` like any other input.
+
+```jsx
+import Selectbox, { SelectboxItem } from '@ionos-web-design-system/react/selectbox';
+
+<Form submit="Save" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+  <FormField name="country" valueMissingMessage="Please select a country.">
+    <Selectbox label="Country" placeholder="Select country">
+      <SelectboxItem value="de">Germany</SelectboxItem>
+      <SelectboxItem value="us">United States</SelectboxItem>
+      <SelectboxItem value="gb">United Kingdom</SelectboxItem>
+    </Selectbox>
+  </FormField>
+</Form>
+```
+
 ### Custom submit and reset buttons
 
 Pass a ReactNode instead of a string for full control over button styling.
@@ -166,3 +185,5 @@ Pass a ReactNode instead of a string for full control over button styling.
   — pick one source of truth.
 - Forget `type="reset"` on custom reset button ReactNodes — the string shorthand
   adds it automatically, but custom elements must include it.
+- Use deprecated `Dropdown` inside `Form` — use `Selectbox` instead, which
+  integrates with `FormField` validation context automatically.

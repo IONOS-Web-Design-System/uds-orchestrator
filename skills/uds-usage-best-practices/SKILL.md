@@ -160,6 +160,11 @@ Icon-only button detected in Figma -->
   module scope for stable WeakMap caching.
 - Build price displays manually — always use the `Price` component (see
   `rules/react-price.md`).
+- Use `Dropdown` / `DropdownItem` in new code — they are deprecated. Use
+  `Selectbox` / `SelectboxItem` from `'.../react/selectbox'` instead. See
+  `rules/react-selectbox.md`.
+- Use the deprecated `Card` component — it is archived. Use `CardMedia`,
+  `CardTariff`, `TileDomain`, or compose `Box` + primitives instead.
 - Use raw `<img>` tags for **raster** assets from Figma (photos, screenshots,
   PNGs, JPGs) — always use `Picture` for raster images (see
   `rules/react-picture.md`). Reach for `AspectRatio` only when a fixed

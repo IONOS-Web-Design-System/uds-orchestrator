@@ -19,7 +19,7 @@ Find the component name, then use the corresponding import and rule file.
 | button-icon       | `import ButtonIcon from '.../react/button-icon'`                                                           | `rules/react-button-icon.md`       |
 | button-link       | `import ButtonLink from '.../react/button-link'`                                                           | `rules/react-button-link.md`       |
 | button-toggle     | `import ButtonToggle from '.../react/button-toggle'`                                                       | `rules/react-button-toggle.md`     |
-| card              | `import Card from '.../react/card'`                                                                        | `rules/react-card.md`              |
+| card              | `import Card from '.../react/card'` _(deprecated — use card-media, card-tariff, or tile-domain)_           | `rules/react-card.md`              |
 | card-media        | `import CardMedia from '.../react/card-media'`                                                             | `rules/react-card-media.md`        |
 | card-tariff       | `import CardTariff from '.../react/card-tariff'`                                                           | `rules/react-card-tariff.md`       |
 | cell-select       | `import CellSelect, { CellSelectGroup } from '.../react/cell-select'`                                      | `rules/react-cell-select.md`       |
@@ -32,8 +32,9 @@ Find the component name, then use the corresponding import and rule file.
 | domain-badge      | `import DomainBadge from '.../react/domain-badge'`                                                         | `rules/react-domain-badge.md`      |
 | domain-offer      | `import DomainOffer from '.../react/domain-offer'`                                                         | `rules/react-domain-offer.md`      |
 | domain-search-bar | `import DomainSearchBar from '.../react/domain-search-bar'`                                                | `rules/react-domain-search-bar.md` |
-| dropdown          | `import Dropdown from '.../react/dropdown'`                                                                | `rules/react-dropdown.md`          |
+| dropdown          | `import Dropdown from '.../react/dropdown'` _(deprecated — use selectbox)_                                 | `rules/react-dropdown.md`          |
 | dropdown-item     | `import DropdownItem from '.../react/dropdown-item'`                                                       | `rules/react-dropdown-item.md`     |
+| selectbox         | `import Selectbox, { SelectboxItem } from '.../react/selectbox'`                                           | `rules/react-selectbox.md`         |
 | form              | `import Form, { FormField } from '.../react/form'`                                                         | `rules/react-form.md`              |
 | hero-tile         | `import HeroTile from '.../react/hero-tile'`                                                               | `rules/react-hero-tile.md`         |
 | icon              | `import Icon from '.../react/icon'`                                                                        | `rules/react-icon.md`              |

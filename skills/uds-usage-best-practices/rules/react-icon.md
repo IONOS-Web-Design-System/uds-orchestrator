@@ -22,17 +22,35 @@ import { bell, plus, checkmark } from '@ionos-web-design-system/icon/system';
 
 ### Size mapping
 
-**System icons** (system group):
+**System icons** (system, social, flags, strato groups):
 
 | Size     | Pixels |
 | -------- | ------ |
-| `xSmall` | 12px   |
+| `xSmall` | 14px   |
 | `small`  | 16px   |
 | `medium` | 20px   |
 | `large`  | 24px   |
 | `xLarge` | 32px   |
 
-**Brand icons** (ionos group) use a larger size mapping.
+**Brand icons** (ionos, brandmark, fasthosts, homepl, checkmark groups) use a larger size mapping:
+
+| Size     | Pixels |
+| -------- | ------ |
+| `xSmall` | 32px   |
+| `small`  | 36px   |
+| `medium` | 48px   |
+| `large`  | 64px   |
+| `xLarge` | 96px   |
+
+The size maps and types are also exported for consumer use:
+
+```tsx
+import Icon, {
+  standardIconSizeMap,
+  brandIconSizeMap,
+} from '@ionos-web-design-system/react/icon';
+import type { StandardSize, BrandSize } from '@ionos-web-design-system/react/icon';
+```
 
 > **Note:** The `brandmark` group (brand logos) should NOT use the `Icon`
 > component — logos need exact Figma dimensions via a `<div>` wrapper with a

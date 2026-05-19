@@ -1,5 +1,13 @@
 # Card
 
+> **Deprecated.** `Card` is archived and will be removed in a future release.
+> Migrate to a more specific component:
+>
+> - **`CardMedia`** — cards with a photo or video visual area
+> - **`CardTariff`** — pricing / plan cards
+> - **`TileDomain`** — domain result tiles
+> - **`Box` + content primitives** — custom card layouts without a preset structure
+
 ## Import
 
 ```tsx
