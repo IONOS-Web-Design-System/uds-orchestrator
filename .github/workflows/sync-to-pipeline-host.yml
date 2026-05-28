@@ -1,0 +1,45 @@
+name: Sync to pipeline-host
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      git_ref:
+        description: 'Tag or commit to sync (defaults to latest release)'
+        required: false
+
+jobs:
+  sync:
+    # Self-hosted required — pipeline-host is on the IONOS internal network.
+    runs-on: self-hosted
+    environment: production
+    steps:
+      - name: Resolve ref to sync
+        id: ref
+        run: |
+          if [ -n "${{ inputs.git_ref }}" ]; then
+            echo "value=${{ inputs.git_ref }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_DEPLOY_KEY }}
+          known_hosts: ${{ vars.PIPELINE_HOST_KNOWN_HOSTS }}
+
+      - name: Pull released ref onto pipeline-host
+        run: |
+          ssh -o StrictHostKeyChecking=yes deploy@${{ vars.PIPELINE_HOST }} bash <<EOF
+            set -e
+            cd /opt/pipeline/uds-orchestrator
+            git fetch --tags origin
+            git checkout ${{ steps.ref.outputs.value }}
+            git rev-parse HEAD
+          EOF
+
+      - name: Verify checkout
+        run: |
+          ssh -o StrictHostKeyChecking=yes deploy@${{ vars.PIPELINE_HOST }} \
+            'cd /opt/pipeline/uds-orchestrator && git describe --tags --exact-match || git rev-parse --short HEAD'
