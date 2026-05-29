@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.4.0...v1.5.0) (2026-05-29)
+
+
+### Features
+
+* **skills:** add illustration pipeline + remotion skills; move wireframe-workspace to internal ([5b8212b](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/5b8212bfd4d454d1af143e4f314d3142d1c42e93))
+
 ## [1.4.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.3.0...v1.4.0) (2026-05-19)
 
 
