@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.5.0...v1.5.1) (2026-05-29)
+
+
+### Bug Fixes
+
+* **skills:** correct four audit findings across illustration + react skills ([29d5b89](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/29d5b899ab6797d823eb7408431af60bb6242b1e))
+
 ## [1.5.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.4.0...v1.5.0) (2026-05-29)
 
 
