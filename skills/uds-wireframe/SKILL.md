@@ -188,7 +188,7 @@ invisible. This is the opposite of how the names might suggest.
 **Alpha threshold for semi-transparent surfaces:** for `background: rgba(R, G, B, alpha)`
 surfaces, the base color determines the effective surface category when `alpha ≥ 0.4`. A
 white base at 0.6 alpha is a **light** surface → use `ionos-light`. A dark base at 0.6 alpha
-is a **dark** surface → use `ionos-light`. Below 0.4 the background bleeds through too
+is a **dark** surface → use `ionos-dark`. Below 0.4 the background bleeds through too
 strongly — treat as transparent and key off the parent container instead.
 
 ## IONOS Product Frame Rule

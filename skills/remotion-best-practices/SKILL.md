@@ -59,8 +59,9 @@ Promise.all([
 This block must appear once per composition file, outside any component function. After this,
 use `fontFamily: 'Overpass'` or `fontFamily: '"Open Sans"'` freely in inline styles.
 
-**Do NOT** use `@remotion/google-fonts` or CDN links — they require a network call that may
-be blocked or slow in the headless renderer.
+**Do NOT** use `@remotion/google-fonts` or CDN links in headless/pipeline contexts — they
+require a network call that may be blocked or slow in the headless renderer. For general
+(non-headless) Remotion development, `@remotion/google-fonts` is fine; see [Google Fonts](#google-fonts) below.
 
 ## Fade-in animations — always ease opacity, match duration to transform
 
@@ -423,7 +424,7 @@ See [rules/compositions.md](rules/compositions.md) for how to define stills, fol
 
 ## Google Fonts
 
-Is the recommended way to load fonts in Remotion. See [rules/google-fonts.md](rules/google-fonts.md) for how to load Google Fonts.
+The recommended way to load fonts in standard Remotion projects. See [rules/google-fonts.md](rules/google-fonts.md) for how to load Google Fonts. Note: not suitable for headless renderers with restricted network access — use the preloaded local font approach described in the font loading section above.
 
 ## Local fonts
 

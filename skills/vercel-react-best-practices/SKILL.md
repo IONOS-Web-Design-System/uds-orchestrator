@@ -15,7 +15,7 @@ metadata:
 # Vercel React Best Practices
 
 Comprehensive performance optimization guide for React and Next.js applications,
-maintained by Vercel. Contains 45 rules across 8 categories, prioritized by
+maintained by Vercel. Contains 51 rules across 8 categories, prioritized by
 impact to guide automated refactoring and code generation.
 
 ## When to Apply
@@ -66,11 +66,15 @@ Reference these guidelines when:
 - `server-serialization` - Minimize data passed to client components
 - `server-parallel-fetching` - Restructure components to parallelize fetches
 - `server-after-nonblocking` - Use after() for non-blocking operations
+- `server-auth-actions` - Authenticate Server Actions like API routes (security)
+- `server-dedup-props` - Avoid duplicate serialization in RSC props
 
 ### 4. Client-Side Data Fetching (MEDIUM-HIGH)
 
 - `client-swr-dedup` - Use SWR for automatic request deduplication
 - `client-event-listeners` - Deduplicate global event listeners
+- `client-localstorage-schema` - Version and minimize localStorage data
+- `client-passive-event-listeners` - Mark scroll/touch listeners as passive
 
 ### 5. Re-render Optimization (MEDIUM)
 
@@ -81,6 +85,8 @@ Reference these guidelines when:
 - `rerender-functional-setstate` - Use functional setState for stable callbacks
 - `rerender-lazy-state-init` - Pass function to useState for expensive values
 - `rerender-transitions` - Use startTransition for non-urgent updates
+- `rerender-memo-with-default-value` - Extract default non-primitive props from memoized components
+- `rerender-simple-expression-in-memo` - Don't wrap simple primitive expressions in useMemo
 
 ### 6. Rendering Performance (MEDIUM)
 
@@ -89,7 +95,7 @@ Reference these guidelines when:
 - `rendering-hoist-jsx` - Extract static JSX outside components
 - `rendering-svg-precision` - Reduce SVG coordinate precision
 - `rendering-hydration-no-flicker` - Use inline script for client-only data
-- `rendering-activity` - Use Activity component for show/hide
+- `rendering-activity` - Use Activity component for show/hide (React canary/experimental only)
 - `rendering-conditional-render` - Use ternary, not && for conditionals
 
 ### 7. JavaScript Performance (LOW-MEDIUM)
@@ -119,7 +125,6 @@ Read individual rule files for detailed explanations and code examples:
 ```
 rules/async-parallel.md
 rules/bundle-barrel-imports.md
-rules/_sections.md
 ```
 
 Each rule file contains:

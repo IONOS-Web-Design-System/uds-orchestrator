@@ -8,9 +8,8 @@ description: >
   guidelines", "color palette", "illustration style", "creative direction", "brand
   identity", "which colors should I use", "brand typography", "IONOS blue",
   "Overpass", "Open Sans", "Poppins", "Nunito Sans", "Lato", "Inter", "strato
-  colors", "fasthosts brand", "homepl style". Prerequisite:
-  @ionos-web-design-system/core installed (see uds-project-setup). For component
-  usage and CSS token code patterns, see uds-usage-best-practices.
+  colors", "fasthosts brand", "homepl style". For component usage and CSS token
+  code patterns, see uds-usage-best-practices.
 ---
 
 # UDS Style Guide — Multi-Brand
@@ -33,7 +32,7 @@ Identify the target brand first, then go to the matching rule file:
 | **arsys** | Inter | `rules/arsys.md` | Stub |
 
 "Full" = Figma-sourced colors + typography + principles documented.  
-"Stub" = font known; colors and detailed guidelines need Figma data to complete.
+"Stub" = font known; colors and detailed guidelines need Figma data to complete. For stub brands, read `rules/shared-identity-principles.md` for universal principles and note that brand-specific color data is not yet available.
 
 ## Reading Order
 
@@ -51,6 +50,8 @@ The three primary IONOS colors:
 | Dark Midnight | `#001B41` | `--brand/ionos-blue-800` | Primary text on screen |
 
 IONOS typefaces: **Overpass** (`--base/font/heading`) for headlines, **Open Sans** (`--base/font/body`) for everything else.
+
+> **Token path notation:** this guide uses `/` as a hierarchy separator (Figma convention). In CSS, use hyphenated custom properties: `var(--brand-ionos-blue-600)`. See `uds-usage-best-practices` for correct token usage in code.
 
 ## CSS Import Pattern
 
