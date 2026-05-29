@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": false,
+      "evidence": "No ThemeProvider import or usage exists in the file. The component is wrapped only in a plain <div style={styles.page}> (line 181). Surface is used but without ThemeProvider."
+    },
+    {
+      "text": "Four stat card elements are present covering active servers, traffic, uptime, and tickets",
+      "passed": true,
+      "evidence": "STAT_CARDS array has four entries: 'Active Servers', 'Monthly Traffic', 'Uptime', 'Open Tickets' (lines 26–30); all rendered via StatCardItem"
+    },
+    {
+      "text": "CSS @keyframes or animation property is used for entrance animations",
+      "passed": false,
+      "evidence": "No @keyframes or CSS animation property is used. The entrance effect is implemented via React state (cardsVisible) toggling opacity and transform through inline transition styles (lines 79–85, 162–178). This is a CSS transition, not a CSS animation/keyframe."
+    },
+    {
+      "text": "Each stat card has a different animation-delay value to create the stagger effect",
+      "passed": false,
+      "evidence": "delay={0} is passed to all StatCardItem components (line 199). The stagger is achieved by triggering visibility state at different setTimeout intervals (100 + index * 150ms), but the CSS transition delay prop passed to the card style is always 0."
+    },
+    {
+      "text": "Colors reference CSS custom properties rather than hard-coded hex values",
+      "passed": false,
+      "evidence": "Most color references include fallback hex values: 'var(--color-neutral-100, #f5f5f5)', 'var(--color-neutral-600, #6b7280)', 'var(--color-neutral-500, #9ca3af)', etc. (lines 58–130). The CSS vars used are also non-standard UDS token names (--color-neutral-* vs UDS --neutral/*)."
+    },
+    {
+      "text": "Server list section contains at least 3 rows/items",
+      "passed": true,
+      "evidence": "SERVERS array has 3 entries: 'vps-prod-eu-01', 'vps-staging-us-01', 'db-primary-eu-01' (lines 33–36), rendered as <tr> rows"
+    },
+    {
+      "text": "Animation durations are in the 200-600ms range (not instant or excessively long)",
+      "passed": true,
+      "evidence": "CSS transition is 'opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms' — 500ms duration (line 84), which is within the 200–600ms range"
+    }
+  ]
+}

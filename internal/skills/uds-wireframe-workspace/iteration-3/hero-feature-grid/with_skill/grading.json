@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": false,
+      "evidence": "Line 275: `<ThemeProvider>` is used with no `brand` prop. The brand is set as a `data-brand=\"ionos\"` attribute on the child `<main>` element (line 277), not as a prop on ThemeProvider itself. The assertion requires `brand='ionos'` on ThemeProvider."
+    },
+    {
+      "text": "ThemeInverter (or equivalent) is used for the dark hero section",
+      "passed": true,
+      "evidence": "Line 43: `<ThemeInverter forceColorScheme=\"dark\">` wraps the entire HeroSection content."
+    },
+    {
+      "text": "Colors reference CSS custom properties (var(--...)) rather than hard-coded hex values",
+      "passed": true,
+      "evidence": "All color references throughout the file use CSS custom properties, e.g. `var(--brand/ionos-blue-900)`, `var(--neutral/white)`, `var(--brand/ionos-sky-300)`, `var(--brand/ionos-blue-800)`. One background uses `rgba(17, 199, 230, 0.15)` (line 57) for a semi-transparent overlay but all solid colors use var() tokens."
+    },
+    {
+      "text": "Hero section contains a Button component with a CTA label",
+      "passed": true,
+      "evidence": "Line 112: `<Button concept=\"brand\" variant=\"primary\" size=\"large\" onClick={() => {}}>Get started for free</Button>` appears inside HeroSection."
+    },
+    {
+      "text": "Three Card components cover Web Hosting, VPS, and Domains (or equivalent)",
+      "passed": true,
+      "evidence": "FEATURES array (lines 12-37) contains entries with titles 'Web Hosting', 'VPS', and 'Domains'. Each is rendered as a `<Card>` component via `FeatureCard` (line 150) in a 3-column grid (line 255)."
+    },
+    {
+      "text": "Headline uses Overpass font family (via CSS token or font-heading class)",
+      "passed": true,
+      "evidence": "Line 75 (h1 in HeroSection): `fontFamily: 'var(--base/font/heading)'`. Also lines 176, 228 use the same token. The UDS heading token resolves to Overpass."
+    },
+    {
+      "text": "File has a comment marking it as a wireframe illustration",
+      "passed": true,
+      "evidence": "Line 1: `// Wireframe illustration — not production code`"
+    },
+    {
+      "text": "Event handlers are stubbed as empty functions () => {} rather than real logic",
+      "passed": true,
+      "evidence": "Line 112: `onClick={() => {}}`, line 115: `onClick={() => {}}`, line 210: `onClick={() => {}`. All event handlers are empty stubs."
+    }
+  ]
+}

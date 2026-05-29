@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "<ThemeProvider brand=\"ionos\" colorScheme=\"light\" platform=\"comfortable\"> is the outermost wrapper (line 35)"
+    },
+    {
+      "text": "ThemeInverter (or equivalent) is used for the dark hero section",
+      "passed": true,
+      "evidence": "<ThemeInverter> wraps the hero Surface section (lines 49–91)"
+    },
+    {
+      "text": "Colors reference CSS custom properties (var(--...)) rather than hard-coded hex values",
+      "passed": true,
+      "evidence": "All colors use var(--brand/ionos-blue-900), var(--brand/ionos-blue-800), var(--brand/ionos-sky-300), var(--brand/ionos-blue-600) — no hex values present"
+    },
+    {
+      "text": "Hero section contains a Button component with a CTA label",
+      "passed": true,
+      "evidence": "<Button variant=\"primary\" size=\"lg\" onClick={() => {}}>Get started free</Button> in the hero CTA row (line 83)"
+    },
+    {
+      "text": "Three Card components cover Web Hosting, VPS, and Domains (or equivalent)",
+      "passed": true,
+      "evidence": "featureCards array contains 'Web Hosting', 'VPS', and 'Domains' entries; each rendered as <Card key={item.title}> (lines 12–31, 113–157)"
+    },
+    {
+      "text": "Headline uses Overpass font family (via CSS token or font-heading class)",
+      "passed": true,
+      "evidence": "h1 has style={{ fontFamily: 'var(--base/font/heading)' }} (line 67); comment on line 64 explicitly states 'Overpass for impact'"
+    },
+    {
+      "text": "File has a comment marking it as a wireframe illustration",
+      "passed": true,
+      "evidence": "Line 1: // Wireframe illustration — not production code"
+    },
+    {
+      "text": "Event handlers are stubbed as empty functions () => {} rather than real logic",
+      "passed": true,
+      "evidence": "All onClick handlers are () => {} — e.g. onClick={() => {}} on lines 83, 86, 152"
+    }
+  ]
+}

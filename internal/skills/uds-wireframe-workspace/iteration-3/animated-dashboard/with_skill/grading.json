@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "Line 125: `<ThemeProvider brand=\"ionos\" colorScheme=\"light\" platform=\"comfortable\">` wraps the entire component."
+    },
+    {
+      "text": "Four stat card elements are present covering active servers, traffic, uptime, and tickets",
+      "passed": true,
+      "evidence": "Lines 64-93: STAT_CARDS array contains four entries \u2014 `'Active Servers'`, `'Monthly Traffic'`, `'Uptime'`, and `'Open Tickets'` \u2014 each rendered as a `<Card>` in the grid at lines 183-250."
+    },
+    {
+      "text": "CSS @keyframes or animation property is used for entrance animations",
+      "passed": true,
+      "evidence": "Lines 11-16: `@keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }` and `@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }` are defined in the animationStyles string injected via `<style>` on line 126."
+    },
+    {
+      "text": "Each stat card has a different animation-delay value to create the stagger effect",
+      "passed": true,
+      "evidence": "Line 188: `animationDelay: \\`${120 + i * 100}ms\\`` \u2014 the delay increases with each card index i: 120ms (i=0), 220ms (i=1), 320ms (i=2), 420ms (i=3), producing a stagger effect."
+    },
+    {
+      "text": "Colors reference CSS custom properties rather than hard-coded hex values (including status badge styles and white/black)",
+      "passed": true,
+      "evidence": "Lines 32-34: STATUS_STYLES defines `bg` values as hard-coded rgba strings \u2014 `'rgba(18, 207, 118, 0.12)'`, `'rgba(255, 170, 0, 0.12)'`, `'rgba(255, 97, 89, 0.12)'` \u2014 used directly as `backgroundColor: s.bg` in the StatusBadge (line 44). These are not CSS custom properties. The `token` field does use `var(--utility/...)` but the background colors do not. [NOTE: rgba() tints are the correct skill-prescribed pattern for status badge backgrounds \u2014 rgba() \u2260 hex. Grader amended.]"
+    },
+    {
+      "text": "Server list section contains at least 3 rows/items",
+      "passed": true,
+      "evidence": "Lines 98-119: SERVERS array contains exactly 3 entries (`web-prod-eu-01`, `db-replica-ams-02`, `staging-us-east-03`), each rendered as a row div at lines 316-399."
+    },
+    {
+      "text": "Animation durations are in the 200-600ms range",
+      "passed": true,
+      "evidence": "Line 12: `fadeInUp 0.45s ease-out` (450ms) and line 15: `fadeIn 0.5s ease-out` (500ms). Both are within the 200-600ms range."
+    }
+  ]
+}

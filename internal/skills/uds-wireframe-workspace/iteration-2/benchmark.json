@@ -1,0 +1,116 @@
+{
+  "metadata": {
+    "skill_name": "uds-wireframe",
+    "skill_path": "/Users/boweixiao/uds-orchestrator/skills/uds-wireframe",
+    "executor_model": "claude-sonnet-4-6",
+    "analyzer_model": "claude-sonnet-4-6",
+    "timestamp": "2026-05-19T16:15:00Z",
+    "evals_run": ["hero-feature-grid", "image-integration", "animated-dashboard"],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0, "eval_name": "hero-feature-grid", "configuration": "with_skill", "run_number": 1,
+      "result": {"pass_rate": 1.0, "passed": 8, "failed": 0, "total": 8, "time_seconds": 85.9, "tokens": 30478, "errors": 0},
+      "expectations": [
+        {"text": "ThemeProvider with brand='ionos' wraps the output", "passed": true, "evidence": "ThemeProvider brand='ionos' colorScheme='light' platform='comfortable' is root wrapper"},
+        {"text": "ThemeInverter (or equivalent) is used for the dark hero section", "passed": true, "evidence": "ThemeInverter wraps the hero Surface section"},
+        {"text": "Colors reference CSS custom properties (var(--...)) rather than hard-coded hex values", "passed": true, "evidence": "All colors use CSS tokens — no hex values"},
+        {"text": "Hero section contains a Button component with a CTA label", "passed": true, "evidence": "Button variant='primary' with CTA text in hero"},
+        {"text": "Three Card components cover Web Hosting, VPS, and Domains (or equivalent)", "passed": true, "evidence": "Three Card components for Web Hosting, VPS, Domains"},
+        {"text": "Headline uses Overpass font family (via CSS token or font-heading class)", "passed": true, "evidence": "h1 uses var(--base/font/heading)"},
+        {"text": "File has a comment marking it as a wireframe illustration", "passed": true, "evidence": "Line 1: // Wireframe illustration — not production code"},
+        {"text": "Event handlers are stubbed as empty functions () => {} rather than real logic", "passed": true, "evidence": "All onClick stubs present"}
+      ], "notes": []
+    },
+    {
+      "eval_id": 0, "eval_name": "hero-feature-grid", "configuration": "old_skill", "run_number": 1,
+      "result": {"pass_rate": 0.75, "passed": 6, "failed": 2, "total": 8, "time_seconds": 50.0, "tokens": 20481, "errors": 0},
+      "expectations": [
+        {"text": "ThemeProvider with brand='ionos' wraps the output", "passed": true, "evidence": "ThemeProvider brand='ionos' present"},
+        {"text": "ThemeInverter (or equivalent) is used for the dark hero section", "passed": false, "evidence": "Uses data-color-scheme='dark' on Surface instead of ThemeInverter"},
+        {"text": "Colors reference CSS custom properties (var(--...)) rather than hard-coded hex values", "passed": false, "evidence": "Hard-coded hex values like '#ffffff' and var(--..., #003d8f) fallbacks present"},
+        {"text": "Hero section contains a Button component with a CTA label", "passed": true, "evidence": "Button variant='primary' size='large' in hero"},
+        {"text": "Three Card components cover Web Hosting, VPS, and Domains (or equivalent)", "passed": true, "evidence": "Three Card components present"},
+        {"text": "Headline uses Overpass font family (via CSS token or font-heading class)", "passed": true, "evidence": "Overpass referenced via CSS token on heading"},
+        {"text": "File has a comment marking it as a wireframe illustration", "passed": true, "evidence": "Wireframe comment present"},
+        {"text": "Event handlers are stubbed as empty functions () => {} rather than real logic", "passed": true, "evidence": "Stubs used"}
+      ], "notes": ["Without wireframe-composition.md, agent used data-color-scheme attribute instead of ThemeInverter"]
+    },
+    {
+      "eval_id": 1, "eval_name": "image-integration", "configuration": "with_skill", "run_number": 1,
+      "result": {"pass_rate": 0.857, "passed": 6, "failed": 1, "total": 7, "time_seconds": 75.3, "tokens": 26359, "errors": 0},
+      "expectations": [
+        {"text": "The local path /Users/boweixiao/Desktop/hero-mockup.png is referenced in an img or Picture element", "passed": true, "evidence": "heroImageSrc constant references the path, used in img element"},
+        {"text": "ThemeProvider with brand='ionos' wraps the output", "passed": true, "evidence": "ThemeProvider brand='ionos' is root wrapper"},
+        {"text": "Colors reference CSS custom properties rather than hard-coded hex values", "passed": false, "evidence": "color: '#ffffff' hard-coded on h1 inside hero overlay (line 86)"},
+        {"text": "Form section includes email and password input fields", "passed": true, "evidence": "TextField email and password fields present"},
+        {"text": "Feature bullet points use Icon components, not emoji characters", "passed": true, "evidence": "Icon group='system' used — no emoji"},
+        {"text": "Content section below hero uses a 2-column grid or flex layout", "passed": true, "evidence": "grid grid-cols-2 layout below hero"},
+        {"text": "File has a comment marking it as a wireframe illustration", "passed": true, "evidence": "Line 1: // Wireframe illustration — not production code"}
+      ], "notes": ["Minor: white text in hero overlay used '#ffffff' instead of var(--neutral/white) — skill should explicitly note that white/black must also use tokens"]
+    },
+    {
+      "eval_id": 1, "eval_name": "image-integration", "configuration": "old_skill", "run_number": 1,
+      "result": {"pass_rate": 0.571, "passed": 4, "failed": 3, "total": 7, "time_seconds": 61.2, "tokens": 21576, "errors": 0},
+      "expectations": [
+        {"text": "The local path /Users/boweixiao/Desktop/hero-mockup.png is referenced in an img or Picture element", "passed": true, "evidence": "img src references the local path"},
+        {"text": "ThemeProvider with brand='ionos' wraps the output", "passed": false, "evidence": "<ThemeProvider data-brand='ionos'> — brand as data attribute, not the brand prop"},
+        {"text": "Colors reference CSS custom properties rather than hard-coded hex values", "passed": false, "evidence": "Hex fallbacks like var(--..., #003d8f) throughout"},
+        {"text": "Form section includes email and password input fields", "passed": true, "evidence": "Email and password inputs present"},
+        {"text": "Feature bullet points use Icon components, not emoji characters", "passed": false, "evidence": "Emoji characters ⚡ 🔒 🌍 used for bullets"},
+        {"text": "Content section below hero uses a 2-column grid or flex layout", "passed": true, "evidence": "2-column layout present"},
+        {"text": "File has a comment marking it as a wireframe illustration", "passed": true, "evidence": "Wireframe comment present"}
+      ], "notes": []
+    },
+    {
+      "eval_id": 2, "eval_name": "animated-dashboard", "configuration": "with_skill", "run_number": 1,
+      "result": {"pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 105.5, "tokens": 32606, "errors": 0},
+      "expectations": [
+        {"text": "ThemeProvider with brand='ionos' wraps the output", "passed": true, "evidence": "ThemeProvider brand='ionos' is root wrapper"},
+        {"text": "Four stat card elements are present covering active servers, traffic, uptime, and tickets", "passed": true, "evidence": "4 stat cards: Active Servers, Monthly Traffic, Uptime, Open Tickets"},
+        {"text": "CSS @keyframes or animation property is used for entrance animations", "passed": true, "evidence": "@keyframes fadeInUp defined in animationStyles, applied via className"},
+        {"text": "Each stat card has a different animation-delay value to create the stagger effect", "passed": true, "evidence": "animationDelay: `${200 + i * 100}ms` per card"},
+        {"text": "Colors reference CSS custom properties rather than hard-coded hex values (including status badge styles)", "passed": true, "evidence": "StatusBadge uses rgba() tints + var(--utility/...) for borderLeft + var(--brand/ionos-blue-800) for text — zero hex values"},
+        {"text": "Server list section contains at least 3 rows/items", "passed": true, "evidence": "3 server rows in the table"},
+        {"text": "Animation durations are in the 200-600ms range", "passed": true, "evidence": "350–450ms durations used"}
+      ], "notes": ["Status color fix confirmed: new Semantic Status Colors section fully resolved the hex leak"]
+    },
+    {
+      "eval_id": 2, "eval_name": "animated-dashboard", "configuration": "old_skill", "run_number": 1,
+      "result": {"pass_rate": 0.857, "passed": 6, "failed": 1, "total": 7, "time_seconds": 44.5, "tokens": 18623, "errors": 0},
+      "expectations": [
+        {"text": "ThemeProvider with brand='ionos' wraps the output", "passed": true, "evidence": "ThemeProvider brand='ionos' present"},
+        {"text": "Four stat card elements are present covering active servers, traffic, uptime, and tickets", "passed": true, "evidence": "4 stat cards present"},
+        {"text": "CSS @keyframes or animation property is used for entrance animations", "passed": true, "evidence": "@keyframes fadeInUp defined and applied"},
+        {"text": "Each stat card has a different animation-delay value to create the stagger effect", "passed": true, "evidence": "animation-delay per card via index"},
+        {"text": "Colors reference CSS custom properties rather than hard-coded hex values (including status badge styles)", "passed": false, "evidence": "Tailwind color classes (text-gray-900, bg-gray-50, hover:bg-blue-50) used extensively — not CSS custom properties"},
+        {"text": "Server list section contains at least 3 rows/items", "passed": true, "evidence": "3 server rows present"},
+        {"text": "Animation durations are in the 200-600ms range", "passed": true, "evidence": "CSS animation durations within range"}
+      ], "notes": ["Without composition guide, agent fell back to Tailwind color utilities instead of UDS CSS variable tokens"]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 0.952, "stddev": 0.07, "min": 0.857, "max": 1.0},
+      "time_seconds": {"mean": 88.9, "stddev": 15.1, "min": 75.3, "max": 105.5},
+      "tokens": {"mean": 29681, "stddev": 3210, "min": 26359, "max": 32606}
+    },
+    "old_skill": {
+      "pass_rate": {"mean": 0.726, "stddev": 0.12, "min": 0.571, "max": 0.857},
+      "time_seconds": {"mean": 51.9, "stddev": 8.4, "min": 44.5, "max": 61.2},
+      "tokens": {"mean": 20227, "stddev": 1440, "min": 18623, "max": 21576}
+    },
+    "delta": {
+      "pass_rate": "+0.23",
+      "time_seconds": "+37.0",
+      "tokens": "+9454"
+    }
+  },
+  "notes": [
+    "Primary target (animated-dashboard status colors) fixed: 7/7 vs 6/7 in iteration 1 — 100% pass rate",
+    "Image-integration has a new 1-assertion miss: '#ffffff' used for hero overlay text — skill should add that white/black also require tokens (var(--neutral/white))",
+    "Old-skill baseline (partial skill, no composition guide) scores 72.6% — higher than no-skill baseline (54.2%) confirming even partial skill helps",
+    "Tailwind color utilities (text-gray-900) are a common fallback when CSS token guidance is absent — wireframe-composition.md prevents this"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "The local path /Users/boweixiao/Desktop/hero-mockup.png is referenced in an img or Picture element",
+      "passed": true,
+      "evidence": "Line 12: const heroImageSrc = '/Users/boweixiao/Desktop/hero-mockup.png'; used as src in <img> at line 67."
+    },
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "Line 50: <ThemeProvider brand=\"ionos\" colorScheme=\"light\" platform=\"comfortable\"> wraps all content."
+    },
+    {
+      "text": "Colors reference CSS custom properties rather than hard-coded hex values",
+      "passed": false,
+      "evidence": "Line 86: color: '#ffffff' is a hard-coded hex value on the <h1> inside the hero overlay text block."
+    },
+    {
+      "text": "Form section includes email and password input fields",
+      "passed": true,
+      "evidence": "Lines 125-135: <TextField label=\"Email address\" type=\"email\" .../> and <TextField label=\"Password\" type=\"password\" .../>."
+    },
+    {
+      "text": "Feature bullet points use Icon components, not emoji characters",
+      "passed": true,
+      "evidence": "Lines 184: <Icon group=\"system\" name={feature.icon} size={22} /> used for each feature bullet; no emoji characters in feature rendering."
+    },
+    {
+      "text": "Content section below hero uses a 2-column grid or flex layout",
+      "passed": true,
+      "evidence": "Line 104: className=\"... grid grid-cols-2 gap-16 items-start\" — a 2-column CSS grid layout below the hero."
+    },
+    {
+      "text": "File has a comment marking it as a wireframe illustration",
+      "passed": true,
+      "evidence": "Line 1: // Wireframe illustration — not production code"
+    }
+  ]
+}

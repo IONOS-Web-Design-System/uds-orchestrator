@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "The local path /Users/boweixiao/Desktop/hero-mockup.png is referenced in an img or Picture element",
+      "passed": true,
+      "evidence": "Line 26: const heroImageSrc = '/Users/boweixiao/Desktop/hero-mockup.png'; used as src in <img> at line 54."
+    },
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": false,
+      "evidence": "Line 48: <ThemeProvider data-brand=\"ionos\"> — the brand value is passed as a data attribute instead of the brand prop, so the ThemeProvider is not properly configured with brand='ionos'."
+    },
+    {
+      "text": "Colors reference CSS custom properties rather than hard-coded hex values",
+      "passed": false,
+      "evidence": "Multiple hard-coded hex fallbacks present: line 63 'var(--brand/ionos-blue-800, #003d8f)', line 92 'var(--brand/ionos-blue-700, #0050b3)', line 169 'var(--brand/ionos-blue-700, #0050b3)', line 119 'var(--neutral/cool-grey-300, #c8cdd5)', line 140 same."
+    },
+    {
+      "text": "Form section includes email and password input fields",
+      "passed": true,
+      "evidence": "Lines 112-145: native <input type=\"email\"> and <input type=\"password\"> elements with labels and onChange handlers."
+    },
+    {
+      "text": "Feature bullet points use Icon components, not emoji characters",
+      "passed": false,
+      "evidence": "features array (lines 28-44) uses emoji icons: '⚡', '🔒', '🌍'. These are rendered as text at line 187 — no Icon component is used."
+    },
+    {
+      "text": "Content section below hero uses a 2-column grid or flex layout",
+      "passed": true,
+      "evidence": "Line 85: className=\"... grid grid-cols-1 md:grid-cols-2 gap-12 items-start\" — a responsive 2-column grid below the hero."
+    },
+    {
+      "text": "File has a comment marking it as a wireframe illustration",
+      "passed": true,
+      "evidence": "Line 1: // Wireframe illustration — not production code"
+    }
+  ]
+}

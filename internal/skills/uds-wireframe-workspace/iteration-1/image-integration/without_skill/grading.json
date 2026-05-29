@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "The local path /Users/boweixiao/Desktop/hero-mockup.png is referenced in an img or Picture element",
+      "passed": true,
+      "evidence": "<img src=\"/Users/boweixiao/Desktop/hero-mockup.png\" alt=\"IONOS Web Hosting Hero\" ...> (lines 42–51)"
+    },
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "<ThemeProvider brand=\"ionos\" platform=\"web\" colorScheme=\"light\"> (line 31)"
+    },
+    {
+      "text": "Colors reference CSS custom properties rather than hard-coded hex values",
+      "passed": false,
+      "evidence": "No CSS custom properties (var(--...)) are used anywhere in the file. All styling uses inline style objects with no color values at all — neither CSS vars nor hex codes appear (colors are delegated entirely to UDS component defaults). However this means the assertion about referencing CSS vars is not met."
+    },
+    {
+      "text": "Form section includes email and password input fields",
+      "passed": true,
+      "evidence": "<TextInput label=\"Email Address\" type=\"email\" ...> and <TextInput label=\"Password\" type=\"password\" ...> (lines 86–97)"
+    },
+    {
+      "text": "Feature bullet points use Icon components, not emoji characters",
+      "passed": false,
+      "evidence": "Feature icons are emoji strings: '⚡', '🔒', '🛠️' stored in the features array (lines 12–27) and rendered as text nodes in a <div> (lines 119–130)"
+    },
+    {
+      "text": "Content section below hero uses a 2-column grid or flex layout",
+      "passed": true,
+      "evidence": "style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', ... }} on the content div (lines 56–63)"
+    },
+    {
+      "text": "File has a comment marking it as a wireframe illustration",
+      "passed": false,
+      "evidence": "No wireframe illustration comment exists. The file starts with 'import React from \"react\";' with no marking comment."
+    }
+  ]
+}

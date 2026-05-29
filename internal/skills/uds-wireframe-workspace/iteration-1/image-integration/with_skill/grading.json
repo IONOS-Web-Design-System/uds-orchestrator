@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "The local path /Users/boweixiao/Desktop/hero-mockup.png is referenced in an img or Picture element",
+      "passed": true,
+      "evidence": "const heroImageSrc = '/Users/boweixiao/Desktop/hero-mockup.png'; used in <img src={heroImageSrc} ...> (lines 11, 53)"
+    },
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "<ThemeProvider brand=\"ionos\" colorScheme=\"light\" platform=\"comfortable\"> is the outermost wrapper (line 36)"
+    },
+    {
+      "text": "Colors reference CSS custom properties rather than hard-coded hex values",
+      "passed": true,
+      "evidence": "All colors use var(--brand/ionos-blue-900), var(--brand/ionos-blue-800), var(--brand/ionos-sky-300) — no hex color values in the file"
+    },
+    {
+      "text": "Form section includes email and password input fields",
+      "passed": true,
+      "evidence": "<TextField label=\"Email address\" type=\"email\" ...> and <TextField label=\"Password\" type=\"password\" ...> (lines 113–124)"
+    },
+    {
+      "text": "Feature bullet points use Icon components, not emoji characters",
+      "passed": true,
+      "evidence": "<Icon group=\"system\" name={feature.icon} size={20} color=\"white\" /> is used for each feature bullet (line 151); no emoji characters appear"
+    },
+    {
+      "text": "Content section below hero uses a 2-column grid or flex layout",
+      "passed": true,
+      "evidence": "<div className=\"max-w-6xl mx-auto grid grid-cols-2 gap-12 px-12 py-16\"> is the content section below the hero (line 87)"
+    },
+    {
+      "text": "File has a comment marking it as a wireframe illustration",
+      "passed": true,
+      "evidence": "Line 1: // Wireframe illustration — not production code"
+    }
+  ]
+}

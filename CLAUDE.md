@@ -8,6 +8,9 @@ Claude Code plugin for the IONOS Universal Design System (UDS).
 .claude-plugin/plugin.json     — Plugin identity (name, description, author)
 .mcp.json                      — Playwright MCP configuration
 commands/                      — Slash commands (/uds-setup, /uds-audit, etc.)
+internal/                      — Non-public items not loaded by the plugin
+  commands/                    — Internal slash commands (e.g. iter-skill)
+  skills/                      — Non-public skills (skill-iteration, uds-wireframe-workspace)
 skills/
   uds-usage-best-practices/    — Component/token usage skill (SKILL.md + 51 rules)
   uds-project-setup/           — Project scaffolding skill (SKILL.md + 5 rules)
@@ -23,6 +26,7 @@ skills/
 - **Setup rules** use prefix `setup-` (e.g., `setup-css-imports.md`)
 - **Commands** go in `commands/` with YAML frontmatter (`description`, `allowed-tools`)
 - **SKILL.md** files must have YAML frontmatter with `name` and `description`
+- **internal/** items are not loaded by the plugin and are for local/dev use only
 
 ## Adding a New Component Rule
 

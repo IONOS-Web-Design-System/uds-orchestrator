@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "Line 44: <ThemeProvider brand=\"ionos\"> wraps all content."
+    },
+    {
+      "text": "ThemeInverter (or equivalent) is used for the dark hero section",
+      "passed": false,
+      "evidence": "No ThemeInverter import or usage found. The dark hero uses data-color-scheme=\"dark\" on a Surface (line 49), which is not the same as ThemeInverter."
+    },
+    {
+      "text": "Colors reference CSS custom properties (var(--...)) rather than hard-coded hex values",
+      "passed": false,
+      "evidence": "Multiple hard-coded hex values found: line 51 'var(--brand/ionos-blue-900, #003d8f)' (fallback hex), line 59 color: '#ffffff', line 70 color: '#ffffff', line 93 'var(--background/neutral, #f5f6f7)' (fallback hex), line 109 'var(--brand/ionos-blue-100, #dce9ff)' (fallback hex)."
+    },
+    {
+      "text": "Hero section contains a Button component with a CTA label",
+      "passed": true,
+      "evidence": "Lines 78-85: <Button variant=\"primary\" size=\"large\" onClick={() => {}}>Get Started</Button> inside the hero Surface."
+    },
+    {
+      "text": "Three Card components cover Web Hosting, VPS, and Domains (or equivalent)",
+      "passed": true,
+      "evidence": "features array (lines 18-40) defines Web Hosting, VPS, and Domains; each renders a <Card> component in the grid."
+    },
+    {
+      "text": "Headline uses Overpass font family (via CSS token or font-heading class)",
+      "passed": true,
+      "evidence": "Line 58: fontFamily: 'Overpass, sans-serif' on the <h1> element explicitly names the Overpass typeface."
+    },
+    {
+      "text": "File has a comment marking it as a wireframe illustration",
+      "passed": true,
+      "evidence": "Line 1: // Wireframe illustration — not production code"
+    },
+    {
+      "text": "Event handlers are stubbed as empty functions () => {} rather than real logic",
+      "passed": true,
+      "evidence": "All onClick handlers (lines 81, 133) are () => {}."
+    }
+  ]
+}

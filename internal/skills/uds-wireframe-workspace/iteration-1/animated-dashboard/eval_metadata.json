@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "animated-dashboard",
+  "prompt": "Wireframe an IONOS server management dashboard. At the top, show 4 stat cards (active servers, monthly traffic, uptime percentage, open tickets). Below that, a table-like server list with 3 rows. Add staggered entrance animations so the stat cards fade in one by one.",
+  "assertions": [
+    {"id": "has-themeprovider-ionos", "text": "ThemeProvider with brand='ionos' wraps the output"},
+    {"id": "four-stat-cards", "text": "Four stat card elements are present covering active servers, traffic, uptime, and tickets"},
+    {"id": "css-keyframes-animation", "text": "CSS @keyframes or animation property is used for entrance animations"},
+    {"id": "staggered-animation-delays", "text": "Each stat card has a different animation-delay value to create the stagger effect"},
+    {"id": "uses-css-variables", "text": "Colors reference CSS custom properties rather than hard-coded hex values"},
+    {"id": "server-list-rows", "text": "Server list section contains at least 3 rows/items"},
+    {"id": "animation-duration-reasonable", "text": "Animation durations are in the 200-600ms range (not instant or excessively long)"}
+  ]
+}

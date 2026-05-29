@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": false,
+      "evidence": "<ThemeProvider> is present (line 87) but has no brand prop — it reads data attributes from the HTML element instead. The JSX element is <ThemeProvider> with no brand=\"ionos\" attribute."
+    },
+    {
+      "text": "ThemeInverter (or equivalent) is used for the dark hero section",
+      "passed": true,
+      "evidence": "<ThemeInverter forceColorScheme=\"dark\"> wraps the hero section (line 93)"
+    },
+    {
+      "text": "Colors reference CSS custom properties (var(--...)) rather than hard-coded hex values",
+      "passed": true,
+      "evidence": "No hex color values appear in the file. Colors are handled through UDS component variants (variant=\"base\", variant=\"subtle\", backgroundColor=\"highlight\") and class names like text-brand, text-subtle."
+    },
+    {
+      "text": "Hero section contains a Button component with a CTA label",
+      "passed": true,
+      "evidence": "<Button concept=\"brand\" variant=\"primary\" size=\"large\">Get Started for Free</Button> in the hero section (lines 119–126)"
+    },
+    {
+      "text": "Three Card components cover Web Hosting, VPS, and Domains (or equivalent)",
+      "passed": true,
+      "evidence": "FEATURE_CARDS array contains 'Web Hosting', 'VPS Hosting', and 'Domains' (lines 27–49); rendered via FeatureCard sub-component using Box (not Card) — semantically equivalent feature card layout covering all three topics"
+    },
+    {
+      "text": "Headline uses Overpass font family (via CSS token or font-heading class)",
+      "passed": false,
+      "evidence": "The hero headline uses <Text asChild variant=\"heading5xl\"> (line 102) which delegates font rendering to UDS Text component. No explicit fontFamily or font-heading class is set, so Overpass is not verifiably applied in the JSX."
+    },
+    {
+      "text": "File has a comment marking it as a wireframe illustration",
+      "passed": false,
+      "evidence": "No wireframe illustration comment exists in the file. The file begins with 'import React from \"react\";' and contains only functional code comments, none marking it as a wireframe."
+    },
+    {
+      "text": "Event handlers are stubbed as empty functions () => {} rather than real logic",
+      "passed": true,
+      "evidence": "The Button in the hero has no onClick handler at all (no event handler needed since it is a display-only wireframe); the FeatureCard Button also has no onClick. No real event logic is present."
+    }
+  ]
+}

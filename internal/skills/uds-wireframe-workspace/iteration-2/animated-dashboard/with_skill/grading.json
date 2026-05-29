@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "Line 131: <ThemeProvider brand=\"ionos\" colorScheme=\"light\" platform=\"comfortable\"> wraps all content."
+    },
+    {
+      "text": "Four stat card elements are present covering active servers, traffic, uptime, and tickets",
+      "passed": true,
+      "evidence": "STAT_CARDS array (lines 60-89) defines four entries: 'Active Servers', 'Monthly Traffic', 'Uptime', and 'Open Tickets', each rendered as a <Card>."
+    },
+    {
+      "text": "CSS @keyframes or animation property is used for entrance animations",
+      "passed": true,
+      "evidence": "Lines 11-20: @keyframes fadeInUp and @keyframes fadeIn defined in ANIMATION_STYLES; applied via animation property on header, stat cards, and server list rows."
+    },
+    {
+      "text": "Each stat card has a different animation-delay value to create the stagger effect",
+      "passed": true,
+      "evidence": "Line 277: animationDelay: `${200 + i * 100}ms` — produces 200ms, 300ms, 400ms, 500ms for the four cards respectively."
+    },
+    {
+      "text": "Colors reference CSS custom properties rather than hard-coded hex values (no hard-coded hex anywhere, including status badge styles)",
+      "passed": true,
+      "evidence": "No hard-coded hex values (#xxxxxx) found in the file. STATUS_STYLES uses rgba() for translucent backgrounds and var(--utility/...) tokens for border colors. All other color values use var(--brand/...), var(--neutral/...), or var(--base/...) tokens."
+    },
+    {
+      "text": "Server list section contains at least 3 rows/items",
+      "passed": true,
+      "evidence": "SERVERS array (lines 94-119) contains 3 entries: prod-web-01, prod-db-02, and staging-api-01, each rendered as a row."
+    },
+    {
+      "text": "Animation durations are in the 200-600ms range",
+      "passed": true,
+      "evidence": "All @keyframes animations use durations of 0.35s (350ms), 0.4s (400ms), and 0.45s (450ms) — all within the 200-600ms range."
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "skill_name": "uds-wireframe",
+  "evals": [
+    {
+      "id": 0,
+      "name": "hero-feature-grid",
+      "prompt": "Build me a wireframe for an IONOS hosting product landing page with a hero section (dark background, headline, subline, CTA button) and a 3-column feature card row below it (web hosting, VPS, domains). Output a .tsx file.",
+      "expected_output": "A .tsx file exporting a React component that wraps content in ThemeProvider brand=ionos, uses Surface/ThemeInverter for the dark hero, includes a headline + CTA button, and renders 3 Card components in a grid with hosting-relevant placeholder content.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "image-integration",
+      "prompt": "Create a wireframe for an IONOS web hosting product page. Use this screenshot as the hero image: /Users/boweixiao/Desktop/hero-mockup.png. The image should fill the top of the page. Below it, show a simple 2-column layout: left side has a headline and sign-up form fields (email + password + button), right side has 3 feature bullet points with icons.",
+      "expected_output": "A .tsx file that embeds /Users/boweixiao/Desktop/hero-mockup.png via UDS Picture component or img tag, includes a form section with TextField components, and uses Icon components for bullet points.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "animated-dashboard",
+      "prompt": "Wireframe an IONOS server management dashboard. At the top, show 4 stat cards (active servers, monthly traffic, uptime percentage, open tickets). Below that, a table-like server list with 3 rows (server name, status badge, location, actions). Add staggered entrance animations when the page loads so the stat cards fade in one by one. Output a .tsx file.",
+      "expected_output": "A .tsx file with ThemeProvider brand=ionos, 4 stat Card components in a grid, a server list section, and CSS @keyframes fadeInUp animations with staggered animation-delay on the cards.",
+      "files": []
+    }
+  ]
+}

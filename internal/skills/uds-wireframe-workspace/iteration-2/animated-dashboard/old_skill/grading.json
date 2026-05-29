@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "Line 26: <ThemeProvider brand=\"ionos\"> wraps all content."
+    },
+    {
+      "text": "Four stat card elements are present covering active servers, traffic, uptime, and tickets",
+      "passed": true,
+      "evidence": "statCards array (lines 11-16) defines four entries: 'Active Servers', 'Monthly Traffic', 'Uptime', and 'Open Tickets', each rendered as a <Card>."
+    },
+    {
+      "text": "CSS @keyframes or animation property is used for entrance animations",
+      "passed": true,
+      "evidence": "Lines 5-9: @keyframes fadeInUp defined in animationStyles; applied via animation property on each stat Card (lines 47-49)."
+    },
+    {
+      "text": "Each stat card has a different animation-delay value to create the stagger effect",
+      "passed": true,
+      "evidence": "Line 50: animationDelay: `${i * 100}ms` — produces 0ms, 100ms, 200ms, 300ms for the four cards respectively."
+    },
+    {
+      "text": "Colors reference CSS custom properties rather than hard-coded hex values (no hard-coded hex anywhere, including status badge styles)",
+      "passed": false,
+      "evidence": "No hard-coded hex (#xxxxxx) values found, but numerous Tailwind color utility classes are used throughout: text-gray-900, text-gray-500, bg-gray-50, border-gray-100, text-gray-400, text-gray-800, text-gray-600, hover:bg-blue-50. These bypass the CSS custom property system entirely and resolve to hard-coded color values, violating the CSS variables requirement."
+    },
+    {
+      "text": "Server list section contains at least 3 rows/items",
+      "passed": true,
+      "evidence": "servers array (lines 18-22) contains 3 entries: web-prod-01, db-primary-02, and cache-node-03, each rendered as a row."
+    },
+    {
+      "text": "Animation durations are in the 200-600ms range",
+      "passed": true,
+      "evidence": "Line 47: animation: 'fadeInUp 0.4s ease-out forwards' — duration is 0.4s (400ms), within the 200-600ms range."
+    }
+  ]
+}

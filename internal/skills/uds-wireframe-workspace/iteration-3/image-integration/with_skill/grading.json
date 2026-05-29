@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "The local path /Users/boweixiao/Desktop/hero-mockup.png is referenced in an img or Picture element",
+      "passed": true,
+      "evidence": "Line 10: `const heroImageSrc = '/Users/boweixiao/Desktop/hero-mockup.png';` and line 52: `<img src={heroImageSrc} alt=\"IONOS web hosting — hero\" .../>` renders it in an img element."
+    },
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "Line 35: `<ThemeProvider brand=\"ionos\" colorScheme=\"light\" platform=\"comfortable\">` wraps the entire output."
+    },
+    {
+      "text": "Colors reference CSS custom properties rather than hard-coded hex values (including white — must use var(--neutral/white) not #ffffff or 'white')",
+      "passed": true,
+      "evidence": "Line 69: `color: 'var(--neutral/white)'`, line 76: `color: 'var(--neutral/white)'`. No instances of `#ffffff` or the string literal `'white'` appear. All solid colors use var(--...) tokens throughout."
+    },
+    {
+      "text": "Form section includes email and password input fields",
+      "passed": true,
+      "evidence": "Lines 106-117: `<TextField label=\"Email address\" placeholder=\"you@example.com\" type=\"email\" .../>` and `<TextField label=\"Password\" placeholder=\"••••••••\" type=\"password\" .../>` are both present."
+    },
+    {
+      "text": "Feature bullet points use Icon components, not emoji characters",
+      "passed": true,
+      "evidence": "Lines 151-156: `<Icon group=\"system\" name={feature.icon} size={24} style={{ color: 'var(--neutral/white)' }} />` is used for each feature bullet. No emoji characters appear in the features list."
+    },
+    {
+      "text": "Content section below hero uses a 2-column grid or flex layout",
+      "passed": true,
+      "evidence": "Line 85: `<div className=\"grid grid-cols-2 gap-12 px-16 py-16\" ...>` — a 2-column CSS grid layout is used for the section below the hero, containing the sign-up form and feature bullet list."
+    },
+    {
+      "text": "File has a comment marking it as a wireframe illustration",
+      "passed": true,
+      "evidence": "Line 1: `// Wireframe illustration — not production code`"
+    }
+  ]
+}

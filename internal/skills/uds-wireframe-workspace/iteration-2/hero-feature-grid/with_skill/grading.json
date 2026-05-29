@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "Line 378: <ThemeProvider brand=\"ionos\" colorScheme=\"light\" platform=\"comfortable\"> wraps all content."
+    },
+    {
+      "text": "ThemeInverter (or equivalent) is used for the dark hero section",
+      "passed": true,
+      "evidence": "Line 85: <ThemeInverter> wraps the HeroSection Surface component."
+    },
+    {
+      "text": "Colors reference CSS custom properties (var(--...)) rather than hard-coded hex values",
+      "passed": true,
+      "evidence": "All color values use var(--brand/...), var(--neutral/...), var(--base/font/...) tokens. The only non-hex values are rgba() for translucent overlays (e.g. rgba(17, 199, 230, 0.12)), which do not constitute hard-coded hex values."
+    },
+    {
+      "text": "Hero section contains a Button component with a CTA label",
+      "passed": true,
+      "evidence": "Lines 161-168: <Button variant=\"primary\" size=\"lg\" ...>Get started free</Button> inside HeroSection."
+    },
+    {
+      "text": "Three Card components cover Web Hosting, VPS, and Domains (or equivalent)",
+      "passed": true,
+      "evidence": "features array (lines 36-63) defines Web Hosting, VPS Hosting, and Domain Names; each maps to a <Card> via FeatureCard component rendered in FeatureGridSection."
+    },
+    {
+      "text": "Headline uses Overpass font family (via CSS token or font-heading class)",
+      "passed": true,
+      "evidence": "Line 131: fontFamily: 'var(--base/font/heading)' on the <h1>; the UDS heading token resolves to Overpass."
+    },
+    {
+      "text": "File has a comment marking it as a wireframe illustration",
+      "passed": true,
+      "evidence": "Line 1: // Wireframe illustration — not production code"
+    },
+    {
+      "text": "Event handlers are stubbed as empty functions () => {} rather than real logic",
+      "passed": true,
+      "evidence": "All onClick handlers (lines 165, 172, 310) are () => {}."
+    }
+  ]
+}

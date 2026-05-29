@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "image-integration",
+  "prompt": "Create a wireframe for an IONOS web hosting product page. Use this screenshot as the hero image: /Users/boweixiao/Desktop/hero-mockup.png. The image should fill the top of the page. Below it, show a simple 2-column layout: left side has a headline and sign-up form fields (email + password + button), right side has 3 feature bullet points with icons.",
+  "assertions": [
+    {"id": "image-path-embedded", "text": "The local path /Users/boweixiao/Desktop/hero-mockup.png is referenced in an img or Picture element"},
+    {"id": "has-themeprovider-ionos", "text": "ThemeProvider with brand='ionos' wraps the output"},
+    {"id": "uses-css-variables", "text": "Colors reference CSS custom properties rather than hard-coded hex values"},
+    {"id": "form-fields-present", "text": "Form section includes email and password input fields"},
+    {"id": "icon-components-not-emojis", "text": "Feature bullet points use Icon components, not emoji characters"},
+    {"id": "two-column-layout", "text": "Content section below hero uses a 2-column grid or flex layout"},
+    {"id": "wireframe-comment", "text": "File has a comment marking it as a wireframe illustration"}
+  ]
+}

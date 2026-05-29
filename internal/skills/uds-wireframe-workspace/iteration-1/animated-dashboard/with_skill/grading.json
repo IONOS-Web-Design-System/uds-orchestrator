@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "ThemeProvider with brand='ionos' wraps the output",
+      "passed": true,
+      "evidence": "<ThemeProvider brand=\"ionos\" colorScheme=\"light\" platform=\"comfortable\"> (line 168)"
+    },
+    {
+      "text": "Four stat card elements are present covering active servers, traffic, uptime, and tickets",
+      "passed": true,
+      "evidence": "statCards array has four entries: 'Active Servers', 'Monthly Traffic', 'Uptime', 'Open Tickets' (lines 55–83); all rendered as <Card> elements"
+    },
+    {
+      "text": "CSS @keyframes or animation property is used for entrance animations",
+      "passed": true,
+      "evidence": "@keyframes fadeInUp and @keyframes fadeIn are defined in the animationStyles string (lines 13–49), injected via <style>{animationStyles}</style>"
+    },
+    {
+      "text": "Each stat card has a different animation-delay value to create the stagger effect",
+      "passed": true,
+      "evidence": "animationDelay: `${200 + i * 120}ms` — each card (i=0..3) gets 200ms, 320ms, 440ms, 560ms respectively (line 246)"
+    },
+    {
+      "text": "Colors reference CSS custom properties rather than hard-coded hex values",
+      "passed": false,
+      "evidence": "Most colors use var(--...) tokens, but statusStyles contains hard-coded hex values: '#0D9A5A', '#A06C00', '#C03228' for Running/Maintenance/Offline text colors (lines 127–138)"
+    },
+    {
+      "text": "Server list section contains at least 3 rows/items",
+      "passed": true,
+      "evidence": "servers array has exactly 3 entries: 'web-prod-eu-01', 'db-prod-eu-02', 'cdn-edge-us-01' (lines 97–118), all rendered as rows"
+    },
+    {
+      "text": "Animation durations are in the 200-600ms range (not instant or excessively long)",
+      "passed": true,
+      "evidence": "fadeInUp: 0.45s (450ms), fadeIn: 0.4s (400ms), fadeIn: 0.35s (350ms) — all within the 200–600ms range (lines 30–48)"
+    }
+  ]
+}
