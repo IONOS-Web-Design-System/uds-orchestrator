@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.6.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.5.1...v1.6.0) (2026-06-02)
+
+
+### Features
+
+* **illustration:** ai specific color definition ([53a85b2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/53a85b251bed85fe083387a6faa04b1b3cb07631))
+
+
+### Bug Fixes
+
+* **ci:** sync-sideload targets coreinstaller@VM and ~/pipeline/uds-orchestrator ([e36b4fb](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/e36b4fb02b13da79b006c50947663979d6b914d6))
+
+
+### Miscellaneous
+
+* **illustration:** new ionos specific ai setting ([c5e4b86](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c5e4b863e7c52f5abce23d65e879154acaf693f9))
+
 ## [1.5.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.5.0...v1.5.1) (2026-05-29)
 
 
