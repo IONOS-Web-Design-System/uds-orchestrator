@@ -1,3 +1,18 @@
+# =============================================================================
+# ⚠️  PARKED — Plan A (egress-allowlist) skills sync. NOT ACTIVE.
+#
+# Pull-on-host model: the VM `git fetch`es uds-orchestrator from github and
+# checks out the released tag. Requires the VM to have github.com egress.
+# Disabled (`.disabled` → GitHub Actions ignores it) while we run the side-load /
+# minimum-egress model (Plan B → sync-sideload.yml), where the VM has NO github
+# egress and skills are PUSHED in over SSH instead.
+#
+# REACTIVATE once DevOps grants the VM github egress:
+#   1. git mv sync-to-pipeline-host.yml.disabled sync-to-pipeline-host.yml
+#   2. git mv sync-sideload.yml sync-sideload.yml.disabled
+#   3. ensure /opt/pipeline/uds-orchestrator is a git clone on the VM.
+# Plan: agent-svc/docs/superpowers/plans/2026-06-02-prod-deploy-allowlist.md
+# =============================================================================
 name: Sync to pipeline-host
 on:
   release:
