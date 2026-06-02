@@ -63,6 +63,38 @@ use `fontFamily: 'Overpass'` or `fontFamily: '"Open Sans"'` freely in inline sty
 require a network call that may be blocked or slow in the headless renderer. For general
 (non-headless) Remotion development, `@remotion/google-fonts` is fine; see [Google Fonts](#google-fonts) below.
 
+## All motion is frame-driven — NEVER use CSS transitions or animations
+
+Remotion renders each frame as an independent, static snapshot in headless Chrome. CSS
+`transition` and `@keyframes`/`animation` never run during a render — they depend on
+wall-clock time the renderer doesn't advance. The ONLY way to animate is to read
+`useCurrentFrame()` and compute values with `interpolate()` / `spring()`.
+
+This is enforced by an eslint gate that **fails the build** on these inline-style properties:
+`transition`, `transitionProperty`, `animation`, `animationName` — and on Tailwind
+`transition-*` / `animate-*` classes.
+
+```tsx
+const frame = useCurrentFrame();
+
+// ❌ WRONG — CSS transition: silently does nothing on render AND fails the eslint gate
+<div style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.3s ease' }} />
+// ❌ WRONG — CSS keyframe animation: same
+<div style={{ animation: 'fadeIn 0.5s ease forwards' }} />
+// ❌ WRONG — Tailwind animation utilities
+<div className="transition-opacity duration-300 animate-pulse" />
+
+// ✓ CORRECT — compute the animated value from the current frame
+const opacity = interpolate(frame, [0, 15], [0, 1], {
+  extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+});
+<div style={{ opacity }} />
+```
+
+There is no exception — hover/enter/exit effects, pulses, spinners, and easing must all be
+expressed as `interpolate(frame, ...)`. If you catch yourself typing `transition:` or
+`animation:` in a style object, replace it with a frame-driven value.
+
 ## Fade-in animations — always ease opacity, match duration to transform
 
 Linear opacity looks like a flash. Always apply the same easing to `opacity` as to the

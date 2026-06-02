@@ -95,6 +95,60 @@ Import from `@ionos-web-design-system/icon/flags`. Uses lowercase ISO 3166-1
 alpha-2 codes: `de`, `us`, `fr`, `gb`, `it`, `es`, `pl`, `nl`, `at`, `ch`, etc.
 Regional groups: `arab`, `asean`, `eu`.
 
+## Icon Runtime API
+
+UDS icon exports come in two forms — understand which you need:
+
+### Form 1 — CSS mask (from the barrel index, recommended for UI)
+
+Named exports from `@ionos-web-design-system/icon/<group>` are `() => string` functions that **inject the icon CSS into `<head>` and return the CSS class name** (e.g. `"uds-system-bolt"`). Use this for components that render in a live DOM.
+
+```ts
+import { bolt, arrowRight } from '@ionos-web-design-system/icon/system';
+import { ionosLight } from '@ionos-web-design-system/icon/brandmark';
+
+// Call to inject CSS + get class name
+const boltClass = bolt();          // → "uds-system-bolt"
+const logoClass = ionosLight();    // → "uds-brandmark-ionos-light"
+
+// Use as className on a styled div (needs CSS mask setup)
+<div className={logoClass} style={{ width: 80, height: 24 }} />
+```
+
+### Form 2 — SVG data URI (from individual icon paths, for backgroundImage)
+
+Each individual icon path exports a `svgData` named constant — a base64 data URI. Use this when you need `backgroundImage: url(...)` (e.g. Remotion wireframes with an IONOS logo).
+
+```ts
+import { svgData as ionosLightSvg } from '@ionos-web-design-system/icon/brandmark/ionos-light';
+import { svgData as boltSvg } from '@ionos-web-design-system/icon/system/bolt';
+
+// Use directly as a data URI
+<div style={{ backgroundImage: `url(${ionosLightSvg})`, width: 80, height: 24,
+              backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }} />
+```
+
+**❌ WRONG** — properties that don't exist:
+```ts
+bolt.svgData   // TypeError — svgData is not a property on () => string
+bolt.svg       // TypeError — svg does not exist
+```
+
+**Import path — CRITICAL for webpack/Remotion bundling:** Always import from the named sub-path alias using named exports from the index. Never import individual icon files from internal `dist/` paths — those are NOT in the package `exports` map and will fail with "not exported under conditions" in webpack.
+
+```ts
+// ❌ WRONG — individual file imports fail webpack/Remotion bundling
+import bolt from '@ionos-web-design-system/icon/dist/system/bolt';
+import arrowRight from '@ionos-web-design-system/icon/dist/system/arrow-right';
+import { ionosLight } from '@ionos-web-design-system/icon/dist/brandmark/ionos-light';
+
+// ✓ CORRECT — always import named exports from the entry-point alias
+import { bolt, arrowRight } from '@ionos-web-design-system/icon/system';
+import { ionosLight } from '@ionos-web-design-system/icon/brandmark';
+```
+
+The rule: `@ionos-web-design-system/icon/<group>` is the only valid import pattern — never `icon/dist/<group>/<name>`.
+
 ## Icons NOT in the Lists Above
 
 For **ionos**, **brandmark**, **fasthosts**, **homepl**, and **strato** icons,

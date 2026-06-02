@@ -25,6 +25,19 @@ const opacity = interpolate(frame, [0, 100], [0, 1], {
 });
 ```
 
+> **⚠ Removed API — `extrapolate` does not exist in Remotion 4.** The old single-key shorthand was split into two explicit keys. Using the old key causes `TS2353` on every call site:
+>
+> ```ts
+> // ❌ WRONG — TypeScript error: 'extrapolate' does not exist in type
+> interpolate(frame, [0, 100], [0, 1], { extrapolate: "clamp" });
+>
+> // ✓ CORRECT — always use both explicit keys
+> interpolate(frame, [0, 100], [0, 1], {
+>   extrapolateLeft: "clamp",
+>   extrapolateRight: "clamp",
+> });
+> ```
+
 ## Bézier easing
 
 Use `Easing.bezier(x1, y1, x2, y2)` inside the `interpolate` options object. The curve is identical in spirit to CSS animations and transitions, which helps when you are stealing timing from the web or from a designer’s spec.
