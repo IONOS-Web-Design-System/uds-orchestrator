@@ -38,6 +38,7 @@ Identify the target brand first, then go to the matching rule file:
 
 1. **`rules/shared-identity-principles.md`** — Principles that apply to all brands. Read this first regardless of target brand.
 2. **Brand-specific rule files** — Navigate via the table above for colors and typography.
+3. **`rules/ionos-ai-features.md`** — IONOS AI feature color language (blue→magenta gradient, AI tokens, Button `ai` concept). Read when building any AI affordance.
 
 ## Quick Reference — IONOS Brand
 
@@ -50,6 +51,8 @@ The three primary IONOS colors:
 | Dark Midnight | `#001B41` | `--brand/ionos-blue-800` | Primary text on screen |
 
 IONOS typefaces: **Overpass** (`--base/font/heading`) for headlines, **Open Sans** (`--base/font/body`) for everything else.
+
+**AI features** use the signature blue→magenta gradient — `--color-ai-primary-start` → `--color-ai-primary-end`, or `<Button concept="ai">`. See `rules/ionos-ai-features.md`. Reserve it for AI affordances only.
 
 > **Token path notation:** this guide uses `/` as a hierarchy separator (Figma convention). In CSS, use hyphenated custom properties: `var(--brand-ionos-blue-600)`. See `uds-usage-best-practices` for correct token usage in code.
 

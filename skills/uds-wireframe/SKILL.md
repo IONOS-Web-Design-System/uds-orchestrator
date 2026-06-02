@@ -101,6 +101,14 @@ For dark/cinematic/premium compositions, read `rules/wireframe-decorative-mode.m
 Key differences from standard mode:
 - **Transparent outer canvas** — `background: transparent` on the root; dark gradient only inside the device frame's screen
 - `colorScheme="dark"` on ThemeProvider root (not ThemeInverter for sections)
+- **Background → main-element theme (default).** When the brief specifies a **light or
+  transparent background**, default the **main product frame AND the pop-out / animated
+  elements to a DARK treatment** (navy `#001B41` / gradient chrome) so the composition
+  anchors against the light page instead of washing out — UNLESS the brief explicitly
+  names a color theme. Pop-out highlight cards then invert against the dark frame
+  (white / near-white per the recursive contrast rule below). On a dark background, keep
+  the inverse (light/white panels). This is the Scene Inversion Principle applied at two
+  levels: frame-vs-page, then highlight-vs-frame.
 - **Brand logo** in the nav bar using `@ionos-web-design-system/icon/brandmark` — import the
   named export that matches the background: `ionosDark` for dark/gradient backgrounds, `ionosLight`
   for light. Never use the internal `dist/` path directly; it bypasses the package exports map.
@@ -213,11 +221,24 @@ visual centrepiece. This is a recognisable simplified UI — not a bar-chart ske
 ```
 
 Rules:
-- **IONOS logo in the nav bar** — use the `svgData` approach from `remotion-best-practices`.
-  Select the variant based on the **panel's own background** (not the scene):
-  - Panel is white/light (`0.88+` opacity) → import `ionos-light` (has blue #003d8f, readable on white)
-  - Panel is dark/glass → import `ionos-dark` (all white fills, readable on dark)
-  Render with `backgroundImage: \`url(\${svgData})\``. Never substitute with a text label or bar.
+- **IONOS logo in the nav bar** — import the `svgData` named export from the individual icon path. Each icon file exports a `svgData` constant (a base64 data URI) for use as a CSS `backgroundImage`.
+  ```tsx
+  // Panel is white/light (0.88+ opacity) → ionos-light variant (blue #003d8f, readable on white)
+  import { svgData as ionosLogoSvg } from '@ionos-web-design-system/icon/brandmark/ionos-light';
+  // Panel is dark/glass → ionos-dark variant (white fills, readable on dark)
+  import { svgData as ionosLogoSvg } from '@ionos-web-design-system/icon/brandmark/ionos-dark';
+
+  // Use directly — svgData is a constant, not a function:
+  <div style={{
+    backgroundImage: `url(${ionosLogoSvg})`,
+    width: 80, height: 24,
+    backgroundSize: 'contain', backgroundRepeat: 'no-repeat',
+  }} />
+  ```
+  - **Do NOT** call `ionosLight()` for this — the barrel function returns a CSS class name, not an SVG string.
+  - Panel white/light (`0.88+` opacity) → `ionos-light` (blue #003d8f fills, readable on white)
+  - Panel dark/glass → `ionos-dark` (white fills, readable on dark)
+  Never substitute with a text label or bar.
 - **System icons inside the panel** — apply the recursive contrast table above: dark icons
   (`backgroundColor: '#001B41'`) inside white panels, light icons (`backgroundColor: '#ffffff'`)
   inside dark panels.
@@ -264,6 +285,55 @@ Rules:
   Do NOT use `0.08–0.14` glass — that is for secondary decorative overlays only.
 - **Depth** — give it generous whitespace and a `boxShadow` that lifts it off the background.
 - This rule applies to both standard and decorative fidelity levels.
+
+## Feature highlighting — pop-out elements break the product frame
+
+A decorative wireframe is an **illustration, not a faithful UI**. It exists to dramatize ONE
+feature — do not reproduce the product's real inline layout. Exaggerate: oversize the
+highlighted element, simplify everything around it, and let the highlight visibly **break out
+of the product frame** (ref `iter-baseline-app-vision-hero-011`). Realism is not the goal —
+making the approached feature pop is.
+
+**Structure — the pop-out must live OUTSIDE the frame's clipping box (most common mistake):**
+- Render the highlight as a **sibling of the product frame at the composition root**
+  (`AbsoluteFill`), NOT as a child of the frame — a child gets clipped.
+- The frame almost always has `overflow: 'hidden'` (for rounded corners), so anything nested
+  inside it CANNOT escape. The pop-out sits one level up, overlapping the frame's edge/corner
+  from outside, with a higher `zIndex` and a pronounced `boxShadow`.
+
+```tsx
+<AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center' }}>
+  {/* product frame — clips its own children */}
+  <div style={{ width: 1040, height: 620, overflow: 'hidden', borderRadius: 12, position: 'relative' }}>
+    … product UI …
+  </div>
+  {/* highlight — SIBLING of the frame, overlaps its edge, NOT clipped */}
+  <div style={{ position: 'absolute', right: 80, top: 180, zIndex: 100,
+                boxShadow: '0 24px 64px rgba(0,27,65,0.28)', transform: `translateX(${x}px)` }}>
+    <AICallout … />
+  </div>
+</AbsoluteFill>
+```
+
+**Motion — vivid, frame-driven, relative to the frame:**
+- Fly in from the frame edge with an **overshoot** (spring-like) + scale ~0.85→1 — bold travel
+  (**60–120px**), not a timid nudge. Every value from `useCurrentFrame()` + `interpolate()`/
+  `spring()` (see `remotion-best-practices`); CSS transitions/animations do not render.
+- Add **parallax**: the pop-out travels more than the frame so it feels closer to the camera.
+
+**Pacing — prominent but NOT rushed (these briefs are short, ~90 frames / 3s):**
+- Pick ONE hero beat (the feature popping out) and give it room: a **≥20-frame eased entrance,
+  then HOLD** it on screen. Don't cram 4–5 micro-beats (sparkle → slide → type → click →
+  rewrite) into 3s — that reads as "too fast". Cut secondary beats; stagger at most 1–2.
+- Springs: prefer a softer settle (`damping: 18–22`) over snappy (`damping: 10–12`).
+
+**AI features — use the IONOS AI gradient (see `uds-style-guide` → `ionos-ai-features`):**
+- AI badge / pill: magenta sparkle icon (`--color-ai-primary-end`) + background
+  `linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end))`.
+- Prompt / "generating" surface: `ai-subtle` gradient background.
+- Generate / "improve with AI" action: `<Button concept="ai" variant="primary">`.
+- Moving AI gradient: animate the gradient **angle** with `interpolate(frame, …)` — never a
+  CSS `@keyframes` / `animation` (forbidden in Remotion).
 
 ## Output Format
 
