@@ -3,7 +3,7 @@
 # The VM has no github egress, so we can't `git fetch` on the host. Instead this
 # job (on a connected-machine self-hosted runner) checks out the released tag
 # here and PUSHES the skills to the VM over SSH (tar | ssh). The agent-svc
-# container bind-mounts /opt/pipeline/uds-orchestrator read-only.
+# container bind-mounts ~/pipeline/uds-orchestrator read-only.
 # Companion (parked): sync-to-pipeline-host.yml.disabled (Plan A pull-on-host).
 # Plan: agent-svc/docs/superpowers/plans/2026-06-02-prod-deploy-sideload.md
 name: sync-sideload
@@ -45,12 +45,12 @@ jobs:
           # Record the synced version for provenance — the VM copy has no .git.
           echo "${{ steps.ref.outputs.value }}" > .skills-version
           tar czf - --exclude=.git --exclude=node_modules . \
-            | ssh -o StrictHostKeyChecking=yes deploy@${{ vars.PIPELINE_HOST }} \
-              'mkdir -p /opt/pipeline/uds-orchestrator && find /opt/pipeline/uds-orchestrator -mindepth 1 -delete && tar xzf - -C /opt/pipeline/uds-orchestrator'
+            | ssh -o StrictHostKeyChecking=yes coreinstaller@${{ vars.PIPELINE_HOST }} \
+              'mkdir -p ~/pipeline/uds-orchestrator && find ~/pipeline/uds-orchestrator -mindepth 1 -delete && tar xzf - -C ~/pipeline/uds-orchestrator'
 
       - name: Verify
         run: |
-          ssh -o StrictHostKeyChecking=yes deploy@${{ vars.PIPELINE_HOST }} \
-            'echo -n "synced: "; cat /opt/pipeline/uds-orchestrator/.skills-version; echo -n "SKILL.md files: "; find /opt/pipeline/uds-orchestrator -name SKILL.md | wc -l'
+          ssh -o StrictHostKeyChecking=yes coreinstaller@${{ vars.PIPELINE_HOST }} \
+            'echo -n "synced: "; cat ~/pipeline/uds-orchestrator/.skills-version; echo -n "SKILL.md files: "; find ~/pipeline/uds-orchestrator -name SKILL.md | wc -l'
           # Skills are read per /generate job; for certainty after a sync you may
-          # restart agent-svc: ssh deploy@host 'docker restart pipeline-agent-svc'
+          # restart agent-svc: ssh coreinstaller@host 'docker restart pipeline-agent-svc'
