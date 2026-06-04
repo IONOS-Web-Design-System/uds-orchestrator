@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.6.0...v1.7.0) (2026-06-04)
+
+
+### Features
+
+* **illustration:** cluster to ionos brand specific rules ([260adfe](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/260adfeb88aaaf2f2518bbbb8cbcb86e6204176e))
+
 ## [1.6.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.5.1...v1.6.0) (2026-06-02)
 
 
