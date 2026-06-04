@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.7.0...v1.7.1) (2026-06-04)
+
+
+### Miscellaneous
+
+* **animation:** polish frame and typo animations ([58f2503](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/58f250322b9cc30bac54d03877881a76df4f015a))
+
 ## [1.7.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.6.0...v1.7.0) (2026-06-04)
 
 
