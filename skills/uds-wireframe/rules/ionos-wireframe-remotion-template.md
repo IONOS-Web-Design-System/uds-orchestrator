@@ -73,6 +73,7 @@ The `schema` prop is what makes `component={MyComposition}` type-safe. If you de
 | `Type 'FC<X>' is not assignable to type 'LooseComponentType<Record<string, unknown>>'` | Component props type is not `VariantProps` | Change component to `React.FC<VariantProps>` |
 | `Object literal may only specify known properties, and 'X' does not exist in type 'VariantProps'` | Added unknown prop to `defaultProps` in Root.tsx | Remove the prop; only standard `VariantProps` fields allowed |
 | `Expected 2 type arguments, but got 1` | Tried to use `Composition<SomeType>` generic | Don't use generics on `<Composition>`; use `schema=` instead |
+| `Module '"remotion"' has no exported member 'z'` | `z` (Zod) is not exported from `remotion` in this version | Import from `zod` directly: `import { z } from 'zod'` — never `import { z } from 'remotion'` |
 
 ## Variant Differentiation
 

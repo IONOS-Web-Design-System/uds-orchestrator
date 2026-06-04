@@ -44,7 +44,7 @@ All rules are inlined below. Quick navigation:
 |---|---|
 | `ionos-wireframe-remotion-template` | **Read first for Remotion jobs** — VariantProps schema, Root.tsx contract, TypeScript error triage |
 | `ionos-wireframe-ai-animations` | **AI animation templates** — copy-ready Remotion code for button, loading state, radial bloom, sparkle pulse. Preview: http://localhost:4200/ai-templates |
-| `ionos-wireframe-product-frame` | Product frame structure, **verified icon allowlist** (system + brandmark), contrast rules, feature pop-out |
+| `ionos-wireframe-product-frame` | Product frame structure, **verified icon allowlist** (system + brandmark), contrast rules, feature pop-out, **constrained viewport cropping patterns** (bottom bleed, zoom-to-highlight, counterbalance rule) |
 | `ionos-wireframe-composition` | Standard layout patterns, component selection, placeholder content guidelines |
 | `ionos-wireframe-decorative-mode` | Decorative mode setup, device frames, Bar/BarGroup helpers, glass card system, HTML preview |
 | `ionos-wireframe-micro-animations` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in, variant switcher |

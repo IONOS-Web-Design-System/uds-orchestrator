@@ -52,8 +52,8 @@ const AI_AREA_BASE: React.CSSProperties = {
   overflow: 'hidden',
   position: 'relative',
   background: 'rgba(255, 255, 255, 0.85)',
-  backdropFilter: 'blur(16px)',
-  WebkitBackdropFilter: 'blur(16px)',
+  backdropFilter: 'blur(8px)',
+  WebkitBackdropFilter: 'blur(8px)',
 };
 ```
 
@@ -111,6 +111,16 @@ export const AIPillButton: React.FC<{
 
 Used as the **main highlight element** floating outside the product frame. Pill-shaped, dashed AI border. Confirmed style from Figma node 64:320.
 
+> **HARD RULE — Remotion:** `backdropFilter` and `WebkitBackdropFilter` are **required** on this
+> element. Background MUST be `rgba(244, 247, 250, 0.88)` — opacity below 1.0 is required for
+> the blur to composite. Do not raise opacity to 0.96 or remove backdropFilter. Add
+> `isolation: 'isolate'` to the AbsoluteFill or the nearest stacking-context parent.
+>
+> **DO NOT** nest `<AITextGenerationArea>` or any element using `AI_AREA_BASE` inside this card.
+> `AITextGenerationArea` is for standalone use on a page/frame. Nesting it here creates a
+> white box-in-box with double shadow. The card IS the glass surface — place the header, text,
+> and button directly as children with no inner background container.
+
 ```tsx
 import { useCurrentFrame, spring, interpolate } from 'remotion';
 
@@ -133,7 +143,10 @@ export const AIFloatingHighlight: React.FC<{
     <div style={{
       borderRadius: 40,
       border: '3px dashed #8212C2',
-      background: 'rgba(244, 247, 250, 0.96)',
+      background: 'rgba(244, 247, 250, 0.88)',
+      backdropFilter: 'blur(8px)',
+      WebkitBackdropFilter: 'blur(8px)',
+      isolation: 'isolate',
       padding: '28px 24px 20px',
       boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
       transform: `translateX(${slideX}px) scale(${scale})`,
@@ -149,8 +162,19 @@ export const AIFloatingHighlight: React.FC<{
           </span>
         </div>
       )}
-      <div style={{ font: '700 18px/1.3 "Overpass", sans-serif', color: '#001B41', paddingInline: 8 }}>
-        {text}
+      {/* Ghost+overlay: ghost reserves height, overlay renders .slice() — no container-height jitter */}
+      <div style={{ position: 'relative', paddingInline: 8 }}>
+        <div style={{ visibility: 'hidden', pointerEvents: 'none',
+                      font: '600 18px/1.35 "Overpass", sans-serif',
+                      whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+          {text}
+        </div>
+        <div style={{ position: 'absolute', inset: 0,
+                      font: '600 18px/1.35 "Overpass", sans-serif', color: '#001B41',
+                      whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflow: 'hidden' }}>
+          {visibleText}
+          <span style={{ opacity: cursorOn }}>&#x258C;</span>
+        </div>
       </div>
       {/* CTA button — full width, same pill radius */}
       <div style={{
@@ -183,11 +207,20 @@ export const AITextGenerationArea: React.FC<{
 }> = ({ startFrame = 0, endFrame = 60, productLabel = 'AI text generation', generatedText = '' }) => {
   const frame = useCurrentFrame();
 
-  const progress    = interpolate(frame, [startFrame, endFrame], [0, 1], {
-    extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
-  });
-  const visibleText = generatedText.slice(0, Math.floor(progress * generatedText.length));
-  const cursorOn    = Math.sin(frame * 0.25) > 0;
+  const CHAR_FRAMES = 2;
+  const BLINK_FRAMES = 16;
+  const charCount = Math.min(generatedText.length, Math.floor(
+    interpolate(frame, [startFrame, endFrame], [0, generatedText.length / CHAR_FRAMES], {
+      extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+    }) * CHAR_FRAMES
+  ));
+  const typedText = generatedText.slice(0, charCount);
+  const cursorOpacity = interpolate(
+    frame % BLINK_FRAMES,
+    [0, BLINK_FRAMES / 2, BLINK_FRAMES],
+    [1, 0, 1],
+    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' },
+  );
 
   return (
     <div style={{ ...AI_AREA_BASE, padding: '20px 20px 24px', boxShadow: areaGlowShadow(frame) }}>
@@ -197,13 +230,19 @@ export const AITextGenerationArea: React.FC<{
           {productLabel}
         </span>
       </div>
-      <div style={{ font: '600 20px/1.35 "Overpass", sans-serif', color: '#001B41' }}>
-        {visibleText}
-        <span style={{
-          display: 'inline-block', width: 2, height: 22,
-          background: AI_PRIMARY_END, verticalAlign: 'middle', marginLeft: 3,
-          opacity: cursorOn ? 1 : 0,
-        }} />
+      {/* Ghost reserves final height; overlay renders slice — prevents container-height jitter */}
+      <div style={{ position: 'relative' }}>
+        <div style={{ visibility: 'hidden', pointerEvents: 'none',
+                      font: '600 20px/1.35 "Overpass", sans-serif',
+                      whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+          {generatedText}
+        </div>
+        <div style={{ position: 'absolute', inset: 0,
+                      font: '600 20px/1.35 "Overpass", sans-serif', color: '#001B41',
+                      whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflow: 'hidden' }}>
+          {typedText}
+          <span style={{ opacity: cursorOpacity }}>&#x258C;</span>
+        </div>
       </div>
     </div>
   );

@@ -277,3 +277,137 @@ const frameDrift = interpolate(frame, [60, 90], [0, -60], { extrapolateLeft: 'cl
 - Client app image: always use `<Img src={staticFile(imageSlug + '.png')}>` from the asset catalog
 - Never use sky `#11C7E6` in the product shell — that is a CTA colour; use `#9DC2D9` for shell decorative elements
 - AI feature affordances: see `uds-style-guide/ionos-ai-features` for gradient button, generating surface, and animation rules
+
+---
+
+## Constrained Viewport — Frame Cropping and Highlight Placement
+
+When the canvas is **wide and short** (landscape marketing banner, 3:1 card) or the product frame is taller/wider than the available display area, do not squeeze or scale the frame to fit. Use these cropping patterns instead.
+
+### 1 — Harmonized Side Margins
+
+Center the product frame optically within the viewport. Leave equal breathing room on the left and right. Do not stretch the frame to fill horizontal space — unused canvas margin is intentional and gives the composition air.
+
+```tsx
+// ✅ Frame narrower than canvas — centered with equal side margins
+<AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center' }}>
+  <div style={{
+    width: 820,           // narrower than the 1280px canvas
+    position: 'relative',
+    overflow: 'hidden', borderRadius: 12,
+  }}>
+    {/* product UI */}
+  </div>
+</AbsoluteFill>
+```
+
+### 2 — Bottom Bleed (height-insufficient canvas)
+
+When the canvas is too short to show the full frame height, **let the frame's bottom extend beyond the viewport**. Never shrink the frame to fit — the crop signals depth ("there's more below") and makes the product feel real and full-size.
+
+**Pattern (Figma node 64:320 — WordPress editor):** Editor UI anchored near top of canvas; bottom ~30% is cropped by the viewport. The AI highlight card and secondary tool chip both appear at the visible bottom edge, inside the viewport.
+
+```tsx
+// Frame anchored top, bleeds below viewport — intentional
+<AbsoluteFill style={{ overflow: 'hidden' }}>
+  <div style={{
+    position: 'absolute',
+    top: 32,
+    left: '50%', transform: 'translateX(-50%)',
+    width: 820,
+    height: 580,   // taller than the ~380px visible area — bottom is cropped
+    overflow: 'hidden', borderRadius: 12,
+  }}>
+    {/* full product UI */}
+  </div>
+
+  {/* AI highlight — right half, overlapping frame's right edge */}
+  <div style={{
+    position: 'absolute',
+    right: 60, top: 120,   // visible zone, right of center
+    zIndex: 100,
+    borderRadius: 40, border: '3px dashed #8212C2',
+    background: 'rgba(244, 247, 250, 0.96)',
+    // card may extend past right canvas edge — also intentional
+  }}>
+    {/* AI prompt + CTA */}
+  </div>
+
+  {/* Optional secondary element near the cropped bottom edge */}
+  <div style={{ position: 'absolute', bottom: 24, left: 200, zIndex: 90, opacity: 0.85 }}>
+    {/* tool chip, palette, or stat pill */}
+  </div>
+</AbsoluteFill>
+```
+
+### 3 — Zoom-to-Highlight (multi-side bleed)
+
+When the AI feature is an **inline editing action** (text selection, image resize, in-page generation), zoom the product frame so the AI interaction target sits in the **optical center** of the viewport. The frame will bleed on 2–3 sides — this is correct and intentional.
+
+**Pattern (Figma node 77:203 — KI Text / text-select AI):** Website hero (background image + "URBAN BIKES" heading) scaled so the selected heading fills the viewport center. Frame bleeds right and bottom. AI panel (tone selector + CTA) appears in the left third of the viewport, also extending slightly past the left canvas edge.
+
+```tsx
+// Zoom-to-highlight: position frame so the AI interaction zone lands at canvas center
+<AbsoluteFill style={{ overflow: 'hidden' }}>
+  {/* Product frame — oversize, bleeds right + bottom */}
+  <div style={{
+    position: 'absolute',
+    top: -60,    // bleeds above canvas
+    left: 120,   // offset left to place interaction target at center
+    width: 1400, // wider than canvas — bleeds right
+    height: 680, // taller than canvas — bleeds bottom
+    overflow: 'hidden',
+  }}>
+    {/* full product UI — AI interaction target (selected text, image region)
+        should land near canvas optical center after offset */}
+  </div>
+
+  {/* AI panel — left side, opposite the frame bleed direction */}
+  <div style={{
+    position: 'absolute',
+    left: -8,    // panel bleeds slightly past left canvas edge
+    top: '50%', transform: 'translateY(-50%)',
+    zIndex: 100,
+    borderRadius: 24, border: '3px dashed #8212C2',
+    background: 'rgba(255, 255, 255, 0.97)',
+    // contains tone tabs, option checkboxes, AI CTA button
+  }}>
+    {/* AI options panel */}
+  </div>
+
+  {/* AI badge — floating above the interaction target, also outside frame */}
+  <div style={{
+    position: 'absolute',
+    // positioned over the selection target in the frame
+    zIndex: 110,
+    width: 72, height: 72, borderRadius: '50%',
+    background: '#8212C2', color: '#fff',
+    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+  }}>
+    {/* sparkles icon + label */}
+  </div>
+</AbsoluteFill>
+```
+
+### 4 — AI Feature Always Escapes the Frame
+
+In all three patterns above, the AI affordance (card, panel, badge) must break outside the product frame's boundary. It is never fully contained within the frame. The AI feature is always the **foreground subject** — the product frame is background context.
+
+| AI feature type | Required placement |
+|---|---|
+| Prompt card (text input + CTA pill) | Sibling of frame; overlaps frame right/bottom edge; may extend past canvas edge |
+| Inline badge (floating over text selection or image region) | Floats above the selection target in the viewport; outside frame or at its edge |
+| Options panel (tone selector, checklist, settings) | Opposite side from the frame's primary bleed; may extend slightly past canvas edge |
+
+> **Rule in one sentence:** The AI feature must break at least one boundary — the frame edge, the canvas edge, or both.
+
+### 5 — Counterbalance Rule
+
+Place the AI highlight on the **opposite side** from where the frame bleeds most heavily. This creates visual tension: the product recedes in one direction; the AI feature advances from the other.
+
+| Frame bleed direction | AI highlight position |
+|---|---|
+| Bottom only (height-short canvas) | Right of center, overlapping frame right edge |
+| Right + bottom (zoom-to-highlight) | Left of center, may extend past left canvas edge |
+| Right only | Left of center |
+| Bottom + left | Right of center |

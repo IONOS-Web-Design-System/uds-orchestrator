@@ -82,7 +82,9 @@ wall-clock time the renderer doesn't advance. The ONLY way to animate is to read
 
 This is enforced by an eslint gate that **fails the build** on these inline-style properties:
 `transition`, `transitionProperty`, `animation`, `animationName` — and on Tailwind
-`transition-*` / `animate-*` classes.
+`transition-*` / `animate-*` classes. The gate bans the property **key** regardless of
+value — even `transition: 'none'` fails the build. Never write these properties at all;
+omitting them already means "no transition".
 
 ```tsx
 const frame = useCurrentFrame();
@@ -93,6 +95,8 @@ const frame = useCurrentFrame();
 <div style={{ animation: 'fadeIn 0.5s ease forwards' }} />
 // ❌ WRONG — Tailwind animation utilities
 <div className="transition-opacity duration-300 animate-pulse" />
+// ❌ WRONG — even disabling transitions fails the gate (the property key itself is banned)
+<div style={{ transition: 'none' }} />
 
 // ✓ CORRECT — compute the animated value from the current frame
 const opacity = interpolate(frame, [0, 15], [0, 1], {
@@ -127,36 +131,52 @@ const translateY = interpolate(progress, [0, 1], [20, 0]);     // driven by same
 Derive both `opacity` and `transform` from the **same eased progress variable** so they are
 guaranteed to move in sync. Never interpolate opacity separately with different timing.
 
-## Typing / text reveal animations — avoid per-word span opacity
+## Typing / text reveal animations — always use .slice(), never per-character opacity
 
-Splitting text into words and animating each `<span>` with its own `interpolate` opacity
-inside a `flexWrap` container causes layout instability and jitter:
-
-```tsx
-// ❌ AVOID — per-word spans cause reflow and jitter
-{words.map((word, i) => (
-  <span key={i} style={{ opacity: interpolate(frame, [10 + i*2, 15 + i*2], [0, 1], ...) }}>
-    {word}
-  </span>
-))}
-```
-
-Instead, slice the full string to a character count and render it as a single text node:
+Per the official Remotion text-animations skill: **always use string slicing for typewriter
+effects. Never use per-character opacity** (per-word spans cause reflow and jitter).
 
 ```tsx
-// ✓ CORRECT — single node, no layout instability
-const charCount = Math.floor(
-  interpolate(frame, [startFrame, endFrame], [0, text.length], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' })
-);
-const visible = text.slice(0, charCount);
-const cursorOpacity = Math.floor(frame / 8) % 2 === 0 ? 1 : 0;
+// ✓ CORRECT — single .slice() node, stable layout
+const CHAR_FRAMES = 2;                     // frames per character
+const BLINK_FRAMES = 16;                   // cursor cycle length
 
-return (
-  <span style={{ fontFamily: 'Overpass', fontSize: 20, color: '#001B41' }}>
-    {visible}
-    <span style={{ opacity: cursorOpacity, color: '#11C7E6' }}>|</span>
-  </span>
+const charCount = Math.min(
+  text.length,
+  Math.floor(frame / CHAR_FRAMES),
 );
+const typedText = text.slice(0, charCount);
+
+// Cursor: interpolate within a blink cycle — smooth, frame-driven, no CSS transition
+const cursorOpacity = interpolate(
+  frame % BLINK_FRAMES,
+  [0, BLINK_FRAMES / 2, BLINK_FRAMES],
+  [1, 0, 1],
+  { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' },
+);
+
+// ⚠ Multi-line containers: reserve final height with a visibility:hidden ghost so the
+// layout height never changes as lines wrap during the reveal.
+<div style={{ position: 'relative' }}>
+  {/* Ghost: reserves the full text's layout height — prevents container-height jitter */}
+  <div style={{ visibility: 'hidden', pointerEvents: 'none',
+                fontFamily: 'Overpass', fontSize: 20, lineHeight: 1.4,
+                whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+    {text}
+  </div>
+  {/* Overlay: renders the sliced text in the reserved space */}
+  <div style={{ position: 'absolute', inset: 0,
+                fontFamily: 'Overpass', fontSize: 20, lineHeight: 1.4,
+                whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: '#001B41',
+                overflow: 'hidden' }}>
+    {typedText}
+    <span style={{ opacity: cursorOpacity }}>&#x258C;</span>
+  </div>
+</div>
+
+// ❌ WRONG — per-word span opacity causes reflow
+// ❌ WRONG — clipPath wipe looks like a reveal, not typing
+// ❌ WRONG — Math.sin() / Math.floor()%2 for cursor blink — use interpolate() instead
 ```
 
 ## Designing a video
