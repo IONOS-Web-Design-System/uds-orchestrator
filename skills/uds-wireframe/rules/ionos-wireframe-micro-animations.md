@@ -21,127 +21,88 @@ Pick at most **2 active animation sequences** per composition. More than that cr
 
 ---
 
-## Pattern 1 — Mouse Cursor Flow (Natural + Playful)
+## Pattern 1 — Mouse Cursor Flow with Trail
 
-The cursor is a **group of three layers** — SVG arrow, a sky-glow halo that pulses at hover stops, and a click ripple that expands on click. The path uses overshoot + settle at each stop for a spring-physics feel, and the **target element's border/background color reacts in sync** with the cursor timing, so it genuinely looks like the cursor is hovering over it.
+The cursor uses **two layers** — SVG arrow + a dotted trail that lingers along the path. No sky-blue shadow or glow halo. The trail is a series of small semi-transparent dots rendered as absolute-positioned elements that follow past cursor positions, fading out as the cursor moves away. This makes the movement readable without distracting color.
 
 ```tsx
-// Full cursor group — place inside device frame content div
-const CursorGroup = () => (
-  <div style={{
-    position: 'absolute', top: 0, left: 0,
-    pointerEvents: 'none', zIndex: 50,
-    animation: 'cursorPath 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite',
-  }}>
-    {/* Sky-glow halo — pulses when hovering */}
-    <div style={{
-      position: 'absolute', left: -16, top: -16,
-      width: 32, height: 32, borderRadius: '50%',
-      background: 'rgba(17, 199, 230, 0.22)',
-      filter: 'blur(8px)',
-      animation: 'cursorGlow 5s ease-in-out infinite',
-    }} />
-    {/* Click ripple — expands on click, invisible otherwise */}
-    <div style={{
-      position: 'absolute', left: -24, top: -24,
-      width: 48, height: 48, borderRadius: '50%',
-      border: '2px solid rgba(17, 199, 230, 0.7)',
-      animation: 'clickRipple 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite',
-    }} />
-    {/* Arrow SVG */}
-    <svg width="18" height="22" viewBox="0 0 18 22" fill="white" xmlns="http://www.w3.org/2000/svg"
-      style={{ filter: 'drop-shadow(1px 1px 4px rgba(0,0,0,0.9)), drop-shadow(0 0 6px rgba(17,199,230,0.4))' }}>
+import { useCurrentFrame, interpolate } from 'remotion';
+
+// Cursor arrow — drop-shadow only for depth, no colored glow
+const CursorArrow = ({ x, y }: { x: number; y: number }) => (
+  <div style={{ position: 'absolute', left: x, top: y, pointerEvents: 'none', zIndex: 50 }}>
+    <svg width="18" height="22" viewBox="0 0 18 22" fill="white"
+      style={{ filter: 'drop-shadow(1px 2px 3px rgba(0,0,0,0.55))' }}>
       <path d="M0 0 L0 18 L4.5 13.5 L7.5 21 L10 20 L7 12.5 L12.5 12.5 Z" />
     </svg>
   </div>
 );
+
+// Trail dot — small circle that fades at an offset behind the cursor
+const TrailDot = ({ x, y, opacity }: { x: number; y: number; opacity: number }) => (
+  <div style={{
+    position: 'absolute', left: x - 3, top: y - 3,
+    width: 6, height: 6, borderRadius: '50%',
+    background: 'rgba(255,255,255,0.65)',
+    opacity, pointerEvents: 'none', zIndex: 49,
+  }} />
+);
+
+// Usage inside the composition — sample path between two points:
+export const CursorWithTrail: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
+  // Interpolate cursor position along the path
+  const progress = interpolate(frame, [10, 50], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const x = interpolate(progress, [0, 1], [60, 280]);
+  const y = interpolate(progress, [0, 1], [300, 152]);
+
+  // Trail dots at delayed positions (simulate past positions)
+  const TRAIL_COUNT = 5;
+  const trails = Array.from({ length: TRAIL_COUNT }, (_, i) => {
+    const trailProgress = interpolate(frame - (i + 1) * 2, [10, 50], [0, 1], {
+      extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+    });
+    return {
+      x: interpolate(trailProgress, [0, 1], [60, 280]),
+      y: interpolate(trailProgress, [0, 1], [300, 152]),
+      opacity: (1 - i / TRAIL_COUNT) * 0.5,
+    };
+  });
+
+  return (
+    <>
+      {trails.map((t, i) => <TrailDot key={i} x={t.x} y={t.y} opacity={t.opacity} />)}
+      <CursorArrow x={x} y={y} />
+    </>
+  );
+};
 ```
 
-**Path keyframes** — cursor moves to 2 targets with overshoot + settle, clicks, then loops. Adjust translate values to point at actual elements in your layout:
+**Click indicator** — on click, briefly scale the cursor arrow down (0.88) and back. No ripple ring needed; the trail already provides motion context.
 
 ```tsx
-const cursorAnims = `
-  /* Main cursor path — overshoot → settle at each stop */
-  @keyframes cursorPath {
-    0%    { transform: translate(60px, 300px); opacity: 1; }
-    /* Approach target 1: overshoot slightly, then settle */
-    17%   { transform: translate(298px, 146px); }
-    22%   { transform: translate(272px, 157px); }
-    27%   { transform: translate(280px, 152px); }   /* settled */
-    /* Hover pause */
-    34%   { transform: translate(280px, 152px); }
-    /* Click: compress then spring */
-    39%   { transform: translate(281px, 153px) scale(0.88); }
-    44%   { transform: translate(279px, 151px) scale(1.06); }
-    48%   { transform: translate(280px, 152px) scale(1.00); }
-    /* Move to target 2: overshoot + settle */
-    63%   { transform: translate(466px, 262px); }
-    67%   { transform: translate(448px, 272px); }
-    71%   { transform: translate(454px, 268px); }   /* settled */
-    /* Hover pause + second click */
-    79%   { transform: translate(454px, 268px); }
-    83%   { transform: translate(455px, 269px) scale(0.88); }
-    87%   { transform: translate(453px, 267px) scale(1.06); }
-    90%   { transform: translate(454px, 268px) scale(1.00); }
-    /* Return and fade out */
-    97%   { transform: translate(60px, 300px); opacity: 0; }
-    100%  { transform: translate(60px, 300px); opacity: 1; }
-  }
-
-  /* Halo — grows bigger when hovering */
-  @keyframes cursorGlow {
-    0%    { transform: scale(1); opacity: 0.25; }
-    27%   { transform: scale(1); opacity: 0.35; }
-    34%   { transform: scale(2.2); opacity: 0.55; }   /* hover at target 1 */
-    48%   { transform: scale(0.8); opacity: 0.15; }   /* post-click */
-    55%   { transform: scale(1); opacity: 0.25; }
-    71%   { transform: scale(1); opacity: 0.35; }
-    79%   { transform: scale(2.2); opacity: 0.55; }   /* hover at target 2 */
-    90%   { transform: scale(0.8); opacity: 0.15; }
-    97%   { transform: scale(1); opacity: 0; }
-    100%  { transform: scale(1); opacity: 0.25; }
-  }
-
-  /* Ripple — expands on each click, invisible between */
-  @keyframes clickRipple {
-    0%,  36%  { transform: scale(0); opacity: 0; }
-    39%        { transform: scale(0.1); opacity: 0.9; }  /* click 1 fires */
-    52%        { transform: scale(2.8); opacity: 0; }
-    52.1%      { transform: scale(0); opacity: 0; }
-    80%,  81%  { transform: scale(0); opacity: 0; }
-    83%        { transform: scale(0.1); opacity: 0.9; }  /* click 2 fires */
-    96%        { transform: scale(2.8); opacity: 0; }
-    100%       { transform: scale(0); opacity: 0; }
-  }
-`;
+const clickScale = interpolate(frame, [clickFrame, clickFrame + 3, clickFrame + 6], [1, 0.88, 1], {
+  extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+});
+// Apply to the cursor div: transform: `scale(${clickScale})`
 ```
 
-**Element reactions — synchronized with cursor timing:**
-
-The card the cursor targets should change color and lift simultaneously. The keyframe percentages mirror the cursor's timeline:
+**Element reactions — synchronized with cursor timing** (keep from original pattern, update colors to neutral):
 
 ```tsx
-const elementReactStyle = `
-  /* Card 1 reacts when cursor is at 27–48% of the 5s loop */
-  @keyframes cardReact {
-    0%    { border-color: rgba(255,255,255,0.10); background: rgba(255,255,255,0.04); transform: translateY(0) scale(1); }
-    27%   { border-color: rgba(17,199,230,0.22); }                    /* cursor arriving */
-    34%   { border-color: rgba(17,199,230,0.50); background: rgba(17,199,230,0.08); transform: translateY(-4px); }  /* hover */
-    39%   { background: rgba(17,199,230,0.12); transform: translateY(-2px) scale(0.99); }  /* click down */
-    44%   { transform: translateY(-6px) scale(1.012); box-shadow: 0 20px 48px rgba(0,0,0,0.5); }   /* spring up */
-    55%   { border-color: rgba(17,199,230,0.18); background: rgba(17,199,230,0.05); transform: translateY(-2px); }
-    68%   { border-color: rgba(255,255,255,0.10); background: rgba(255,255,255,0.04); transform: translateY(0) scale(1); }
-    100%  { border-color: rgba(255,255,255,0.10); background: rgba(255,255,255,0.04); transform: translateY(0) scale(1); }
-  }
-`;
-
-// Apply to the card the cursor visits — no animationDelay needed (percentages handle sync):
-<div style={{ ...glassCard, animation: 'cardReact 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite' }}>
-  {/* content */}
-</div>
+// Card lifts when cursor arrives — no sky-blue tint, use neutral white glass
+@keyframes cardReact {
+  0%    { transform: translateY(0) scale(1); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+  /* cursor hovering */
+  34%   { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
+  /* click */
+  39%   { transform: translateY(-2px) scale(0.99); }
+  44%   { transform: translateY(-6px) scale(1.012); box-shadow: 0 20px 48px rgba(0,0,0,0.5); }
+  68%   { transform: translateY(0) scale(1); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+  100%  { transform: translateY(0) scale(1); }
+}
 ```
 
-Place `<CursorGroup />` inside the device frame's `position: relative` content area. Coordinates are in pixels from the content area's top-left corner. Keep the path to 2 targets max.
+Place cursor elements inside the device frame's `position: relative` content area. Coordinates are in pixels from the content area's top-left. Keep the path to 1–2 targets max.
 
 ---
 

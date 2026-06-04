@@ -47,13 +47,32 @@ Interactive AI controls (generate / "improve with AI" / prompt send) use this gr
 ## Primary AI CTA — the gradient
 
 A full blue→magenta gradient background with white text. Default direction `45deg`.
-The `315deg` (hover) and `225deg` (active) angles are **interaction states**, not a
-continuous animation. In a rendered video there is no live cursor, so:
-- Hold the gradient at `45deg` by default.
-- To depict an interaction, **snap** the angle (e.g. `45→225deg` over ~4–6 frames with
-  `interpolate(frame, [clickStart, clickStart+5], …)`) at the click moment, then settle.
-- Do NOT slowly rotate the CTA gradient across the whole clip — that is not the behaviour.
-  A *subtle* continuous shimmer belongs only on `ai-subtle` "generating…" backgrounds.
+**In Remotion/wireframe contexts, always use a static `45deg` angle. Do NOT animate or
+interpolate the gradient angle.**
+
+### AI moment animation — preferred effects
+
+To animate an AI moment (button activation, content generation, result reveal), use:
+- **Glow/radial bloom** — a radial gradient using `#095BB1` (blue) or `#D746F5` (magenta)
+  at low opacity (~0.15–0.25), pulsed via `interpolate()` on `opacity` or `scale`
+- **Harmonized gradient fade** — fade in/out a `linear-gradient(120deg, #FAE7FE, #FFFFFF)`
+  (`ai-subtle`) as the background of the active surface; slow, calm movement only
+- **Light bloom on text/icon** — briefly lift the AI star icon or result text with a
+  soft `drop-shadow(0 0 8px #D746F5)` at low opacity, fading out after the reveal
+
+These effects are calm and premium — they signal AI without overpowering the content.
+
+### Loading state — mandatory
+
+**Every AI interaction must include a visible loading/generating state** between the
+trigger (button click) and the result reveal. A direct cut from action to result looks
+broken. The loading state:
+- Uses the `ai-subtle` gradient (`#FAE7FE → #FFFFFF`) as a calm animated background on
+  the generating surface (slow oscillation via `interpolate()` on `opacity` or position)
+- Lasts at least 10–15 frames (at 30fps) — long enough to read as deliberate processing
+- May include a pulsing AI star icon (`#B410E7`, low opacity oscillation) or a soft
+  gradient scan across the content area
+- Resolves into the result reveal with a fade or slide — never a hard cut
 
 ```css
 background: linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end));
@@ -85,9 +104,9 @@ import { Button } from '@ionos-web-design-system/react';
 <Button concept="ai" variant="primary">Generate with AI</Button>
 ```
 
-The gradient direction animates on hover/active (45° → 315° → 225°); AI loading state
-uses a gradient glow/scan rather than a spinner.
+AI loading state uses a gradient glow/scan rather than a spinner.
 
-> **In Remotion/wireframe contexts:** CSS gradient *animation* does not run during a
-> render. Drive a moving AI gradient with `useCurrentFrame()` + `interpolate()` on the
-> gradient angle — see `remotion-best-practices` and `uds-wireframe`.
+> **In Remotion/wireframe contexts:** The AI CTA button gradient is always static —
+> `linear-gradient(45deg, #095BB1, #D746F5)`. Animate the AI *moment* using glow,
+> radial bloom, or harmonized `ai-subtle` gradient fade — not by rotating the CTA angle.
+> A loading state between trigger and result is required — see "Loading state" above.

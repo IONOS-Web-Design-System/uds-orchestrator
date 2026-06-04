@@ -35,7 +35,7 @@ export default function MyIllustration() {
         <MacWindowFrame>
           {/* Dark gradient lives here — inside the screen only */}
           <div style={{
-            background: 'linear-gradient(135deg, var(--brand/ionos-blue-900) 0%, var(--brand/ionos-blue-700) 100%)',
+            background: 'linear-gradient(135deg, var(--color-gradient-start, #02102B) 0%, var(--color-gradient-end, #0B2A63) 100%)',
           }}>
             {/* screen content */}
           </div>
@@ -73,7 +73,7 @@ Always include the IONOS logo (or the relevant brand's logo) in the nav bar plac
 
 **Import and embed pattern (dark background — default for decorative):**
 ```tsx
-import { svgData as ionosLogo } from '@ionos-web-design-system/icon/dist/brandmark/ionos-dark';
+import { svgData as ionosLogo } from '@ionos-web-design-system/icon/brandmark/ionos-dark';
 
 // In the nav bar:
 <img src={ionosLogo} alt="IONOS" style={{ height: 22, width: 'auto', display: 'block' }} />
@@ -104,7 +104,7 @@ The `svgData` export is a `data:image/svg+xml;base64,...` string — use it dire
 
 All imports follow the pattern:
 ```tsx
-import { svgData as logo } from '@ionos-web-design-system/icon/dist/brandmark/{name}';
+import { svgData as logo } from '@ionos-web-design-system/icon/brandmark/{name}';
 ```
 
 **Nav bar with logo (full pattern):**
@@ -381,7 +381,7 @@ The slight tilt (`rotate(1.5deg)`) and shadow make the card feel like it's physi
 ```tsx
 // Wireframe illustration — not production code
 <ThemeProvider brand="ionos" colorScheme="dark" platform="comfortable">
-  <Surface style={{ minHeight: '100vh', background: 'var(--brand/ionos-blue-900)' }}>
+  <Surface style={{ minHeight: '100vh', background: 'var(--surface-base-invert, #02102B)' }}>
     {/* composition */}
   </Surface>
 </ThemeProvider>
@@ -396,17 +396,26 @@ Set `colorScheme="dark"` at the root — activates dark semantic tokens across a
 Three options — pick based on composition needs:
 
 ```tsx
-// Option 1 — Solid dark (neutral, safe default)
-background: 'var(--brand/ionos-blue-900)'
+// Option 1 — Solid dark using surface token (neutral, safe default)
+// CSS contexts: var(--surface-base-invert)  |  Remotion hex fallback: #02102B
+background: 'var(--surface-base-invert, #02102B)'
 
-// Option 2 — Directional gradient (depth + directionality — preferred for most layouts)
-background: 'linear-gradient(135deg, var(--brand/ionos-blue-900) 0%, var(--brand/ionos-blue-700) 100%)'
+// Option 2 — Directional gradient using design tokens (preferred for most layouts)
+// CSS: var(--color-gradient-start) → var(--color-gradient-end)
+// Remotion hex fallbacks: #02102B → #0B2A63
+background: 'linear-gradient(135deg, var(--color-gradient-start, #02102B) 0%, var(--color-gradient-end, #0B2A63) 100%)'
 
-// Option 3 — Radial spotlight (most cinematic — use when there's a clear top focal point)
-background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(17, 199, 230, 0.15) 0%, var(--brand/ionos-blue-900) 70%)'
+// Option 3 — Radial spotlight (most cinematic — clear top focal point)
+background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(17,199,230,0.15) 0%, var(--color-gradient-start, #02102B) 70%)'
 ```
 
-Default to Option 2. Use Option 3 when the hero content is centered at the top (the sky glow draws the eye). Use Option 1 for secondary/nested panels within a larger dark layout.
+Default to Option 2. Use Option 3 when hero content is at the top. Use Option 1 for secondary/nested dark panels.
+
+**Dark background surfaces (dark colorScheme):**
+- `var(--surface-base-invert)` — deepest dark, equivalent to `#02102B`
+- `var(--surface-subtle-invert)` — slightly lighter dark, for elevated panels within a dark layout
+
+**CSS variables don't resolve in Remotion renders** — always provide the hex fallback via `var(--token, #hexFallback)` or use the hex directly.
 
 ---
 

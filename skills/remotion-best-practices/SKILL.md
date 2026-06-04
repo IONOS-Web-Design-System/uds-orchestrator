@@ -44,6 +44,12 @@ import { continueRender, delayRender, staticFile } from 'remotion';
 
 const fontHandle = delayRender('Loading UDS fonts');
 
+// Safety valve: renderMedia spawns one Chromium process per CPU core.
+// Each process runs this module-level code concurrently, hammering the local
+// bundle server. Some requests may hang (never resolve, never reject) — .catch()
+// alone doesn't help a hanging promise. Force continueRender after 8s max.
+const _fontSafety = setTimeout(() => continueRender(fontHandle), 8000);
+
 Promise.all([
   new FontFace('Overpass', `url(${staticFile('fonts/Overpass-Regular.woff2')}) format('woff2')`).load(),
   new FontFace('Overpass', `url(${staticFile('fonts/Overpass-SemiBold.woff2')}) format('woff2')`, { weight: '600' }).load(),
@@ -51,7 +57,11 @@ Promise.all([
   new FontFace('Open Sans', `url(${staticFile('fonts/OpenSans-SemiBold.woff2')}) format('woff2')`, { weight: '600' }).load(),
   new FontFace('Open Sans', `url(${staticFile('fonts/OpenSans-Bold.woff2')}) format('woff2')`, { weight: '700' }).load(),
 ]).then((faces) => {
+  clearTimeout(_fontSafety);
   faces.forEach((face) => document.fonts.add(face));
+  continueRender(fontHandle);
+}).catch(() => {
+  clearTimeout(_fontSafety);
   continueRender(fontHandle);
 });
 ```

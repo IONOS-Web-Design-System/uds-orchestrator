@@ -1,0 +1,282 @@
+---
+name: ionos-wireframe-ai-animations
+description: Ready-to-use Remotion templates for IONOS AI feature moments — CTA pill button, text-generation area, image-generation area. Copy directly into Composition.tsx. Preview at http://localhost:4200/ai-templates
+metadata:
+  tags: ionos, ai, animation, remotion, loading, neumorphism, template
+---
+
+# IONOS AI Animation Templates
+
+**Live preview:** http://localhost:4200/ai-templates
+
+---
+
+## Shared constants
+
+```tsx
+import { svgData as sparklesSvg }   from '@ionos-web-design-system/icon/system/filled-sparkles';
+import { svgData as wandSvg }        from '@ionos-web-design-system/icon/system/filled-generative-wand';
+import { svgData as writeSvg }       from '@ionos-web-design-system/icon/system/filled-generative-write';
+import { svgData as chatAiSvg }      from '@ionos-web-design-system/icon/system/filled-chat-ai';
+import { svgData as envelopeAiSvg }  from '@ionos-web-design-system/icon/system/filled-envelope-ai';
+// ✗ star / filled-star are NOT AI icons   ✗ filled-ai-phone not yet in package
+
+const AI_GRADIENT    = 'linear-gradient(45deg, #095BB1, #D746F5)'; // CTA — static 45°, NEVER rotate
+const AI_PRIMARY_END = '#D746F5';  // text/image bars, cursor
+const AI_LABEL_COLOR = '#8212C2';  // generation area product label (Figma spec)
+
+// Gradient-filled AI icon — background:gradient + maskImage
+function aiIconStyle(svgData: string, size: number): React.CSSProperties {
+  return {
+    width: size, height: size, flexShrink: 0,
+    background: AI_GRADIENT,
+    maskImage: `url(${svgData})`, WebkitMaskImage: `url(${svgData})`,
+    maskSize: 'contain', maskRepeat: 'no-repeat',
+    WebkitMaskSize: 'contain', WebkitMaskRepeat: 'no-repeat',
+  };
+}
+
+// Generation area — glass fill + inset neumorphism, no border
+// Outer glow pulses via areaGlow(); inset layers are static
+const AI_AREA_INSET = 'inset 0 2px 3px rgba(255,255,255,0.60), inset 0 -2px 3px rgba(255,255,255,0.70)';
+
+function areaGlowShadow(frame: number): string {
+  const p    = Math.sin((frame % 84) / 84 * Math.PI * 2);
+  const blur = 16 + p * 8;
+  const a    = (0.10 + p * 0.08).toFixed(2);
+  return `0 4px ${blur}px rgba(180,16,231,${a}), ${AI_AREA_INSET}`;
+}
+
+const AI_AREA_BASE: React.CSSProperties = {
+  borderRadius: 16,
+  overflow: 'hidden',
+  position: 'relative',
+  background: 'rgba(255, 255, 255, 0.85)',
+  backdropFilter: 'blur(16px)',
+  WebkitBackdropFilter: 'blur(16px)',
+};
+```
+
+---
+
+## Template 1 — AI CTA Pill Button
+
+Full pill, static 45° gradient, glow pulse. `filled-sparkles` is the default icon.
+`loadingLabel` swaps text between `triggerFrame` and `loadingEndFrame`.
+
+```tsx
+import { useCurrentFrame, spring, interpolate } from 'remotion';
+
+export const AIPillButton: React.FC<{
+  fps: number;
+  label?: string;
+  loadingLabel?: string;
+  triggerFrame?: number;
+  loadingEndFrame?: number;
+}> = ({ fps, label = 'Improve with AI', loadingLabel = 'Generating…', triggerFrame = 0, loadingEndFrame }) => {
+  const frame = useCurrentFrame();
+  const isLoading    = triggerFrame > 0 && frame >= triggerFrame
+    && (loadingEndFrame === undefined || frame < loadingEndFrame);
+  const displayLabel = isLoading ? loadingLabel : label;
+
+  const p          = Math.sin((frame % 72) / 72 * Math.PI * 2);
+  const outerAlpha = (0.18 + p * 0.10).toFixed(2);
+  const press      = spring({ frame: frame - triggerFrame, fps, config: { damping: 18, stiffness: 180 } });
+  const scale      = triggerFrame > 0 ? interpolate(press, [0, 0.45, 1], [1, 0.93, 1]) : 1;
+
+  return (
+    <div style={{
+      display: 'inline-flex', alignItems: 'center', gap: 9,
+      height: 44, paddingInline: 24, borderRadius: 999,
+      background: AI_GRADIENT, color: '#fff',
+      fontFamily: '"Open Sans", sans-serif', fontWeight: 600, fontSize: 14,
+      opacity: isLoading ? 0.82 : 1,
+      transform: `scale(${scale})`,
+      boxShadow: [
+        `0 4px ${16 + p * 6}px rgba(9,91,177,0.30)`,
+        `0 2px 10px rgba(215,70,245,${outerAlpha})`,
+        p > 0 ? `0 0 0 ${(p * 3).toFixed(1)}px rgba(215,70,245,0.06)` : '',
+      ].filter(Boolean).join(', '),
+    }}>
+      <div style={{ ...aiIconStyle(sparklesSvg, 17), background: '#fff' }} />
+      {displayLabel}
+    </div>
+  );
+};
+```
+
+---
+
+## Floating Highlight Card
+
+Used as the **main highlight element** floating outside the product frame. Pill-shaped, dashed AI border. Confirmed style from Figma node 64:320.
+
+```tsx
+import { useCurrentFrame, spring, interpolate } from 'remotion';
+
+export const AIFloatingHighlight: React.FC<{
+  fps: number;
+  enterFrame?: number;       // frame when card flies in
+  text?: string;             // prompt text or generated headline
+  productLabel?: string;
+  ctaLabel?: string;
+}> = ({ fps, enterFrame = 20, text = '', productLabel, ctaLabel = 'Improve with AI' }) => {
+  const frame = useCurrentFrame();
+
+  // Fly in from right with spring overshoot
+  const enter  = spring({ frame: frame - enterFrame, fps, config: { damping: 18, stiffness: 120 } });
+  const slideX = interpolate(enter, [0, 1], [120, 0]);
+  const scale  = interpolate(enter, [0, 0.6, 1], [0.88, 1.04, 1]);
+  const opacity = interpolate(frame, [enterFrame, enterFrame + 8], [0, 1], { extrapolateRight: 'clamp' });
+
+  return (
+    <div style={{
+      borderRadius: 40,
+      border: '3px dashed #8212C2',
+      background: 'rgba(244, 247, 250, 0.96)',
+      padding: '28px 24px 20px',
+      boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
+      transform: `translateX(${slideX}px) scale(${scale})`,
+      opacity,
+      display: 'flex', flexDirection: 'column', gap: 16,
+      minWidth: 260, maxWidth: 320,
+    }}>
+      {productLabel && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingInline: 8 }}>
+          <div style={aiIconStyle(writeSvg, 22)} />
+          <span style={{ font: '700 12px "Overpass", sans-serif', color: AI_LABEL_COLOR }}>
+            {productLabel}
+          </span>
+        </div>
+      )}
+      <div style={{ font: '700 18px/1.3 "Overpass", sans-serif', color: '#001B41', paddingInline: 8 }}>
+        {text}
+      </div>
+      {/* CTA button — full width, same pill radius */}
+      <div style={{
+        borderRadius: 40, background: AI_GRADIENT, color: '#fff',
+        height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
+        fontFamily: '"Open Sans", sans-serif', fontWeight: 600, fontSize: 15,
+      }}>
+        <div style={{ ...aiIconStyle(sparklesSvg, 18), background: '#fff' }} />
+        {ctaLabel}
+      </div>
+    </div>
+  );
+};
+```
+
+---
+
+## Template 2 — Text Generation Area
+
+Glass fill + inset neumorphism, no border. Gradient AI icon header + open headline content.
+
+```tsx
+import { useCurrentFrame, interpolate } from 'remotion';
+
+export const AITextGenerationArea: React.FC<{
+  startFrame?: number;
+  endFrame?: number;
+  productLabel?: string;
+  generatedText?: string;
+}> = ({ startFrame = 0, endFrame = 60, productLabel = 'AI text generation', generatedText = '' }) => {
+  const frame = useCurrentFrame();
+
+  const progress    = interpolate(frame, [startFrame, endFrame], [0, 1], {
+    extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+  });
+  const visibleText = generatedText.slice(0, Math.floor(progress * generatedText.length));
+  const cursorOn    = Math.sin(frame * 0.25) > 0;
+
+  return (
+    <div style={{ ...AI_AREA_BASE, padding: '20px 20px 24px', boxShadow: areaGlowShadow(frame) }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+        <div style={aiIconStyle(writeSvg, 24)} />
+        <span style={{ font: '700 12px "Overpass", sans-serif', color: AI_LABEL_COLOR }}>
+          {productLabel}
+        </span>
+      </div>
+      <div style={{ font: '600 20px/1.35 "Overpass", sans-serif', color: '#001B41' }}>
+        {visibleText}
+        <span style={{
+          display: 'inline-block', width: 2, height: 22,
+          background: AI_PRIMARY_END, verticalAlign: 'middle', marginLeft: 3,
+          opacity: cursorOn ? 1 : 0,
+        }} />
+      </div>
+    </div>
+  );
+};
+```
+
+---
+
+## Template 3 — Image Generation Area
+
+Same glass container. Bars build in with staggered delays simulating image regions rendering.
+
+```tsx
+import { useCurrentFrame, interpolate } from 'remotion';
+
+export const AIImageGenerationArea: React.FC<{
+  width?: number;
+  height?: number;
+  startFrame?: number;
+  endFrame?: number;
+  productLabel?: string;
+}> = ({ width = 400, height = 200, startFrame = 0, endFrame = 60, productLabel = 'AI Image Generator' }) => {
+  const frame = useCurrentFrame();
+
+  function barScale(delayFraction: number): number {
+    return interpolate(frame, [startFrame + delayFraction * endFrame, endFrame], [0, 1], {
+      extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+    });
+  }
+
+  return (
+    <div style={{ ...AI_AREA_BASE, width, height, padding: '20px 20px 24px',
+                  display: 'flex', flexDirection: 'column', boxShadow: areaGlowShadow(frame) }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+        <div style={aiIconStyle(wandSvg, 24)} />
+        <span style={{ font: '700 12px "Overpass", sans-serif', color: AI_LABEL_COLOR }}>
+          {productLabel}
+        </span>
+      </div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 8 }}>
+        <div style={{ height: 32, borderRadius: 6, background: AI_PRIMARY_END, opacity: 0.45,
+                      transform: `scaleX(${barScale(0.0)})`, transformOrigin: 'left' }} />
+        <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ height: 48, borderRadius: 6, background: AI_PRIMARY_END, opacity: 0.35, flex: 2,
+                        transform: `scaleX(${barScale(0.25)})`, transformOrigin: 'left' }} />
+          <div style={{ height: 48, borderRadius: 6, background: '#095BB1', opacity: 0.25, flex: 1,
+                        transform: `scaleX(${barScale(0.40)})`, transformOrigin: 'left' }} />
+        </div>
+        <div style={{ height: 14, borderRadius: 6, background: AI_PRIMARY_END, opacity: 0.25, width: '60%',
+                      transform: `scaleX(${barScale(0.55)})`, transformOrigin: 'left' }} />
+      </div>
+    </div>
+  );
+};
+```
+
+---
+
+## Usage
+
+```tsx
+import { AbsoluteFill } from 'remotion';
+import { type VariantProps } from './schema';
+
+export const MyComposition: React.FC<VariantProps> = ({ fps = 30, headline }) => (
+  <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', background: '#F4F7FA' }}>
+    <div style={{ width: 560, display: 'flex', flexDirection: 'column', gap: 20, padding: 32 }}>
+      <AITextGenerationArea startFrame={15} endFrame={65}
+        productLabel="AI Website-Generator" generatedText={headline} />
+      <AIPillButton fps={fps} label="Generate with AI"
+        loadingLabel="Generating text…" triggerFrame={10} loadingEndFrame={65} />
+    </div>
+  </AbsoluteFill>
+);
+// Over photo/video: AI_AREA_BASE has backdropFilter — place over any <Img>/<Video>, no changes needed.
+```
