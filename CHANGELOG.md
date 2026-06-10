@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.8.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.7.1...v1.8.0) (2026-06-10)
+
+
+### Features
+
+* **uds-image:** brand-aware image-generation skill ([8562626](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/8562626035e58821f4ac697b1db36f711eac7a31))
+* **uds-image:** minimal skill stub for image-svc craft step ([dca263c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/dca263c3fb018bdf73f2cb041cd21a9f5085b8b8))
+* **uds-image:** shared + per-brand image rules (ionos photoreal/cutout + 7 brands) ([88bdd77](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/88bdd770edb1644f19dcd8e839b72a8d7a638af4))
+
 ## [1.7.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.7.0...v1.7.1) (2026-06-04)
 
 
