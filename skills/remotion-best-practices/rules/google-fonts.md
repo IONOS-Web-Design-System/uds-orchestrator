@@ -7,9 +7,11 @@ metadata:
 
 # Using fonts in Remotion
 
+> **UDS illustration pipeline:** All brand fonts (including Google Fonts like Poppins, Montserrat, Inter) are already bundled locally in `public/fonts/` and loaded via `loadBrandFonts()` in `src/fonts.ts`. Do NOT use `@remotion/google-fonts` in the pipeline — CDN calls are unreliable in headless rendering and are unnecessary since the files are already bundled.
+
 ## Google Fonts with @remotion/google-fonts
 
-The recommended way to use Google Fonts. It's type-safe and automatically blocks rendering until the font is ready.
+Recommended for standard (non-headless) Remotion projects outside the UDS pipeline. Type-safe and automatically blocks rendering until the font is ready.
 
 ### Prerequisites
 

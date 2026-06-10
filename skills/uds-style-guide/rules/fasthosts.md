@@ -1,6 +1,6 @@
 # Fasthosts Brand
 
-**`data-brand="fasthosts"` | Font: Poppins | Market: United Kingdom**
+**`data-brand="fasthosts"` | Font: AntennaCond (proprietary) | Market: United Kingdom**
 
 ## CSS Import
 
@@ -12,10 +12,10 @@
 
 | Role | Font | CSS Token |
 |------|------|-----------|
-| Headings | Poppins | `--base/font/heading` |
-| Body | Poppins | `--base/font/body` |
+| Headings | AntennaCond | `--font-title` |
+| Body | AntennaCond | `--font-base` |
 
-Poppins is a geometric sans-serif with clean, modern proportions. It reads as confident and contemporary.
+AntennaCond is a proprietary condensed typeface (not available on Google Fonts or Fontshare). Font files are bundled in the remotion-starter template as `.woff` (no `.woff2` available); loaded automatically via `loadBrandFonts()`.
 
 ## Colors, Identity Principles
 

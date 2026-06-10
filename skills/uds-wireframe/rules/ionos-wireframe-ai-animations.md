@@ -22,7 +22,7 @@ import { svgData as envelopeAiSvg }  from '@ionos-web-design-system/icon/system/
 // ✗ star / filled-star are NOT AI icons   ✗ filled-ai-phone not yet in package
 
 const AI_GRADIENT    = 'linear-gradient(45deg, #095BB1, #D746F5)'; // CTA — static 45°, NEVER rotate
-const AI_PRIMARY_END = '#D746F5';  // text/image bars, cursor
+const AI_PRIMARY_END = '#D746F5';  // text/image bars
 const AI_LABEL_COLOR = '#8212C2';  // generation area product label (Figma spec)
 
 // Gradient-filled AI icon — background:gradient + maskImage
@@ -90,7 +90,8 @@ export const AIPillButton: React.FC<{
       height: 44, paddingInline: 24, borderRadius: 999,
       background: AI_GRADIENT, color: '#fff',
       fontFamily: '"Open Sans", sans-serif', fontWeight: 600, fontSize: 14,
-      opacity: isLoading ? 0.82 : 1,
+      // State (idle ↔ loading) is conveyed by the glow pulse + press scale ONLY.
+      // Never dim or recolor between states — gradient + opacity stay constant.
       transform: `scale(${scale})`,
       boxShadow: [
         `0 4px ${16 + p * 6}px rgba(9,91,177,0.30)`,
@@ -109,7 +110,7 @@ export const AIPillButton: React.FC<{
 
 ## Floating Highlight Card
 
-Used as the **main highlight element** floating outside the product frame. Pill-shaped, dashed AI border. Confirmed style from Figma node 64:320.
+Used as the **main highlight element** floating outside the product frame. Pill-shaped glass card with a pulsing AI glow — **no border**. Based on Figma node 64:320. The glow (not a dashed outline) is the AI affordance, and it pulses on the same purple as the generation area.
 
 > **HARD RULE — Remotion:** `backdropFilter` and `WebkitBackdropFilter` are **required** on this
 > element. Background MUST be `rgba(244, 247, 250, 0.88)` — opacity below 1.0 is required for
@@ -133,22 +134,30 @@ export const AIFloatingHighlight: React.FC<{
 }> = ({ fps, enterFrame = 20, text = '', productLabel, ctaLabel = 'Improve with AI' }) => {
   const frame = useCurrentFrame();
 
-  // Fly in from right with spring overshoot
-  const enter  = spring({ frame: frame - enterFrame, fps, config: { damping: 18, stiffness: 120 } });
+  // Fly in from right with spring overshoot.
+  // Snap to 1 once visually settled — springs asymptote and never reach their rest
+  // value; an unsettled spring keeps the card's text re-rasterizing every frame
+  // (sub-pixel scale/translate changes), which reads as typography shimmer.
+  const rawEnter = spring({ frame: frame - enterFrame, fps, config: { damping: 18, stiffness: 120 } });
+  const enter  = rawEnter > 0.995 ? 1 : rawEnter;
   const slideX = interpolate(enter, [0, 1], [120, 0]);
   const scale  = interpolate(enter, [0, 0.6, 1], [0.88, 1.04, 1]);
   const opacity = interpolate(frame, [enterFrame, enterFrame + 8], [0, 1], { extrapolateRight: 'clamp' });
 
+  // Pulsing purple glow REPLACES the old dashed border as the AI affordance.
+  // Same hue as the generation area's areaGlow — never a border, never a color swap.
+  const gp = Math.sin((frame % 84) / 84 * Math.PI * 2);
+  const cursorOn = Math.floor(frame / 16) % 2 === 0 ? 1 : 0;
+
   return (
     <div style={{
       borderRadius: 40,
-      border: '3px dashed #8212C2',
       background: 'rgba(244, 247, 250, 0.88)',
       backdropFilter: 'blur(8px)',
       WebkitBackdropFilter: 'blur(8px)',
       isolation: 'isolate',
       padding: '28px 24px 20px',
-      boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
+      boxShadow: `0 16px 48px rgba(0,0,0,0.35), 0 0 ${(24 + gp * 14).toFixed(1)}px rgba(180,16,231,${(0.18 + gp * 0.12).toFixed(2)})`,
       transform: `translateX(${slideX}px) scale(${scale})`,
       opacity,
       display: 'flex', flexDirection: 'column', gap: 16,
@@ -172,11 +181,11 @@ export const AIFloatingHighlight: React.FC<{
         <div style={{ position: 'absolute', inset: 0,
                       font: '600 18px/1.35 "Overpass", sans-serif', color: '#001B41',
                       whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflow: 'hidden' }}>
-          {visibleText}
+          {text}
           <span style={{ opacity: cursorOn }}>&#x258C;</span>
         </div>
       </div>
-      {/* CTA button — full width, same pill radius */}
+      {/* CTA button — full width, same pill radius. No glow here: the card already glows. */}
       <div style={{
         borderRadius: 40, background: AI_GRADIENT, color: '#fff',
         height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
@@ -248,6 +257,8 @@ export const AITextGenerationArea: React.FC<{
   );
 };
 ```
+
+**Sequencing constraint — typing starts only after the parent settles.** Set `startFrame` to AFTER the parent card's entrance animation has fully terminated (snapped spring or clamped bezier at its rest value). While text is typing, every ancestor transform must be static — no drift, no unsettled spring, no fractional scale. A typing animation inside a moving/scaling container re-rasterizes glyphs every frame and shimmers. See remotion-best-practices "Text rendering stability".
 
 ---
 
