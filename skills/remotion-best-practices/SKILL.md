@@ -36,42 +36,55 @@ Fonts must be fully loaded before Remotion renders any frame. Without this, head
 falls back to a system font for the first frames and then switches — causing a visible flash
 or jitter in the output video.
 
-The workspace `public/fonts/` folder contains the UDS typefaces. Load them at **module
-level** (outside the component) in `src/Composition.tsx` using `delayRender`:
+The remotion-starter template pre-bundles **all UDS brand fonts** in `public/fonts/`. Font loading is handled by `src/fonts.ts`, called unconditionally from **`src/index.ts`** (the bundle entry point — never rewritten by the agent). You do not need to write font loading code. Use font-family names directly in inline styles:
+
+```tsx
+// src/Composition.tsx — just use font-family names; loading is handled by index.ts.
+//   fontFamily: 'Open Sans'     → IONOS body
+//   fontFamily: 'Overpass'      → IONOS heading
+//   fontFamily: 'Poppins'       → Strato
+//   fontFamily: 'AntennaCond'   → Fasthosts
+//   fontFamily: 'Azo Sans'      → home.pl
+//   fontFamily: 'Montserrat'    → Strefa
+//   fontFamily: 'Inter'         → UDAG / World4You body
+//   fontFamily: 'Satoshi'       → World4You heading
+//   fontFamily: 'FS Blake'      → Arsys heading
+```
+
+**Do NOT modify `src/index.ts`** — it is the bundle entry point and must not be changed.
+
+If you need to load additional fonts in a one-off composition outside the template, use the same `delayRender` + `FontFace` pattern:
 
 ```tsx
 import { continueRender, delayRender, staticFile } from 'remotion';
 
-const fontHandle = delayRender('Loading UDS fonts');
-
-// Safety valve: renderMedia spawns one Chromium process per CPU core.
-// Each process runs this module-level code concurrently, hammering the local
-// bundle server. Some requests may hang (never resolve, never reject) — .catch()
-// alone doesn't help a hanging promise. Force continueRender after 8s max.
+const fontHandle = delayRender('Loading fonts');
 const _fontSafety = setTimeout(() => continueRender(fontHandle), 8000);
 
-Promise.all([
-  new FontFace('Overpass', `url(${staticFile('fonts/Overpass-Regular.woff2')}) format('woff2')`).load(),
-  new FontFace('Overpass', `url(${staticFile('fonts/Overpass-SemiBold.woff2')}) format('woff2')`, { weight: '600' }).load(),
-  new FontFace('Open Sans', `url(${staticFile('fonts/OpenSans-Regular.woff2')}) format('woff2')`).load(),
-  new FontFace('Open Sans', `url(${staticFile('fonts/OpenSans-SemiBold.woff2')}) format('woff2')`, { weight: '600' }).load(),
-  new FontFace('Open Sans', `url(${staticFile('fonts/OpenSans-Bold.woff2')}) format('woff2')`, { weight: '700' }).load(),
-]).then((faces) => {
-  clearTimeout(_fontSafety);
-  faces.forEach((face) => document.fonts.add(face));
-  continueRender(fontHandle);
-}).catch(() => {
-  clearTimeout(_fontSafety);
-  continueRender(fontHandle);
-});
+new FontFace('MyFont', `url(${staticFile('fonts/MyFont-Regular.woff2')}) format('woff2')`)
+  .load()
+  .then((face) => {
+    clearTimeout(_fontSafety);
+    document.fonts.add(face);
+    continueRender(fontHandle);
+  })
+  .catch(() => { clearTimeout(_fontSafety); continueRender(fontHandle); });
 ```
 
-This block must appear once per composition file, outside any component function. After this,
-use `fontFamily: 'Overpass'` or `fontFamily: '"Open Sans"'` freely in inline styles.
+Bundled fonts by brand — all loaded automatically via `loadBrandFonts()`:
 
-**Do NOT** use `@remotion/google-fonts` or CDN links in headless/pipeline contexts — they
-require a network call that may be blocked or slow in the headless renderer. For general
-(non-headless) Remotion development, `@remotion/google-fonts` is fine; see [Google Fonts](#google-fonts) below.
+| Brand | Body font | Heading font | Font source |
+|---|---|---|---|
+| IONOS | Open Sans | Overpass | Google Fonts |
+| Strato | Poppins | Poppins | Google Fonts |
+| Fasthosts | AntennaCond | AntennaCond | ⚠ Proprietary (.woff) |
+| home.pl | Azo Sans | Azo Sans | ⚠ Commercial |
+| Strefa | Montserrat | Montserrat | Google Fonts |
+| UDAG | Inter | Inter | Google Fonts |
+| World4You | Inter | Satoshi | Google Fonts / Fontshare |
+| Arsys | Open Sans | FS Blake | Open Sans: GF; FS Blake: ⚠ Proprietary |
+
+Do not use `@remotion/google-fonts` or CDN links — network calls are unreliable in the headless renderer. All fonts are already bundled locally. See [rules/local-fonts.md](rules/local-fonts.md) for the manual pattern if needed.
 
 ## All motion is frame-driven — NEVER use CSS transitions or animations
 
@@ -82,9 +95,7 @@ wall-clock time the renderer doesn't advance. The ONLY way to animate is to read
 
 This is enforced by an eslint gate that **fails the build** on these inline-style properties:
 `transition`, `transitionProperty`, `animation`, `animationName` — and on Tailwind
-`transition-*` / `animate-*` classes. The gate bans the property **key** regardless of
-value — even `transition: 'none'` fails the build. Never write these properties at all;
-omitting them already means "no transition".
+`transition-*` / `animate-*` classes.
 
 ```tsx
 const frame = useCurrentFrame();
@@ -95,8 +106,6 @@ const frame = useCurrentFrame();
 <div style={{ animation: 'fadeIn 0.5s ease forwards' }} />
 // ❌ WRONG — Tailwind animation utilities
 <div className="transition-opacity duration-300 animate-pulse" />
-// ❌ WRONG — even disabling transitions fails the gate (the property key itself is banned)
-<div style={{ transition: 'none' }} />
 
 // ✓ CORRECT — compute the animated value from the current frame
 const opacity = interpolate(frame, [0, 15], [0, 1], {
@@ -147,7 +156,7 @@ const charCount = Math.min(
 );
 const typedText = text.slice(0, charCount);
 
-// Cursor: interpolate within a blink cycle — smooth, frame-driven, no CSS transition
+// Cursor blink — frame-driven opacity cycle
 const cursorOpacity = interpolate(
   frame % BLINK_FRAMES,
   [0, BLINK_FRAMES / 2, BLINK_FRAMES],
@@ -176,8 +185,54 @@ const cursorOpacity = interpolate(
 
 // ❌ WRONG — per-word span opacity causes reflow
 // ❌ WRONG — clipPath wipe looks like a reveal, not typing
-// ❌ WRONG — Math.sin() / Math.floor()%2 for cursor blink — use interpolate() instead
 ```
+
+## Text rendering stability — no live transforms on text containers
+
+Text glyphs re-rasterize whenever their ancestor transform changes — each sub-pixel offset
+produces different antialiasing, which reads as **shimmer/jitter**. Images interpolate
+smoothly at sub-pixel offsets; text does not. Three rules:
+
+**1. Never apply slow continuous drift to elements containing readable text.**
+A drift of `interpolate(frame, [60, 180], [0, -15])` = 0.125px/frame re-rasterizes every
+glyph every frame. Apply drift to image/shape layers only — or freeze it while text is
+visible or typing:
+
+```tsx
+// ❌ WRONG — typed text inside a continuously drifting card → per-frame glyph shimmer
+<div style={{ transform: `translateY(${frameDrift}px)` }}>{typedText}</div>
+
+// ✓ CORRECT — drift the image-heavy product frame; keep the text card static
+<div style={{ transform: `translateY(${frameDrift}px)` }}>{/* frame: images, bars */}</div>
+<div style={{ /* no drift */ }}>{typedText}</div>
+```
+
+**2. Springs never settle — clamp them after the entrance.**
+`spring()` asymptotes toward 1, emitting 0.9991 → 1.0003 → 0.9998… for dozens of frames
+after the visible settle. Scale/translate driven by an unsettled spring keeps text
+re-rasterizing. Either snap to the exact rest value, or use the bezier overshoot curve
+(per the official timing guidance) which terminates exactly when clamped:
+
+```tsx
+// Option A — snap the spring once visually settled
+const raw = spring({ frame: frame - 40, fps, config: { damping: 18, stiffness: 120 } });
+const settled = raw > 0.995 ? 1 : raw;
+
+// Option B (preferred for text-bearing cards) — bezier overshoot, exact terminal value
+const enter = interpolate(frame, [40, 65], [0, 1], {
+  easing: Easing.bezier(0.34, 1.56, 0.64, 1),   // spring-like overshoot, ends at exactly 1
+  extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+});
+```
+
+**3. Scale must rest at exactly 1.0 while text renders.**
+Glyph hinting at scale 0.97 differs from scale 1.0. An entrance may pass through fractional
+scales, but the animation must end with `scale(1)` exactly — and typing must not start
+until the container's transform has reached its terminal values.
+
+**Sequencing rule:** complete all card transforms first (entrance, scale, settle), THEN
+start the typing beat. Overlapping a typing animation with a moving/scaling ancestor is
+the most common cause of typography jitter.
 
 ## Designing a video
 
@@ -260,26 +315,6 @@ import { svgData as ionosLightSvg } from '@ionos-web-design-system/icon/dist/bra
 
 **Do NOT import the CSS files** (`system.css`, `brandmark.css`) — they are not needed
 with this approach and will be ignored or mangled by the preview bundler.
-
-## Pacing for short compositions
-
-When `durationInFrames / fps < 3` (i.e. the composition is shorter than 3 seconds):
-
-- **No dramatic movements.** Avoid large translates (keep `x`/`y` offsets ≤ 8 px),
-  fast zooms, full-screen wipes, or anything that crosses more than ~10% of the
-  canvas in a single motion.
-- **Prefer micro-motions.** Gentle fades (`opacity` 0 → 1), soft scale pulses
-  (`scale` 0.97 → 1.0), and small position nudges are the right vocabulary.
-- **Let stillness carry the weight.** Most of the frame budget should be settled
-  composition; motion is seasoning, not the meal.
-- **Match easing to available frames.** Use a slow-out easing
-  (`Easing.bezier(0.16, 1, 0.3, 1)`) and allocate at least 40% of the total
-  frames to the easing tail so movements decelerate smoothly rather than stopping
-  abruptly.
-
-These constraints apply even if the brief mentions "dynamic" or "energetic" — in
-a sub-3-second window, small deliberate motion reads as premium and intentional;
-large motion reads as jarring and rushed.
 
 Place assets in the `public/` folder at your project root.
 

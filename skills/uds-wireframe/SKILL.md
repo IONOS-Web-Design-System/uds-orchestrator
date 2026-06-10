@@ -48,7 +48,7 @@ All rules are inlined below. Quick navigation:
 | `ionos-wireframe-composition` | Standard layout patterns, component selection, placeholder content guidelines |
 | `ionos-wireframe-decorative-mode` | Decorative mode setup, device frames, Bar/BarGroup helpers, glass card system, HTML preview |
 | `ionos-wireframe-micro-animations` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in, variant switcher |
-| `ionos-wireframe-asset-integration` | Local file and Figma URL asset integration, pipeline Figma asset enrichment |
+| `ionos-wireframe-asset-integration` | Local file and Figma URL asset integration, pipeline catalog `role:`-driven selection & placement, staggered reveal |
 
 ## Output Format
 

@@ -1,6 +1,6 @@
 # World4You Brand
 
-**`data-brand="world4you"` | Font: Nunito Sans | Market: Austria**
+**`data-brand="world4you"` | Font: Inter (body) + Satoshi (heading) | Market: Austria**
 
 ## CSS Import
 
@@ -12,10 +12,10 @@
 
 | Role | Font | CSS Token |
 |------|------|-----------|
-| Headings | Nunito Sans | `--base/font/heading` |
-| Body | Nunito Sans | `--base/font/body` |
+| Headings | Satoshi | `--font-title` |
+| Body | Inter | `--font-base` |
 
-Nunito Sans is shared with Strato and UDAG. The font conveys friendliness and approachability, fitting for a local market with a strong community focus.
+World4You uses two typefaces: Satoshi for headings (Fontshare) and Inter for body text (Google Fonts). Both are bundled in the remotion-starter template and loaded automatically via `loadBrandFonts()`.
 
 ## Colors, Identity Principles
 

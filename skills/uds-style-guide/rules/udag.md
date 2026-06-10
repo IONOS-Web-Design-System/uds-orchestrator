@@ -1,6 +1,6 @@
 # UDAG Brand
 
-**`data-brand="udag"` | Font: Nunito Sans | Market: Germany**
+**`data-brand="udag"` | Font: Inter | Market: Germany**
 
 ## CSS Import
 
@@ -12,10 +12,10 @@
 
 | Role | Font | CSS Token |
 |------|------|-----------|
-| Headings | Nunito Sans | `--base/font/heading` |
-| Body | Nunito Sans | `--base/font/body` |
+| Headings | Inter | `--font-title` |
+| Body | Inter | `--font-base` |
 
-Nunito Sans shares the rounded, approachable character of Strato and World4You's typeface. Despite the shared font, each brand resolves its own color tokens.
+Inter is a highly legible screen typeface designed for UI contexts. Each brand resolves its own color tokens independently.
 
 ## Colors, Identity Principles
 

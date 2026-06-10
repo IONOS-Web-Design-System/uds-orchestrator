@@ -4,16 +4,20 @@ The UDS supports 8 brands across the IONOS Group. Each brand targets a different
 
 ## Brand × Font Mapping
 
-| Brand | `data-brand` Value | Font Family | Market |
-|-------|--------------------|-------------|--------|
-| IONOS | `ionos` | Overpass (headings) + Open Sans (body) | Primary brand, international |
-| Strato | `strato` | Nunito Sans | Germany / Europe |
-| Fasthosts | `fasthosts` | Poppins | United Kingdom |
-| home.pl | `homepl` | Lato | Poland |
-| Strefa | `strefa` | Lato | Poland (sub-brand) |
-| UDAG | `udag` | Nunito Sans | Germany |
-| World4You | `world4you` | Nunito Sans | Austria |
-| Arsys | `arsys` | Inter | Spain |
+Fonts are set via `--font-base` (body) and `--font-title` (heading) CSS tokens.
+
+| Brand | `data-brand` | `--font-base` | `--font-title` | Market |
+|-------|-------------|--------------|----------------|--------|
+| IONOS | `ionos` | Open Sans | Overpass | Primary brand, international |
+| Strato | `strato` | Poppins | Poppins | Germany / Europe |
+| Fasthosts | `fasthosts` | AntennaCond ⚠ | AntennaCond ⚠ | United Kingdom |
+| home.pl | `homepl` | Azo Sans ⚠ | Azo Sans ⚠ | Poland |
+| Strefa | `strefa` | Montserrat | Montserrat | Poland (sub-brand) |
+| UDAG | `udag` | Inter | Inter | Germany |
+| World4You | `world4you` | Inter | Satoshi | Austria |
+| Arsys | `arsys` | Open Sans | FS Blake ⚠ | Spain |
+
+⚠ Proprietary/commercial fonts — not available via Google Fonts; must be self-hosted.
 
 ## CSS Import per Brand
 
