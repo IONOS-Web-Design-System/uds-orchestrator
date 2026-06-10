@@ -1,308 +1,143 @@
 # Wireframe Asset Integration
 
-Pixel images make wireframes much more realistic — a hero photo, a product screenshot, or a mockup device frame gives viewers an immediate sense of the intended visual weight and composition.
+Pixel images make a wireframe feel real — a hero photo, a client UI screenshot, a device mockup.
+Use them deliberately (≤2–3 per composition); a wall of pasted screenshots is not a wireframe.
 
-## The Two Asset Sources
+There are two ways images arrive: **user-provided** (interactive use) and the **pipeline catalog**
+(codegen). The catalog is the main path for the pipeline.
 
-### 1. Local File Path
+---
 
-When the user pastes a path like `/Users/you/Desktop/hero.jpg` or `./assets/product-shot.png`:
+## User-provided images (interactive)
 
-**Use UDS Picture component** (preferred — handles formats, retina, lazy loading):
-
+**Local file path** (`/Users/.../hero.jpg`, `./assets/x.png`)
+Prefer the UDS `Picture` component; plain `<img>` is acceptable for quick sketches.
 ```tsx
 import { Picture } from '@ionos-web-design-system/react/picture';
-
-<Picture
-  src="/Users/you/Desktop/hero.jpg"
-  alt="Hero image"
-  className="w-full h-96 object-cover rounded-lg"
-/>
+<Picture src="/Users/you/hero.jpg" alt="Hero" className="w-full h-96 object-cover rounded-lg" />
 ```
+Local paths only resolve in a dev server with filesystem access; `public/` paths are reliable.
 
-**Or plain `<img>`** (acceptable for quick wireframes):
+**Figma URL** (`figma.com/design/:fileKey/:name?node-id=1-2`)
+Extract `fileKey` + `nodeId` (`node-id=1-2` → `1:2`), call
+`mcp__plugin_figma_figma__get_screenshot(fileKey, nodeId)` for a 7-day URL, embed via `<img>`, and
+leave a comment with the source URL so it can be re-fetched when it expires.
 
-```tsx
-<img
-  src="/Users/you/Desktop/hero.jpg"
-  alt="Hero"
-  className="w-full h-96 object-cover rounded-lg"
-/>
-```
-
-Note for the user: local paths only work when the component is rendered in a dev server with access to the local filesystem. For Storybook or Next.js dev, `public/` folder paths work reliably.
-
-### 2. Figma URL
-
-When the user pastes a Figma URL (e.g. `https://www.figma.com/design/...?node-id=...`):
-
-1. **Extract the `fileKey` and `nodeId`** from the URL:
-   - `figma.com/design/:fileKey/:name?node-id=:int-:int` → nodeId becomes `int:int` (replace `-` with `:`)
-
-2. **Call the Figma MCP tool** to get a screenshot:
-   ```
-   mcp__plugin_figma_figma__get_screenshot(fileKey, nodeId)
-   ```
-   This returns a short-lived image URL (valid 7 days).
-
-3. **Embed the screenshot URL** in the wireframe:
-   ```tsx
-   // Screenshot fetched from Figma — URL expires after 7 days
-   const figmaScreenshot = 'https://www.figma.com/api/mcp/asset/...';
-
-   <img
-     src={figmaScreenshot}
-     alt="Design reference from Figma"
-     className="w-full rounded-lg shadow-lg"
-   />
-   ```
-
-4. **Add a comment** in the code noting the source Figma URL so the user can re-fetch when the URL expires.
+**Placement quick-reference:** Hero — full-width `object-cover`, dark overlay + centered headline/CTA.
+Card — `object-cover object-top`, caption below. Aside — rounded + bordered, small caption.
 
 ---
 
-## Placement Patterns
+## Pipeline catalog assets
 
-### Hero image (full-width banner)
+The pipeline pre-copies matched assets into the workspace `public/` folder and injects a
+`# Available assets` block. **Always** reference them with `<Img src={staticFile('slug.format')} />`
+— never plain `<img>`, never download or fetch at runtime.
+
+### How to select and place
+
+Each catalog entry's `description` is a plain-prose paragraph written by the designer. It describes
+what the image shows, what business or person it represents, and when to use it. **Read the full
+description semantically and match it against the brief context** — not against tags or slug names.
+
+The description may start with a type prefix in brackets: `[photo]`, `[website]`, `[mockup]`,
+`[icon]`. Use this to determine placement. If no prefix is present, infer from the description.
+
+**Placement by type:**
+
+| Type prefix (or inferred) | What it is | How to place it |
+|---|---|---|
+| `[photo]` | Standalone photo — person, product, scene | Fill an **image placeholder** only (`objectFit:'cover'`). Never the whole client interface. |
+| `[website]` | Full website or app UI screenshot | Use **as the website being edited** inside the product frame's light client-app zone (`#F4F7FA`). Never also shrink into a thumbnail. |
+| `[mockup]` | Scene with a blank screen area | Mockup = backdrop at z-index 0; composite the live UI absolutely into the blank screen region. |
+| `[icon]` | Small brand/product icon | Inline in generated UI (integrations row, login button). 16–32px, `objectFit:'contain'`, never a hero. |
+
+**Selection rules — read these in order:**
+
+1. **Match description to brief context.** The right asset is the one whose description best matches
+   who the customer is, what industry they are in, and what their website looks like in the brief.
+   A brief about a small business owner's shop calls for a `[website]` described as a shop, not a
+   portfolio. A brief about automotive repair calls for a `[photo]` of a garage or car, not food.
+
+2. **Honour explicit contrasts in the description.** Designers write "use for X, not for Y" to
+   distinguish similar-looking assets. A description that says "not a personal portfolio" is telling
+   you directly not to pick it for an individual-person brief.
+
+3. **Match light/dark theme.** The product frame's client-app zone is always light (`#F4F7FA`), so
+   only use `[website]` assets described as light-themed there. A dark-themed dashboard screenshot
+   placed in a light zone produces a jarring mismatch.
+
+4. **Skip the catalog if nothing fits.** It is always correct to build from Remotion primitives and
+   UDS tokens instead of forcing a poorly-matched asset.
 
 ```tsx
-<div className="relative w-full h-[480px] overflow-hidden">
-  <img
-    src={heroImageSrc}
-    alt="Hero"
-    className="w-full h-full object-cover"
-  />
-  <div className="absolute inset-0 bg-[var(--brand/ionos-blue-800)] opacity-60" />
-  <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-    <h1 className="text-5xl font-heading font-semibold">Headline</h1>
-    <Button variant="primary" className="mt-6" onClick={() => {}}>CTA</Button>
+// [mockup] — composite the live UI into the blank screen area:
+<div style={{ position: 'relative' }}>
+  <Img src={staticFile('phone-mockup.png')} style={{ width: '100%', display: 'block' }} />
+  <div style={{ position: 'absolute', top: '7%', left: '12%', right: '12%', bottom: '7%',
+                overflow: 'hidden', borderRadius: 28 }}>
+    {/* generated mobile UI — tune the inset to THIS mockup's blank screen region */}
   </div>
 </div>
 ```
 
-### Product screenshot in a card
+### When the brief gives raw Figma nodeIds (no descriptions)
+
+If the brief lists `[figma: nodeId=…]` without descriptions, enrich once before writing layout code:
+call `get_design_context(fileKey: "StkUOHcGRMDXOZWT0E2nft", nodeId: "0:1")` **once**, read each
+frame's `description` (fall back to its `name`), and classify into a layout role:
+
+| Description keywords | Role / placement |
+|---|---|
+| `overview`, `dashboard`, `main`, `home` | **Hero panel** — largest slot, center |
+| `panel`, `sidebar`, `detail`, `assistant` | **Secondary panel** — floats beside/below |
+| `badge`, `notification`, `status`, `done` | **Pop-out** — small, absolute, outside frame edge |
+| `card`, `upload`, `progress`, `form` | **Inline card** — inside the content grid |
+| `logo`, `brand`, `nav`, `header` | **Nav asset** — top strip |
+
+First match wins. On timeout/error, infer positionally: first = hero, middle = panels, last = pop-out.
+Never call Figma MCP inside a Remotion render function — asset lookup is a codegen-time step.
+
+### Animate: staggered reveal
+
+Reveal assets in sequence for progressive disclosure (hero → panels → cards → pop-out):
+
+| Frames | Element | Motion |
+|---|---|---|
+| 0–20 | Hero | fade + scale 0.96→1 |
+| 20–40 | Secondary panel | slide-in `translateX -48→0` |
+| 38–58 | Inline card | slide-up `translateY 32→0` |
+| 55–75 | Pop-out | fly-in `translateX 72→0` |
 
 ```tsx
-<Card className="overflow-hidden">
-  <img
-    src={productScreenshot}
-    alt="Product screenshot"
-    className="w-full h-48 object-cover object-top"
-  />
-  <div className="p-4">
-    <h3 className="font-semibold text-lg">Feature name</h3>
-    <p className="text-sm opacity-70 mt-1">Short description of the feature.</p>
-  </div>
-</Card>
-```
-
-### Reference image in sidebar / aside
-
-```tsx
-<div className="flex gap-8">
-  <div className="flex-1">
-    {/* main content */}
-  </div>
-  <aside className="w-64 shrink-0">
-    <img
-      src={referenceImage}
-      alt="Visual reference"
-      className="w-full rounded-lg border border-[var(--background/neutral)]"
-    />
-    <p className="text-xs opacity-50 mt-2">Reference image</p>
-  </aside>
-</div>
-```
-
----
-
----
-
-## 3. Pipeline Figma Asset Enrichment
-
-When the pipeline brief lists assets with Figma coordinates:
-
-```
-# Available assets
-- nc-ref-1 → public/nc-ref-1.png  [figma: fileKey=StkUOHcGRMDXOZWT0E2nft nodeId=1:2311]
-- nc-ref-2 → public/nc-ref-2.png  [figma: fileKey=StkUOHcGRMDXOZWT0E2nft nodeId=1:2312]
-```
-
-the images are already on disk — but slug names alone do not tell you what each frame depicts. **Before writing any layout code, enrich your understanding of each asset by reading its Figma source description.**
-
-### Step 1 — Enumerate all components from the reference catalog
-
-Call `get_design_context` on the file root to retrieve every frame with its description. The POC illustration reference catalog always lives at:
-
-- **fileKey**: `StkUOHcGRMDXOZWT0E2nft`
-- **root nodeId**: `0:1`
-
-```
-mcp__plugin_figma_figma__get_design_context(
-  fileKey: "StkUOHcGRMDXOZWT0E2nft",
-  nodeId: "0:1"
-)
-```
-
-This returns the full component tree. For each frame, extract:
-- `id` — the node ID (matches the `nodeId` in the brief)
-- `name` — the frame name in Figma
-- `description` — the text field on the component; this is the semantic label
-
-### Step 2 — Match each brief asset to its description
-
-For each `[figma: nodeId=X]` in the brief, find the component where `id === X` in the `get_design_context` response. Build a lookup table:
-
-| Asset slug | nodeId | Description text | Keywords extracted |
-|-----------|--------|-----------------|-------------------|
-| nc-ref-1 | 1:2311 | e.g. `"main dashboard, file list view"` | dashboard, overview, list |
-| nc-ref-2 | 1:2312 | e.g. `"AI suggestion sidebar panel"` | AI, sidebar, panel, detail |
-| nc-ref-3 | 1:2313 | e.g. `"task completion badge, status notification"` | completion, badge, notification |
-| nc-ref-4 | 1:2314 | e.g. `"file upload progress card"` | upload, progress, card, step |
-
-If a node has no description, fall back to the frame `name`; if that is also uninformative, treat it as a generic secondary panel.
-
-### Step 3 — Classify assets into layout roles
-
-Map description keywords to composition roles using these rules:
-
-| Keywords in description | Layout role | Placement |
-|------------------------|-------------|-----------|
-| `overview`, `dashboard`, `main`, `workspace`, `home` | **Hero panel** — largest slot; 55–65% canvas width as the central content area | Center or right-center |
-| `panel`, `sidebar`, `detail`, `AI`, `assistant` | **Secondary panel** — floats beside or below the hero | Floating left or overlay |
-| `badge`, `notification`, `alert`, `completion`, `status`, `done` | **Pop-out notification** — small, top-right or bottom-left, animates in last | Absolute, outside frame edge |
-| `step`, `wizard`, `card`, `upload`, `progress`, `form` | **Inline card image** — embedded inside a glass card with bar caption below | Inside content grid |
-| `logo`, `brand`, `header`, `nav` | **Nav / header asset** — use in the device-frame nav bar area | Top strip |
-
-When a description contains keywords from multiple categories, use the first match in the priority order above.
-
-### Step 4 — Compose and animate
-
-Use `<Img src={staticFile('slug.png')} />` (never plain `<img>`) for all pipeline assets. Apply the staggered reveal sequence below to create progressive disclosure:
-
-```
-Frame  0–20:   Hero panel — fade in + subtle scale 0.96→1
-Frame 20–40:   Secondary panel — slide in from left (translateX -48→0)
-Frame 38–58:   Inline card — slide up from below (translateY 32→0)
-Frame 55–75:   Pop-out notification — fly in from right edge (translateX 72→0)
-```
-
-```tsx
-import { AbsoluteFill, Img, Sequence, interpolate, useCurrentFrame, useVideoConfig, Easing, staticFile } from 'remotion';
-
-// Inside composition:
+import { Img, interpolate, useCurrentFrame, Easing, staticFile } from 'remotion';
 const frame = useCurrentFrame();
-
-// Hero panel
-const heroOpacity  = interpolate(frame, [0, 20],  [0, 1],  { extrapolateRight: 'clamp' });
-const heroScale    = interpolate(frame, [0, 20],  [0.96, 1], { extrapolateRight: 'clamp' });
-
-// Secondary panel
-const panel2X      = interpolate(frame, [20, 40], [-48, 0], {
-  extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
-  easing: Easing.bezier(0.16, 1, 0.3, 1),
-});
-const panel2Op     = interpolate(frame, [20, 36], [0, 1],  { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
-
-// Inline card
-const cardY        = interpolate(frame, [38, 58], [32, 0],  {
-  extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
-  easing: Easing.bezier(0.16, 1, 0.3, 1),
-});
-const cardOp       = interpolate(frame, [38, 54], [0, 1],  { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
-
-// Notification pop-out
-const notifX       = interpolate(frame, [55, 75], [72, 0],  {
-  extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
-  easing: Easing.bezier(0.16, 1, 0.3, 1),
-});
-const notifOp      = interpolate(frame, [55, 68], [0, 1],  { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
+const reveal = (inF: number, outF: number) =>
+  interpolate(frame, [inF, outF], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+    easing: Easing.bezier(0.16, 1, 0.3, 1) });
+// e.g. hero: opacity reveal(0,20), scale 0.96→1; panel: translateX (1-reveal(20,40))*-48; …
 ```
 
-**Hero panel layout:**
-```tsx
-<div style={{
-  borderRadius: 12, overflow: 'hidden',
-  boxShadow: '0 32px 80px rgba(0,0,0,0.55)',
-  border: '1px solid rgba(255,255,255,0.10)',
-  opacity: heroOpacity,
-  transform: `scale(${heroScale})`,
-}}>
-  <Img src={staticFile('nc-ref-1.png')} style={{ width: '100%', display: 'block' }} />
-</div>
-```
-
-**Secondary floating panel:**
-```tsx
-<div style={{
-  borderRadius: 12, overflow: 'hidden',
-  boxShadow: '0 16px 48px rgba(0,0,0,0.45)',
-  border: '1px solid rgba(255,255,255,0.10)',
-  width: 280,
-  transform: `translateX(${panel2X}px)`,
-  opacity: panel2Op,
-}}>
-  <Img src={staticFile('nc-ref-2.png')} style={{ width: '100%', display: 'block' }} />
-</div>
-```
-
-**Inline card with caption bars:**
-```tsx
-<div style={{ ...glassCard, overflow: 'hidden', padding: 0, transform: `translateY(${cardY}px)`, opacity: cardOp }}>
-  <Img src={staticFile('nc-ref-4.png')} style={{ width: '100%', display: 'block', borderRadius: '12px 12px 0 0' }} />
-  <div style={{ padding: '14px 18px' }}>
-    <Bar w="68%" h={10} op={0.25} />
-    <div style={{ marginTop: 8 }}><BarGroup lines={2} op={0.14} /></div>
-  </div>
-</div>
-```
-
-**Pop-out notification (absolute, outside device frame):**
-```tsx
-<div style={{
-  position: 'absolute', top: 32, right: -28, zIndex: 20,
-  borderRadius: 12, overflow: 'hidden',
-  boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
-  border: '1px solid rgba(255,255,255,0.12)',
-  width: 220,
-  transform: `translateX(${notifX}px)`,
-  opacity: notifOp,
-}}>
-  <Img src={staticFile('nc-ref-3.png')} style={{ width: '100%', display: 'block' }} />
-</div>
-```
-
-### Variant differentiation with figmaRefs
-
-When `variants > 1`, create variation by reordering which asset occupies which role — not by changing the animation timing:
-
-- **v1**: standard order (hero = overview, pop-out = notification)
-- **v2**: swap secondary and inline-card roles; offset the pop-out to bottom-left instead of top-right
-- **v3+**: reverse stagger direction (hero enters from right; panels enter from above)
-
-Do this via `variantInputProps` in the manifest, e.g. `{ variantId: 'v2', popOutSide: 'bottom-left', panelFromRight: true }`, and read those props in the composition.
-
-### Rules for pipeline Figma assets
-
-- Call `get_design_context` **once** at the start; do not call it again per-asset or per-frame
-- Never call Figma MCP inside Remotion component render functions — asset lookup is a codegen-time step, not a runtime step
-- If `get_design_context` times out or returns an error, fall back to positional inference: first asset = hero, middle assets = panels, last asset = pop-out
-- All assets are pre-downloaded to `public/` — do not attempt to download or fetch them in the Remotion code
+**Variants (`variants > 1`):** vary by **reordering which asset fills which role** (not by retiming).
+Drive it via `variantInputProps` in the manifest (e.g. `{ popOutSide:'bottom-left', panelFromRight:true }`)
+and read those props in the composition.
 
 ---
 
-## Fallback When No Image Is Provided
+## Fallback when no image fits
 
-When the user hasn't provided an image but the layout needs one, use a placeholder div styled with brand tokens:
+It's always fine to skip the catalog and build from primitives. When the layout needs an image but
+none is provided/suitable, use a token-styled placeholder:
 
 ```tsx
-<div
-  className="w-full h-64 rounded-lg flex items-center justify-center"
-  style={{ background: 'var(--brand/ionos-blue-900)' }}
->
+<div className="w-full h-64 rounded-lg flex items-center justify-center"
+     style={{ background: 'var(--brand/ionos-blue-900)' }}>
   <Icon group="system" name="image" size={48} className="opacity-30" />
   <span className="text-sm opacity-40 ml-2">Image placeholder</span>
 </div>
 ```
 
-This keeps the wireframe visually honest about where an image belongs without requiring the user to provide one immediately.
+---
+
+> **Designers — authoring asset metadata:** the full guide for writing descriptions lives in the
+> Figma asset library. Source doc: `docs/asset-metadata-authoring.md`.

@@ -1,6 +1,6 @@
 # Strefa Brand
 
-**`data-brand="strefa"` | Font: Lato | Market: Poland (sub-brand)**
+**`data-brand="strefa"` | Font: Montserrat | Market: Poland (sub-brand)**
 
 ## CSS Import
 
@@ -12,10 +12,10 @@
 
 | Role | Font | CSS Token |
 |------|------|-----------|
-| Headings | Lato | `--base/font/heading` |
-| Body | Lato | `--base/font/body` |
+| Headings | Montserrat | `--font-title` |
+| Body | Montserrat | `--font-base` |
 
-Strefa shares the Lato typeface with home.pl but carries a distinct color palette and brand identity. Do not assume color choices from home.pl apply here.
+Montserrat is a geometric sans-serif available via Google Fonts. Strefa has a distinct color palette and brand identity from home.pl — do not assume color choices from home.pl apply here.
 
 ## Colors, Identity Principles
 

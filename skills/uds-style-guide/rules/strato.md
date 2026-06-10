@@ -1,6 +1,6 @@
 # Strato Brand
 
-**`data-brand="strato"` | Font: Nunito Sans | Market: Germany / Europe**
+**`data-brand="strato"` | Font: Poppins | Market: Germany / Europe**
 
 ## CSS Import
 
@@ -12,10 +12,10 @@
 
 | Role | Font | CSS Token |
 |------|------|-----------|
-| Headings | Nunito Sans | `--base/font/heading` |
-| Body | Nunito Sans | `--base/font/body` |
+| Headings | Poppins | `--font-title` |
+| Body | Poppins | `--font-base` |
 
-Nunito Sans is a rounded, friendly sans-serif. It conveys approachability compared to IONOS's more authoritative Overpass.
+Poppins is a geometric sans-serif available via Google Fonts. It conveys a modern, approachable personality distinct from IONOS's Overpass.
 
 ## Colors, Identity Principles
 

@@ -2,7 +2,7 @@
 
 > **Scope: decorative mode wireframes only.** Standard wireframes do not include animations. If the user requests a standard (mid-fi) wireframe, skip this file entirely.
 
-The purpose of animations in decorative mode is to **simulate real UI interactions** — showing a viewer exactly how the interface behaves. A mouse cursor guiding the eye to a feature, a card lifting as the cursor approaches, bars appearing as if content is being generated: these make the illustration feel like a live screen recording rather than a static picture.
+The purpose of animations in decorative mode is to **simulate real UI interactions** — showing a viewer exactly how the interface behaves. Cards lifting and responding to highlighted actions, bars appearing as if content is being generated, elements revealing in sequence: these make the illustration feel like a live screen recording rather than a static picture.
 
 ---
 
@@ -10,7 +10,7 @@ The purpose of animations in decorative mode is to **simulate real UI interactio
 
 | What to show | Animation to use |
 |---|---|
-| "User clicks this card/button" | Cursor flow + card press |
+| "User interacts with a card/button" | Card press / highlight cycle |
 | "Content appears / AI generates" | Bar grow (typing) |
 | "New notification arrives" | Fly-in for pop-out element |
 | "This element is prominent" | Float / bob for pop-out card |
@@ -21,92 +21,7 @@ Pick at most **2 active animation sequences** per composition. More than that cr
 
 ---
 
-## Pattern 1 — Mouse Cursor Flow with Trail
-
-The cursor uses **two layers** — SVG arrow + a dotted trail that lingers along the path. No sky-blue shadow or glow halo. The trail is a series of small semi-transparent dots rendered as absolute-positioned elements that follow past cursor positions, fading out as the cursor moves away. This makes the movement readable without distracting color.
-
-```tsx
-import { useCurrentFrame, interpolate } from 'remotion';
-
-// Cursor arrow — drop-shadow only for depth, no colored glow
-const CursorArrow = ({ x, y }: { x: number; y: number }) => (
-  <div style={{ position: 'absolute', left: x, top: y, pointerEvents: 'none', zIndex: 50 }}>
-    <svg width="18" height="22" viewBox="0 0 18 22" fill="white"
-      style={{ filter: 'drop-shadow(1px 2px 3px rgba(0,0,0,0.55))' }}>
-      <path d="M0 0 L0 18 L4.5 13.5 L7.5 21 L10 20 L7 12.5 L12.5 12.5 Z" />
-    </svg>
-  </div>
-);
-
-// Trail dot — small circle that fades at an offset behind the cursor
-const TrailDot = ({ x, y, opacity }: { x: number; y: number; opacity: number }) => (
-  <div style={{
-    position: 'absolute', left: x - 3, top: y - 3,
-    width: 6, height: 6, borderRadius: '50%',
-    background: 'rgba(255,255,255,0.65)',
-    opacity, pointerEvents: 'none', zIndex: 49,
-  }} />
-);
-
-// Usage inside the composition — sample path between two points:
-export const CursorWithTrail: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
-  // Interpolate cursor position along the path
-  const progress = interpolate(frame, [10, 50], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  const x = interpolate(progress, [0, 1], [60, 280]);
-  const y = interpolate(progress, [0, 1], [300, 152]);
-
-  // Trail dots at delayed positions (simulate past positions)
-  const TRAIL_COUNT = 5;
-  const trails = Array.from({ length: TRAIL_COUNT }, (_, i) => {
-    const trailProgress = interpolate(frame - (i + 1) * 2, [10, 50], [0, 1], {
-      extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
-    });
-    return {
-      x: interpolate(trailProgress, [0, 1], [60, 280]),
-      y: interpolate(trailProgress, [0, 1], [300, 152]),
-      opacity: (1 - i / TRAIL_COUNT) * 0.5,
-    };
-  });
-
-  return (
-    <>
-      {trails.map((t, i) => <TrailDot key={i} x={t.x} y={t.y} opacity={t.opacity} />)}
-      <CursorArrow x={x} y={y} />
-    </>
-  );
-};
-```
-
-**Click indicator** — on click, briefly scale the cursor arrow down (0.88) and back. No ripple ring needed; the trail already provides motion context.
-
-```tsx
-const clickScale = interpolate(frame, [clickFrame, clickFrame + 3, clickFrame + 6], [1, 0.88, 1], {
-  extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
-});
-// Apply to the cursor div: transform: `scale(${clickScale})`
-```
-
-**Element reactions — synchronized with cursor timing** (keep from original pattern, update colors to neutral):
-
-```tsx
-// Card lifts when cursor arrives — no sky-blue tint, use neutral white glass
-@keyframes cardReact {
-  0%    { transform: translateY(0) scale(1); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
-  /* cursor hovering */
-  34%   { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
-  /* click */
-  39%   { transform: translateY(-2px) scale(0.99); }
-  44%   { transform: translateY(-6px) scale(1.012); box-shadow: 0 20px 48px rgba(0,0,0,0.5); }
-  68%   { transform: translateY(0) scale(1); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
-  100%  { transform: translateY(0) scale(1); }
-}
-```
-
-Place cursor elements inside the device frame's `position: relative` content area. Coordinates are in pixels from the content area's top-left. Keep the path to 1–2 targets max.
-
----
-
-## Pattern 1b — Multiple Floating Elements
+## Pattern 1 — Multiple Floating Elements
 
 For **large illustrations**, deploy 3–4 floating elements at different positions around the device frame. Each floater has a unique rotation, bob height, and delay so they move out of sync — this creates a lively, orbital feel.
 
@@ -191,7 +106,7 @@ For **medium illustrations**, use only floaters 0 and 1. For **small**, use only
 
 ## Pattern 2 — Card Press / Highlight
 
-Simulates a user hovering and pressing a card. Use on the card the cursor is pointed at — the two animations work together.
+Simulates a highlighted card interaction. Use on any card that should draw the viewer's attention — pairs naturally with floating elements.
 
 ```tsx
 const cardInteractiveStyle = `
@@ -218,7 +133,7 @@ const cardInteractiveStyle = `
   }
 `;
 
-// Apply to the card element — delay so it starts when cursor arrives:
+// Apply to the card element — use animationDelay to stagger when the highlight begins:
 <div style={{
   ...glassCard,
   animation: 'cardHighlight 3.5s ease-in-out infinite',
@@ -322,11 +237,8 @@ The TSX itself is generated with **Variant A** by default. Add a comment block a
 
 ### The 4 variants
 
-**Variant A — Cursor Journey** *(default)*
-Playful cursor navigates the interface with spring-overshoot motion, glow halo, click ripple, and synchronized card reactions. Best for: UX interaction demonstrations, product walkthroughs.
-
-**Variant B — Cascade Reveal**
-Sections enter with staggered `flyIn` animations — the window frame appears, then sections reveal top-to-bottom, then floaters arrive last. No cursor. Best for: composition showcase, marketing panels, first impression.
+**Variant A — Cascade Reveal** *(default)*
+Sections enter with staggered animations — the window frame appears first, then sections reveal top-to-bottom, then floaters arrive last. No cursor. Best for: composition showcase, marketing panels, first impression.
 
 ```tsx
 const cascadeStyle = `
@@ -341,6 +253,9 @@ const cascadeStyle = `
 // Feature grid cards: animation-delay: 360 + i*100ms
 // Floaters: animation-delay: 700 + i*150ms
 ```
+
+**Variant B — Float Highlight**
+Floating pop-out elements bob gently while a featured card cycles through a lift-and-settle highlight. No cursor. Best for: feature showcases, ambient product panels, always-on placements.
 
 **Variant C — Pulse Radiate**
 Key icon containers emit slow expanding ring pulses. No cursor, no movement. The composition is fully static except for subtle breathing rings that radiate outward from 1–2 focal icons. Best for: background decoration, always-on ambient panels, static marketing placements.
@@ -405,13 +320,9 @@ The HTML preview always includes this variant bar and JavaScript switcher. Place
   .vbtn:hover { border-color: rgba(17,199,230,0.4); color: rgba(255,255,255,0.85); }
   .vbtn.active { background: rgba(17,199,230,0.15); border-color: rgba(17,199,230,0.5); color: rgba(17,199,230,0.95); }
 
-  /* Variant A elements — show only in A */
-  .v-cursor { display: none; }
-  [data-variant="A"] .v-cursor { display: block; }
-
-  /* Variant B — cascade: paused by default, running in B */
+  /* Variant A (Cascade) — sections animate in by default */
   .v-cascade { animation-play-state: paused !important; opacity: 0; }
-  [data-variant="B"] .v-cascade { animation-play-state: running !important; }
+  [data-variant="A"] .v-cascade { animation-play-state: running !important; }
 
   /* Variant C — pulse rings: hidden by default */
   .v-pulse { display: none; }
@@ -421,13 +332,13 @@ The HTML preview always includes this variant bar and JavaScript switcher. Place
   .v-generate { animation-play-state: paused !important; width: 0 !important; opacity: 0 !important; }
   [data-variant="D"] .v-generate { animation-play-state: running !important; }
 
-  /* Default (A) — cursor visible, others idle */
+  /* Default (A) — cascade active */
   body { /* default = A */ }
 </style>
 
 <div class="variant-bar">
-  <button class="vbtn active" onclick="setV(this,'A')">A · Cursor</button>
-  <button class="vbtn"        onclick="setV(this,'B')">B · Cascade</button>
+  <button class="vbtn active" onclick="setV(this,'A')">A · Cascade</button>
+  <button class="vbtn"        onclick="setV(this,'B')">B · Float</button>
   <button class="vbtn"        onclick="setV(this,'C')">C · Pulse</button>
   <button class="vbtn"        onclick="setV(this,'D')">D · AI Generate</button>
 </div>
@@ -450,7 +361,6 @@ document.body.dataset.variant = 'A';
 ```
 
 Apply the variant class to each animated element in the HTML:
-- Cursor group → `class="v-cursor"`
 - Sections/cards (cascade) → `class="v-cascade"` + their `animation` property
 - Pulse rings → `class="v-pulse"`
 - Bar elements in generation mode → `class="v-generate"` + `animation: barReveal ...`
@@ -467,8 +377,8 @@ Always include this at the top of the generated `.tsx`:
 // Wireframe illustration — not production code
 //
 // Animation variants — ask to switch:
-//   Variant A (current): Cursor Journey — playful cursor navigates cards with hover reactions
-//   Variant B: Cascade Reveal — staggered section reveal, no cursor
+//   Variant A (current): Cascade Reveal — staggered section reveal, no cursor
+//   Variant B: Float Highlight — floating elements bob, card highlight cycles
 //   Variant C: Pulse Radiate — subtle icon pulse rings, ambient
 //   Variant D: AI Generation — bars build progressively, generation feel
 //
@@ -494,18 +404,18 @@ If the user wants any of the following, invoke the `remotion-best-practices` ski
 
 Before adding any animation, identify the **one thing** you want the viewer to understand:
 
-> "The user clicks the analytics card, and a result appears."
+> "The analytics card highlights, and a result appears."
 
-Then use exactly the animations that illustrate that story — cursor flow to the card, card press, bar grow on the result. Nothing more.
+Then use exactly the animations that illustrate that story — card highlight, bar grow on the result. Nothing more.
 
 **Size-based animation budget:**
-| Size | Cursor? | Floaters | Interaction animations |
-|------|---------|----------|----------------------|
-| Large (750px) | Yes (2 targets) | 3–4 | cursor + card react + bar-grow |
-| Medium (500px) | Yes (1–2 targets) | 1–2 | cursor + card react |
-| Small (250px) | No (too cramped) | 1 (pill only) | float bob only |
+| Size | Floaters | Interaction animations |
+|------|----------|----------------------|
+| Large (750px) | 3–4 | cascade + card highlight + bar-grow |
+| Medium (500px) | 1–2 | cascade + card highlight |
+| Small (250px) | 1 (pill only) | float bob only |
 
-- Cursor path: 5s loop; card reactions: same 5s loop (synced by percentage); fly-ins: 400–600ms
+- Card highlight cycles: 3.5–5s loop; fly-ins: 400–600ms
 - Total composition loop should feel natural at 5–8 seconds
-- Animate only the element the cursor targets — never background or unrelated elements
+- Animate only the elements that serve the narrative — never background or unrelated elements
 - Float bobs must all have different delays and loop durations (3.5–5.5s) so they drift out of sync

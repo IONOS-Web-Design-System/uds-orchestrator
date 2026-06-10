@@ -10,9 +10,9 @@ Carefully executed typography ensures consistency across brand experiences and b
 
 | Typeface | CSS Token | Character | Primary Use |
 |----------|-----------|-----------|-------------|
-| Overpass | `--base/font/heading` | Persuasive, guiding, impressive | Headlines, pull quotes, display |
-| Open Sans | `--base/font/body` | Informative, reasonable, universal | Body text, UI, buttons — default |
-| Overpass Mono | `--font/code-font` | Technical, structured | Code snippets, specifications |
+| Overpass | `--font-title` | Persuasive, guiding, impressive | Headlines, pull quotes, display |
+| Open Sans | `--font-base` | Informative, reasonable, universal | Body text, UI, buttons — default |
+| Overpass Mono | `--font-code` | Technical, structured | Code snippets, specifications |
 
 **Download:**
 - Overpass: https://github.com/RedHatOfficial/Overpass
@@ -98,19 +98,19 @@ When implementing in a project with `@ionos-web-design-system/core`:
 ```css
 /* Headings — Overpass */
 h1, h2, .headline {
-  font-family: var(--base/font/heading);  /* Overpass */
+  font-family: var(--font-title);  /* Overpass */
   font-weight: 600;
 }
 
 /* Body / UI — Open Sans */
 body, button, label, p {
-  font-family: var(--base/font/body);     /* Open Sans */
+  font-family: var(--font-base);   /* Open Sans */
   font-weight: 400;
 }
 
 /* Code / specs — Overpass Mono */
 code, pre, .spec-text {
-  font-family: var(--font/code-font);     /* Overpass Mono */
+  font-family: var(--font-code);   /* Overpass Mono */
 }
 ```
 

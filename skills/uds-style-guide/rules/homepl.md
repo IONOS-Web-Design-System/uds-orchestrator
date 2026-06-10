@@ -1,6 +1,6 @@
 # home.pl Brand
 
-**`data-brand="homepl"` | Font: Lato | Market: Poland**
+**`data-brand="homepl"` | Font: Azo Sans (commercial) | Market: Poland**
 
 ## CSS Import
 
@@ -12,10 +12,10 @@
 
 | Role | Font | CSS Token |
 |------|------|-----------|
-| Headings | Lato | `--base/font/heading` |
-| Body | Lato | `--base/font/body` |
+| Headings | Azo Sans | `--font-title` |
+| Body | Azo Sans | `--font-base` |
 
-Lato is a humanist sans-serif designed to feel both stable and warm. Well suited to a local market brand that values familiarity.
+Azo Sans is a commercial geometric sans-serif (not available on Google Fonts or Fontshare). Font files are bundled in the remotion-starter template; loaded automatically via `loadBrandFonts()`.
 
 ## Component Notes
 

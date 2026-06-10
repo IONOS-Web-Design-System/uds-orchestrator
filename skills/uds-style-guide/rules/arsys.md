@@ -1,6 +1,6 @@
 # Arsys Brand
 
-**`data-brand="arsys"` | Font: Inter | Market: Spain**
+**`data-brand="arsys"` | Font: Open Sans (body) + FS Blake (heading, proprietary) | Market: Spain**
 
 ## CSS Import
 
@@ -12,12 +12,10 @@
 
 | Role | Font | CSS Token |
 |------|------|-----------|
-| Headings | Inter | `--base/font/heading` |
-| Body | Inter | `--base/font/body` |
+| Headings | FS Blake | `--font-title` |
+| Body | Open Sans | `--font-base` |
 
-Inter is a highly legible screen typeface designed for UI contexts. It reads as technical and precise — a professional tone suited to a hosting and infrastructure brand.
-
-Note: Arsys shares the Inter typeface with the IONOS brand but uses a distinct color palette. Do not assume IONOS colors apply.
+Arsys uses FS Blake for headings (proprietary — not available on Google Fonts) and Open Sans for body text (Google Fonts). Both are bundled in the remotion-starter template and loaded automatically via `loadBrandFonts()`. Do not assume IONOS colors apply.
 
 ## Colors, Identity Principles
 
