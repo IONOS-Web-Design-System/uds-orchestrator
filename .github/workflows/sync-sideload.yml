@@ -54,3 +54,18 @@ jobs:
             'echo -n "synced: "; cat ~/pipeline/uds-orchestrator/.skills-version; echo -n "SKILL.md files: "; find ~/pipeline/uds-orchestrator -name SKILL.md | wc -l'
           # Skills are read per /generate job; for certainty after a sync you may
           # restart agent-svc: ssh coreinstaller@host 'docker restart pipeline-agent-svc'
+
+      # uds-moderator.sandbox.lan pending provisioning — remove continue-on-error once live
+      - name: Push skills to uds-moderator VM (clear-in-place)
+        continue-on-error: true
+        run: |
+          tar czf - --exclude=.git --exclude=node_modules . \
+            | ssh -o StrictHostKeyChecking=no coreinstaller@uds-moderator.sandbox.lan \
+              'mkdir -p ~/pipeline/uds-orchestrator && find ~/pipeline/uds-orchestrator -mindepth 1 -delete && tar xzf - -C ~/pipeline/uds-orchestrator'
+
+      # uds-moderator.sandbox.lan pending provisioning — remove continue-on-error once live
+      - name: Verify uds-moderator VM
+        continue-on-error: true
+        run: |
+          ssh -o StrictHostKeyChecking=no coreinstaller@uds-moderator.sandbox.lan \
+            'echo -n "synced: "; cat ~/pipeline/uds-orchestrator/.skills-version; echo -n "SKILL.md files: "; find ~/pipeline/uds-orchestrator -name SKILL.md | wc -l'
