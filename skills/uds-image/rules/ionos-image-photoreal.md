@@ -5,5 +5,5 @@
   Dark Midnight #001B41, Cloud #F4F7FA. Prefer cool blues + clean neutrals.
 - Scenes: people working with technology, clean workspaces, data/cloud motifs rendered
   as tasteful abstractions — never literal UI screenshots.
-- Avoid: warm/saturated palettes, cartoon/illustration styling, stocky clichés.
+- Avoid: warm/saturated palettes, cartoon/illustration styling.
 - background MUST be "opaque"; style "photoreal".

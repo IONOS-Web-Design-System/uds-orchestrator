@@ -1,0 +1,33 @@
+{
+  "skill_name": "uds-image",
+  "evals": [
+    {
+      "id": 0,
+      "name": "portrait-testimonial-left",
+      "prompt": "Generate a portrait image for a customer_testimonial component on an IONOS web hosting product page. The subject is Sarah, a satisfied small-business owner who runs her bakery online with IONOS hosting. She should be on the left side of the image. Brand: IONOS.",
+      "expected_output": "A SPEC block where: (1) image-type-portrait is applied; (2) the prompt anchors Sarah in the LEFT third of the frame with phrasing like 'person standing in the left third of the frame, body and gaze angled slightly to the right'; (3) the negativePrompt excludes rendered text, logos, and UI chrome; (4) aspectRatio reflects a portrait-friendly ratio (3:2 or 2:3); (5) paletteRefs include IONOS brand blue or warm neutrals; (6) NO centre-framing or right-side placement appears.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "portrait-testimonial-right",
+      "prompt": "Generate a portrait image for a customer_testimonial component on an IONOS cloud-server marketing page. The subject is Marco, a freelance developer who relies on IONOS VPS hosting. He should be on the right side of the image. Brand: IONOS.",
+      "expected_output": "A SPEC block where: (1) image-type-portrait is applied; (2) the prompt anchors Marco in the RIGHT third of the frame with phrasing like 'person positioned on the right side of the image, turned slightly toward the left'; (3) the negativePrompt excludes rendered text, logos, and UI chrome; (4) aspectRatio is appropriate for portrait (3:2 or 2:3); (5) paletteRefs reflect IONOS brand identity; (6) NO centre-framing or left-side placement appears.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "portrait-baseline-no-component",
+      "prompt": "Generate a portrait image of an entrepreneur standing in their home office for an IONOS brand campaign. No specific UI component is specified. Brand: IONOS.",
+      "expected_output": "A SPEC block where: (1) image-type-portrait is applied; (2) the prompt uses default rule-of-thirds framing — slight off-centre composition but NO forced left-third or right-third anchor (the component-driven placement override must NOT fire); (3) the subject faces the camera naturally in their home-office environment; (4) soft warm lighting and at least one contextual prop (desk, laptop, shelving) appear in the prompt; (5) paletteRefs include IONOS brand tones; (6) negativePrompt excludes rendered text and plain-colour studio backdrops.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "portrait-carpenter-diversity",
+      "prompt": "Professional portrait of a skilled carpenter in a modern woodworking workshop, arms crossed, authentic craftsman attire with apron, natural workshop lighting, finished wooden furniture pieces visible in background, trustworthy and competent expression. Brand: IONOS.",
+      "expected_output": "A SPEC block where: (1) image-type-portrait is applied; (2) character-diversity is applied — the prompt contains an explicit ethnicity, age, and body-shape descriptor chosen by the agent (e.g. 'a Black man in his 40s with a stocky build') rather than leaving demographics unspecified; (3) body shape is consistent with a manual trade (stocky/solid/muscular); (4) the brief's scene elements are preserved — workshop environment, crossed arms, apron, finished furniture; (5) no person description from the original brief (gender, age, ethnicity) was carried over verbatim — the agent chose these independently; (6) negativePrompt excludes rendered text, logos, distorted hands, and plain studio backdrops.",
+      "files": []
+    }
+  ]
+}
