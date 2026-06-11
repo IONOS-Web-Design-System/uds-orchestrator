@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.9.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.8.0...v1.9.0) (2026-06-11)
+
+
+### Features
+
+* **illustration:** improve illustration skills ([bf4504f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/bf4504ff14cd6c95ebad618f4cae6dedb6a01568))
+* **illustration:** improve illustration skills ([d1a0002](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d1a00024f01451d25dea196c20a14b59f6ef5b3f))
+* uds-asset-moderator skill — mode rubric, shared context, hybrid decomposition ([3996ec8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3996ec8946d3388b8c5b5ce935a71c4e90113e99))
+* **uds-image:** human-focused image types — face-visibility priority ladder, type rules, diversity + environment guidance, evals ([f7a4a8b](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f7a4a8b6f1b3a2ad043c2e25f7f94e996e08418f))
+* **uds-wireframe:** rule for embedding animated UI into a generated image's screen quad ([e95b7df](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/e95b7df560c9b34a3a62caf046dba1fd38aa8eb7))
+
 ## [1.8.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.7.1...v1.8.0) (2026-06-10)
 
 

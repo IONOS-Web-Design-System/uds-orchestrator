@@ -9,7 +9,7 @@
       "name": "uds-orchestrator",
       "source": "./",
       "description": "UDS project setup, component/token best practices, Figma-to-code orchestration, and browser verification.",
-      "version": "1.8.0"
+      "version": "1.9.0"
     }
   ]
 }
