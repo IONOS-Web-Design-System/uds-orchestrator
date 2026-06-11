@@ -20,9 +20,16 @@ asset and (usually) a `screenQuad`.
 against the full canvas. Compute a CSS `matrix3d` that maps the unit square onto it:
 
 ```tsx
+type Pt = [number, number];
 // Projective map: unit square -> arbitrary convex quad (normalized coords scaled to px).
-function quadToMatrix3d(quad: [number, number][], W: number, H: number): string {
-  const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = quad.map(([x, y]) => [x * W, y * H]);
+// NOTE: the 4-tuple parameter type matters — the tsc gate runs with
+// noUncheckedIndexedAccess, so destructuring a plain Pt[] fails with TS18048.
+// Declare the quad literal from the brief with `as const` satisfied by this type:
+//   const screenQuad: [Pt, Pt, Pt, Pt] = [[0.3,0.2],[0.6,0.2],[0.6,0.6],[0.3,0.6]];
+function quadToMatrix3d(quad: [Pt, Pt, Pt, Pt], W: number, H: number): string {
+  const [[nx0, ny0], [nx1, ny1], [nx2, ny2], [nx3, ny3]] = quad;
+  const x0 = nx0 * W, y0 = ny0 * H, x1 = nx1 * W, y1 = ny1 * H;
+  const x2 = nx2 * W, y2 = ny2 * H, x3 = nx3 * W, y3 = ny3 * H;
   // Solve the 2D projective transform from (0,0),(1,0),(1,1),(0,1) to the quad corners.
   const dx1 = x1 - x2, dx2 = x3 - x2, dy1 = y1 - y2, dy2 = y3 - y2;
   const sx = x0 - x1 + x2 - x3, sy = y0 - y1 + y2 - y3;
