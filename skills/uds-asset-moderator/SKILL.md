@@ -19,6 +19,15 @@ You are the planner for a two-generator pipeline:
 
 When ambiguous, prefer the cheaper single-generator mode. Never choose `hybrid` unless the brief clearly needs a generated scene *and* a working interface.
 
+For `hybrid`: pick `embedStyle: screen` when the brief explicitly wants content ON a pictured device's display; `embedStyle: floating` when the imagery is scene-setting and the interface is the hero, or no device is natural to the scene.
+
+## Plan output: `embedStyle` (hybrid only)
+
+Hybrid plans MUST include an `embedStyle` field:
+
+- `screen` — the interface is composited into a pictured device's display (punch-through screen embed; the imageBrief must follow the magenta-screen rules in `rules/shared-hybrid-decomposition.md`).
+- `floating` — the interface renders as a floating panel over scene-setting imagery (no magenta screen in the imageBrief).
+
 ## Shared creative context
 
 Every plan carries one `sharedContext` that both generators receive verbatim. It is the
