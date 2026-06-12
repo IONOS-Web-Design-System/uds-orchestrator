@@ -42,3 +42,11 @@ consistency contract: `paletteRefs` MUST be hex values from the brand palette
 - Each `feature` text must be a self-contained brief — the generators never see the original request.
 - Keep each `feature` under 1200 characters; the orchestrator appends ~600 chars of context.
 - Never request rendered text, logos, or UI chrome in an image brief — image models garble them.
+
+## Color harmony (hybrid)
+
+The planner does NOT guess the generated image's colors. After the image exists, the
+orchestrator measures its dominant tones and appends a `Color harmony:` block to the
+illustration brief automatically. The plan's `sharedContext.paletteRefs` stay brand
+anchors; `compositionPlan` may state a tonal intent (e.g. "calm cool tones"), which the
+imageBrief should reflect so the measured tones land in the intended family.

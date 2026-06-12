@@ -212,6 +212,27 @@ Animation hooks: stagger the cluster in with **Pattern 5 — Element Fly-In** (p
 first, toolbar and bubble at +0.3-0.5s offsets); at most one fragment may idle with
 **Pattern 4 — Float / Gentle Bob** (`floatBob`). The backdrop never animates.
 
+## Color harmony (both styles)
+
+The contract's `Color harmony:` line carries the backdrop imagery's **measured** tones
+(dominant + supporting hexes, warm/cool, light/dark). The composition must feel
+of-a-piece with the imagery — never a brand-default background fighting the photo:
+
+- **Root background gradient**: derive it from the dominant tone's hue family, darkened —
+  mix the dominant hue toward the brand navy (`#001B41`) at roughly 60-80% darkness. E.g.
+  dominant teal `#2E6F73` → gradient `#0E2B33 → #001B41`; warm terracotta `#B86B4C` →
+  `#3A1F14 → #001B41`. Keep it calm and dark enough that white text and glass panels read.
+- **What never changes**: panel glass stays neutral (`rgba(244,247,250,0.88)`), the
+  blue→magenta AI gradient stays exactly `#095BB1 → #D746F5` (CTAs/badges only), brand
+  component colors stay tokenized. Harmony lives in the ROOT background, scrims, and
+  subtle shadow tints — not in recolored UI.
+- **Contrast supervision**: when the contract says the imagery is `light`, put a darker
+  scrim (`linear-gradient(transparent, rgba(0,27,65,0.55))`) behind any headline/text over
+  the imagery; when `dark`, white text may sit directly on it. Glow shadows may tint
+  toward the dominant hue at low opacity instead of pure black.
+- When the contract says "no measured imagery tones available", use the brand navy family
+  (`#0E1A2D → #001B41`) and keep contrast high.
+
 ## Verifying
 
 Verify with the still gate: frame 0 shows the backdrop imagery plus the floating UI cleanly

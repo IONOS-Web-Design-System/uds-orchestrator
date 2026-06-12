@@ -70,20 +70,25 @@ to empty shelves.
 ## Scenario-appropriate lighting
 
 Light must come from sources that actually exist in the environment — never generic
-"studio soft light" unless the brief is literally a photography studio:
+"studio soft light" unless the brief is literally a photography studio. Default to
+**warm, positive, optimistic lighting** in every setting (brand directive — see
+`ionos-image-photoreal`):
 
-| Setting | Light source to name in the prompt |
+| Setting | Preferred light source |
 |---|---|
-| Workshop / studio | Large side windows, overhead industrial strip lights, warm daylight |
-| Coffee shop / restaurant | Warm amber pendant lights hanging low, window light from one side |
-| Outdoor / market | Natural overcast daylight or warm golden-hour sun from one side |
-| Office | Diffused overhead office light + monitor glow |
-| Kitchen | Overhead task lighting, warm tungsten from range hood |
+| Workshop / trade | Large side windows with warm afternoon daylight, overhead industrial warm lamps |
+| Coffee shop / restaurant | Warm amber pendant lights hanging low, warm window light from one side |
+| Home office / café | Warm natural window daylight, soft morning or afternoon sun angle |
+| Outdoor | Warm golden-hour sun from one side, bright positive overcast (not cold grey) |
+| Studio / clean desk | Warm diffused window light, soft warm fill from one side |
 
-Name the light source explicitly:
-- ✅ `"warm amber light from low-hanging industrial pendant lamps"`
-- ✅ `"soft natural side light from large workshop windows casting gentle shadows"`
-- ❌ `"soft even studio lighting"` — generic; removes the sense of place
+Name the light source explicitly and add a mood qualifier:
+- ✅ `"warm golden afternoon light from large side windows casting soft gentle shadows, bright and optimistic atmosphere"`
+- ✅ `"warm amber light from low-hanging industrial pendant lamps filling the space with a welcoming glow"`
+- ✅ `"soft warm morning window light, bright positive mood"`
+- ❌ `"cool overcast light"` — cold and corporate
+- ❌ `"dramatic directional lighting"` — moody, not on-brand
+- ❌ `"soft even studio lighting"` — generic, removes sense of place
 
 ## Natural appearance
 
