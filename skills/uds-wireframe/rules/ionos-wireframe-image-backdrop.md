@@ -59,20 +59,42 @@ Layer order (document order, no z-index games):
    window onto a region of the scene, not a photo frame around all of it.
 
    **Backdrop motion** (contract line `Backdrop motion:`, animation intent only — applies
-   to the pointer AND full-bleed styles): give the imagery a slow, calm Ken Burns
-   treatment via `useCurrentFrame` + `interpolate` — EITHER a scale 1.0→1.06 OR a gentle
-   `objectPosition` pan across the **full duration**; pick ONE, ease linear, never fast:
+   to the pointer AND full-bleed styles): **imagery motion is PURPOSED, never decorative.
+   Idle Ken Burns — continuous aimless zoom or pan — is banned.** Exactly three motions
+   are sanctioned; use the one(s) the narrative calls for, otherwise the backdrop stays
+   static:
 
-   ```tsx
-   const frame = useCurrentFrame();
-   const { durationInFrames } = useVideoConfig();
-   const kb = interpolate(frame, [0, durationInFrames - 1], [1.0, 1.06]); // linear
-   <Img src={staticFile('<slug>.png')}
-        style={{ width: '100%', height: '100%', objectFit: 'cover',
-                 objectPosition: '30% 40%', transform: `scale(${kb})` }} />
-   ```
+   1. **Highlight zoom** — zoom toward the region being highlighted, *synchronized with
+      the highlight element's entrance* (the marquee/panel/badge that refers to it). The
+      zoom SETTLES — it runs over ~15-25 frames as the highlight appears, then holds:
 
-   Without a `Backdrop motion:` line in the contract, the backdrop stays static.
+      ```tsx
+      const frame = useCurrentFrame();
+      // marquee enters at MARQUEE_IN; the zoom accompanies it, then holds.
+      const z = interpolate(frame, [MARQUEE_IN, MARQUEE_IN + 20], [1.0, 1.08],
+        { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+      <Img src={staticFile('<slug>.png')}
+           style={{ width: '100%', height: '100%', objectFit: 'cover',
+                    objectPosition: '30% 40%',           // the highlighted region
+                    transformOrigin: '30% 40%',          // zoom INTO that region
+                    transform: `scale(${z})` }} />
+      ```
+
+      `transformOrigin` must match the focal `objectPosition` — the zoom moves INTO the
+      highlighted area, tying camera and highlight together.
+
+   2. **Entrance fade+move** — when the image container itself pops into view (or
+      leaves): opacity 0→1 with a small translate/scale (e.g. `translateY 24→0`,
+      `scale 0.97→1`) over ~12-18 frames, using the same `flyIn` curve as the floating
+      fragments (micro-animations Pattern 5). After the entrance, the imagery holds.
+
+   3. **Interaction response** — only when a cursor-flow animation (micro-animations
+      cursor pattern) crosses or clicks the image container: a subtle settle response
+      synchronized to the cursor event frames — `scale 1.0→1.02` easing back to 1.0, or
+      a ≤8px parallax shift. The image reacts to the interaction; it does not move on
+      its own.
+
+   Without a `Backdrop motion:` line in the contract, the backdrop stays fully static.
 
 3. **Headline over the image** — a short bold heading (brand heading font, white) rendered
    as a UI text layer on top of the backdrop. The illustration owns this text — it is NOT
@@ -249,9 +271,10 @@ Layer order:
 Animation hooks: stagger the cluster in with **Pattern 5 — Element Fly-In** (primary card
 first, toolbar and bubble at +0.3-0.5s offsets); at most one fragment may idle with
 **Pattern 4 — Float / Gentle Bob** (`floatBob`). The backdrop is **static by default**;
-when the contract includes a `Backdrop motion:` line, apply the slow scale/pan Ken Burns
-treatment described in the pointer section (scale 1.0→1.06 OR a gentle objectPosition pan
-— one of them, linear, across the full duration).
+when the contract includes a `Backdrop motion:` line, apply one of the three PURPOSED
+motions from the pointer section (highlight zoom synced to a highlight element, entrance
+fade+move of the image layer, or a cursor-interaction response) — idle Ken Burns is
+banned here too.
 
 ## Style: interface-asset
 

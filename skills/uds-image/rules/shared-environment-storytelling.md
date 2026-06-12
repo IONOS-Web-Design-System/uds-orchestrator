@@ -56,12 +56,18 @@ Great photography uses three planes of focus. Encode all three in the prompt usi
    planks, pipe clamps, sawdust-dusted tools, half-finished cabinet doors, and stacked
    wooden boards, all rendered out of focus".
 
+Choose foreground objects with **distinct, saturated colours** — they sit closest to
+the lens and carry the most visual weight in the bokeh layer. A cobalt-blue notebook,
+a terracotta mug, or a vivid green plant reads with far more impact than a white mug
+or beige folder. Aim for at least one visually strong colour in the foreground.
+
 **Encoding template** — use this exact structure, filling in trade-specific objects:
 
-> `"shallow depth of field portrait photography, [foreground object A] and [foreground
-> object B] lying on the surface immediately in front of the camera lens, rendered as
-> out-of-focus bokeh in the lower frame — [character description, in sharp focus] —
-> background of [dense enumeration of environment objects] all softly blurred behind"`
+> `"shallow depth of field portrait photography, [colourful foreground object A] and
+> [colourful foreground object B] lying on the surface immediately in front of the
+> camera lens, rendered as out-of-focus bokeh in the lower frame — [character
+> description, in sharp focus] — background of [dense enumeration of environment
+> objects] all softly blurred behind"`
 
 The foreground blur is the single strongest signal for "this was shot in a real place".
 Without it the image looks like a render. Without specific enumeration the model defaults
@@ -69,26 +75,27 @@ to empty shelves.
 
 ## Scenario-appropriate lighting
 
-Light must come from sources that actually exist in the environment — never generic
-"studio soft light" unless the brief is literally a photography studio. Default to
-**warm, positive, optimistic lighting** in every setting (brand directive — see
-`ionos-image-photoreal`):
+Light must come from sources that actually exist in the environment. Vary the quality
+and temperature to match the specific scene — do not default to the same warm golden
+light every time. Neutral, cool-neutral, and direct sunshine are all valid and
+encouraged (see `ionos-image-photoreal` for the full palette).
 
-| Setting | Preferred light source |
+| Setting | Example natural light options (pick the one that fits) |
 |---|---|
-| Workshop / trade | Large side windows with warm afternoon daylight, overhead industrial warm lamps |
-| Coffee shop / restaurant | Warm amber pendant lights hanging low, warm window light from one side |
-| Home office / café | Warm natural window daylight, soft morning or afternoon sun angle |
-| Outdoor | Warm golden-hour sun from one side, bright positive overcast (not cold grey) |
-| Studio / clean desk | Warm diffused window light, soft warm fill from one side |
+| Workshop / trade | Bright neutral daylight from large side windows; direct sunshine casting crisp shadows; cool overhead industrial light |
+| Coffee shop / restaurant | Warm ambient pendant light; bright neutral window light at midday; cool morning light before the rush |
+| Home office / desk | Cool-neutral morning window light; soft diffused daylight; bright direct sunshine on the desk surface |
+| Outdoor | Clear direct sunshine, straight-on; bright overcast neutral sky; dappled light through trees |
+| Studio / product | Soft diffused neutral window light; clean even interior light; cool-neutral ambient |
 
-Name the light source explicitly and add a mood qualifier:
-- ✅ `"warm golden afternoon light from large side windows casting soft gentle shadows, bright and optimistic atmosphere"`
-- ✅ `"warm amber light from low-hanging industrial pendant lamps filling the space with a welcoming glow"`
-- ✅ `"soft warm morning window light, bright positive mood"`
-- ❌ `"cool overcast light"` — cold and corporate
-- ❌ `"dramatic directional lighting"` — moody, not on-brand
+Name the specific light source and quality in the prompt:
+- ✅ `"bright direct sunshine through the window, crisp natural shadows"`
+- ✅ `"soft cool-neutral daylight from large windows, even and calm"`
+- ✅ `"clear midday light, neutral and clean"`
+- ✅ `"warm pendant lamp glow"` — when the scene calls for it
+- ❌ `"warm golden afternoon light"` applied universally to every scene
 - ❌ `"soft even studio lighting"` — generic, removes sense of place
+- ❌ `"dramatic moody shadows"` — too dark
 
 ## Natural appearance
 
