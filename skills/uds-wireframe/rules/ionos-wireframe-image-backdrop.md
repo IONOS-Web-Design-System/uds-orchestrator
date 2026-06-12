@@ -111,14 +111,25 @@ Layer order (document order, no z-index games):
    ≥10–15 frames, no hard cut).
 
 6. **Connector line** — a thin line from the panel's edge to the headline's marquee,
-   ending in a filled dot. A 2px div (horizontal/vertical runs) or an SVG `<line>` +
-   `<circle>` for angled runs:
+   ending in a filled dot. **The connector is ALWAYS axis-aligned — a single horizontal
+   or vertical segment. Slanted/diagonal connectors are not allowed.** Plan the layout
+   so the panel's anchor point and the marquee's edge midpoint share the same `y`
+   (horizontal run, the reference pattern) or the same `x` (vertical run); when the two
+   genuinely cannot align, use an L-elbow of TWO axis-aligned segments — never one
+   tilted line. Implement with divs (a div line cannot accidentally slant):
 
    ```tsx
-   <svg style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-     <line x1={panelX} y1={panelY} x2={dotX} y2={dotY} stroke={ACCENT} strokeWidth={2} />
-     <circle cx={dotX} cy={dotY} r={5} fill={ACCENT} />
-   </svg>
+   const LINE_Y = marqueeCenterY;        // panel anchor must sit at this same y
+   <div style={{
+     position: 'absolute', left: panelRightX, top: LINE_Y - 1,
+     width: marqueeLeftX - panelRightX, height: 2, background: ACCENT,
+   }} />
+   <div style={{
+     position: 'absolute', left: marqueeLeftX - 5, top: LINE_Y - 5,
+     width: 10, height: 10, borderRadius: '50%', background: ACCENT,
+   }} />
+   {/* L-elbow (only when alignment is impossible): one horizontal div + one vertical
+       div meeting at the corner — still never a tilted segment. */}
    ```
 
 7. **Optional accent badge** — one small circular badge (brand accent fill, icon +
