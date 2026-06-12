@@ -46,6 +46,26 @@ type MyCompositionProps = { textToType: string };
 
 Use `headline` and `subline` for the animation's readable text content. Use `variantId` to differentiate layout or motion between variants. Do not use `subline` for AI-generated text — that is the `headline` content.
 
+### Reading text slots safely — every `texts.<slot>` is `string | undefined`
+
+`texts` is a string record and the build runs `tsc` under `noUncheckedIndexedAccess`, so **every `texts.someSlot` read is typed `string | undefined`**. JSX children tolerate that (`<Text>{texts.headline}</Text>` compiles), but the moment a slot flows into a **`string`-typed position** — a component prop (`label={texts.navItem}`), `alt`, `aria-label`, `title`, a style string, an array passed to a child — `tsc` fails with `TS2322: Type 'string | undefined' is not assignable to type 'string'`. This is the single most common reason a wireframe fails the gate and burns a repair attempt.
+
+**Guard on the first pass — do not wait for the gate to reject it.** Two equivalent fixes:
+
+```tsx
+// ✅ Destructure once at the top with defaults (cleanest for many slots):
+export const MyComposition: React.FC<VariantProps> = ({ texts, brand, colorScheme }) => {
+  const { navDashboard = '', navServers = '', statCostValue = '' } = texts;
+  return <NavItem label={navDashboard} />; // navDashboard is `string`, not `string | undefined`
+};
+
+// ✅ Or inline `?? ''` at each typed-string use site:
+<NavItem label={texts.navServers ?? ''} />
+<img alt={texts.logoAlt ?? ''} src={staticFile('logo.png')} />
+```
+
+Never reach for `texts.x!` (non-null assertion) or `as string` — a missing slot would then render `undefined` at runtime; `?? ''` degrades gracefully.
+
 ## Protected template files — Do Not Emit
 
 Three files are owned by the template and must **never** appear in your output. The pipeline silently drops them if emitted, so any changes you write will be lost:
@@ -105,6 +125,7 @@ The `schema` prop is what makes `component={MyComposition}` type-safe. If you de
 | `Object literal may only specify known properties, and 'X' does not exist in type 'VariantProps'` | Added unknown prop to `defaultProps` in Root.tsx | Remove the prop; only standard `VariantProps` fields allowed |
 | `Expected 2 type arguments, but got 1` | Tried to use `Composition<SomeType>` generic | Don't use generics on `<Composition>`; use `schema=` instead |
 | `Module '"remotion"' has no exported member 'z'` | `z` (Zod) is not exported from `remotion` in this version | Import from `zod` directly: `import { z } from 'zod'` — never `import { z } from 'remotion'` |
+| `Type 'string \| undefined' is not assignable to type 'string'` (on a `texts.<slot>` read) | `noUncheckedIndexedAccess` types every slot as `string \| undefined`; you passed one into a `string`-typed prop/attribute | Add `?? ''` at the use site, or destructure with defaults: `const { slot = '' } = texts`. See "Reading text slots safely" above. |
 | **`Expected 2-3 arguments, but got 1` in `schema.ts` AND `Property 'X' does not exist on type '{}'` / `Type 'unknown' is not assignable to type 'ReactNode'` scattered across `Composition.tsx`** | Schema cascade: `schema.ts` was emitted with `z.record(z.string())` (1 arg). This Zod version requires 2: `z.record(z.string(), z.string())`. The broken schema causes `texts` to collapse to `{}`, making every prop access untyped. | **Do not emit `schema.ts`** — it is a protected file. Fix: delete your `schema.ts` output entirely and import `VariantProps` from the template's existing `./schema`. |
 
 ## Variant Differentiation

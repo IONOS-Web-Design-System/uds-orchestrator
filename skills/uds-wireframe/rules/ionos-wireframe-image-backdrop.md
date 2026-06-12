@@ -36,20 +36,35 @@ Layer order (document order, no z-index games):
    IONOS Blue → Dark Midnight, `linear-gradient(135deg, #0B2A63 0%, #001B41 100%)`.
    For AI features, the AI blue→magenta gradient (`#095BB1 → #D746F5`, see
    `uds-style-guide/rules/ionos-ai-features.md`) may replace it.
-2. **Backdrop card** — the catalog image as a rounded-corner card covering roughly
-   **75-90% of the canvas**, offset toward one side (per the composition plan), with
-   `objectFit: 'cover'`, `overflow: 'hidden'`, and a soft shadow:
+2. **Backdrop card = ONE FRAME** — the catalog image as a rounded-corner card covering
+   roughly **75-90% of the canvas**, offset toward one side (per the composition plan),
+   with `objectFit: 'cover'`, `overflow: 'hidden'`, and a soft shadow.
+
+   **The one-frame rule:** everything that reads as part of the pictured scene — the
+   imagery, the headline rendered over it, its scrim — lives INSIDE this card, inside a
+   single `scene` wrapper that receives any backdrop-motion transform. When the frame
+   zooms or moves, imagery and in-frame typography move TOGETHER; a headline that stays
+   put while the image zooms behind it breaks the illusion and is wrong.
 
    ```tsx
    <div style={{
      position: 'absolute', top: '6%', right: '4%', width: '82%', height: '88%',
      borderRadius: 24, overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.45)',
    }}>
-     <Img src={staticFile('<slug>.png')}
-          style={{ width: '100%', height: '100%', objectFit: 'cover',
-                   objectPosition: '30% 40%' /* zoom the crop onto the focal area */ }} />
+     {/* scene wrapper: ONE transform moves imagery + in-frame text together */}
+     <div style={{ width: '100%', height: '100%',
+                   transform: `scale(${z})`, transformOrigin: '30% 40%' }}>
+       <Img src={staticFile('<slug>.png')}
+            style={{ width: '100%', height: '100%', objectFit: 'cover',
+                     objectPosition: '30% 40%' /* crop onto the focal area */ }} />
+       {/* headline + scrim live HERE, inside the scene wrapper (see step 3) */}
+     </div>
    </div>
    ```
+
+   Canvas-level annotations — marquee, connector, badge, the floating panel — do NOT
+   live in the scene wrapper and do NOT zoom with it; they draw in AFTER the motion
+   settles, positioned against the settled layout.
 
    **Crop rule** (contract line `Crop:`): show only the imagery's **relevant region** —
    zoom the crop with `objectFit: 'cover'` plus an `objectPosition` aimed at the focal
@@ -73,15 +88,22 @@ Layer order (document order, no z-index games):
       // marquee enters at MARQUEE_IN; the zoom accompanies it, then holds.
       const z = interpolate(frame, [MARQUEE_IN, MARQUEE_IN + 20], [1.0, 1.08],
         { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-      <Img src={staticFile('<slug>.png')}
-           style={{ width: '100%', height: '100%', objectFit: 'cover',
-                    objectPosition: '30% 40%',           // the highlighted region
-                    transformOrigin: '30% 40%',          // zoom INTO that region
-                    transform: `scale(${z})` }} />
+      // the transform goes on the SCENE WRAPPER (one-frame rule) — imagery AND the
+      // in-frame headline zoom together; never transform the <Img> alone:
+      <div style={{ width: '100%', height: '100%',
+                    transformOrigin: '30% 40%',          // zoom INTO the highlighted region
+                    transform: `scale(${z})` }}>
+        <Img src={staticFile('<slug>.png')}
+             style={{ width: '100%', height: '100%', objectFit: 'cover',
+                      objectPosition: '30% 40%' /* the highlighted region */ }} />
+        {/* headline + scrim here — they ride the same transform */}
+      </div>
       ```
 
       `transformOrigin` must match the focal `objectPosition` — the zoom moves INTO the
-      highlighted area, tying camera and highlight together.
+      highlighted area, tying camera and highlight together. The marquee, connector, and
+      badge are canvas-level annotations: they draw in AFTER the zoom settles (at or
+      after `MARQUEE_IN + 20`), wrapping the headline's settled position.
 
    2. **Entrance fade+move** — when the image container itself pops into view (or
       leaves): opacity 0→1 with a small translate/scale (e.g. `translateY 24→0`,
@@ -96,7 +118,7 @@ Layer order (document order, no z-index games):
 
    Without a `Backdrop motion:` line in the contract, the backdrop stays fully static.
 
-3. **Headline over the image** — a short bold heading (brand heading font, white) rendered
+3. **Headline over the image (inside the scene wrapper)** — a short bold heading (brand heading font, white) rendered
    as a UI text layer on top of the backdrop. The illustration owns this text — it is NOT
    baked into the image. Guarantee contrast with a text-shadow or a local gradient scrim:
 
