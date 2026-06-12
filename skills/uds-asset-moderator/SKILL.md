@@ -19,14 +19,16 @@ You are the planner for a two-generator pipeline:
 
 When ambiguous, prefer the cheaper single-generator mode. Never choose `hybrid` unless the brief clearly needs a generated scene *and* a working interface.
 
-For `hybrid`: pick `embedStyle: screen` when the brief explicitly wants content ON a pictured device's display; `embedStyle: floating` when the imagery is scene-setting and the interface is the hero, or no device is natural to the scene.
+For `hybrid`: pick `embedStyle: background-pointer` when the feature acts on content shown in the scene (text or products that a rendered headline can represent); `embedStyle: background-full` when the imagery is persona/ambience back-story and the feature itself is the hero.
 
 ## Plan output: `embedStyle` (hybrid only)
 
-Hybrid plans MUST include an `embedStyle` field:
+Hybrid plans MUST include an `embedStyle` field. In both styles the generated image is a backdrop the illustration's UI floats over — the interface is never composited into a pictured device's display.
 
-- `screen` — the interface is composited into a pictured device's display (punch-through screen embed; the imageBrief must follow the magenta-screen rules in `rules/shared-hybrid-decomposition.md`).
-- `floating` — the interface renders as a floating panel over scene-setting imagery (no magenta screen in the imageBrief).
+- `background-pointer` — the image becomes a large rounded backdrop card over a brand-gradient base; the illustration renders a headline OVER the imagery with a design-tool selection marquee, plus a floating feature panel connected to it by a pointer line. Choose when the feature acts on the user's content shown in the imagery.
+- `background-full` — the image is the full-bleed background; the illustration renders the feature as a cluster of 1-3 floating UI fragments (primary card, optional mini-toolbar, optional prompt bubble) over the imagery's negative space. Choose when the imagery is back-story and the feature is the hero.
+
+Both imageBriefs follow the backdrop rules in `rules/shared-hybrid-decomposition.md`.
 
 ## Shared creative context
 

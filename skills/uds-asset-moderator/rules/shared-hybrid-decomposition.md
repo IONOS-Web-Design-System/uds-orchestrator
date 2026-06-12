@@ -1,32 +1,40 @@
 # Hybrid decomposition contract
 
-The contract differs by `embedStyle` — apply ONLY the matching section.
+Both embed styles treat the generated image as a **backdrop** the illustration's UI floats
+over. Apply the shared imageBrief rules, then the style-specific additions.
 
-## embedStyle: screen
+## imageBrief — both styles
 
 The hybrid imageBrief MUST:
-- describe the scene with the device (phone/tablet/laptop/monitor) clearly visible,
-- instruct: "the device screen is a flat, solid, uniform magenta (#FF00FF) surface with no
-  glare, no reflections, no content" — this is the chroma target the orchestrator detects,
-- prefer the screen plane facing the camera (slight angles are fine; extreme foreshortening
-  makes the embed unusable),
-- have the screen occupy roughly 15-40% of the frame.
+- describe a clean, well-composed scene — one focal subject, no clutter competing with it,
+- instruct: "the full subject is visible inside the frame with clear margin to every frame
+  edge — never cropped at an edge",
+- request **intentional negative space** on one stated side (e.g. "calm, low-detail space on
+  the left third of the frame") — this is where the floating UI will sit; no busy detail or
+  focal subject in that region,
+- NEVER request a device-screen placeholder, a magenta/keying surface, or any "blank screen
+  to fill later" — screens in the scene, if any, are just ordinary scene content.
 
-## embedStyle: floating
+## embedStyle: background-pointer
 
-The hybrid imageBrief MUST NOT request a magenta screen. Instead it MUST:
-- request a clean scene with intentional negative space where the floating panel will sit
-  (no busy detail or focal subject in that region),
-- keep the imagery's focal subject clear of the panel area.
+The imageBrief MUST additionally:
+- include a clear, calm surface or region in the imagery (a wall, a product face, an open
+  area) near which the rendered headline will sit — the headline is drawn by the
+  illustration, so that region must tolerate white text over it.
 
-The `compositionPlan` should say which side the panel goes (e.g. "panel on the right
-over the negative space").
+The `compositionPlan` MUST state both the panel side and the headline position
+(e.g. "panel on the left over the negative space; headline upper-right over the teal wall").
 
-## Both styles
+## embedStyle: background-full
+
+The `compositionPlan` MUST state which side the floating cluster goes
+(e.g. "cluster on the right over the blurred background").
+
+## illustrationBrief — both styles
 
 The hybrid illustrationBrief MUST:
-- describe ONLY the interface to animate (what UI, which components, what motion),
-- not re-describe the scene — the orchestrator appends the background-image and embed
-  instructions itself,
-- assume the orchestrator handles the compositing (punch-through screen embed for
-  `screen`, floating panel for `floating`).
+- describe ONLY the feature UI to render (which components, what copy, what motion),
+- not re-describe the scene — the orchestrator appends the backdrop image and the
+  `[HYBRID EMBED CONTRACT]` instructions itself,
+- assume the orchestrator handles the compositing contract (backdrop card + pointer for
+  `background-pointer`, full-bleed backdrop + floating cluster for `background-full`).

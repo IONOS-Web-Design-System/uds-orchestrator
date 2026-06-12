@@ -1,0 +1,203 @@
+# Image-backdrop hybrid compositions
+
+Applies when the brief contains a `[HYBRID EMBED CONTRACT]` section. The contract's
+`Style:` line names one of two composition styles — follow the matching section below:
+
+- `Style: image-backdrop with feature pointer` → [feature pointer](#style-image-backdrop-with-feature-pointer)
+- `Style: image-backdrop full-bleed` → [full-bleed](#style-image-backdrop-full-bleed)
+
+In both styles the catalog image is a **backdrop** the UI floats over — the imagery is
+never keyed, masked, or punched through, and the UI never pretends to live inside a
+pictured device screen.
+
+Rules for BOTH styles:
+
+- **Opaque root.** Give the composition root an explicit opaque `backgroundColor`
+  (transparent roots render black in mp4).
+- **Never cover the imagery's focal subject.** The contract / composition plan says which
+  side has negative space — that side gets the floating UI.
+- **Critical content margins.** Keep headlines, buttons, and badges within the middle 90%
+  of the canvas; nothing critical within ~48px of a canvas edge.
+- **Still gate.** Frame 0 must already show the backdrop image plus the floating UI cleanly
+  composed — no empty canvas, no elements mid-flight off-screen.
+
+## Style: image-backdrop with feature pointer
+
+Story: the AI feature acts on the user's content shown in the imagery. The image is a
+large rounded card; a headline rendered OVER it is "selected" with design-tool visual
+language, and a floating feature panel points at it.
+
+Layer order (document order, no z-index games):
+
+1. **Root** — `<AbsoluteFill>` with an opaque brand-gradient background. Default:
+   IONOS Blue → Dark Midnight, `linear-gradient(135deg, #0B2A63 0%, #001B41 100%)`.
+   For AI features, the AI blue→magenta gradient (`#095BB1 → #D746F5`, see
+   `uds-style-guide/rules/ionos-ai-features.md`) may replace it.
+2. **Backdrop card** — the catalog image as a rounded-corner card covering roughly
+   **75-90% of the canvas**, offset toward one side (per the composition plan), with
+   `objectFit: 'cover'`, `overflow: 'hidden'`, and a soft shadow:
+
+   ```tsx
+   <div style={{
+     position: 'absolute', top: '6%', right: '4%', width: '82%', height: '88%',
+     borderRadius: 24, overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.45)',
+   }}>
+     <Img src={staticFile('<slug>.png')}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+   </div>
+   ```
+
+3. **Headline over the image** — a short bold heading (brand heading font, white) rendered
+   as a UI text layer on top of the backdrop. The illustration owns this text — it is NOT
+   baked into the image. Guarantee contrast with a text-shadow or a local gradient scrim:
+
+   ```tsx
+   <h1 style={{
+     position: 'absolute', /* over a calm region of the backdrop */
+     fontFamily: 'Overpass, sans-serif', fontWeight: 800, color: '#fff',
+     textShadow: '0 2px 24px rgba(0,0,0,0.55)', // or place over a scrim:
+     // background: 'linear-gradient(transparent, rgba(0,27,65,0.55))' on a wrapper
+     margin: 0,
+   }}>URBAN BIKES</h1>
+   ```
+
+4. **Selection marquee around the headline** — dashed accent border + 4 square corner
+   handles, sized slightly larger than the headline box:
+
+   ```tsx
+   const ACCENT = '#11C7E6'; // or the AI magenta for AI features
+   <div style={{
+     position: 'absolute', inset: -14, // wraps the headline wrapper
+     border: `2px dashed ${ACCENT}`, pointerEvents: 'none',
+   }}>
+     {(['top','bottom'] as const).map(v => (['left','right'] as const).map(h => (
+       <div key={v+h} style={{
+         position: 'absolute', [v]: -5, [h]: -5, width: 10, height: 10,
+         background: '#fff', border: `2px solid ${ACCENT}`,
+       }} />
+     )))}
+   </div>
+   ```
+
+5. **Floating feature panel** — a compact white panel half-overlapping the backdrop card's
+   edge on the negative-space side. Anatomy: rounded corners, soft shadow, optional dashed
+   accent border, and the feature's UI (segmented control, radio list, primary CTA — real
+   UDS components or tight sketches):
+
+   ```tsx
+   <div style={{
+     position: 'absolute', left: '5%', top: '30%', width: 280,
+     background: '#fff', borderRadius: 16, padding: 20,
+     border: '2px dashed var(--color-ai-primary-end, #D746F5)',
+     boxShadow: '0 24px 64px rgba(0,0,0,0.35)',
+   }}>
+     {/* segmented control / options / primary button with sparkles icon */}
+   </div>
+   ```
+
+6. **Connector line** — a thin line from the panel's edge to the headline's marquee,
+   ending in a filled dot. A 2px div (horizontal/vertical runs) or an SVG `<line>` +
+   `<circle>` for angled runs:
+
+   ```tsx
+   <svg style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+     <line x1={panelX} y1={panelY} x2={dotX} y2={dotY} stroke={ACCENT} strokeWidth={2} />
+     <circle cx={dotX} cy={dotY} r={5} fill={ACCENT} />
+   </svg>
+   ```
+
+7. **Optional accent badge** — one small circular badge (brand accent fill, icon +
+   1-2 words like "KI Text") near the headline:
+
+   ```tsx
+   <div style={{
+     position: 'absolute', /* near the marquee */
+     display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
+     borderRadius: 999, background: 'var(--color-ai-primary-end, #D746F5)',
+     color: '#fff', fontSize: 13, fontWeight: 700,
+     boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
+   }}>
+     <Icon group="system" name="sparkles" size={14} /> KI Text
+   </div>
+   ```
+
+Animation hooks (reference the patterns in `ionos-wireframe-micro-animations.md` — do not
+re-invent them): panel enters with **Pattern 5 — Element Fly-In** (`flyIn`); the marquee
+draws in right after (animate `strokeDashoffset` on an SVG rect, or fade + scale the dashed
+div from 1.04→1); the badge pops last (scale 0.6→1 overshoot, same `flyIn` curve); the
+connector line can grow from the panel toward the dot. Backdrop and headline are present
+from frame 0.
+
+## Style: image-backdrop full-bleed
+
+Story: the imagery is persona/ambience back-story; the floating UI cluster IS the product
+feature. **No connector lines into the imagery.**
+
+Layer order:
+
+1. **Root** — `<AbsoluteFill>` with an explicit opaque `backgroundColor` (a brand dark or a
+   tone sampled from the image).
+2. **Backdrop** — the catalog image as the full-bleed background:
+
+   ```tsx
+   <AbsoluteFill>
+     <Img src={staticFile('<slug>.png')}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+   </AbsoluteFill>
+   ```
+
+3. **Floating UI cluster** — 1-3 fragments over the imagery's negative space, together
+   occupying roughly **40-60% of canvas width**, never covering the focal subject. Fragments
+   slightly overlap each other and may overlap the photo subject's edge. All share the same
+   surface anatomy: white/light background, rounded corners (16-20px), soft shadow
+   (`0 24px 64px rgba(0,0,0,0.3)`).
+
+   - **Primary card (always):** a mini product/feature card — title, supporting line, CTA
+     button, and media slots. The same catalog image may be reused INSIDE the card's media
+     slots (`<Img src={staticFile('<slug>.png')} style={{ objectFit: 'cover' }} />` in a
+     small rounded container) — that reuse is intentional, not a bug.
+   - **Mini-toolbar (optional):** a small horizontal pill of icon buttons with one prominent
+     accent/gradient button:
+
+     ```tsx
+     <div style={{
+       position: 'absolute', /* near the primary card */
+       display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+       background: '#fff', borderRadius: 999, boxShadow: '0 12px 32px rgba(0,0,0,0.25)',
+     }}>
+       {/* 3-4 small system icons, then: */}
+       <div style={{
+         width: 32, height: 32, borderRadius: '50%', display: 'flex',
+         alignItems: 'center', justifyContent: 'center', color: '#fff',
+         background: 'linear-gradient(45deg, var(--color-ai-primary-start, #095BB1), var(--color-ai-primary-end, #D746F5))',
+       }}>
+         <Icon group="system" name="sparkles" size={16} />
+       </div>
+     </div>
+     ```
+
+   - **Prompt bubble (optional):** a small card with a dashed accent border, a tiny accent
+     sparkle icon, a muted caption (e.g. "Anforderung KI Website-Generator"), and a short
+     bold request line:
+
+     ```tsx
+     <div style={{
+       position: 'absolute', /* offset from the cluster */ maxWidth: 300,
+       background: '#fff', borderRadius: 14, padding: 16,
+       border: '2px dashed var(--color-ai-primary-end, #D746F5)',
+       boxShadow: '0 16px 48px rgba(0,0,0,0.3)',
+     }}>
+       {/* icon + caption row, then bold navy request text */}
+     </div>
+     ```
+
+Animation hooks: stagger the cluster in with **Pattern 5 — Element Fly-In** (primary card
+first, toolbar and bubble at +0.3-0.5s offsets); at most one fragment may idle with
+**Pattern 4 — Float / Gentle Bob** (`floatBob`). The backdrop never animates.
+
+## Verifying
+
+Verify with the still gate: frame 0 shows the backdrop imagery plus the floating UI cleanly
+composed — pointer style additionally shows the headline, marquee, panel, and connector;
+full-bleed style shows the cluster over negative space with the photo's focal subject fully
+visible.
