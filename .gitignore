@@ -11,3 +11,6 @@ node_modules/
 .claude/
 
 .playwright-mcp/
+
+# Local-only brainstorming specs & implementation plans — stay on disk, never committed.
+docs/superpowers/

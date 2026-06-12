@@ -31,6 +31,20 @@ Hybrid plans MUST include an `embedStyle` field with one of three values. In the
 
 All imageBriefs follow the rules in `rules/shared-hybrid-decomposition.md`.
 
+## Prompt engineering
+
+Classification is only the first step — the plan's `feature` strings are engineered briefs,
+not echoes of the request. Apply these rules when writing them:
+- `rules/shared-brief-enrichment.md` — expand each `feature` into a self-contained,
+  generator-ready brief; what to include and what to omit per generator.
+- `rules/shared-param-mapping.md` — how `brand`, `colorScheme`, `showroom`, `market`,
+  `dimensions`, `durationSec`, and `variants` bias the plan.
+- `rules/shared-cross-generator-consistency.md` — keep `sharedContext` reading identically
+  to both generators so a hybrid asset looks like one piece.
+
+(Humans formulating a brief interactively use the `/imagine` command, which reads these same
+rules plus `rules/human-interactive.md`.)
+
 ## Shared creative context
 
 Every plan carries one `sharedContext` that both generators receive verbatim. It is the
