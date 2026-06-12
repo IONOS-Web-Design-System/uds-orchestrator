@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.0.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.9.0...v2.0.0) (2026-06-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* **skills:** image-backdrop hybrid composition — pointer + full-bleed styles replace screen embed
+
+### Features
+
+* **imagine:** human interactive layer for prompt engineering ([3dc9129](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3dc91293e8f5b4a2c937d447daf313219639b954))
+* **skills:** color-harmony supervision — backdrop rule derives root gradient from measured imagery tones ([3ead27b](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3ead27b5162e807cf1f7fb4eafda0ecc8c8fa2c1))
+* **skills:** dimension-aware hybrid styles — interface-asset, backdrop crop + Ken Burns motion ([d43efe1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d43efe10714defddb5fb414b87e786e082e75d58))
+* **skills:** image-backdrop hybrid composition — pointer + full-bleed styles replace screen embed ([dc13f3f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/dc13f3f541d68224f986dac86788f75da14dc794))
+* **skills:** punch-through screen embed + floating-panel style for hybrid ([8024a88](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/8024a883193992e026a4ef78903ffb188a4e98f1))
+* **uds-wireframe:** one-frame rule — scene wrapper carries imagery + in-frame typography through backdrop motion; annotations draw in after settle ([c65264b](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c65264ba94d9df722095934d68c2270439c85768))
+* **uds-wireframe:** purposed backdrop motion — highlight zoom (transformOrigin-tied), entrance fade+move, interaction response; idle Ken Burns banned ([460947e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/460947e21e7f51f566d1ab0966bc985a90b3747d))
+
+
+### Bug Fixes
+
+* **uds-wireframe:** backdrop connector is always axis-aligned — div-based flat runs or L-elbow, slanted lines disallowed ([7425020](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/7425020d1766f37385201e703ca436595d1aee11))
+* **uds-wireframe:** strict-TS-safe quadToMatrix3d — 4-tuple param survives noUncheckedIndexedAccess gate ([0e177c2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/0e177c299e0e3b66c3ba8eb4553d2ad38aef7a16))
+
 ## [1.9.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.8.0...v1.9.0) (2026-06-11)
 
 
