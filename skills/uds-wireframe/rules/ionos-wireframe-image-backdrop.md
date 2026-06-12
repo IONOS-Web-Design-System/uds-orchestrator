@@ -1,21 +1,24 @@
 # Image-backdrop hybrid compositions
 
 Applies when the brief contains a `[HYBRID EMBED CONTRACT]` section. The contract's
-`Style:` line names one of two composition styles — follow the matching section below:
+`Style:` line names one of three composition styles — follow the matching section below:
 
 - `Style: image-backdrop with feature pointer` → [feature pointer](#style-image-backdrop-with-feature-pointer)
 - `Style: image-backdrop full-bleed` → [full-bleed](#style-image-backdrop-full-bleed)
+- `Style: interface-asset` → [interface-asset](#style-interface-asset)
 
-In both styles the catalog image is a **backdrop** the UI floats over — the imagery is
-never keyed, masked, or punched through, and the UI never pretends to live inside a
-pictured device screen.
+In the two backdrop styles the catalog image is a **backdrop** the UI floats over; in the
+interface-asset style the catalog image lives **inside** the wireframe as its hero/media
+asset. In all three the imagery is never keyed, masked, or punched through, and the UI
+never pretends to live inside a pictured device screen.
 
-Rules for BOTH styles:
+Rules for ALL styles:
 
 - **Opaque root.** Give the composition root an explicit opaque `backgroundColor`
   (transparent roots render black in mp4).
 - **Never cover the imagery's focal subject.** The contract / composition plan says which
-  side has negative space — that side gets the floating UI.
+  side has negative space — that side gets the floating UI. (For interface-asset this
+  applies inside the hero/media slot: keep the headline over the imagery's calm region.)
 - **Critical content margins.** Keep headlines, buttons, and badges within the middle 90%
   of the canvas; nothing critical within ~48px of a canvas edge.
 - **Still gate.** Frame 0 must already show the backdrop image plus the floating UI cleanly
@@ -43,9 +46,33 @@ Layer order (document order, no z-index games):
      borderRadius: 24, overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.45)',
    }}>
      <Img src={staticFile('<slug>.png')}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          style={{ width: '100%', height: '100%', objectFit: 'cover',
+                   objectPosition: '30% 40%' /* zoom the crop onto the focal area */ }} />
    </div>
    ```
+
+   **Crop rule** (contract line `Crop:`): show only the imagery's **relevant region** —
+   zoom the crop with `objectFit: 'cover'` plus an `objectPosition` aimed at the focal
+   area (e.g. `objectPosition: '30% 40%'`). The reference (77:203) shows a zoomed part of
+   the teal wall + bike, not the whole photo. **Never present the complete photo
+   letterboxed or framed as a small picture inside the canvas** — the backdrop card is a
+   window onto a region of the scene, not a photo frame around all of it.
+
+   **Backdrop motion** (contract line `Backdrop motion:`, animation intent only — applies
+   to the pointer AND full-bleed styles): give the imagery a slow, calm Ken Burns
+   treatment via `useCurrentFrame` + `interpolate` — EITHER a scale 1.0→1.06 OR a gentle
+   `objectPosition` pan across the **full duration**; pick ONE, ease linear, never fast:
+
+   ```tsx
+   const frame = useCurrentFrame();
+   const { durationInFrames } = useVideoConfig();
+   const kb = interpolate(frame, [0, durationInFrames - 1], [1.0, 1.06]); // linear
+   <Img src={staticFile('<slug>.png')}
+        style={{ width: '100%', height: '100%', objectFit: 'cover',
+                 objectPosition: '30% 40%', transform: `scale(${kb})` }} />
+   ```
+
+   Without a `Backdrop motion:` line in the contract, the backdrop stays static.
 
 3. **Headline over the image** — a short bold heading (brand heading font, white) rendered
    as a UI text layer on top of the backdrop. The illustration owns this text — it is NOT
@@ -221,9 +248,50 @@ Layer order:
 
 Animation hooks: stagger the cluster in with **Pattern 5 — Element Fly-In** (primary card
 first, toolbar and bubble at +0.3-0.5s offsets); at most one fragment may idle with
-**Pattern 4 — Float / Gentle Bob** (`floatBob`). The backdrop never animates.
+**Pattern 4 — Float / Gentle Bob** (`floatBob`). The backdrop is **static by default**;
+when the contract includes a `Backdrop motion:` line, apply the slow scale/pan Ken Burns
+treatment described in the pointer section (scale 1.0→1.06 OR a gentle objectPosition pan
+— one of them, linear, across the full duration).
 
-## Color harmony (both styles)
+## Style: interface-asset
+
+Story: the product feature IS a full interface (e.g. a CMS/editor shell), and the
+generated imagery serves as that interface's content. Reference 64:320: a dark navy
+brand-gradient base; the main interface wireframe (editor shell with a left icon sidebar)
+is the centerpiece; the imagery sits inside it as the hero media with a welcome headline
+over it; a prompt bubble and a mini-toolbar float over the wireframe's edge.
+
+This is a **normal wireframe composition** — build the interface itself per the standard
+rules and do not re-invent them here:
+
+- `ionos-wireframe-composition.md` — layout patterns, component selection, placeholder
+  content, headline-over-media treatment.
+- `ionos-wireframe-asset-integration.md` — catalog asset placement
+  (`<Img src={staticFile('<slug>.png')} />`, never plain `<img>`).
+- `ionos-wireframe-product-frame.md` — the product shell's color system (sidebar,
+  panels, header actions) and the one-frame-one-highlight composition rule.
+
+What THIS rule adds on top:
+
+1. **Root** — opaque brand-gradient `<AbsoluteFill>` (harmonized per the
+   [Color harmony](#color-harmony-all-styles) section below — derive the gradient from
+   the imagery's measured dominant tone mixed toward `#001B41`).
+2. **Main interface wireframe** — the centerpiece, covering roughly **70-85% of the
+   canvas**, sitting on the gradient root with rounded corners and a soft shadow.
+3. **The catalog image is the hero/media asset INSIDE the wireframe** — placed in the
+   interface's hero/media slot with `objectFit: 'cover'`, with the headline text rendered
+   over it per the composition rules (welcome headline, contrast via text-shadow or
+   scrim). Placeholder bars/content blocks sit below the hero, per the product-frame
+   placeholder palette.
+4. **1-2 floating highlight fragments** overlapping the wireframe's edge — a prompt
+   bubble and/or a small mini-toolbar pill, per the **Floating Highlight Card template**
+   (`ionos-wireframe-ai-animations.md`): borderless glass surface + pulsing AI glow, no
+   border of any kind. The prompt bubble uses the `ai-subtle` surface
+   (`linear-gradient(120deg, #FAE7FE, #FFFFFF)`) with a muted caption and a gradient CTA
+   (e.g. "✨ Seite erstellen" — `linear-gradient(45deg, #095BB1, #D746F5)`, white text).
+   The AI gradient belongs to CTAs only, never to fragment chrome.
+
+## Color harmony (all styles)
 
 The contract's `Color harmony:` line carries the backdrop imagery's **measured** tones
 (dominant + supporting hexes, warm/cool, light/dark). The composition must feel
@@ -249,4 +317,6 @@ of-a-piece with the imagery — never a brand-default background fighting the ph
 Verify with the still gate: frame 0 shows the backdrop imagery plus the floating UI cleanly
 composed — pointer style additionally shows the headline, marquee, panel, and connector;
 full-bleed style shows the cluster over negative space with the photo's focal subject fully
-visible.
+visible; interface-asset style shows the full interface wireframe on the gradient root with
+the imagery already filling its hero/media slot, the headline over it, and the floating
+fragment(s) overlapping the wireframe's edge.

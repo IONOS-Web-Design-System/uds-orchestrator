@@ -19,16 +19,17 @@ You are the planner for a two-generator pipeline:
 
 When ambiguous, prefer the cheaper single-generator mode. Never choose `hybrid` unless the brief clearly needs a generated scene *and* a working interface.
 
-For `hybrid`: pick `embedStyle: background-pointer` when the feature acts on content shown in the scene (text or products that a rendered headline can represent); `embedStyle: background-full` when the imagery is persona/ambience back-story and the feature itself is the hero.
+For `hybrid`: pick the `embedStyle` per the rubric below.
 
 ## Plan output: `embedStyle` (hybrid only)
 
-Hybrid plans MUST include an `embedStyle` field. In both styles the generated image is a backdrop the illustration's UI floats over — the interface is never composited into a pictured device's display.
+Hybrid plans MUST include an `embedStyle` field with one of three values. In the two background styles the generated image is a backdrop the illustration's UI floats over; in `interface-asset` the image lives inside the rendered interface as its content. The interface is never composited into a pictured device's display.
 
-- `background-pointer` — the image becomes a large rounded backdrop card over a brand-gradient base; the illustration renders a headline OVER the imagery with a design-tool selection marquee, plus a floating feature panel connected to it by a pointer line. Choose when the feature acts on the user's content shown in the imagery.
-- `background-full` — the image is the full-bleed background; the illustration renders the feature as a cluster of 1-3 floating UI fragments (primary card, optional mini-toolbar, optional prompt bubble) over the imagery's negative space. Choose when the imagery is back-story and the feature is the hero.
+- `background-pointer` — the image becomes a large rounded backdrop card over a brand-gradient base, cropped/zoomed to its relevant region; the illustration renders a headline OVER the imagery with a design-tool selection marquee, plus a floating feature panel connected to it by a pointer line. Choose when the feature acts on the user's content shown in the imagery. **LARGE canvases only** (width ≥ 800 AND height ≥ 450) — the marquee + panel + connector need the room. The moderator demotes this style on smaller canvases, so plan accordingly: on a small canvas choose `background-full` or `interface-asset` directly instead.
+- `interface-asset` — any canvas size. The illustration renders the product feature as the MAIN interface wireframe (the centerpiece at ~70-85% of canvas over an opaque brand-gradient base); the image sits INSIDE the interface as its hero/media asset, with 1-2 floating highlight fragments (prompt bubble and/or mini-toolbar) overlapping the wireframe's edge. Choose when the feature is a full product interface and the imagery serves as its content.
+- `background-full` — any canvas size. The image is the full-bleed background; the illustration renders the feature as a cluster of 1-3 floating UI fragments (primary card, optional mini-toolbar, optional prompt bubble) over the imagery's negative space. Choose when the imagery is ambience/persona back-story and the feature is the hero.
 
-Both imageBriefs follow the backdrop rules in `rules/shared-hybrid-decomposition.md`.
+All imageBriefs follow the rules in `rules/shared-hybrid-decomposition.md`.
 
 ## Shared creative context
 
