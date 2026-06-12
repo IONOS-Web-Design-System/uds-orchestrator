@@ -1,0 +1,69 @@
+# IONOS — character ethnicity by market
+
+Overrides the ethnicity pool in `shared-character-diversity` for the `ionos` brand.
+Before choosing an ethnicity, scan the brief's `showroom` field and `feature` text for
+market signals. Apply the matching market pool below. If no signal is found, fall back
+to the `shared-character-diversity` pool.
+
+## Step 1 — Detect the target market
+
+Scan `showroom` and `feature` for these signals (case-insensitive):
+
+| Market | Signals to match |
+|---|---|
+| Germany (DE) | `de`, `de-`, `germany`, `german`, `deutschland`, `deutsch` |
+| United States (US) | `us`, `us-`, `united states`, `american`, `en-us` |
+| Spain (ES) | `es`, `es-`, `spain`, `spanish`, `spanien`, `españa`, `espana` |
+| Italy (IT) | `it`, `it-`, `italy`, `italian`, `italia` |
+| France (FR) | `fr`, `fr-`, `france`, `french`, `frankreich` |
+
+Match against the `showroom` prefix first (e.g. `showroom: "de-app-builder"` → Germany),
+then scan the `feature` text for country/language names if no prefix is found.
+
+## Step 2 — Apply the market pool
+
+### Germany (DE) and United States (US)
+
+Primary market is white / Northern-European. Reflect the core customer demographic.
+
+| Ethnicity | Weight | Exact prompt encoding |
+|---|---|---|
+| White / Northern-European | ~70 % | `"a white man in his 40s"` / `"a white woman in her 30s"` |
+| Black / African descent | ~15 % | `"a Black man in his 30s"` / `"a Black woman in her 40s"` |
+| East or South-East Asian | ~10 % | `"an East Asian woman in her 50s"` |
+| South Asian | ~5 % | `"a South Asian man in his 40s"` |
+
+### Spain (ES) and Italy (IT)
+
+Primary market is Mediterranean / Latin-European — the dominant appearance in these
+countries. Use the Mediterranean descriptor; do NOT use "Latino" (which models read
+as Latin American) or "Hispanic" (which is outside the defined encoding list).
+
+| Ethnicity | Weight | Exact prompt encoding |
+|---|---|---|
+| Mediterranean / Latin-European | ~65 % | `"a Mediterranean man in his 40s with olive complexion and dark hair"` / `"a Mediterranean woman in her 30s"` |
+| White / Northern-European | ~20 % | `"a white man in his 50s"` |
+| Black / African descent | ~10 % | `"a Black woman in her 40s"` |
+| East or South-East Asian | ~5 % | `"an East Asian man in his 30s"` |
+
+### France (FR)
+
+| Ethnicity | Weight | Exact prompt encoding |
+|---|---|---|
+| White / French-European | ~55 % | `"a white man in his 40s"` |
+| North African / Maghrebi | ~20 % | `"a North African man in his 30s"` |
+| Black / African descent | ~15 % | `"a Black woman in her 40s"` |
+| East or South-East Asian | ~10 % | `"an East Asian woman in her 30s"` |
+
+### No market signal detected
+
+Fall back to the global pool in `shared-character-diversity`. Do not guess a market.
+
+## Rules that still apply from shared-character-diversity
+
+- Closed pool: use only the encodings listed above — do not invent descriptors.
+- Always encode the chosen ethnicity explicitly in `prompt` — never leave it unspecified.
+- Rotate across the pool across multiple images in a session; do not default to the
+  highest-weight entry every time.
+- Body-shape and age guidance from `shared-character-diversity` are unchanged.
+- Never encode ethnicity in `negativePrompt`.

@@ -28,6 +28,20 @@
       "prompt": "Professional portrait of a skilled carpenter in a modern woodworking workshop, arms crossed, authentic craftsman attire with apron, natural workshop lighting, finished wooden furniture pieces visible in background, trustworthy and competent expression. Brand: IONOS.",
       "expected_output": "A SPEC block where: (1) image-type-portrait is applied; (2) character-diversity is applied — the prompt contains an explicit ethnicity, age, and body-shape descriptor chosen by the agent (e.g. 'a Black man in his 40s with a stocky build') rather than leaving demographics unspecified; (3) body shape is consistent with a manual trade (stocky/solid/muscular); (4) the brief's scene elements are preserved — workshop environment, crossed arms, apron, finished furniture; (5) no person description from the original brief (gender, age, ethnicity) was carried over verbatim — the agent chose these independently; (6) negativePrompt excludes rendered text, logos, distorted hands, and plain studio backdrops.",
       "files": []
+    },
+    {
+      "id": 4,
+      "name": "market-de-ethnicity",
+      "prompt": "Portrait of a satisfied customer for an IONOS web hosting campaign targeting the German market. Showroom: de-customer-testimonial. Brand: IONOS.",
+      "expected_output": "A SPEC block where: (1) ionos-character-ethnicity detects the DE market from 'de-customer-testimonial'; (2) the chosen ethnicity is from the DE/US pool — white/Northern-European primary (70%) or Black/Asian with lower probability; (3) NOT Mediterranean/Latin-European (that pool is for ES/IT only); (4) explicit ethnicity descriptor appears in the prompt (e.g. 'a white woman in her 40s'); (5) no unspecified or generic person description.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "market-es-ethnicity",
+      "prompt": "Portrait of a satisfied customer for an IONOS web hosting campaign targeting the Spanish market. Showroom: es-customer-testimonial. Brand: IONOS.",
+      "expected_output": "A SPEC block where: (1) ionos-character-ethnicity detects the ES market from 'es-customer-testimonial'; (2) the chosen ethnicity is from the ES/IT pool — Mediterranean/Latin-European primary (65%); (3) the prompt contains a descriptor like 'a Mediterranean man/woman with olive complexion and dark hair'; (4) NOT the generic 'white' or 'Black' descriptor alone — the Mediterranean encoding must appear; (5) explicit ethnicity descriptor present before any scene description.",
+      "files": []
     }
   ]
 }

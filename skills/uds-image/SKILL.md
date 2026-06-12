@@ -75,7 +75,8 @@ Every photoreal brief falls into one of four types — detect and apply the matc
 
 ## Rules (inlined per brand)
 - `shared-image-principles` — universal composition, image type detection, negative-prompt, aspect-ratio.
-- `shared-character-diversity` — ethnicity pool, body-shape guidance, age/gender defaults; apply whenever the brief includes a person.
+- `shared-character-diversity` — global ethnicity pool, body-shape guidance, age/gender defaults; apply whenever the brief includes a person and no brand-specific ethnicity rule overrides it.
+- `ionos-character-ethnicity` (ionos brand only) — market-specific ethnicity pools keyed to the brief's showroom prefix or feature text (DE/US → white primary; ES/IT → Mediterranean primary; FR → French/Maghrebi mix); overrides `shared-character-diversity` when a market signal is detected.
 - `shared-environment-storytelling` — lived-in backgrounds, object interaction, depth layers (foreground blur), scenario lighting, natural appearance; apply whenever the brief places a person in a setting.
 - `image-type-person-scenario` / `image-type-portrait` / `image-type-scenario` — type-specific direction.
 - `<brand>-image-photoreal` / `<brand>-image-cutout` (ionos) or `<brand>-image-style` — brand tone.

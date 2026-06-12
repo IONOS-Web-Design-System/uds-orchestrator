@@ -62,10 +62,13 @@ Layer order (document order, no z-index games):
    ```
 
 4. **Selection marquee around the headline** — dashed accent border + 4 square corner
-   handles, sized slightly larger than the headline box:
+   handles, sized slightly larger than the headline box. **This in-scene selection
+   affordance is the ONLY place a dashed border is allowed** — it depicts content
+   selection (design-tool language), not panel chrome. Panels, bubbles, and badges never
+   use dashed outlines (retired style — see `ionos-ai-features`):
 
    ```tsx
-   const ACCENT = '#11C7E6'; // or the AI magenta for AI features
+   const ACCENT = '#8212C2'; // the sanctioned text-selection marquee purple (product-frame rule)
    <div style={{
      position: 'absolute', inset: -14, // wraps the headline wrapper
      border: `2px dashed ${ACCENT}`, pointerEvents: 'none',
@@ -79,21 +82,33 @@ Layer order (document order, no z-index games):
    </div>
    ```
 
-5. **Floating feature panel** — a compact white panel half-overlapping the backdrop card's
-   edge on the negative-space side. Anatomy: rounded corners, soft shadow, optional dashed
-   accent border, and the feature's UI (segmented control, radio list, primary CTA — real
-   UDS components or tight sketches):
+5. **Floating feature panel** — a compact panel half-overlapping the backdrop card's edge
+   on the negative-space side, containing the feature's UI (segmented control, radio list,
+   primary CTA — real UDS components or tight sketches). **Panel chrome follows the
+   Floating Highlight Card template (`ionos-wireframe-ai-animations.md`): a borderless
+   glass surface with a pulsing AI glow — NO border of any kind (dashed AND gradient
+   borders are retired panel styles). The AI gradient belongs to the CTA inside, not the
+   panel chrome.**
 
    ```tsx
+   // Floating Highlight Card chrome (see ionos-wireframe-ai-animations.md for the full
+   // animated version with enter spring + glow pulse):
+   const gp = Math.sin((frame % 84) / 84 * Math.PI * 2); // glow pulse
    <div style={{
      position: 'absolute', left: '5%', top: '30%', width: 280,
-     background: '#fff', borderRadius: 16, padding: 20,
-     border: '2px dashed var(--color-ai-primary-end, #D746F5)',
-     boxShadow: '0 24px 64px rgba(0,0,0,0.35)',
+     borderRadius: 24, padding: 20,
+     background: 'rgba(244, 247, 250, 0.88)',
+     backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+     boxShadow: `0 24px 64px rgba(0,0,0,0.35), 0 0 ${24 + gp * 14}px rgba(180,16,231,${0.18 + gp * 0.12})`,
    }}>
-     {/* segmented control / options / primary button with sparkles icon */}
+     {/* options list; CTA: linear-gradient(45deg,#095BB1,#D746F5) + white text;
+         sparkle icon accent: #B410E7 */}
    </div>
    ```
+
+   If the panel shows a generating/loading moment, use the mandatory `ai-subtle`
+   treatment from `ionos-ai-features` (calm `#FAE7FE → #FFFFFF` oscillation,
+   ≥10–15 frames, no hard cut).
 
 6. **Connector line** — a thin line from the panel's edge to the headline's marquee,
    ending in a filled dot. A 2px div (horizontal/vertical runs) or an SVG `<line>` +
@@ -176,15 +191,17 @@ Layer order:
      </div>
      ```
 
-   - **Prompt bubble (optional):** a small card with a dashed accent border, a tiny accent
-     sparkle icon, a muted caption (e.g. "Anforderung KI Website-Generator"), and a short
-     bold request line:
+   - **Prompt bubble (optional):** a prompt surface follows `ionos-ai-features` — the
+     `ai-subtle` gradient background, borderless, soft shadow — **never a dashed or
+     bordered outline (retired styles)** — with a tiny accent sparkle icon (`#B410E7`),
+     a muted caption (e.g. "Anforderung KI Website-Generator"), and a short bold request
+     line:
 
      ```tsx
      <div style={{
        position: 'absolute', /* offset from the cluster */ maxWidth: 300,
-       background: '#fff', borderRadius: 14, padding: 16,
-       border: '2px dashed var(--color-ai-primary-end, #D746F5)',
+       background: 'linear-gradient(120deg, #FAE7FE, #FFFFFF)', // ai-subtle prompt surface
+       borderRadius: 14, padding: 16,
        boxShadow: '0 16px 48px rgba(0,0,0,0.3)',
      }}>
        {/* icon + caption row, then bold navy request text */}
