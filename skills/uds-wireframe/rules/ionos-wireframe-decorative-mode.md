@@ -11,7 +11,7 @@ Compared to standard mode:
 | Background | Light (`colorScheme="light"`) | **Transparent** outer canvas — dark gradient lives only inside the device frame's screen |
 | Text | Plausible placeholder copy | Visual bar placeholders + 1–2 readable context strings (typography anchor) |
 | Icons | Utility accents (20–24px) | Focal points (32–48px) in colored glass containers |
-| Cards | UDS Surface/Card components | Glass morphism overlays (rgba border + blur) |
+| Cards | UDS Card / Box components (no `Surface` export) | Glass morphism overlays (rgba border + blur) |
 | Logo | None | Brand logo from `@ionos-web-design-system/icon/brandmark` in nav bar |
 | Images | Embedded inline | Floating panel with shadow treatment |
 | Output | `.tsx` only | `.tsx` + `/tmp/uds-decorative-preview.html` (with animation variant switcher) |
@@ -24,25 +24,29 @@ Trigger words: "decorative", "dark", "cinematic", "premium", "hero panel", "mark
 
 The decorative illustration must have a **transparent outer canvas** so it can be dropped onto any host background — a light page, a dark hero section, a gradient, or an image.
 
-**Structure rule:** The `ThemeProvider` root and any outer wrapper use `background: transparent`. The dark gradient belongs only inside the device frame's screen content area.
+**Structure rule:** The `data-*` wrapper and the outer canvas use `background: transparent`. The dark gradient belongs only inside the device frame's screen content area.
 
 ```tsx
 export default function MyIllustration() {
   return (
-    <ThemeProvider brand="ionos" colorScheme="dark" platform="comfortable">
-      {/* Outer canvas — transparent, inline-block so it sizes to content */}
-      <div style={{ background: 'transparent', display: 'inline-block', position: 'relative', padding: '40px 60px 40px 40px' }}>
-        <MacWindowFrame>
-          {/* Dark gradient lives here — inside the screen only */}
-          <div style={{
-            background: 'linear-gradient(135deg, var(--color-gradient-start, #02102B) 0%, var(--color-gradient-end, #0B2A63) 100%)',
-          }}>
-            {/* screen content */}
-          </div>
-        </MacWindowFrame>
-        {/* Floating pop-out elements — glass/semi-transparent, work on any bg */}
-      </div>
-    </ThemeProvider>
+    // ThemeProvider takes ONLY children. Brand/platform/colorScheme are applied
+    // as data-* attributes on a wrapping element (NOT props on ThemeProvider).
+    <div data-brand="ionos" data-platform="comfortable" data-color-scheme="dark" style={{ display: 'inline-block', background: 'transparent' }}>
+      <ThemeProvider>
+        {/* Outer canvas — transparent, inline-block so it sizes to content */}
+        <div style={{ background: 'transparent', display: 'inline-block', position: 'relative', padding: '40px 60px 40px 40px' }}>
+          <MacWindowFrame>
+            {/* Dark gradient lives here — inside the screen only */}
+            <div style={{
+              background: 'linear-gradient(135deg, var(--color-gradient-start, #02102B) 0%, var(--color-gradient-end, #0B2A63) 100%)',
+            }}>
+              {/* screen content */}
+            </div>
+          </MacWindowFrame>
+          {/* Floating pop-out elements — glass/semi-transparent, work on any bg */}
+        </div>
+      </ThemeProvider>
+    </div>
   );
 }
 ```
@@ -333,6 +337,8 @@ const WindowsFrame = ({ children }: { children: React.ReactNode }) => (
 
 The most visually dynamic decorative compositions have **one or two elements that escape the device frame boundary** — a stat card floating above the screen edge, a notification pill bleeding outside the laptop bezel. These tell the viewer "this is important".
 
+> **If a pop-out contains readable text, do not loop a float/bob on it** — the perpetual motion re-rasterizes its glyphs every frame and shimmers. Let it fly in once and hold, or bob only a non-text backdrop/icon layer. In Remotion renders this is gate-enforced (`text-stability`); see remotion-best-practices "Text rendering stability".
+
 Wrap the device frame in a padded relative container, then use `position: absolute` to place pop-out elements:
 
 ```tsx
@@ -380,11 +386,16 @@ The slight tilt (`rotate(1.5deg)`) and shadow make the card feel like it's physi
 
 ```tsx
 // Wireframe illustration — not production code
-<ThemeProvider brand="ionos" colorScheme="dark" platform="comfortable">
-  <Surface style={{ minHeight: '100vh', background: 'var(--surface-base-invert, #02102B)' }}>
-    {/* composition */}
-  </Surface>
-</ThemeProvider>
+// ThemeProvider takes ONLY children. Brand/platform/colorScheme are applied as
+// data-* attributes on a wrapping element (NOT props on ThemeProvider).
+<div data-brand="ionos" data-platform="comfortable" data-color-scheme="dark">
+  <ThemeProvider>
+    {/* No `Surface` component in UDS — use a div with a bg-surface-* class or a CSS-var background */}
+    <div style={{ minHeight: '100vh', background: 'var(--surface-base-invert, #02102B)' }}>
+      {/* composition */}
+    </div>
+  </ThemeProvider>
+</div>
 ```
 
 Set `colorScheme="dark"` at the root — activates dark semantic tokens across all UDS components. **Do not** use `ThemeInverter` in decorative mode; the whole page is dark.

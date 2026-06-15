@@ -18,10 +18,12 @@ ornament.
 - **No decorative lines.** No sweeping curves, diagonal accent lines, "circuit
   trace" paths, or geometric line-art behind content. The background is a
   calm surface, not an active element.
-- **Solid or gradient only.** Use a flat brand color, a two-stop linear /
-  radial gradient between brand tokens (e.g. `--brand/ionos-blue-600` →
-  `--brand/ionos-blue-800`), or a clean off-white (`--base/surface/canvas`).
-  Subtle vignette or radial fade is acceptable; explicit lines are not.
+- **Solid or gradient only.** Use a flat brand color or a two-stop linear /
+  radial gradient between brand hexes (e.g. `#003D8F` → `#001B41`), or a clean
+  off-white (`var(--surface-base)`). Use literal hex for brand-scale colours and
+  semantic `var(--surface-*)` tokens for surfaces — never Figma `/`-paths like
+  `var(--brand/ionos-blue-600)` (not valid CSS). Subtle vignette/radial fade is
+  acceptable; explicit lines are not.
 - **Content carries the energy.** Motion, color, and product detail should
   earn the viewer's attention — not background ornamentation.
 

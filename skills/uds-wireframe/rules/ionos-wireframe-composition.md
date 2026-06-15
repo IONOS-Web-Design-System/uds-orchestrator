@@ -12,22 +12,30 @@ This is not a pixel-perfect reproduction. Make reasonable spatial decisions wher
 
 ```tsx
 // Wireframe illustration — not production code
-import { ThemeProvider, Surface } from '@ionos-web-design-system/react';
+import { ThemeProvider } from '@ionos-web-design-system/react';
 
 export default function MyWireframe() {
   return (
-    <ThemeProvider brand="ionos" colorScheme="light" platform="comfortable">
-      <Surface>
-        {/* composition goes here */}
-      </Surface>
-    </ThemeProvider>
+    // ThemeProvider takes ONLY children. Brand/platform/colorScheme are applied
+    // as data-* attributes on a wrapping element (NOT props on ThemeProvider).
+    <div data-brand="ionos" data-platform="comfortable" data-color-scheme="light">
+      <ThemeProvider>
+        {/* There is NO `Surface` component in UDS. For a themed background use a
+            div with a bg-surface-* utility class (or style={{ backgroundColor: 'var(--surface-…)' }}). */}
+        <div className="bg-surface-base text-semantic-base">
+          {/* composition goes here */}
+        </div>
+      </ThemeProvider>
+    </div>
   );
 }
 ```
 
-- `brand="ionos"` — active brand (only ionos is fully style-guided currently)
-- `colorScheme="light"` — default for standard mode; use `"dark"` for decorative mode (set at root, not via ThemeInverter)
-- `platform="comfortable"` — default spacing; use `"compact"` for dense UIs
+- **There is no `Surface` component** — `@ionos-web-design-system/react` does not export it. Use a `div` with a `bg-surface-*` class (`bg-surface-base`, `bg-surface-subtle`, `bg-surface-subtlest`) or `style={{ backgroundColor: 'var(--surface-subtlest)' }}`.
+- `ThemeProvider` takes **no props** — only `children`. It reads the theme from the `data-*` attributes on an ancestor element.
+- `data-brand="ionos"` — active brand (only ionos is fully style-guided currently)
+- `data-color-scheme="light"` — default for standard mode; use `"dark"` for decorative mode (set on the wrapper, not via ThemeInverter)
+- `data-platform="comfortable"` — default spacing; use `"compact"` for dense UIs
 
 ---
 
@@ -51,12 +59,12 @@ import { NavigationBar } from '@ionos-web-design-system/react/navigation-bar';
 ### Hero / Banner Section
 
 ```tsx
-import { Surface } from '@ionos-web-design-system/react/surface';
 import { Button } from '@ionos-web-design-system/react/button';
 import { ThemeInverter } from '@ionos-web-design-system/react/theme-inverter';
 
 <ThemeInverter>
-  <Surface className="px-16 py-24 text-center">
+  {/* No `Surface` component — themed background via a bg-surface-* div */}
+  <div className="bg-surface-base px-16 py-24 text-center">
     <h1 className="font-heading text-6xl font-semibold mb-4">
       Your hosting, simplified
     </h1>
@@ -66,7 +74,7 @@ import { ThemeInverter } from '@ionos-web-design-system/react/theme-inverter';
     <Button variant="primary" size="lg" onClick={() => {}}>
       Get started
     </Button>
-  </Surface>
+  </div>
 </ThemeInverter>
 ```
 
@@ -191,10 +199,10 @@ function StatusBadge({ status }: { status: keyof typeof STATUS_STYLES }) {
   return (
     <span style={{
       backgroundColor: s.bg,
-      // Text uses Dark Midnight — not a darkened utility color — for token purity
-      color: 'var(--brand/ionos-blue-800)',
+      // Dark Midnight text via a semantic token (or hex '#001B41') — NOT a Figma path
+      color: 'var(--text-base)',
       borderLeft: `3px solid ${s.token}`,
-      fontFamily: 'var(--base/font/body)',
+      fontFamily: 'Open Sans, sans-serif',
       fontSize: '0.75rem',
       fontWeight: 600,
       padding: '2px 10px',
@@ -212,35 +220,51 @@ The border-left trick lets the utility color show its true value without requiri
 
 ---
 
-## No Hard-Coded Colors — Including White and Black
+## Colors — semantic core tokens, or hex. NEVER Figma token paths.
 
-Every color must come from a CSS token — this includes white and black:
+`@ionos-web-design-system/core` exposes **semantic** CSS custom properties — `--surface-*`,
+`--text-*`, `--border-*`, `--surface-semantic-*` — and the wireframe renders under
+`<ThemeProvider>` + `data-brand`, so they resolve live. Those are valid CSS variables.
 
-| Color | Token | When to use |
-|-------|-------|-------------|
-| White | `var(--neutral/white)` | Text on dark backgrounds, overlays |
-| Screen text (dark) | `var(--brand/ionos-blue-800)` | Default body text (Dark Midnight) |
-| Deep blue-black | `var(--brand/ionos-blue-900)` | Dark gradient backgrounds |
-| Near-black | `var(--neutral/cool-grey-900)` | Dense text on white |
+The brand colour scale (IONOS Blue, Sky, …) and white/black are written in `uds-style-guide`
+as **Figma hierarchy paths** (`brand/ionos-blue-600`, `neutral/white`). **These are NOT CSS
+variables.** `var(--brand/ionos-blue-600)`, `var(--neutral/white)`, `var(--base/font/body)` all
+fail: the `/` is a CSS parse error, so the declaration is dropped and the element renders
+transparent/unstyled — which silently breaks contrast (white-on-transparent = invisible icons).
+The hex fallback does not save you (a malformed-name `var()` fails before the fallback).
+
+| Need | Use this |
+|------|----------|
+| White (text/icon on dark) | `var(--text-base-invert)` or hex `#fff` |
+| Default dark screen text | `var(--text-base)` or hex `#001B41` |
+| Default card / surface | `var(--surface-base)` |
+| Dark / inverted surface | `var(--surface-base-invert)` (pair with `--text-base-invert`) |
+| Subtle backdrop | `var(--surface-subtlest)` |
+| A specific brand colour | the literal **hex** from uds-style-guide (e.g. `#003D8F`) |
 
 ```tsx
-// ✅ Correct — white text on a dark hero overlay
-<h1 style={{ color: 'var(--neutral/white)' }}>Headline</h1>
+// ✅ Correct — semantic token, or hex. Pair surface + its foreground for contrast.
+<h1 style={{ color: 'var(--text-base-invert)' }}>Headline</h1>   // white-on-dark
+<div style={{ background: '#003D8F', color: '#fff' }}>IONOS Blue panel</div>
 
-// ❌ Wrong — hex shorthand breaks token purity
-<h1 style={{ color: '#ffffff' }}>Headline</h1>
-<h1 style={{ color: 'white' }}>Headline</h1>
+// ❌ Wrong — Figma token paths are not CSS variables; the declaration is dropped → unstyled
+<h1 style={{ color: 'var(--neutral/white)' }}>Headline</h1>
+<div style={{ background: 'var(--brand/ionos-blue-600)' }}>…</div>
 ```
 
 ---
 
 ## Tailwind CSS in Wireframes
 
-Since `@ionos-web-design-system/core` exposes all design tokens as CSS variables, you can use them in Tailwind arbitrary values:
+`@ionos-web-design-system/core` exposes **semantic** tokens as CSS variables — use those names
+in Tailwind arbitrary values (never a Figma `/`-path):
 
 ```tsx
-// Brand colors via CSS variables
-<div className="bg-[var(--brand/ionos-blue-600)] text-[var(--neutral/white)] p-8">
+// ✅ semantic core tokens (valid) — or a literal hex for a specific brand colour
+<div className="bg-[var(--surface-base-invert)] text-[var(--text-base-invert)] p-8">
+  Inverted surface
+</div>
+<div className="bg-[#003D8F] text-[#fff] p-8">
   IONOS Blue background
 </div>
 

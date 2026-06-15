@@ -10,7 +10,7 @@ Color distinguishes the IONOS brand and enables a consistent experience across m
 
 These colors are always available and form the foundation of every IONOS design.
 
-| Name | Code | HEX | CSS Token | Usage |
+| Name | Code | HEX | Figma path (ref) | Usage |
 |------|------|-----|-----------|-------|
 | IONOS Blue | B6 | `#003D8F` | `--brand/ionos-blue-600` | Logo, primary brand anchor. Frames the brand together with Dark Midnight. |
 | Sky | S3 | `#11C7E6` | `--brand/ionos-sky-300` | Brand CTA, bold accents. Adds boldness and vibrance — use to direct eyes. |
@@ -22,7 +22,7 @@ These colors are always available and form the foundation of every IONOS design.
 
 Used for gradients, deep backgrounds, and print contexts.
 
-| Name | Code | HEX | CSS Token | Usage |
+| Name | Code | HEX | Figma path (ref) | Usage |
 |------|------|-----|-----------|-------|
 | Blue Black | B9 | `#02102B` | `--brand/ionos-blue-900` | Base of the basic blue gradient. |
 | Cool Black | C9 | `#0A121C` | `--neutral/cool-grey-900` | Deeper black for print work. |
@@ -43,7 +43,7 @@ When using secondary colors:
 - Combine with the primary palette
 - Ensure colors support the content hierarchy
 
-| Name | Code | HEX | CSS Token | HSL |
+| Name | Code | HEX | Figma path (ref) | HSL |
 |------|------|-----|-----------|-----|
 | Amber | Y3 | `#FFAA00` | `--utility/yellow-300` | 40° 100% 50% |
 | Purple | P4 | `#D746F5` | `--utility/purple-400` | 290° 90% 62% |
@@ -73,23 +73,31 @@ When using secondary colors:
 - Mix multiple secondary colors in one composition
 - Use IONOS Blue as a text color on a white background without checking contrast (it passes AA for large text only)
 
-## CSS Token Usage in Code
+## Using these colours in code
 
-When implementing in a project with `@ionos-web-design-system/core`:
+The `Figma path (ref)` column above (`brand/ionos-blue-600`, `neutral/white`, …) is **Figma hierarchy
+notation — NOT a CSS variable.** `@ionos-web-design-system/core` exposes only **semantic** custom
+properties (`--surface-*`, `--text-*`, `--border-*`, `--surface-semantic-*`); there is no
+`--brand/...` or `--brand-...` CSS variable. Writing `var(--brand/ionos-blue-600)` is a CSS parse
+error (the `/`), so the declaration is dropped and the element renders unstyled.
+
+Two valid options — a **semantic core token** for UI roles, or the **literal hex** for a specific
+brand-scale colour:
 
 ```css
-/* Use CSS custom properties — never hard-code hex values */
-.cta-button {
-  background-color: var(--brand/ionos-blue-600);  /* IONOS Blue */
-  color: var(--neutral/white);
-}
+/* ✅ Semantic core tokens (resolve per brand under ThemeProvider/data-brand) */
+.cta-button   { background-color: var(--surface-base-invert); color: var(--text-base-invert); }
+.body-text    { color: var(--text-base); }
 
-.hero-background {
-  background: linear-gradient(
-    var(--brand/ionos-blue-900),  /* Blue Black */
-    var(--brand/ionos-blue-800)   /* Dark Midnight */
-  );
-}
+/* ✅ Literal hex for a specific brand-scale colour (there is no core var for it) */
+.brand-panel  { background: #003D8F; color: #fff; }
+.hero-background { background: linear-gradient(#02102B, #001B41); }
+
+/* ❌ Figma paths are not CSS variables — declaration dropped, element unstyled */
+.bad { background-color: var(--brand/ionos-blue-600); color: var(--neutral/white); }
 ```
+
+Always pair a `--surface-*` background with its matching `--text-*` foreground so contrast holds.
+For Tailwind mappings and component-level implementation, see `uds-usage-best-practices`.
 
 For Tailwind CSS mappings and component-level implementation, see `uds-usage-best-practices`.

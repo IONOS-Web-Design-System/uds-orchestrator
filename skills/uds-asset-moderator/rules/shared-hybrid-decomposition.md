@@ -47,6 +47,18 @@ overlapping the wireframe edge, mini-toolbar upper-right").
 The `compositionPlan` MUST state which side the floating cluster goes
 (e.g. "cluster on the right over the blurred background").
 
+## embedStyle: floating-card
+
+The image is shown as a **contained rounded card** (not full-bleed), so the imageBrief
+should produce a subject that reads well at card scale — a single clear subject, comfortably
+inside the frame. Negative space is less critical here (the highlight chips sit on the card's
+edge against the pale surface), but still avoid clutter at the very edges where a chip lands.
+Cutout (`assetType: "cutout"`) imagery also works well for this style.
+
+The `compositionPlan` MUST state where the highlight chips sit relative to the card
+(e.g. "portrait card centred; labelled chip over the top-left corner, icon pill over the
+lower edge").
+
 ## illustrationBrief — all styles
 
 The hybrid illustrationBrief MUST:
@@ -55,4 +67,5 @@ The hybrid illustrationBrief MUST:
   `[HYBRID EMBED CONTRACT]` instructions itself,
 - assume the orchestrator handles the compositing contract (backdrop card + pointer for
   `background-pointer`, full-bleed backdrop + floating cluster for `background-full`,
-  in-wireframe hero asset + floating fragments for `interface-asset`).
+  in-wireframe hero asset + floating fragments for `interface-asset`, contained image card
+  + edge highlight chips for `floating-card`).

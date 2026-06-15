@@ -49,7 +49,7 @@ The description may start with a type prefix in brackets: `[photo]`, `[website]`
 |---|---|---|
 | `[photo]` | Standalone photo — person, product, scene | Fill an **image placeholder** only (`objectFit:'cover'`). Never the whole client interface. |
 | `[website]` | Full website or app UI screenshot | Use **as the website being edited** inside the product frame's light client-app zone (`#F4F7FA`). Never also shrink into a thumbnail. |
-| `[mockup]` | Scene with a blank screen area | Mockup = backdrop at z-index 0; composite the live UI absolutely into the blank screen region. |
+| `[mockup]` | Transparent device frame with a blank screen | Place the mockup PNG **ABOVE** your UI (higher `zIndex`). Put the wireframe in a container sized to the **mockup's own aspect ratio**, absolutely positioned at the **exact `screen=x%,y%,w%,h%` slot** given in the `# Available assets` entry. The transparent screen reveals the UI; the opaque bezel frames and rounds it. Do NOT guess the inset — use the provided `screen=` numbers. |
 | `[icon]` | Small brand/product icon | Inline in generated UI (integrations row, login button). 16–32px, `objectFit:'contain'`, never a hero. |
 
 **Selection rules — read these in order:**
@@ -71,13 +71,24 @@ The description may start with a type prefix in brackets: `[photo]`, `[website]`
    UDS tokens instead of forcing a poorly-matched asset.
 
 ```tsx
-// [mockup] — composite the live UI into the blank screen area:
-<div style={{ position: 'relative' }}>
-  <Img src={staticFile('phone-mockup.png')} style={{ width: '100%', display: 'block' }} />
-  <div style={{ position: 'absolute', top: '7%', left: '12%', right: '12%', bottom: '7%',
-                overflow: 'hidden', borderRadius: 28 }}>
-    {/* generated mobile UI — tune the inset to THIS mockup's blank screen region */}
+// [mockup] — transparent device frame. The mockup's screen AND surround are
+// transparent; only the bezel is opaque. So layer the device PNG ABOVE the UI:
+// the transparent screen reveals the wireframe beneath, and the opaque bezel
+// frames + rounds it (no borderRadius needed on the UI).
+//
+// 1. Size the wrapper to the mockup's OWN aspect ratio (w:h) so the screen=
+//    percentages map 1:1 — e.g. iPad Pro 13" landscape is 3132×2448 → 1040×813.
+// 2. Position the wireframe at the EXACT `screen=x%,y%,w%,h%` from `# Available
+//    assets` (left=x, top=y, width=w, height=h). NEVER guess the inset.
+<div style={{ position: 'relative', width: 1040, height: 813 /* = mockup aspect */ }}>
+  {/* wireframe BENEATH, clipped to the exact screen slot */}
+  <div style={{ position: 'absolute', left: '6.5%', top: '8.3%', width: '87.3%', height: '83.8%',
+                overflow: 'hidden' /* values from this asset's screen= line */ }}>
+    {/* generated UI fills this box (no rounded corners — the bezel masks it) */}
   </div>
+  {/* device frame ON TOP — transparent screen lets the UI show through */}
+  <Img src={staticFile('apple-ipad-pro-13-space-gray-landscape.png')}
+       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 10, pointerEvents: 'none' }} />
 </div>
 ```
 
@@ -131,7 +142,7 @@ none is provided/suitable, use a token-styled placeholder:
 
 ```tsx
 <div className="w-full h-64 rounded-lg flex items-center justify-center"
-     style={{ background: 'var(--brand/ionos-blue-900)' }}>
+     style={{ background: 'var(--surface-base-invert)', color: 'var(--text-base-invert)' }}>
   <Icon group="system" name="image" size={48} className="opacity-30" />
   <span className="text-sm opacity-40 ml-2">Image placeholder</span>
 </div>
