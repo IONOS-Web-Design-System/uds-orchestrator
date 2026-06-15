@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.0.0...v2.0.1) (2026-06-15)
+
+
+### Documentation
+
+* **skills:** pending skill working-tree edits ([79820ab](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/79820ab55abc5fb9b710b6292a06101d38ada81e))
+* **skills:** text-stability, color-token, and small-format guidance hardening ([62a9012](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/62a9012f9a6946c484bc19ec428ac27dd080b30a))
+
 ## [2.0.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v1.9.0...v2.0.0) (2026-06-12)
 
 
