@@ -58,13 +58,17 @@ Produce a single `src/Composition.tsx`. For Remotion jobs, the template's `Root.
 // Wireframe illustration — not production code
 import { type VariantProps } from './schema';          // Remotion: always use VariantProps
 // OR for static wireframes:
-import { ThemeProvider, Surface } from '@ionos-web-design-system/react';
+import { ThemeProvider } from '@ionos-web-design-system/react';  // NOTE: there is no `Surface` export — use a div with a bg-surface-* utility class
 
-export const MyComposition: React.FC<VariantProps> = ({ headline, subline, variantId, brand, colorScheme }) => {
+export const MyComposition: React.FC<VariantProps> = ({ headline, subline, variantId, brand, colorScheme, platform }) => {
   return (
-    <ThemeProvider brand={brand} colorScheme={colorScheme} platform="comfortable">
-      {/* layout composition */}
-    </ThemeProvider>
+    // ThemeProvider takes ONLY children. Brand/platform/colorScheme are applied
+    // as data-* attributes on a wrapping element (NOT props on ThemeProvider).
+    <div data-brand={brand} data-platform={platform} data-color-scheme={colorScheme}>
+      <ThemeProvider>
+        {/* layout composition */}
+      </ThemeProvider>
+    </div>
   );
 };
 ```

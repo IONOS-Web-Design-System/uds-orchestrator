@@ -37,15 +37,9 @@ function aiIconStyle(svgData: string, size: number): React.CSSProperties {
 }
 
 // Generation area — glass fill + inset neumorphism, no border
-// Outer glow pulses via areaGlow(); inset layers are static
+// Outer shadow is a plain dim drop (no AI gradient glow); inset layers are static
 const AI_AREA_INSET = 'inset 0 2px 3px rgba(255,255,255,0.60), inset 0 -2px 3px rgba(255,255,255,0.70)';
-
-function areaGlowShadow(frame: number): string {
-  const p    = Math.sin((frame % 84) / 84 * Math.PI * 2);
-  const blur = 16 + p * 8;
-  const a    = (0.10 + p * 0.08).toFixed(2);
-  return `0 4px ${blur}px rgba(180,16,231,${a}), ${AI_AREA_INSET}`;
-}
+const AI_AREA_SHADOW = `0 2px 12px rgba(0,0,0,0.10), ${AI_AREA_INSET}`;
 
 const AI_AREA_BASE: React.CSSProperties = {
   borderRadius: 16,
@@ -110,7 +104,7 @@ export const AIPillButton: React.FC<{
 
 ## Floating Highlight Card
 
-Used as the **main highlight element** floating outside the product frame. Pill-shaped glass card with a pulsing AI glow — **no border**. Based on Figma node 64:320. The glow (not a dashed outline) is the AI affordance, and it pulses on the same purple as the generation area.
+Used as the **main highlight element** floating outside the product frame. Pill-shaped glass card with a plain dim drop shadow — **no border, no AI glow**. Based on Figma node 64:320. The AI affordance is conveyed by the gradient CTA button inside, not by the card's shadow.
 
 > **HARD RULE — Remotion:** `backdropFilter` and `WebkitBackdropFilter` are **required** on this
 > element. Background MUST be `rgba(244, 247, 250, 0.88)` — opacity below 1.0 is required for
@@ -144,9 +138,6 @@ export const AIFloatingHighlight: React.FC<{
   const scale  = interpolate(enter, [0, 0.6, 1], [0.88, 1.04, 1]);
   const opacity = interpolate(frame, [enterFrame, enterFrame + 8], [0, 1], { extrapolateRight: 'clamp' });
 
-  // Pulsing purple glow REPLACES the old dashed border as the AI affordance.
-  // Same hue as the generation area's areaGlow — never a border, never a color swap.
-  const gp = Math.sin((frame % 84) / 84 * Math.PI * 2);
   const cursorOn = Math.floor(frame / 16) % 2 === 0 ? 1 : 0;
 
   return (
@@ -157,7 +148,7 @@ export const AIFloatingHighlight: React.FC<{
       WebkitBackdropFilter: 'blur(8px)',
       isolation: 'isolate',
       padding: '28px 24px 20px',
-      boxShadow: `0 16px 48px rgba(0,0,0,0.35), 0 0 ${(24 + gp * 14).toFixed(1)}px rgba(180,16,231,${(0.18 + gp * 0.12).toFixed(2)})`,
+      boxShadow: '0 16px 48px rgba(0,0,0,0.18)',
       transform: `translateX(${slideX}px) scale(${scale})`,
       opacity,
       display: 'flex', flexDirection: 'column', gap: 16,
@@ -232,7 +223,7 @@ export const AITextGenerationArea: React.FC<{
   );
 
   return (
-    <div style={{ ...AI_AREA_BASE, padding: '20px 20px 24px', boxShadow: areaGlowShadow(frame) }}>
+    <div style={{ ...AI_AREA_BASE, padding: '20px 20px 24px', boxShadow: AI_AREA_SHADOW }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
         <div style={aiIconStyle(writeSvg, 24)} />
         <span style={{ font: '700 12px "Overpass", sans-serif', color: AI_LABEL_COLOR }}>
@@ -286,7 +277,7 @@ export const AIImageGenerationArea: React.FC<{
 
   return (
     <div style={{ ...AI_AREA_BASE, width, height, padding: '20px 20px 24px',
-                  display: 'flex', flexDirection: 'column', boxShadow: areaGlowShadow(frame) }}>
+                  display: 'flex', flexDirection: 'column', boxShadow: AI_AREA_SHADOW }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
         <div style={aiIconStyle(wandSvg, 24)} />
         <span style={{ font: '700 12px "Overpass", sans-serif', color: AI_LABEL_COLOR }}>
