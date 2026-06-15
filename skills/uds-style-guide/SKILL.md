@@ -44,17 +44,27 @@ Identify the target brand first, then go to the matching rule file:
 
 The three primary IONOS colors:
 
-| Color | HEX | CSS Token | Role |
-|-------|-----|-----------|------|
-| IONOS Blue | `#003D8F` | `--brand/ionos-blue-600` | Logo, primary anchor |
-| Sky | `#11C7E6` | `--brand/ionos-sky-300` | CTA, attention, energy |
-| Dark Midnight | `#001B41` | `--brand/ionos-blue-800` | Primary text on screen |
+The three primary IONOS colors (the `Figma token` column is **reference notation only — not a CSS variable**):
 
-IONOS typefaces: **Overpass** (`--base/font/heading`) for headlines, **Open Sans** (`--base/font/body`) for everything else.
+| Color | HEX | Figma token (reference) | Role |
+|-------|-----|-------------------------|------|
+| IONOS Blue | `#003D8F` | `brand/ionos-blue-600` | Logo, primary anchor |
+| Sky | `#11C7E6` | `brand/ionos-sky-300` | CTA, attention, energy |
+| Dark Midnight | `#001B41` | `brand/ionos-blue-800` | Primary text on screen |
 
-**AI features** use the signature blue→magenta gradient — `--color-ai-primary-start` → `--color-ai-primary-end`, or `<Button concept="ai">`. See `rules/ionos-ai-features.md`. Reserve it for AI affordances only.
+IONOS typefaces: **Overpass** for headlines, **Open Sans** for everything else.
 
-> **Token path notation:** this guide uses `/` as a hierarchy separator (Figma convention). In CSS, use hyphenated custom properties: `var(--brand-ionos-blue-600)`. See `uds-usage-best-practices` for correct token usage in code.
+**AI features** use the signature blue→magenta gradient — `<Button concept="ai">`, or in code the `--surface-semantic-ai` token. See `rules/ionos-ai-features.md`. Reserve it for AI affordances only.
+
+> **Token path notation — Figma paths are NOT CSS variables.** This guide writes brand colours
+> as Figma hierarchy paths (`brand/ionos-blue-600`). There is **no** matching CSS custom property
+> for the brand colour scale — neither `var(--brand/ionos-blue-600)` (the `/` is a CSS parse error)
+> nor `var(--brand-ionos-blue-600)` resolves; both silently drop the declaration and leave the
+> element unstyled. **In code:** use the literal **hex** above for a specific brand colour, or use
+> `@ionos-web-design-system/core` **semantic** tokens for UI roles — `var(--surface-base)` /
+> `var(--text-base)`, `var(--surface-base-invert)` / `var(--text-base-invert)`,
+> `var(--surface-subtlest)`, `var(--surface-semantic-ai)` / `var(--text-semantic-ai)` — always
+> pairing a `--surface-*` with its matching `--text-*`. See `uds-usage-best-practices`.
 
 ## CSS Import Pattern
 

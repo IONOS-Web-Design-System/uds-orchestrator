@@ -1,0 +1,137 @@
+# Small-format illustrations
+
+**When this applies:** the brief's dimensions are small — **under ~512px on both axes**
+(e.g. 432×324, 480×480, social-card / inline-badge sizes). A whole product UI shrunk to fit
+this canvas is unreadable. (For larger canvases, ignore this rule and use the standard
+composition / product-frame guidance.)
+
+Pick ONE of two approaches:
+
+- **Icon-story** — an abstract composition of a central motif + connected services + a
+  connector (see "icon-story grammar" below). Best for integration / multi-service / concept
+  stories.
+- **Cropped product frame** — show a REAL product frame, but **cropped to its important
+  corner at a legible scale**, letting the rest bleed off the canvas edges (see "Cropped
+  product frame" below). Best when the brief is about a specific product screen/feature.
+
+Either way: **the fix for "UI too small to read" is to CROP, not to SHRINK** — show fewer
+elements at a legible size rather than the whole UI in miniature. Icons are **large and
+prominent** at this scale (see "Icon sizing").
+
+## Background — always `surface-subtlest`
+
+Small illustrations sit on the brand's subtlest surface so they drop cleanly into any host
+surface. Set it on the themed wrapper (it resolves per `data-brand` / `data-color-scheme`):
+
+```tsx
+<div data-brand={brand} data-platform={platform} data-color-scheme={colorScheme}
+     style={{ width: '100%', height: '100%' }}>
+  <ThemeProvider>
+    <AbsoluteFill style={{ backgroundColor: 'var(--surface-subtlest)' }}>
+      {/* icon-story composition */}
+    </AbsoluteFill>
+  </ThemeProvider>
+</div>
+```
+
+For ionos light this resolves to a pale blue; do not hardcode a hex — use the token so it
+follows the brand/scheme. (Equivalent utility class: `bg-surface-subtlest`.)
+
+## The icon-story grammar
+
+Compose three roles — central motif + connected services + a connector that tells the story:
+
+1. **Central motif** — the IONOS subject. Either:
+   - a **brand/system icon** rendered large (e.g. a `shield`+`lock` for security, a
+     `cloud-migration` / `analytics` / `ai-mail-assistant` brand icon for a product), or
+   - a **small abstract wireframe** — a rounded card with 2–3 IONOS-blue placeholder bars,
+     or a minimal app frame (slim nav rail + a few rows). Keep it abstract at this size. (To
+     show a *realistic* product frame at small size, use the cropped-frame approach below
+     instead of shrinking a whole UI into the canvas.)
+2. **Connected services** — when the brief **names external apps/services** (WEB.DE, GMX,
+   Outlook, Magento, WooCommerce, IONOS eShop, …), place their **real logos from the
+   `# Available assets` catalog** via `staticFile('<slug>.<format>')`, small and inline,
+   flanking or orbiting the central motif. **Never hand-draw a fake brand logo** — if the
+   named logo is not in the catalog, omit it or use a neutral placeholder, don't fake it.
+3. **Connector** — show the integration/story between the motif and the services with one of:
+   woven/braided IONOS-blue flow lines, concentric "reach" rings, short hub-and-spoke
+   connector lines, or simple adjacency/overlap.
+
+## Cropped product frame — show the important corner, let it bleed off-canvas
+
+To show a real product screen at small size, **anchor the frame to one corner at a legible
+scale and let the rest run off the canvas edges** — never scale a whole UI down to fit. The
+visible region carries the meaning; the off-canvas remainder just implies "this is a full
+product".
+
+Grammar (mirrors the reference assets):
+- **Anchor & bleed.** Pin the frame to the **top-left** (or top corner): give it a fixed
+  large size (its natural ~700–900px width) positioned so its left/top sit at a small inset
+  and its right/bottom extend **past the canvas**. Set `overflow: 'hidden'` on the root
+  `AbsoluteFill` so the bleed clips to a clean edge. Only the sidebar + a few rows + the
+  highlighted feature stay in view; the far edge is cut off.
+- **Show the navigational anchor.** Keep the brand's dark navy **sidebar/nav rail** (with the
+  IONOS wordmark and 3–4 large nav icons) in frame on the left — it's what reads as "a real
+  product". Then a few content rows / list items / a chart in the main pane.
+- **Legible, not miniature.** Rows ~12–18px tall, real placeholder bars, nav icons large
+  (see Icon sizing). If it looks cramped, show FEWER elements — do not shrink.
+- **Large floating highlights over the frame edge.** 1–2 prominent elements straddling the
+  frame's cut edge — big **circular icon badges** on the left/bottom edge, or a **stat card**
+  (e.g. an icon + "+58 %") at the top-right — per the floating-highlight-card template. The
+  pale `surface-subtlest` shows around the frame's exposed corners.
+- Animate the entrance (frame eases in, highlights pop after it settles); follow the
+  text-stability rule — no perpetual transform on text-bearing cards.
+
+## Icons to use
+
+- IONOS **brand product icons** and **system icons**: import via the `svgData` deep-import
+  recipe and the **verified allowlist** in `remotion-best-practices` (do not guess names —
+  a non-existent name fails the render bundle; fall back to a `system/` icon when unsure).
+- **Social platform glyphs** (`dist/social/instagram`, `…/facebook`, etc.) for social-media
+  scenarios.
+
+### Icon sizing — large and prominent at small format
+
+Small icons read as noise on a small canvas. Size them **up**, relative to the canvas:
+- **Sidebar / nav icons:** ~36–56px glyphs, usually inside rounded-square buttons (the active
+  one in a filled brand-blue tile, as in the reference).
+- **Circular badge / motif icons:** glyph ~28–44px inside a **64–96px** coloured circle
+  (cyan / green / brand-blue), floating over or beside the frame.
+- **Floating-stat / chip icons:** ~24–32px.
+- Avoid sub-20px icons at this scale. The central motif of an icon-story can be very large
+  (up to ~40% of the shorter canvas edge).
+
+## Motion
+
+Keep it minimal and **looping** (briefs may set `loop:true`): connector lines flow, rings
+pulse outward, logos ease/float in, a lock clicks once. Frame-driven only (`useCurrentFrame`
++ `interpolate`) — never CSS transitions. A still `illustration` intent needs no motion.
+
+**Looping motion goes on non-text layers only.** Float/bob/pulse the icons, logos, rings, and
+connectors — NOT a chip, pill, label, or any element that renders readable text. A perpetual
+`Math.sin`/`Math.cos` float (or an unclamped `spring()`) on a text-bearing element re-rasterizes
+its glyphs every frame and shimmers. Text chips fly in once and then hold still; if a chip must
+appear to float, float a sibling backdrop layer and keep the text layer static. This is
+gate-enforced (`text-stability`) — see remotion-best-practices "Text rendering stability".
+
+## Hybrid in small format (generated image present)
+
+If the moderator dispatched a **hybrid** brief, a generated image arrives as a catalog asset
+named in the brief (reference it via `staticFile()`). The `[HYBRID EMBED CONTRACT]` block in the
+brief names the `Style:` — follow it. The three small-format usages map to the moderator's
+embed styles:
+
+1. **Full-bleed background** (`Style: image-backdrop full-bleed`, embed style `background-full`)
+   — the image fills the canvas (`<Img>` `objectFit:'cover'`); render 1–3 floating UI fragments
+   over its negative space.
+2. **Inline in the cropped product frame** (`Style: interface-asset`) — the image is the
+   media/hero slot *inside* the product frame; on this small canvas, **crop** that frame per
+   "Cropped product frame" above (bleed off-canvas, large icons) and keep the hero media in
+   the visible region — do not shrink a whole UI to fit.
+3. **Floating image card + highlight UI** (`Style: floating image card with edge highlights`,
+   embed style `floating-card`) — the image is a single contained rounded card (dominant,
+   ~60–80% of canvas, soft shadow) on the `surface-subtlest` background, with 1–2 small
+   highlight chips/pills (a labelled chip and/or an icon pill) overlapping its edges; no
+   connector lines, no selection marquee. Transparent cutouts also work well here.
+
+Keep the `surface-subtlest` background in usages #2 and #3; usage #1 replaces it with the image.
