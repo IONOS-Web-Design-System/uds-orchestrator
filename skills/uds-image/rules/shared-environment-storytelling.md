@@ -75,10 +75,13 @@ to empty shelves.
 
 ## Scenario-appropriate lighting
 
-Light must come from sources that actually exist in the environment. Vary the quality
-and temperature to match the specific scene — do not default to the same warm golden
-light every time. Neutral, cool-neutral, and direct sunshine are all valid and
-encouraged (see `ionos-image-photoreal` for the full palette).
+Light must come from sources that actually exist in the environment, and the overall feel
+should be **vivid, warm, and relaxed ("chill")** — rich inviting colour and a calm, premium
+mood (see the lighting principle in SKILL.md). Lead with warm, soft, natural light; vary the
+exact quality per scene so it never looks repetitive, but keep the result warm and vivid
+rather than cool or clinical. Reserve cool / neutral / clinical light only for subjects that
+genuinely demand it (a server hall, a lab) — and even then add a warm practical accent
+(amber indicator glow, a warm lamp) so it never reads cold or sterile.
 
 | Setting | Example natural light options (pick the one that fits) |
 |---|---|
@@ -88,13 +91,13 @@ encouraged (see `ionos-image-photoreal` for the full palette).
 | Outdoor | Clear direct sunshine, straight-on; bright overcast neutral sky; dappled light through trees |
 | Studio / product | Soft diffused neutral window light; clean even interior light; cool-neutral ambient |
 
-Name the specific light source and quality in the prompt:
-- ✅ `"bright direct sunshine through the window, crisp natural shadows"`
-- ✅ `"soft cool-neutral daylight from large windows, even and calm"`
-- ✅ `"clear midday light, neutral and clean"`
-- ✅ `"warm pendant lamp glow"` — when the scene calls for it
-- ❌ `"warm golden afternoon light"` applied universally to every scene
+Name the specific light source and quality in the prompt — lean warm and vivid:
+- ✅ `"warm soft daylight pouring through large windows, gentle inviting glow, vivid natural colour"`
+- ✅ `"golden practical lamp light with a relaxed, premium mood"`
+- ✅ `"bright direct sunshine through the window, warm crisp natural shadows"`
+- ✅ `"cool daylight from the server-hall, warmed by amber rack indicator glow"` — clinical scene, warmed
 - ❌ `"soft even studio lighting"` — generic, removes sense of place
+- ❌ `"cool neutral clinical light"` as the default — only for subjects that truly demand it, and warm it
 - ❌ `"dramatic moody shadows"` — too dark
 
 ## Natural appearance

@@ -30,10 +30,20 @@ Start from the brief's requested shot. Widen automatically if the face cannot fi
 
 | Brief requests | Aspect ratio | Use this framing |
 |---|---|---|
-| waist-up | any | `"full face clearly visible from hairline to chin, waist-up shot showing complete upper body"` |
+| waist-up | portrait / square (1:1, 2:3, 3:4, 9:16) | `"full face clearly visible from hairline to chin, waist-up shot showing complete upper body"` |
+| waist-up | landscape (16:9, 4:3, 3:2) | `"full face clearly visible from hairline to chin, waist-up shot with deliberate headroom — the head sits in the upper-middle of the frame with clear space above it and NEVER touches the top edge; subject seated or standing behind a waist-height surface so the body fills the lower frame"` |
 | full body / long shot | portrait (2:3, 3:4, 9:16) | `"full face clearly visible from hairline to chin, full body in frame from head to floor"` |
 | full body / long shot | landscape (16:9, 4:3, 3:2) | `"full face clearly visible from hairline to chin, extra-wide establishing shot, character occupying one vertical third of the frame, full body visible from head to floor"` |
 | avatar | 1:1 | `"face as the focal point, eyes and full face clearly visible, head and shoulders in frame"` |
+
+**Crop-safety — image-svc renders a SQUARE then center-crops to the target ratio.** A
+**landscape** target (w > h) trims the **top and bottom**; a **portrait** target (h > w)
+trims the **left and right**. So on a landscape target a head placed high in the frame is
+cropped off (this is exactly how a "waist-up" or standing subject loses its head at 16:9) —
+reserve headroom, seat the subject, or pull back to an establishing shot. On a portrait
+target keep the subject clear of the side edges. This applies to **every** type, including
+`scenario` / `person-scenario`: people in a landscape scene must sit in the lower two-thirds
+with clear space above their heads.
 
 **Priority 3 — Foreground objects (nice-to-have, conditional):**
 Add foreground bokeh only when the shot distance allows it without competing for the
@@ -58,6 +68,23 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
 - Encode the brand palette and tone from the inlined `uds-style-guide` rules below.
 - Photoreal requests are complete scenes (opaque background). Cutout requests are a single
   clear subject on a plain, evenly-lit, high-contrast background that mattes cleanly.
+- **Bind every character to a scenario — never a person standing idle, arms at their sides,
+  facing the lens straight-on.** Give them a real action within their environment, a definite
+  posture/body language, and a fitting facial expression, shot from a **natural angle**
+  (three-quarter or a slight off-axis angle, eye-level or slightly elevated — not flat
+  symmetrical front-on). Front-on / straight-to-camera / tight close-up framing is used ONLY
+  when the brief explicitly asks for it, or for an `avatar` / `portrait` headshot (where the
+  face is the deliberate subject).
+- **Lighting — default vivid, warm, and relaxed ("chill").** Reach first for rich, inviting,
+  natural light with believable saturated colour and a calm, premium mood (soft warm daylight,
+  golden practical glow, gentle warm rim light). Cool / neutral / clinical light is a
+  *deliberate* choice only when the subject genuinely calls for it (e.g. a server hall) — and
+  even then warm it with a practical accent so it never reads cold or sterile. Vary the exact
+  quality per scene, but keep the overall feel vivid and warm rather than flat or chilly.
+- **Device-screen / focus-object shots — vary the angle.** When a laptop screen, phone screen,
+  or other object is the focus, do NOT default to a flat front-on view. Prefer an
+  over-the-shoulder / **back shot** (camera behind the user looking past them at the screen),
+  a **telephoto / compressed** perspective, or a three-quarter angle — see `image-type-scenario`.
 
 ## Image types
 Every photoreal brief falls into one of four types — detect and apply the matching rule:
