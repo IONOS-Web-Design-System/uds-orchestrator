@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.0.2...v2.1.0) (2026-06-16)
+
+
+### Features
+
+* **imagine:** external API submission via n8n moderator-trigger + first-time setup guide ([fc29df0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/fc29df01880775cbcfdaece3fe95146b17c81062))
+
 ## [2.0.2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.0.1...v2.0.2) (2026-06-16)
 
 
