@@ -120,12 +120,15 @@ aspect ratio; you do not set the type field — the wording is what triggers the
 
 ## Submit
 
-After the user is happy, OFFER to submit (do not auto-fire):
-- On yes: `POST` the envelope `{requestId, payload, callbackUrl}` to the local moderator
-  `/create` with `Authorization: Bearer <MODERATOR_AUTH_TOKEN>`. Locally the token and a
-  working `callbackUrl` mirror `uds-moderator/dev/gen.sh` (token from the dev env; callback
-  defaults to the moderator's own shim). Prefer reusing `dev/gen.sh <brief.json>` if the
-  moderator dev stack is the target — it builds the envelope and prints inspect commands.
-- On no: hand back the JSON (and the `dev/gen.sh` one-liner) so the user fires it themselves.
+After the user is happy, OFFER to submit (do not auto-fire). The `/imagine` command owns the
+full submission + monitoring logic — see step 5 of `commands/imagine.md` for the canonical
+implementation. In brief:
+
+- **Local dev** (`$HOME/pipeline-local/secrets/agent-svc.env` present): run `dev/gen.sh <brief.json>`.
+- **External / VPN** (`UDS_IMAGINE_TOKEN` env var set): POST `{requestId, payload, callbackUrl}`
+  to `https://n8nwh.ionos.org/webhook/moderator-trigger` with `Authorization: Bearer $UDS_IMAGINE_TOKEN`,
+  then poll `GET https://n8nwh.ionos.org/webhook/moderator-jobs?requestId=<id>` every 15 s
+  until `status` is `done`/`error`, and render `variantUrls` inline in chat.
+- **Hand back**: print the JSON and the `curl` submission one-liner.
 
 Never invent palette hex or brand facts — read them from the uds-style-guide skill.

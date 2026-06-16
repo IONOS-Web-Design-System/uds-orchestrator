@@ -45,16 +45,84 @@ submit it.
 4. **Show the user** the assembled UnifiedBrief JSON plus a one-line plain-English summary of
    what will be generated. Let them tweak any field before submitting.
 
-5. **Offer to submit (do not auto-fire).** Ask: submit to the local moderator now, or hand
-   back the brief?
-   - **Submit:** the moderator dev stack is the simplest target. Write the payload to a temp
-     `*.json` and run `dev/gen.sh <file>` from the uds-moderator checkout if available — it
-     builds the `{requestId, payload, callbackUrl}` envelope, supplies the bearer token, and
-     prints inspect commands. If `dev/gen.sh` is not available, `POST` the envelope to
-     `http://localhost:8082/create` with `Authorization: Bearer <MODERATOR_AUTH_TOKEN>`
-     (token from the moderator's dev env) and a reachable `callbackUrl`. Report the
-     `requestId` and where the output lands.
-   - **Hand back:** print the JSON and the `dev/gen.sh` one-liner so the user can fire it.
+5. **Offer to submit (do not auto-fire).** Ask: submit now, or hand back the brief?
+   Detect context first, then use the matching path:
+
+   **A. Local dev** (`$HOME/pipeline-local/secrets/agent-svc.env` exists):
+   Write the payload to a temp `*.json` and run `dev/gen.sh <file>` from the uds-moderator
+   checkout — it builds the `{requestId, payload, callbackUrl}` envelope, supplies the bearer
+   token, and prints inspect commands.
+
+   **B. External / VPN** (default when local dev stack is absent):
+   Requires `UDS_IMAGINE_TOKEN` env var (= the `N8N_INBOUND_TOKEN` shared secret). If the var
+   is unset, show the setup instructions below and stop — do not proceed without it.
+
+   **First-time setup (show this when `UDS_IMAGINE_TOKEN` is missing):**
+   > **Get the token:** contact **Bowei Xiao** at **bowei.xiao@ionos.com** to request access
+   > to the UDS asset pipeline. He will share the `N8N_INBOUND_TOKEN` value with you.
+   >
+   > **Set it permanently** (one-time, persists across all Claude Code sessions):
+   > ```bash
+   > claude config set env.UDS_IMAGINE_TOKEN <token-value>
+   > ```
+   > This writes to `~/.claude/settings.json` and is picked up automatically from then on.
+   > Confirm with: `echo $UDS_IMAGINE_TOKEN` (open a new terminal or re-source your shell).
+   >
+   > **VPN required:** `n8nwh.ionos.org` is only reachable over the IONOS internal VPN.
+   > Connect before running `/imagine`.
+
+   Once the token is set:
+
+   1. **Smoke-test connectivity** before submitting (only on first use per session):
+      ```bash
+      curl -s -o /dev/null -w "%{http_code}" --max-time 8 \
+        -H "Authorization: Bearer $UDS_IMAGINE_TOKEN" \
+        "https://n8nwh.ionos.org/webhook/moderator-jobs?requestId=smoke-test"
+      ```
+      - `404` → connected and authenticated (requestId just not found — proceed).
+      - `403` / `401` → token wrong; tell the user to check `UDS_IMAGINE_TOKEN`.
+      - curl error / timeout → VPN not connected; tell the user.
+
+   2. **Submit** the envelope `{requestId, payload, callbackUrl}` to the n8n intake:
+      ```bash
+      curl -s -X POST \
+        -H "Authorization: Bearer $UDS_IMAGINE_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d '{"requestId":"<id>","payload":<UnifiedBrief>,"callbackUrl":"https://n8nwh.ionos.org/webhook/mock-callback"}' \
+        "https://n8nwh.ionos.org/webhook/moderator-trigger"
+      ```
+      Confirm `status: "accepted"` in the response. If the server returns an error, show it and stop.
+
+   3. **Monitor in background** — write a polling script to `/tmp/poll-<requestId>.sh`:
+      ```bash
+      #!/usr/bin/env bash
+      TOKEN="$1" REQ="$2"
+      for i in $(seq 1 90); do
+        RESP=$(curl -s --max-time 10 \
+          -H "Authorization: Bearer $TOKEN" \
+          "https://n8nwh.ionos.org/webhook/moderator-jobs?requestId=$REQ")
+        STATUS=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo "unknown")
+        echo "[$i/90] $STATUS"
+        if [[ "$STATUS" == "done" || "$STATUS" == "error" || "$STATUS" == "partial" ]]; then
+          echo "$RESP" > "/tmp/$REQ-result.json"
+          echo "COMPLETE: $STATUS"
+          break
+        fi
+        sleep 15
+      done
+      ```
+      Run it with `run_in_background: true` passing `$UDS_IMAGINE_TOKEN` and `<requestId>` as
+      args. Tell the user: *"Job `<requestId>` submitted — monitoring in background (polls every
+      15 s, up to 22 min)."*
+
+   4. **Render results** once the background Bash notifies completion: read
+      `/tmp/<requestId>-result.json`. For each entry in `variantUrls`:
+      - Image assets → display inline: `![v0](url)`
+      - Video/animation assets → display as a labelled link: `[variant v0](url)`
+      Show all variants. On `error` status, display the `error` field instead.
+
+   **Hand back (either path):** print the UnifiedBrief JSON and the submission one-liner so
+   the user can fire it themselves.
 
 Keep it conversational and fast. Never block on questions you can answer from the brief or
 sensible defaults.
