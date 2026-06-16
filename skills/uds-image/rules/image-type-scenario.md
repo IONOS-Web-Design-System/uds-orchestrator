@@ -31,8 +31,10 @@ over-the-shoulder/back shot of the screen — i.e. the face is genuinely not the
 - Show the moment of engagement — card tapping terminal, fingers mid-scroll, team leaning
   toward a shared screen — not before or after
 - Context objects (coffee cups, notebooks, plants, shop decor) reinforce setting authenticity
-- If a screen is visible, it may show abstract colour blocks or blurred content — never
-  readable text, logos, or UI chrome
+- If a screen is incidental here (device-in-context, screen NOT the focus), it may show
+  abstract colour blocks or blurred content — never readable paragraphs, logos, or UI chrome.
+  (When the **screen-based product itself is the focus**, the opposite applies — full screen
+  clearly visible showing a relevant real interface; see the Screen-moment variant below.)
 
 ## Lighting
 - Ambient and practical — coffee shop window, office overhead, meeting room diffused light
@@ -48,42 +50,62 @@ a dashboard, an app, a website — and that screen is the hero of the image.
 Brief signals: "show the dashboard", "app on phone", "laptop with interface", "product
 feature on screen", "website on device", "screen in context".
 
-### Device placement and angle
+### Priority — fit the device into the scenario NATURALLY first, then show the full screen
 
-The screen must face the viewer at an angle that reads as natural and legible:
+For a screen-based product, **scenario fit and storytelling come FIRST.** Full-screen visibility
+comes second and is achieved by where you place the **camera** — never by posing the device.
 
-| Device | Camera position | Device angle |
-|---|---|---|
-| Smartphone | slightly elevated (10–20° above), shooting at the front face of the screen | held vertically in hand, tilted 5–10° toward viewer, screen facing camera |
-| Laptop | slightly elevated (20–30° above), slightly to one side | open at 100–110°, lid angled toward viewer so screen is visible; keyboard partially visible |
-| Tablet | slightly elevated (15–25° above) | held in both hands or resting on surface, screen facing viewer at 10–20° tilt |
+**1. A real, natural use moment (top priority).** The device is used exactly as a real person
+uses it. Two hard anti-patterns:
+- a **lone idle device** on an empty desk / propped on a stand with no one around, and
+- a person **holding or turning the device up to "present" the screen to the lens** — nobody
+  holds a phone or tablet flat to the camera in real life; it reads as a fake product demo. This
+  is the #1 thing to avoid.
 
-Encode the device angle explicitly in the prompt:
-- `"smartphone held vertically in hand, screen angled directly toward viewer, photographed at slight elevation"`
-- `"open laptop on desk, lid at 105-degree angle facing the camera, shot from slightly above and to the side"`
+Anchor a genuine moment instead: tapping a phone on the contactless reader to **pay at a counter**,
+glancing down at the phone in hand over a coffee, typing at a laptop mid-task, two people leaning
+over a dashboard in discussion. Hands and posture are natural to the action. Encode it:
+`"tapping their phone on the contactless card reader at the bakery counter, screen facing up"`,
+`"glancing down at the phone held casually in one hand at the café table"`.
 
-**Vary the angle — do NOT default to the flat front-on screen view every time.** A straight-on
-screen is the weakest, most generic framing (and the screen content is faked anyway). Pick the
-angle that tells the story best:
+**2. Then make the full screen clearly visible — by MOVING THE CAMERA, not the device.** Put the
+camera where it would *naturally* catch the screen during that moment, so the whole screen reads
+without anyone posing it:
+- **Phone:** shoot **over the shoulder or from above**, looking down at the phone held naturally in
+  the hand (the screen faces up toward this viewpoint); or a tap-to-pay moment with the screen up.
+- **Laptop / tablet:** shoot **over the shoulder or slightly above and beside** the person as they
+  work, catching the screen they are already facing; keyboard/hands in frame.
+- The screen faces the camera because the camera occupies the natural over-the-user / over-the-
+  counter viewpoint — NOT because the subject aimed the device at it.
 
-| Angle | When to use | Prompt phrasing |
-|---|---|---|
-| **Over-the-shoulder / back shot** | the user's act of looking at the screen is the point | `"shot from behind and over the user's shoulder, looking past them at the glowing screen, the back of their head and shoulder soft in the foreground"` |
-| **Telephoto / compressed** | a clean, premium product feel; isolates the device from a busy room | `"telephoto lens, compressed perspective, shallow depth of field isolating the device, background softly blurred"` |
-| **Three-quarter / side** | shows device + hands + a slice of environment | `"three-quarter side angle on the device, hands interacting, environment visible behind"` |
-| **Slight-elevated front** | the screen layout itself is the hero (use sparingly) | the table above |
+Keep the **entire** screen in frame, unclipped (no head/hand covering it), in sharp focus and the
+brightest element. If the natural angle can't show the whole screen, **move or widen the camera —
+do not twist the device toward the lens.** (Back-shots that fully hide the screen, or extreme
+oblique angles that skew it, belong to the device-in-context case where the screen is not the point.)
 
-Mix these across a set of variants rather than repeating the front-on shot.
+### Screen content — a relevant, real app interface
 
-### Screen content
+The screen shows a **clear, recognisable, relevant app interface** — NOT abstract colour blocks.
+Render a believable layout for the actual product (navigation/sidebar, header, cards, a chart, a
+product grid, a form — whatever that app really looks like), in sharp focus and fully visible.
 
-**Never generate readable text or legible UI on screen** — image models garble it.
-Instead, describe a visually plausible but indistinct screen:
-- `"screen displaying a soft-focus dashboard interface with coloured chart elements and navigation areas, content intentionally unreadable at this distance"`
-- `"phone screen showing a warm-toned e-commerce app layout with product images, text blocks indistinct"`
+- **Which interface?** Default to the **product the `showroom` refers to** (e.g. an e-commerce
+  showroom → an online-shop admin / storefront UI; an email-marketing showroom → a campaign
+  dashboard; a website-builder showroom → the builder canvas). If the showroom implies no
+  specific product, show an interface that **reflects the image's own scenario**. In the
+  `/imagine` flow, the agent ASKS the user what the screen should show (see `human-interactive`).
+- **Layout over fine text.** Describe the app by its recognisable UI regions with at most short
+  plausible labels/headings — never paragraphs of legible body text (image models still garble
+  dense copy). The interface must read as the right product at a glance even if fine text is
+  approximate. Example: `"the laptop screen clearly showing an e-commerce store-admin interface
+  — left navigation rail, a product grid of photo thumbnails with price chips, a sales summary
+  chart along the top — clean modern UI, full screen sharp and clearly visible"`.
+- **For a pixel-accurate product UI**, use **hybrid mode** (`interface-asset`) instead — it
+  composites a real rendered UDS interface; pure image generation renders a recognisable-but-
+  approximate layout.
 
-The screen should be the **brightest element in the frame** — use natural screen glow:
-- `"screen emitting soft natural light, slightly brighter than the ambient environment"`
+The screen should be the **brightest element in the frame** — `"screen emitting soft natural
+light, slightly brighter than the ambient environment"`.
 
 ### Foreground context objects (essential)
 

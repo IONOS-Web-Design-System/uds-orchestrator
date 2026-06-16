@@ -76,12 +76,14 @@ to empty shelves.
 ## Scenario-appropriate lighting
 
 Light must come from sources that actually exist in the environment, and the overall feel
-should be **vivid, warm, and relaxed ("chill")** — rich inviting colour and a calm, premium
-mood (see the lighting principle in SKILL.md). Lead with warm, soft, natural light; vary the
-exact quality per scene so it never looks repetitive, but keep the result warm and vivid
-rather than cool or clinical. Reserve cool / neutral / clinical light only for subjects that
-genuinely demand it (a server hall, a lab) — and even then add a warm practical accent
-(amber indicator glow, a warm lamp) so it never reads cold or sterile.
+should be **bright, natural, and vivid — airy and uplifting, never moody, dark, or
+underexposed** (see the lighting principle in SKILL.md). Lead with abundant soft natural light
+(a bright airy room, generous daylight); keep the tone warm and relaxed ("chill") and welcome a
+**subtle film-like filter / gentle colour grade** that ties the palette together. Vary the exact
+quality per scene so it never looks repetitive, but keep the result bright and warm rather than
+cool or clinical. Reserve cool / neutral / clinical light only for subjects that genuinely demand
+it (a server hall, a lab) — and even then keep it bright and add a warm practical accent (amber
+indicator glow, a warm lamp) so it never reads cold or sterile.
 
 | Setting | Example natural light options (pick the one that fits) |
 |---|---|
@@ -95,10 +97,24 @@ Name the specific light source and quality in the prompt — lean warm and vivid
 - ✅ `"warm soft daylight pouring through large windows, gentle inviting glow, vivid natural colour"`
 - ✅ `"golden practical lamp light with a relaxed, premium mood"`
 - ✅ `"bright direct sunshine through the window, warm crisp natural shadows"`
+- ✅ `"bright airy daylight filling the room, soft and natural, with a subtle warm film grade"`
 - ✅ `"cool daylight from the server-hall, warmed by amber rack indicator glow"` — clinical scene, warmed
 - ❌ `"soft even studio lighting"` — generic, removes sense of place
 - ❌ `"cool neutral clinical light"` as the default — only for subjects that truly demand it, and warm it
-- ❌ `"dramatic moody shadows"` — too dark
+- ❌ `"dramatic moody shadows"` / `"dark low-key"` — too dark; keep it bright and airy
+
+## Dynamic, in-the-moment capture
+
+The image should feel like a **candid photo grabbed mid-moment**, not a static studio pose.
+Put the character in motion — walking mid-stride, laughing mid-task, turning, reaching,
+pouring, gesturing — and add a **slight natural camera/motion blur** so it reads as alive and
+documentary:
+- ✅ `"caught mid-stride, a touch of natural motion blur, candid documentary feel"`
+- ✅ `"a blurred passer-by crossing the foreground, the subject sharp and in-the-moment"`
+- ✅ `"laughing mid-task, slight motion blur on the moving hand"`
+Keep the **face sharp** for avatar/portrait — the blur lives in the motion, the moving hand, and
+the surrounding/foreground figures, never on the hero face. Avoid the rigid "stand still and
+smile" look.
 
 ## Natural appearance
 

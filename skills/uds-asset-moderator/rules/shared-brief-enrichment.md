@@ -25,22 +25,31 @@ Per-generator hazards to OMIT:
   when a clear face is genuinely not needed (hands on a keyboard, a figure from behind, a
   room). Naming a real person/role ("a marketing expert presenting") without a shot is the
   classic way to get a headless torso. Also:
-  - **Bind the character to the scenario** — give them an action, posture, and expression, shot
-    at a natural three-quarter / slightly-angled view. Never describe a person standing idle,
-    arms down, facing the lens head-on (unless the brief explicitly wants a front-on close-up,
-    avatar, or portrait headshot).
+  - **Bind the character to the scenario, and make it dynamic** — give them an action, posture,
+    and expression, shot at a natural three-quarter / slightly-angled view, ideally **caught
+    mid-moment (walking, laughing, reaching, gesturing) with a slight natural motion blur** so it
+    reads candid and alive. Never a person standing idle, arms down, facing the lens head-on
+    (unless the brief explicitly wants a front-on close-up, avatar, or portrait headshot).
   - **Landscape head-crop safety:** image-svc renders square then center-crops — a landscape
     (w > h) target trims top/bottom. For any person in a landscape image, keep them in the lower
     two-thirds with clear headroom (seated or behind a waist-height surface), or pull back to an
     establishing shot — never let a head sit near the top edge.
-  - **Lighting:** default to vivid, warm, relaxed light with rich believable colour; only go
-    cool/clinical when the subject demands it, and warm it with a practical accent even then.
-  - **Device-screen / focus object:** vary the angle — prefer over-the-shoulder / back shot or a
-    telephoto/compressed view over a flat front-on screen; never request legible on-screen text.
-    But a phone/tablet/laptop in the shot does NOT make the device the subject: if a **person**
-    is the named subject doing a task, keep their **face the anchor** (person-scenario, headroom,
-    crop-safe on landscape) — only make the screen/device the hero when the brief is explicitly
-    about what's on screen (e.g. "close-up of the app", "the dashboard on screen").
+  - **Lighting & mood:** default **bright, natural, vivid** — airy and uplifting, never moody or
+    dark; warm/relaxed ("chill") tone, optionally a subtle film-like filter/grade. Set the mood
+    with **colourful props + a soft bokeh background**. Only go cool/clinical when the subject
+    demands it, kept bright and warmed with a practical accent.
+  - **Device with a person:** a phone/tablet/laptop in the shot does NOT make the device the
+    subject. If a **person** is the named subject doing a task, keep their **face the anchor**
+    (person-scenario, headroom, crop-safe on landscape); the device is held/used. Only make the
+    screen the hero when the brief is explicitly about what's on screen.
+  - **Screen-based product is the focus** (the UI is the point — "show the dashboard", "the app
+    on the phone"). Order it: **first** a natural use moment, **then** full-screen visibility via
+    camera placement. Write a real moment (tapping a phone to pay at a counter, typing at a
+    laptop, glancing at the phone in hand, two people over a dashboard) and have the camera catch
+    the screen naturally — **over-the-shoulder / from above** — NOT the person holding the device
+    up to face the lens (fake-demo look) and NOT a lone idle device. Then name a **relevant, real
+    app interface** (layout/UI regions, short labels only — no paragraphs; default to the
+    `showroom` product, else the scenario). For a pixel-accurate UI, prefer `hybrid` mode.
 - **illustration** `feature`: describe *structure and intent* (which UDS components, what
   copy slots, what data the screen shows, what motion if `intent:animation`) — not pixel
   coordinates. The agent builds real components; over-specifying layout fights the system.

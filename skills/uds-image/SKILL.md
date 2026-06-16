@@ -75,16 +75,37 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
   symmetrical front-on). Front-on / straight-to-camera / tight close-up framing is used ONLY
   when the brief explicitly asks for it, or for an `avatar` / `portrait` headshot (where the
   face is the deliberate subject).
-- **Lighting — default vivid, warm, and relaxed ("chill").** Reach first for rich, inviting,
-  natural light with believable saturated colour and a calm, premium mood (soft warm daylight,
-  golden practical glow, gentle warm rim light). Cool / neutral / clinical light is a
-  *deliberate* choice only when the subject genuinely calls for it (e.g. a server hall) — and
-  even then warm it with a practical accent so it never reads cold or sterile. Vary the exact
-  quality per scene, but keep the overall feel vivid and warm rather than flat or chilly.
-- **Device-screen / focus-object shots — vary the angle.** When a laptop screen, phone screen,
-  or other object is the focus, do NOT default to a flat front-on view. Prefer an
-  over-the-shoulder / **back shot** (camera behind the user looking past them at the screen),
-  a **telephoto / compressed** perspective, or a three-quarter angle — see `image-type-scenario`.
+- **Make characters DYNAMIC — a candid moment in motion, not a frozen pose.** Catch them
+  mid-action — walking mid-stride, laughing mid-task, turning, reaching, gesturing — so the frame
+  feels alive and documentary. Add a **slight natural camera/motion blur**: a touch of motion blur
+  on a moving hand or a passing foreground figure, soft candid focus — the look of a real photo
+  grabbed in the moment, not a static studio shot. (Keep the face itself sharp for avatar/portrait;
+  the blur lives in the motion and the surrounding figures.)
+- **Lighting — default BRIGHT, NATURAL, and vivid (airy, relaxed "chill").** Reach first for
+  abundant, soft, natural light — a bright airy room, generous daylight, a sunny relaxed mood —
+  with believable vivid colour. The image should feel **well-lit and uplifting, never moody,
+  dark, or underexposed.** A **subtle film-like filter / colour grade** is welcome (a gentle warm
+  or soft-pastel wash that ties the palette together). Warmth is the default tone; cool / neutral /
+  clinical light is a *deliberate* choice only when the subject demands it (e.g. a server hall),
+  and even then keep it bright and warm it with a practical accent so it never reads cold or
+  sterile. Vary the quality per scene, but keep the overall feel bright, natural, and inviting.
+- **Colour & mood via objects + bokeh.** Conceptualise the mood with **colourful props** (a
+  mustard sweater, a teal mug, fresh flowers, a bright product) and a **soft bokeh background** —
+  bright out-of-focus light, blurred people/space behind. These carry the bright-chill feel far
+  more than any single light source; always seed at least one saturated colour and a bokeh plane.
+- **Device-screen / focus-object shots.** Two cases (see `image-type-scenario`):
+  - **Screen-based product is the focus** (the laptop/tablet/phone UI is the point). Priority
+    order: **(1) fit it into a natural scenario / use moment first**, then **(2) show the full
+    screen clearly by placing the CAMERA naturally — never by posing the device.** Anchor a real
+    moment — tapping a phone to pay at a counter, typing at a laptop, glancing at the phone in
+    hand, two people over a dashboard — then shoot **over-the-shoulder / from above** so the whole
+    screen reads at the angle it naturally faces. **Two hard anti-patterns:** a lone idle device,
+    and a person holding/turning the device up to "present" the screen to the lens (fake-demo
+    look). The screen shows a **relevant, real app interface** (recognisable layout, short labels,
+    no paragraphs), defaulting to the **product the `showroom` refers to** else the scenario; in
+    `/imagine` the agent asks what it shows. For a pixel-accurate UI use hybrid `interface-asset`.
+  - **Device is just context** (screen content not the point): vary the angle — over-the-shoulder /
+    back shot, telephoto/compressed, or three-quarter; the screen may be indistinct.
 
 ## Image types
 Every photoreal brief falls into one of four types — detect and apply the matching rule:
@@ -98,6 +119,7 @@ Every photoreal brief falls into one of four types — detect and apply the matc
 - `shared-character-diversity` — global ethnicity pool, body-shape guidance, age/gender defaults; apply whenever the brief includes a person and no brand-specific ethnicity rule overrides it.
 - `ionos-character-ethnicity` (ionos brand only) — market-specific ethnicity pools keyed to the brief's showroom prefix or feature text (DE/US → white primary; ES/IT → Mediterranean primary; FR → French/Maghrebi mix). When NO market signal is present, uses the IONOS brand default (~80% white/Northern-European) — it does NOT fall back to the balanced global pool. Fully replaces `shared-character-diversity` for ionos.
 - `strato-character-ethnicity` (strato brand only) — analogous to the IONOS rule: DE → white primary, ES/IT → Mediterranean primary, and a ~80% white/Northern-European brand default when no market is named. Fully replaces `shared-character-diversity` for strato.
+- `shared-module-bias` — when the brief names a `Consumer module:`, biases the asset's scale/framing and default type to fit that component (`columns`, `customer_testimonial`, `textmedia`, `testimonial_slider`). Fills defaults only — the brief's explicit fields win.
 - `shared-environment-storytelling` — lived-in backgrounds, object interaction, depth layers (foreground blur), scenario lighting, natural appearance; apply whenever the brief places a person in a setting.
 - `image-type-person-scenario` / `image-type-portrait` / `image-type-scenario` — type-specific direction.
 - `<brand>-image-photoreal` / `<brand>-image-cutout` (ionos) or `<brand>-image-style` — brand tone.
