@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.0.1...v2.0.2) (2026-06-16)
+
+
+### Documentation
+
+* **skills:** image-generation look refinements + module-specific generation bias ([003244b](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/003244be904abb568d04ee0b679dd76b8d1ae818))
+* **skills:** refine /imagine prompt layer + image-generation guidance ([1dd7a1f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1dd7a1f820bbadf0264a863e45a0cce9a86e78e0))
+
 ## [2.0.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.0.0...v2.0.1) (2026-06-15)
 
 
