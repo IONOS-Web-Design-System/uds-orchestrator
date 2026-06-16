@@ -24,7 +24,23 @@ Per-generator hazards to OMIT:
   allows cropping for generic scenes. Use a scene/scenario framing (face may be partial) only
   when a clear face is genuinely not needed (hands on a keyboard, a figure from behind, a
   room). Naming a real person/role ("a marketing expert presenting") without a shot is the
-  classic way to get a headless torso.
+  classic way to get a headless torso. Also:
+  - **Bind the character to the scenario** — give them an action, posture, and expression, shot
+    at a natural three-quarter / slightly-angled view. Never describe a person standing idle,
+    arms down, facing the lens head-on (unless the brief explicitly wants a front-on close-up,
+    avatar, or portrait headshot).
+  - **Landscape head-crop safety:** image-svc renders square then center-crops — a landscape
+    (w > h) target trims top/bottom. For any person in a landscape image, keep them in the lower
+    two-thirds with clear headroom (seated or behind a waist-height surface), or pull back to an
+    establishing shot — never let a head sit near the top edge.
+  - **Lighting:** default to vivid, warm, relaxed light with rich believable colour; only go
+    cool/clinical when the subject demands it, and warm it with a practical accent even then.
+  - **Device-screen / focus object:** vary the angle — prefer over-the-shoulder / back shot or a
+    telephoto/compressed view over a flat front-on screen; never request legible on-screen text.
+    But a phone/tablet/laptop in the shot does NOT make the device the subject: if a **person**
+    is the named subject doing a task, keep their **face the anchor** (person-scenario, headroom,
+    crop-safe on landscape) — only make the screen/device the hero when the brief is explicitly
+    about what's on screen (e.g. "close-up of the app", "the dashboard on screen").
 - **illustration** `feature`: describe *structure and intent* (which UDS components, what
   copy slots, what data the screen shows, what motion if `intent:animation`) — not pixel
   coordinates. The agent builds real components; over-specifying layout fights the system.

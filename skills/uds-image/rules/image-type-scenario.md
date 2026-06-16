@@ -8,6 +8,15 @@ Brief signals: "app in use", "payment", "checkout", "customer using", "device us
 "meeting with screen", "product in context", "hands on device", any brief where the
 product/action is more important than who is doing it.
 
+**Tie-breaker — person + device ≠ automatically `scenario`.** A handheld device (phone,
+tablet, laptop) in the brief does NOT by itself make this a `scenario`. If the brief **names a
+person as the subject** doing a task (a baker checking reservations, an owner managing orders),
+the device is *held/used* and the **person stays the anchor** → use **`person-scenario`** (face
+visible, headroom, especially on landscape — a head must never be cropped just because a phone
+is in the shot). Only choose `scenario` when the brief makes the **screen/device itself the
+hero** — "close-up of the app", "the dashboard on screen", "the checkout moment", a deliberate
+over-the-shoulder/back shot of the screen — i.e. the face is genuinely not the point.
+
 ## Composition rules
 - Focal point is the product interaction: device screen, hands on terminal, interface visible
   on a laptop in a meeting, transaction moment at a counter
@@ -52,6 +61,19 @@ The screen must face the viewer at an angle that reads as natural and legible:
 Encode the device angle explicitly in the prompt:
 - `"smartphone held vertically in hand, screen angled directly toward viewer, photographed at slight elevation"`
 - `"open laptop on desk, lid at 105-degree angle facing the camera, shot from slightly above and to the side"`
+
+**Vary the angle — do NOT default to the flat front-on screen view every time.** A straight-on
+screen is the weakest, most generic framing (and the screen content is faked anyway). Pick the
+angle that tells the story best:
+
+| Angle | When to use | Prompt phrasing |
+|---|---|---|
+| **Over-the-shoulder / back shot** | the user's act of looking at the screen is the point | `"shot from behind and over the user's shoulder, looking past them at the glowing screen, the back of their head and shoulder soft in the foreground"` |
+| **Telephoto / compressed** | a clean, premium product feel; isolates the device from a busy room | `"telephoto lens, compressed perspective, shallow depth of field isolating the device, background softly blurred"` |
+| **Three-quarter / side** | shows device + hands + a slice of environment | `"three-quarter side angle on the device, hands interacting, environment visible behind"` |
+| **Slight-elevated front** | the screen layout itself is the hero (use sparingly) | the table above |
+
+Mix these across a set of variants rather than repeating the front-on shot.
 
 ### Screen content
 

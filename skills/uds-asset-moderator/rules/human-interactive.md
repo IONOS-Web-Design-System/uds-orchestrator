@@ -24,15 +24,33 @@ you write the brief.
   "showroom": "<use-case id, e.g. dev-local>",
   "dimensions": { "w": <int>, "h": <int> },
   "durationSec": <1–10>,
+  "loop": <true | false>,
   "variants": <1–4>,
   "market": "de | en | es | fr | pl | it | nl | gb",
   "callbackUrl": "<url>"
 }
 ```
 
-Dimension ranges by mode: image 256–2048 × 256–2048; illustration 320–1920 × 180–1080;
-hybrid is the intersection 320–1920 × 256–1080. `background-pointer` hybrids want w ≥ 800
-AND h ≥ 450. There is no `module` field — it is downstream-only.
+**Dimension ranges by mode:** image 256–2048 × 256–2048; illustration 320–1920 × 180–1080;
+hybrid is the intersection 320–1920 × 256–1080. There is no `module` field — it is downstream-only.
+
+**`loop` (boolean, default `false`):** only meaningful for an **animated** illustration/hybrid.
+`true` constrains the animation to a seamless loop (final frame == first frame) for continuous
+`<video loop>` playback; `false` plays once. Leave `false` unless the user wants looping motion.
+
+**Canvas size shapes the hybrid look — set dimensions to match the intent (the moderator picks
+the embed style, you don't set it):**
+- **Large canvas (w ≥ 800 AND h ≥ 450):** the design-tool "pointer" look (headline selection
+  marquee + connector + feature panel over a backdrop card) is available. Use a large landscape
+  canvas when the user wants that "AI acting on the user's content" treatment.
+- **Small canvas (under ~512px on both axes):** the moderator builds a compact composition — a
+  contained **image-card with edge chips**, or a **cropped product frame** (the UI bleeds off
+  the canvas, large icons), never a whole UI shrunk to fit. The pointer look is unavailable here
+  (it auto-demotes). So for square/banner/badge sizes, expect a card or cropped-frame result.
+
+**Crop-safety (images):** image-svc renders a square then center-crops to the requested ratio —
+**landscape** (w > h) trims top & bottom, **portrait** (h > w) trims left & right. Keep the focal
+subject centered with margin on the trimmed axis; say so in the brief for non-square images.
 
 ## Conversation flow
 
@@ -46,8 +64,13 @@ AND h ≥ 450. There is no `module` field — it is downstream-only.
      shot** — see "Image assets: mode & camera shot" below. This is REQUIRED, not optional:
      a missing shot is why faces get cropped.
    - fidelity/tone for illustrations (standard vs decorative/cinematic)
-   - dimensions (default 1280×720; suggest by mode) and orientation
-   - for illustration: still vs animated (+ durationSec if animated), variants
+   - dimensions (default 1280×720; suggest by mode) and orientation — note the crop-safety
+     rule for non-square images, and that small canvases yield a card/cropped-frame look
+   - for illustration/hybrid: still vs animated; if animated → `durationSec` (default 3) AND
+     whether it should **loop seamlessly** (`loop`, default `false` = play once)
+   - variants (default 1)
+   - `showroom` — where the asset will live (e.g. `app-builder`, `marketing-hero`,
+     `de-campaign`, `dev-local`); it biases mode + tone. Default `dev-local` if they don't care.
    - market (default `de`)
 3. **Enrich.** Apply `shared-brief-enrichment.md` + `shared-param-mapping.md` to write the
    final `brief` text. For hybrid, keep it one coherent idea; the moderator will decompose.

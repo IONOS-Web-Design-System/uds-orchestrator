@@ -33,7 +33,10 @@ submit it.
 2. **Follow `human-interactive.md`.** Infer everything you can from `$ARGUMENTS` (likely
    mode, asset type, mood), restate your read in one sentence, then ask only for what is
    genuinely missing or ambiguous — one short batch with smart defaults (brand=ionos,
-   colorScheme=light, mode=auto, dimensions 1280×720, durationSec=3, variants=1, market=de).
+   colorScheme=light, mode=auto, showroom=dev-local, dimensions 1280×720, durationSec=3,
+   loop=false, variants=1, market=de). For an **animated** asset, also confirm whether it
+   should **loop seamlessly** (`loop:true`) or play once (`loop:false`, the default). Mind the
+   canvas-size → hybrid-look and image crop-safety notes in `human-interactive.md`.
 
 3. **Enrich and assemble** the `UnifiedBrief` JSON (shape and dimension ranges per
    `human-interactive.md`). Write the `brief` text yourself using the enrichment +
