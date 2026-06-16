@@ -63,6 +63,15 @@ subject centered with margin on the trimmed axis; say so in the brief for non-sq
    - for any **image** (or the image half of a hybrid): the **image mode** and **camera
      shot** — see "Image assets: mode & camera shot" below. This is REQUIRED, not optional:
      a missing shot is why faces get cropped.
+   - **if the image features a screen-based product (laptop / tablet / phone) as a focus:
+     ACTIVELY ASK two things — (a) the natural use moment, and (b) what the screen should show.**
+     Lead with the moment: who is using it and doing what, as people really do — an owner tapping
+     a phone to pay at the counter, someone typing at a laptop, two colleagues over a dashboard.
+     Then the interface content (default: the product the `showroom` refers to — shop admin,
+     campaign dashboard, builder canvas — else the scenario). Write the brief so the screen is
+     read **through a natural camera angle** (over-the-shoulder / from above), the full screen
+     clearly visible — NEVER the subject holding the device up to the lens, and never a lone idle
+     device. For a pixel-accurate UI, suggest `hybrid` mode instead.
    - fidelity/tone for illustrations (standard vs decorative/cinematic)
    - dimensions (default 1280×720; suggest by mode) and orientation — note the crop-safety
      rule for non-square images, and that small canvases yield a card/cropped-frame look

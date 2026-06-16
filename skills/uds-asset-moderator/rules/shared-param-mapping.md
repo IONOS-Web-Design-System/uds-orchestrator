@@ -29,5 +29,7 @@ free text always wins on subject, params win on format and context.
   `illustrationBrief.intent:animation`; a still wants no motion language. `variants` is the
   fan-out count — keep the brief general enough to yield distinct variants.
 
-Note: **`module`** is NOT a moderator brief field — it is a downstream agent-svc passthrough
-(consumer routing). Do not expect or emit it here.
+Note: **`module`** is an optional inbound brief field but NOT a planner output — the
+moderator forwards it verbatim into both the image and illustration sub-briefs (consumer
+routing + module-specific generation). Do not emit `module` in the `===PLAN===` block; it
+bypasses the plan entirely.
