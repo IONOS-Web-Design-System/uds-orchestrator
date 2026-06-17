@@ -139,4 +139,14 @@ implementation. In brief:
   questions and goes straight to submit.
 - **Hand back** (user declines): print the UnifiedBrief JSON; offer the `curl` one-liner only if asked.
 
+## After results: translation / re-render (illustration & animation only)
+
+When an illustration/animation result comes back, proactively offer to re-render the *same*
+composition into other languages — no new generation, identical motion/layout. Ask which
+markets + which format (`mp4`/`webm`/`gif`/`png` poster). The `/imagine` command owns the
+mechanics (see its step 6): derive `requestId` + `variant` from the result's video download
+URL, POST the flat ReRenderBrief to `…/webhook/imagine-rerender` (unauthenticated), capture
+`renderId`, then poll the unauthenticated `…/webhook/download` proxy per market and render each.
+Not offered for pure `image` results (no rendered text to translate).
+
 Never invent palette hex or brand facts — read them from the uds-style-guide skill.

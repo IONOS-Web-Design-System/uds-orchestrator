@@ -167,5 +167,48 @@ validate. Otherwise proceed normally from step 1.
    **Hand back (user declines to submit, reachable or not):** print the UnifiedBrief JSON for
    them to keep. Offer the `curl` one-liner only if they want to fire it manually.
 
+6. **Offer translation / re-render (illustration & animation results only).** After an
+   illustration or animation result renders (it has **video** variants), proactively offer to
+   re-render the *same* composition into other languages — fast, no new AI generation, identical
+   motion and layout. Skip this for pure `image` results (photoreal images carry no rendered
+   text to translate). This continues the already-reachable session from step 5B, so no new
+   smoke-test is needed; if a call can't reach the pipeline, fall back to the **Offline /
+   sandbox handoff** (hand back the ReRenderBrief JSON the same way).
+
+   1. Ask the user **which markets** (languages — any of `de`/`en`/`es`/`fr`/`pl`/`it`/`nl`/`gb`)
+      and **which format** (`mp4` / `webm` / `gif` / `png` poster-frame) — ask the format each time.
+   2. **Derive `requestId` + `variant`** from the chosen video variant's existing download URL
+      (the `…/webhook/download?…` link rendered in step 5B.4): parse its `requestId=` and
+      `variant=` query params. For a hybrid these already point at the illustration sub-run
+      (`-illus`) — no manual suffixing.
+   3. **Submit the re-render** — send the flat ReRenderBrief directly (no wrapper):
+      ```bash
+      curl -s -X POST -H "Content-Type: application/json" \
+        -d '{"requestId":"<id>","variant":"<v>","markets":["en","fr"],"format":"mp4","callbackUrl":"https://n8nwh.ionos.org/webhook/mock-callback"}' \
+        "https://n8nwh.ionos.org/webhook/imagine-rerender"
+      ```
+      Capture `renderId` from the response. No `renderId` → rejection (e.g. `409` not
+      re-renderable, `404` unknown variant) — show the body and stop.
+   4. **Poll the unauthenticated `download` proxy per market** until each file exists (it 404s
+      until ready). Write a background poller to `/tmp/poll-<renderId>.sh`:
+      ```bash
+      #!/usr/bin/env bash
+      ID="$1" RID="$2" V="$3" FMT="$4"; shift 4
+      for m in "$@"; do
+        for i in $(seq 1 40); do
+          CODE=$(curl -s -o "/tmp/$ID-$V-$m.$FMT.part" -w "%{http_code}" \
+            "https://n8nwh.ionos.org/webhook/download?requestId=$ID&renderId=$RID&variant=$V&market=$m&format=$FMT")
+          if [ "$CODE" = "200" ]; then mv "/tmp/$ID-$V-$m.$FMT.part" "/tmp/$ID-$V-$m.$FMT"; echo "$m DONE"; break; fi
+          rm -f "/tmp/$ID-$V-$m.$FMT.part"; sleep 15
+        done
+      done
+      echo "RERENDER COMPLETE"
+      ```
+      Run it with `run_in_background: true`, passing `<id> <renderId> <variant> <format>` then
+      the market list. Tell the user the re-render is running.
+   5. **Render each market** once complete: `mp4`/`webm`/`gif` → labelled link
+      `[<v> · <market>](/tmp/<id>-<v>-<market>.<fmt>)`; `png` poster → inline
+      `![<v> · <market>](/tmp/<id>-<v>-<market>.png)`. Report any market whose file never arrived.
+
 Keep it conversational and fast. Never block on questions you can answer from the brief or
 sensible defaults.
