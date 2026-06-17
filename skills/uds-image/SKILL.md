@@ -114,6 +114,14 @@ Every photoreal brief falls into one of four types — detect and apply the matc
 - `image-type-portrait` — subject faces camera in their workplace; waist-up minimum; props reveal identity
 - `image-type-scenario` — product/interaction is focal point; people are secondary or cropped
 
+## Market & re-rendering
+`market` (and the showroom prefix) is a **generation-time** input: it selects the persona's
+ethnicity/locale pool (see the brand `*-character-ethnicity` rules below). Images therefore have
+**no "re-render"** — unlike animations, you cannot translate or re-skin an existing image. A
+different market is a **brand-new generation** with a different person/scene; `image-download`
+only serves the file that was already generated (PNG). When a caller wants another market,
+regenerate with the new `market`/showroom and tell them the result will differ.
+
 ## Rules (inlined per brand)
 - `shared-image-principles` — universal composition, image type detection, negative-prompt, aspect-ratio.
 - `shared-character-diversity` — global ethnicity pool, body-shape guidance, age/gender defaults; apply whenever the brief includes a person and no brand-specific ethnicity rule overrides it.

@@ -139,14 +139,33 @@ implementation. In brief:
   questions and goes straight to submit.
 - **Hand back** (user declines): print the UnifiedBrief JSON; offer the `curl` one-liner only if asked.
 
-## After results: translation / re-render (illustration & animation only)
+## After results: proactively offer next steps
 
-When an illustration/animation result comes back, proactively offer to re-render the *same*
-composition into other languages — no new generation, identical motion/layout. Ask which
-markets + which format (`mp4`/`webm`/`gif`/`png` poster). The `/imagine` command owns the
-mechanics (see its step 6): derive `requestId` + `variant` from the result's video download
-URL, POST the flat ReRenderBrief to `…/webhook/imagine-rerender` (unauthenticated), capture
-`renderId`, then poll the unauthenticated `…/webhook/download` proxy per market and render each.
-Not offered for pure `image` results (no rendered text to translate).
+Once results render, proactively offer how to move forward. **The options differ by asset type,
+and so does the cost — be explicit about which actions are a cheap re-render vs a full new
+generation.** The `/imagine` command owns the mechanics (its step 6).
+
+**Illustration / animation** (a re-render reuses the composition — cheap, no new AI gen,
+identical motion/layout):
+1. **Other languages** — same animation, translated copy, in more markets (re-render).
+2. **Different format** — re-encode a variant as `mp4`/`webm`/`gif`/`png` poster (re-render).
+3. **Add context & regenerate** — fold new direction into the brief → fresh generation.
+
+Re-render (1 & 2) goes through `…/webhook/imagine-rerender` (flat ReRenderBrief, unauthenticated)
+→ poll the unauthenticated `…/webhook/download` proxy per market.
+
+**Image** — there is **no image re-render**. Photoreal images carry no rendered text, and
+`image-download` only serves the already-generated file. So:
+1. **Other markets** — a different `market` is a **brand-new generation**, not a translation:
+   `market` (+ the showroom prefix) drives the persona's ethnicity/locale (see the `uds-image`
+   ethnicity rules), so the person/scene WILL differ. **Notify the user it's a fresh image
+   before regenerating.**
+2. **Different format** — image-svc returns PNG; other containers aren't a server feature
+   (only a new generation changes output). Don't fake a re-render.
+3. **Add context & regenerate** — augment the brief → fresh generation.
+
+Any "regenerate" (image markets, or add-context for either type) re-runs the normal submit
+path with a NEW `requestId` and an adjusted brief — warn that it's a full generation (minutes,
+and a genuinely new result).
 
 Never invent palette hex or brand facts — read them from the uds-style-guide skill.

@@ -167,30 +167,46 @@ validate. Otherwise proceed normally from step 1.
    **Hand back (user declines to submit, reachable or not):** print the UnifiedBrief JSON for
    them to keep. Offer the `curl` one-liner only if they want to fire it manually.
 
-6. **Offer translation / re-render (illustration & animation results only).** After an
-   illustration or animation result renders (it has **video** variants), proactively offer to
-   re-render the *same* composition into other languages — fast, no new AI generation, identical
-   motion and layout. Skip this for pure `image` results (photoreal images carry no rendered
-   text to translate). This continues the already-reachable session from step 5B, so no new
-   smoke-test is needed; if a call can't reach the pipeline, fall back to the **Offline /
-   sandbox handoff** (hand back the ReRenderBrief JSON the same way).
+6. **Offer next steps (proactive menu, after every result).** Once results render, proactively
+   present how to move forward. The available options and their **cost** differ by asset type —
+   show only the ones that apply and state the cost plainly. This continues the already-reachable
+   session from step 5B (no new smoke-test); if any call can't reach the pipeline, fall back to
+   the **Offline / sandbox handoff**.
 
-   1. Ask the user **which markets** (languages — any of `de`/`en`/`es`/`fr`/`pl`/`it`/`nl`/`gb`)
-      and **which format** (`mp4` / `webm` / `gif` / `png` poster-frame) — ask the format each time.
+   **If the result is an illustration / animation** (it has **video** variants — re-render is
+   cheap: it reuses the composition, no new AI generation, identical motion/layout):
+   - **(1) Other languages** — same animation, translated copy, in more markets → **step 6A**.
+   - **(2) Different format** — re-encode a variant as `mp4`/`webm`/`gif`/`png` poster → **step 6A**.
+   - **(3) Add context & regenerate** — fold new direction into the brief, fresh generation → **step 6B**.
+
+   **If the result is an image** (photoreal images have **no rendered text and no re-render
+   path** — `image-download` only serves the already-generated file):
+   - **(1) Other markets** — there is **no image “re-render.”** A different `market` is a
+     **brand-new generation**: `market` (and the showroom prefix) drives the persona's
+     ethnicity/locale (see `uds-image` ethnicity rules), so the person/scene **will look
+     different**. **Tell the user plainly it's a fresh image — a new generation, not a
+     translation, and the result will differ** — then proceed via **step 6B** with the new market.
+   - **(2) Different format** — image-svc returns the stored format (PNG). Other containers are
+     not a server feature; only a new generation changes the output. Say so — do **not** fake a
+     re-render. (A local file conversion is the user's own step, out of scope here.)
+   - **(3) Add context & regenerate** — augment the brief, fresh generation → **step 6B**.
+
+   **Step 6A — Re-render (illustration / animation only).**
+   1. Ask **which markets** (`de`/`en`/`es`/`fr`/`pl`/`it`/`nl`/`gb`) and, for option (2),
+      **which format** (`mp4`/`webm`/`gif`/`png` poster) — ask the format each time.
    2. **Derive `requestId` + `variant`** from the chosen video variant's existing download URL
-      (the `…/webhook/download?…` link rendered in step 5B.4): parse its `requestId=` and
-      `variant=` query params. For a hybrid these already point at the illustration sub-run
-      (`-illus`) — no manual suffixing.
-   3. **Submit the re-render** — send the flat ReRenderBrief directly (no wrapper):
+      (the `…/webhook/download?…` link from step 5B.4): parse its `requestId=` and `variant=`
+      query params. For a hybrid these already point at the illustration sub-run (`-illus`).
+   3. **Submit** the flat ReRenderBrief directly (no wrapper):
       ```bash
       curl -s -X POST -H "Content-Type: application/json" \
         -d '{"requestId":"<id>","variant":"<v>","markets":["en","fr"],"format":"mp4","callbackUrl":"https://n8nwh.ionos.org/webhook/mock-callback"}' \
         "https://n8nwh.ionos.org/webhook/imagine-rerender"
       ```
-      Capture `renderId` from the response. No `renderId` → rejection (e.g. `409` not
-      re-renderable, `404` unknown variant) — show the body and stop.
-   4. **Poll the unauthenticated `download` proxy per market** until each file exists (it 404s
-      until ready). Write a background poller to `/tmp/poll-<renderId>.sh`:
+      Capture `renderId`. No `renderId` → rejection (`409` not re-renderable / `404` unknown
+      variant) — show the body and stop.
+   4. **Poll the unauthenticated `download` proxy per market** (it 404s until ready). Background
+      poller to `/tmp/poll-<renderId>.sh`:
       ```bash
       #!/usr/bin/env bash
       ID="$1" RID="$2" V="$3" FMT="$4"; shift 4
@@ -204,11 +220,19 @@ validate. Otherwise proceed normally from step 1.
       done
       echo "RERENDER COMPLETE"
       ```
-      Run it with `run_in_background: true`, passing `<id> <renderId> <variant> <format>` then
-      the market list. Tell the user the re-render is running.
-   5. **Render each market** once complete: `mp4`/`webm`/`gif` → labelled link
+      Run with `run_in_background: true`, passing `<id> <renderId> <variant> <format>` then the
+      market list. Tell the user the re-render is running.
+   5. **Render each market**: `mp4`/`webm`/`gif` → labelled link
       `[<v> · <market>](/tmp/<id>-<v>-<market>.<fmt>)`; `png` poster → inline
       `![<v> · <market>](/tmp/<id>-<v>-<market>.png)`. Report any market whose file never arrived.
+
+   **Step 6B — Regenerate (new generation; image or illustration).** Start from the existing
+   UnifiedBrief, apply the change — for "other markets" set the new `market` **and** the showroom
+   prefix (so the ethnicity/locale rules pick it up); for "add context" append the user's new
+   direction into the `brief` text — then **mint a NEW `requestId`** and submit it through
+   **step 5B exactly like a first run** (`imagine-trigger` → poll `imagine-jobs` → download →
+   render). Warn the user up front: this is a **full generation** (takes the usual minutes and
+   produces a fresh, different result — not a copy of the previous one).
 
 Keep it conversational and fast. Never block on questions you can answer from the brief or
 sensible defaults.
