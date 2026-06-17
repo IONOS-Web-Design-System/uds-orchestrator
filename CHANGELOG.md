@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.2.0...v2.2.1) (2026-06-17)
+
+
+### Bug Fixes
+
+* **imagine:** submit flat UnifiedBrief to imagine-trigger (no payload wrapper); add local/cowork run guard ([af0fd14](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/af0fd14780b8de78882143791394dd56a2ec2aa0))
+
 ## [2.2.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.1.0...v2.2.0) (2026-06-17)
 
 
