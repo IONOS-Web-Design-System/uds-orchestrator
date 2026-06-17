@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.1.0...v2.2.0) (2026-06-17)
+
+
+### Features
+
+* **imagine:** token-free external path via unauthenticated imagine-* bridge ([0770e4a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/0770e4ac627c51b9643d64538be01bee4be9a7f0))
+
+
+### Documentation
+
+* **imagine:** align human-interactive submit notes with token-free bridge ([2008ef6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/2008ef6b4ac57f13d2af18c620833b397b614754))
+
 ## [2.1.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.0.2...v2.1.0) (2026-06-16)
 
 
