@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.3.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.2.1...v2.3.0) (2026-06-17)
+
+
+### Features
+
+* **imagine:** graceful sandbox handoff + accept pasted briefs ([e3713c8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/e3713c8a34b70429865c8bf001b1c97325eaa0c8))
+* **imagine:** post-result multi-language re-render flow ([932cb52](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/932cb52d7879adf4e68c3083e1f72bf8f90e2b1d))
+* **imagine:** proactive 3-way post-process menu; images regenerate (no re-render) ([054f7f2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/054f7f2e571394e6f07d9506fcb7b598d99b6d76))
+
+
+### Bug Fixes
+
+* **imagine:** wire moderation-principles rule, correct durationSec range, complete brief assembly ([9693c32](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9693c32aff1e6326bc173a133260deeeeb5507fd))
+
 ## [2.2.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.2.0...v2.2.1) (2026-06-17)
 
 
