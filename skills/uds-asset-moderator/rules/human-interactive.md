@@ -125,10 +125,11 @@ full submission + monitoring logic — see step 5 of `commands/imagine.md` for t
 implementation. In brief:
 
 - **Local dev** (`$HOME/pipeline-local/secrets/agent-svc.env` present): run `dev/gen.sh <brief.json>`.
-- **External / VPN** (`UDS_IMAGINE_TOKEN` env var set): POST `{requestId, payload, callbackUrl}`
-  to `https://n8nwh.ionos.org/webhook/moderator-trigger` with `Authorization: Bearer $UDS_IMAGINE_TOKEN`,
-  then poll `GET https://n8nwh.ionos.org/webhook/moderator-jobs?requestId=<id>` every 15 s
-  until `status` is `done`/`error`, and render `variantUrls` inline in chat.
+- **External / VPN** (no token — VPN only): POST `{requestId, payload, callbackUrl}` to
+  `https://n8nwh.ionos.org/webhook/imagine-trigger` (unauthenticated), then poll
+  `GET https://n8nwh.ionos.org/webhook/imagine-jobs?requestId=<id>` every 15 s until `status`
+  is `done`/`partial`/`error`. Download each `variantUrls` entry (unauthenticated n8n proxy
+  URLs) to `/tmp` and render: images inline, video/animation as a labelled link to the saved file.
 - **Hand back**: print the JSON and the `curl` submission one-liner.
 
 Never invent palette hex or brand facts — read them from the uds-style-guide skill.
