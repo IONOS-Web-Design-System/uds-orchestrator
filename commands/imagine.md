@@ -54,53 +54,39 @@ submit it.
    token, and prints inspect commands.
 
    **B. External / VPN** (default when local dev stack is absent):
-   Requires `UDS_IMAGINE_TOKEN` env var (= the `N8N_INBOUND_TOKEN` shared secret). If the var
-   is unset, show the setup instructions below and stop — do not proceed without it.
+   No token required — the `/imagine` bridge endpoints (`imagine-trigger` / `imagine-jobs`) are
+   unauthenticated and protected by network isolation. The only requirement is the IONOS VPN,
+   since `n8nwh.ionos.org` is corp-internal (NXDOMAIN publicly, RFC1918).
 
-   **First-time setup (show this when `UDS_IMAGINE_TOKEN` is missing):**
-   > **Get the token:** contact **Bowei Xiao** at **bowei.xiao@ionos.com** to request access
-   > to the UDS asset pipeline. He will share the `N8N_INBOUND_TOKEN` value with you.
-   >
-   > **Set it permanently** (one-time, persists across all Claude Code sessions):
-   > ```bash
-   > claude config set env.UDS_IMAGINE_TOKEN <token-value>
-   > ```
-   > This writes to `~/.claude/settings.json` and is picked up automatically from then on.
-   > Confirm with: `echo $UDS_IMAGINE_TOKEN` (open a new terminal or re-source your shell).
-   >
+   **First-time setup (show this the first time the external path is used):**
    > **VPN required:** `n8nwh.ionos.org` is only reachable over the IONOS internal VPN.
-   > Connect before running `/imagine`.
-
-   Once the token is set:
+   > Connect before running `/imagine`. No token or config is needed.
 
    1. **Smoke-test connectivity** before submitting (only on first use per session):
       ```bash
       curl -s -o /dev/null -w "%{http_code}" --max-time 8 \
-        -H "Authorization: Bearer $UDS_IMAGINE_TOKEN" \
-        "https://n8nwh.ionos.org/webhook/moderator-jobs?requestId=smoke-test"
+        "https://n8nwh.ionos.org/webhook/imagine-jobs?requestId=smoke-test"
       ```
-      - `404` → connected and authenticated (requestId just not found — proceed).
-      - `403` / `401` → token wrong; tell the user to check `UDS_IMAGINE_TOKEN`.
-      - curl error / timeout → VPN not connected; tell the user.
+      - `404` → connected (requestId just not found — proceed).
+      - curl error / timeout → VPN not connected; tell the user to connect.
 
-   2. **Submit** the envelope `{requestId, payload, callbackUrl}` to the n8n intake:
+   2. **Submit** the envelope `{requestId, payload, callbackUrl}` to the imagine intake:
       ```bash
       curl -s -X POST \
-        -H "Authorization: Bearer $UDS_IMAGINE_TOKEN" \
         -H "Content-Type: application/json" \
         -d '{"requestId":"<id>","payload":<UnifiedBrief>,"callbackUrl":"https://n8nwh.ionos.org/webhook/mock-callback"}' \
-        "https://n8nwh.ionos.org/webhook/moderator-trigger"
+        "https://n8nwh.ionos.org/webhook/imagine-trigger"
       ```
-      Confirm `status: "accepted"` in the response. If the server returns an error, show it and stop.
+      Confirm `status: "accepted"` in the response. If the body lacks it, the moderator safe-gate
+      rejected the brief — show the body and stop.
 
    3. **Monitor in background** — write a polling script to `/tmp/poll-<requestId>.sh`:
       ```bash
       #!/usr/bin/env bash
-      TOKEN="$1" REQ="$2"
+      REQ="$1"
       for i in $(seq 1 90); do
         RESP=$(curl -s --max-time 10 \
-          -H "Authorization: Bearer $TOKEN" \
-          "https://n8nwh.ionos.org/webhook/moderator-jobs?requestId=$REQ")
+          "https://n8nwh.ionos.org/webhook/imagine-jobs?requestId=$REQ")
         STATUS=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo "unknown")
         echo "[$i/90] $STATUS"
         if [[ "$STATUS" == "done" || "$STATUS" == "error" || "$STATUS" == "partial" ]]; then
@@ -111,15 +97,24 @@ submit it.
         sleep 15
       done
       ```
-      Run it with `run_in_background: true` passing `$UDS_IMAGINE_TOKEN` and `<requestId>` as
-      args. Tell the user: *"Job `<requestId>` submitted — monitoring in background (polls every
-      15 s, up to 22 min)."*
+      Run it with `run_in_background: true` passing `<requestId>` as the only arg. Tell the user:
+      *"Job `<requestId>` submitted — monitoring in background (polls every 15 s, up to 22 min)."*
 
-   4. **Render results** once the background Bash notifies completion: read
-      `/tmp/<requestId>-result.json`. For each entry in `variantUrls`:
-      - Image assets → display inline: `![v0](url)`
-      - Video/animation assets → display as a labelled link: `[variant v0](url)`
-      Show all variants. On `error` status, display the `error` field instead.
+   4. **Download bytes + render** once the background Bash notifies completion: read
+      `/tmp/<requestId>-result.json`. Its `variantUrls` map values are **unauthenticated n8n
+      proxy URLs** (`…/webhook/image-download?…` / `…/webhook/download?…`) — VPN-reachable, not
+      internal-VM URLs. For each `<variant>: <url>` pair:
+      - Derive the extension from the URL's `format=` query param: `png`/`jpg`/`jpeg`/`webp` →
+        image; `mp4`/`webm`/`gif` → video; default `png`.
+      - Download to a local file:
+        ```bash
+        curl -fsSL "<url>" -o "/tmp/<requestId>-<variant>.<ext>"
+        ```
+      - **Image** → display inline: `![<variant>](/tmp/<requestId>-<variant>.<ext>)`
+      - **Video / animation** → labelled link (Claude Desktop cannot inline-play video):
+        `[<variant> — saved animation](/tmp/<requestId>-<variant>.<ext>)`
+      Render all variants. On `error` status, display the `error` field instead. If a single
+      variant download fails, report that variant and continue rendering the rest.
 
    **Hand back (either path):** print the UnifiedBrief JSON and the submission one-liner so
    the user can fire it themselves.
