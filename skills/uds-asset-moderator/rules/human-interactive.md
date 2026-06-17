@@ -132,6 +132,11 @@ implementation. In brief:
   `GET https://n8nwh.ionos.org/webhook/imagine-jobs?requestId=<id>` every 15 s until `status`
   is `done`/`partial`/`error`. Download each `variantUrls` entry (unauthenticated n8n proxy
   URLs) to `/tmp` and render: images inline, video/animation as a labelled link to the saved file.
-- **Hand back**: print the JSON and the `curl` submission one-liner.
+- **Offline / sandbox** (smoke-test can't reach the pipeline — a cowork cloud sandbox, or VPN
+  off): do NOT show curl or ask the user to poll. Print the finished UnifiedBrief as a
+  copy-paste `json` block and tell them to open a **local** Claude Code session (desktop app or
+  `claude` CLI) on the VPN, run `/imagine`, and paste the brief — a pasted brief skips the
+  questions and goes straight to submit.
+- **Hand back** (user declines): print the UnifiedBrief JSON; offer the `curl` one-liner only if asked.
 
 Never invent palette hex or brand facts — read them from the uds-style-guide skill.

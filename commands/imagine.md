@@ -22,8 +22,20 @@ submit it.
 - `$ARGUMENTS` — a free-text description of the asset the user wants (e.g. "a dark, cinematic
   hero for the AI website builder showing a storefront and a floating assistant panel"). May
   be empty — if so, ask the user what they want to create.
+- `$ARGUMENTS` may instead be a **complete UnifiedBrief JSON** handed off from another session
+  (e.g. an `/imagine` run inside a cowork sandbox that couldn't submit). The user may paste the
+  JSON directly or send it as `submit this imagine brief: { … }`. When the input already
+  contains a full UnifiedBrief, **skip the interview** and go straight to submit — see the
+  Pre-flight note below.
 
 ## Instructions
+
+**Pre-flight — is this already a finished brief?** If `$ARGUMENTS` (or the user's message)
+already contains a complete UnifiedBrief JSON — it has at least `brief`, `brand`, and `mode`
+or `dimensions` — do NOT re-interview the user. Parse it, sanity-check it (required fields
+present; dimension ranges per `human-interactive.md`), then jump straight to step 4 (show it
+back for a final OK) and step 5 (submit). Load any rules from step 1 only if you need them to
+validate. Otherwise proceed normally from step 1.
 
 1. **Load the rules** (read, do not summarize to the user):
    - `skills/uds-asset-moderator/SKILL.md` — mode rubric, `===PLAN===` contract, embedStyle.
@@ -74,11 +86,11 @@ submit it.
       curl -s -o /dev/null -w "%{http_code}" --max-time 8 \
         "https://n8nwh.ionos.org/webhook/imagine-jobs?requestId=smoke-test"
       ```
-      - `404` → connected (requestId just not found — proceed).
-      - curl error / timeout / DNS failure → not reachable. If you are in **Claude Code on the
-        web / a cowork cloud sandbox**, this is expected — that environment is network-isolated
-        and cannot reach the IONOS VPN; re-run `/imagine` from a **local** Claude Code session
-        (CLI or desktop app) on the VPN. Otherwise the VPN is not connected; tell the user to connect.
+      - `404` → connected (requestId just not found — proceed to step 2).
+      - curl error / timeout / DNS failure → **not reachable from this session.** Do NOT show
+        the user curl commands or ask them to poll anything, and do not retry blindly. Go to
+        **"Offline / sandbox handoff"** below. This is the expected path inside a cowork cloud
+        sandbox (network-isolated, no VPN) and also when the local VPN is simply not connected.
 
    2. **Submit** the **UnifiedBrief directly** to the imagine intake — send the brief JSON as the
       request body. Do **NOT** wrap it in a `{requestId, payload, callbackUrl}` envelope: the
@@ -131,8 +143,26 @@ submit it.
       Render all variants. On `error` status, display the `error` field instead. If a single
       variant download fails, report that variant and continue rendering the rest.
 
-   **Hand back (either path):** print the UnifiedBrief JSON and the submission one-liner so
-   the user can fire it themselves.
+   **Offline / sandbox handoff** (when step 1's smoke-test can't reach the pipeline — e.g. a
+   cowork cloud sandbox, or the VPN is not connected): you still did the prompt-engineering
+   here; hand the finished brief off for a local session to submit. **No terminal, no curl, no
+   manual polling for the user.**
+   1. Tell the user plainly: *"I can't reach the IONOS asset pipeline from this session (it's
+      network-isolated / off-VPN), so I can't generate the image right here — but your brief is
+      ready to go."*
+   2. Print the complete **UnifiedBrief as a single copy-paste ` ```json ` block** (the full
+      flat brief, including `requestId` + `callbackUrl`).
+   3. Give these next steps in plain language:
+      > **To generate it:** open a **local Claude Code session** — the Claude Code **desktop
+      > app** or the `claude` CLI — while connected to the IONOS VPN. Run **`/imagine`** and
+      > **paste the brief above** when asked (or send it as `submit this imagine brief: <paste>`).
+      > It will submit, wait, and show the finished image(s) right in the chat — you don't need
+      > a terminal. (The pasted brief skips the questions and goes straight to submit.)
+   4. Only if the user explicitly asks to run it themselves in a terminal, give them the raw
+      `curl` submit one-liner (step 2) + the poll command. Otherwise don't show curl at all.
+
+   **Hand back (user declines to submit, reachable or not):** print the UnifiedBrief JSON for
+   them to keep. Offer the `curl` one-liner only if they want to fire it manually.
 
 Keep it conversational and fast. Never block on questions you can answer from the brief or
 sensible defaults.
