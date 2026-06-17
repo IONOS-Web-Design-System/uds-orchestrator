@@ -125,7 +125,9 @@ full submission + monitoring logic — see step 5 of `commands/imagine.md` for t
 implementation. In brief:
 
 - **Local dev** (`$HOME/pipeline-local/secrets/agent-svc.env` present): run `dev/gen.sh <brief.json>`.
-- **External / VPN** (no token — VPN only): POST `{requestId, payload, callbackUrl}` to
+- **External / VPN** (no token — VPN only; run from a **local** Claude Code session, NOT a
+  cowork cloud sandbox, which can't reach the VPN): POST the **UnifiedBrief directly** (the flat
+  brief JSON — NO `payload:` wrapper; it already carries `requestId` + `callbackUrl`) to
   `https://n8nwh.ionos.org/webhook/imagine-trigger` (unauthenticated), then poll
   `GET https://n8nwh.ionos.org/webhook/imagine-jobs?requestId=<id>` every 15 s until `status`
   is `done`/`partial`/`error`. Download each `variantUrls` entry (unauthenticated n8n proxy

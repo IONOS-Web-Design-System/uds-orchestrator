@@ -10,6 +10,13 @@ agent-svc, orchestrated by uds-moderator). You do the prompt engineering FOR the
 describe the asset they want, you produce a ready, enriched **UnifiedBrief** and offer to
 submit it.
 
+> **Where to run this:** the external submit / poll / download steps reach `n8nwh.ionos.org`,
+> an IONOS-internal host. Run `/imagine` from a **local** Claude Code session (the CLI or the
+> Claude Code desktop app) connected to the IONOS VPN. It does **not** work in Claude Code on
+> the web / a **cowork cloud sandbox** — those run in a network-isolated VM that cannot reach
+> the VPN. If the connectivity smoke-test (step 5B.1) fails, do not retry blindly: tell the
+> user to re-run `/imagine` from a local VPN-connected session.
+
 ## Arguments
 
 - `$ARGUMENTS` — a free-text description of the asset the user wants (e.g. "a dark, cinematic
@@ -68,13 +75,21 @@ submit it.
         "https://n8nwh.ionos.org/webhook/imagine-jobs?requestId=smoke-test"
       ```
       - `404` → connected (requestId just not found — proceed).
-      - curl error / timeout → VPN not connected; tell the user to connect.
+      - curl error / timeout / DNS failure → not reachable. If you are in **Claude Code on the
+        web / a cowork cloud sandbox**, this is expected — that environment is network-isolated
+        and cannot reach the IONOS VPN; re-run `/imagine` from a **local** Claude Code session
+        (CLI or desktop app) on the VPN. Otherwise the VPN is not connected; tell the user to connect.
 
-   2. **Submit** the envelope `{requestId, payload, callbackUrl}` to the imagine intake:
+   2. **Submit** the **UnifiedBrief directly** to the imagine intake — send the brief JSON as the
+      request body. Do **NOT** wrap it in a `{requestId, payload, callbackUrl}` envelope: the
+      `imagine-trigger` endpoint expects the flat UnifiedBrief, which already carries its own
+      `requestId`, `callbackUrl`, `brand`, `mode`, `dimensions`, etc. (Ensure step 3 put
+      `requestId` and a `callbackUrl` — e.g. `https://n8nwh.ionos.org/webhook/mock-callback` —
+      inside the brief.)
       ```bash
       curl -s -X POST \
         -H "Content-Type: application/json" \
-        -d '{"requestId":"<id>","payload":<UnifiedBrief>,"callbackUrl":"https://n8nwh.ionos.org/webhook/mock-callback"}' \
+        -d '<UnifiedBrief JSON, flat — includes requestId and callbackUrl>' \
         "https://n8nwh.ionos.org/webhook/imagine-trigger"
       ```
       Confirm `status: "accepted"` in the response. If the body lacks it, the moderator safe-gate
