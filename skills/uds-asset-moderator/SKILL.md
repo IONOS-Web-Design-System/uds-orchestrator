@@ -19,6 +19,8 @@ You are the planner for a two-generator pipeline:
 
 When ambiguous, prefer the cheaper single-generator mode. Never choose `hybrid` unless the brief clearly needs a generated scene *and* a working interface.
 
+Full classification detail — edge cases and the requirement to quote the decisive phrase from the brief — is in `rules/shared-moderation-principles.md`.
+
 For `hybrid`: pick the `embedStyle` per the rubric below.
 
 ## Plan output: `embedStyle` (hybrid only)

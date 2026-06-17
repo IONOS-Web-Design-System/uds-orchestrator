@@ -23,7 +23,7 @@ you write the brief.
   "mode": "auto | image | illustration | hybrid",
   "showroom": "<use-case id, e.g. dev-local>",
   "dimensions": { "w": <int>, "h": <int> },
-  "durationSec": <1–10>,
+  "durationSec": <1–30>,
   "loop": <true | false>,
   "variants": <1–4>,
   "market": "de | en | es | fr | pl | it | nl | gb",

@@ -42,6 +42,8 @@ validate. Otherwise proceed normally from step 1.
    - `skills/uds-asset-moderator/rules/shared-brief-enrichment.md`
    - `skills/uds-asset-moderator/rules/shared-param-mapping.md`
    - `skills/uds-asset-moderator/rules/shared-cross-generator-consistency.md`
+   - `skills/uds-asset-moderator/rules/shared-moderation-principles.md` — the image/illustration/
+     hybrid classification rubric; use it to infer `mode` when the user leaves it `auto`.
    - `skills/uds-asset-moderator/rules/human-interactive.md` — the conversation flow you follow.
    - `skills/uds-style-guide/SKILL.md` — brand palette/typography (never invent hex/brand facts).
    - When the asset is (or includes) an **image**, also read `skills/uds-image/SKILL.md` and
@@ -59,7 +61,8 @@ validate. Otherwise proceed normally from step 1.
 
 3. **Enrich and assemble** the `UnifiedBrief` JSON (shape and dimension ranges per
    `human-interactive.md`). Write the `brief` text yourself using the enrichment +
-   param-mapping rules. Generate a kebab-case `requestId` (≤56 chars) from the subject.
+   param-mapping rules. Generate a kebab-case `requestId` (≤56 chars) from the subject, and set
+   a `callbackUrl` (polling doesn't use it — default `https://n8nwh.ionos.org/webhook/mock-callback`).
 
 4. **Show the user** the assembled UnifiedBrief JSON plus a one-line plain-English summary of
    what will be generated. Let them tweak any field before submitting.
