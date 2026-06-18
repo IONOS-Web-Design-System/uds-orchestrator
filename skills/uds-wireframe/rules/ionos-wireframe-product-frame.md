@@ -58,7 +58,7 @@ This is a completely separate inner panel with its own light theme — it MUST c
 ```
 
 **Text placeholder bars in the client app**: `#BCC8D4` (cool-grey-300), NOT white or dark.
-**AI selection target inside client app**: `border: 2px dashed #8212C2` — the text-selection marquee ONLY. The floating highlight card itself has NO border; it uses a pulsing AI glow (see "Floating Highlight Card" below).
+**AI selection target inside client app**: `border: 2px dashed #8212C2` — the text-selection marquee ONLY. The floating highlight card itself has NO border; it uses a plain neutral drop shadow (no AI glow — the AI glow is on the CTA button only) (see "Floating Highlight Card" below).
 
 ## Product Frame — Content Detail Rules
 
@@ -183,15 +183,15 @@ The AI feature highlight is a **sibling of the product frame at the `AbsoluteFil
 
 **Shape spec (confirmed from Figma node 64:320):**
 ```tsx
-// Floating highlight card — pill-shaped glass, NO border, pulsing AI glow.
-// The glow (not a dashed outline) is the AI affordance. For the animated
+// Floating highlight card — pill-shaped glass, NO border, plain neutral drop shadow
+// (no AI glow — the AI glow is on the CTA button only). For the animated
 // pulse see ionos-wireframe-ai-animations.md (AIFloatingHighlight).
 <div style={{
   position: 'absolute',
   borderRadius: 40,                          // large pill — NOT 16
-  background: 'rgba(244, 247, 250, 0.96)',  // near-opaque light fill
+  background: 'var(--surface-subtle)',  /* opaque surface token; the 0.88 + backdrop-blur glass is ONLY for the AI generation area */
   padding: '28px 24px 20px',
-  boxShadow: '0 16px 48px rgba(0,0,0,0.35), 0 0 28px rgba(180,16,231,0.28)', // glow, never a border
+  boxShadow: '0 16px 48px rgba(0,0,0,0.35)', // plain neutral drop shadow — no AI glow on the card
   zIndex: 100,
   // position: sibling of the frame, overlapping its right/bottom edge
 }}>
@@ -218,8 +218,8 @@ The AI feature highlight is a **sibling of the product frame at the `AbsoluteFil
   {/* 2 — floating highlight card (sibling, NOT child) */}
   <div style={{ position: 'absolute', right: 80, top: 180, zIndex: 100,
                 borderRadius: 40,
-                background: 'rgba(244,247,250,0.96)',
-                boxShadow: '0 16px 48px rgba(0,0,0,0.35), 0 0 28px rgba(180,16,231,0.28)',
+                background: 'var(--surface-subtle)',
+                boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
                 transform: `translateX(${highlightX}px) scale(${highlightScale})` }}>
     {/* AI content + CTA */}
   </div>
@@ -339,8 +339,8 @@ This pattern applies to **landscape/widescreen canvases** (e.g. 1280×720). For 
     right: 60, top: 120,
     zIndex: 100,
     borderRadius: 40,
-    background: 'rgba(244, 247, 250, 0.96)',
-    boxShadow: '0 16px 48px rgba(0,0,0,0.35), 0 0 28px rgba(180,16,231,0.28)',
+    background: 'var(--surface-subtle)',
+    boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
   }}>
     {/* AI prompt + CTA */}
   </div>
@@ -382,7 +382,7 @@ When the AI feature is an **inline editing action** (text selection, image resiz
     zIndex: 100,
     borderRadius: 24,
     background: 'rgba(255, 255, 255, 0.97)',
-    boxShadow: '0 16px 48px rgba(0,0,0,0.35), 0 0 28px rgba(180,16,231,0.28)',
+    boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
     // contains tone tabs, option checkboxes, AI CTA button
   }}>
     {/* AI options panel */}
@@ -394,7 +394,7 @@ When the AI feature is an **inline editing action** (text selection, image resiz
     // positioned over the selection target in the frame
     zIndex: 110,
     width: 72, height: 72, borderRadius: '50%',
-    background: '#8212C2', color: '#fff',
+    background: 'linear-gradient(45deg, #095BB1, #D746F5)', color: '#fff',
     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
   }}>
     {/* sparkles icon + label */}
@@ -467,9 +467,9 @@ const H = height;
     bottom: Math.round(H * 0.16),   // ≈83px from bottom — grows upward if content expands
     width:  Math.round(W * 0.65),   // ≈338px — 60–68% of canvas width
     borderRadius: 40,
-    background: 'rgba(244, 247, 250, 0.96)',
+    background: 'var(--surface-subtle)',
     padding: '28px 24px 20px',
-    boxShadow: '10px 8px 15px rgba(0,0,0,0.21), 46px 34px 28px rgba(0,0,0,0.18), 0 0 28px rgba(180,16,231,0.28)',
+    boxShadow: '10px 8px 15px rgba(0,0,0,0.21), 46px 34px 28px rgba(0,0,0,0.18)',
     zIndex: 100,
     transform: `translateY(${cardEnterY}px) scale(${cardScale})`,
   }}>

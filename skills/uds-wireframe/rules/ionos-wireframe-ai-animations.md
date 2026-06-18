@@ -23,7 +23,7 @@ import { svgData as envelopeAiSvg }  from '@ionos-web-design-system/icon/system/
 
 const AI_GRADIENT    = 'linear-gradient(45deg, #095BB1, #D746F5)'; // CTA — static 45°, NEVER rotate
 const AI_PRIMARY_END = '#D746F5';  // text/image bars
-const AI_LABEL_COLOR = '#8212C2';  // generation area product label (Figma spec)
+const AI_LABEL_COLOR = '#8212C2';  // purple-600 — AI "generating" text colour (transient; revert to var(--text-base)/var(--text-subtle) once generation completes)
 
 // Gradient-filled AI icon — background:gradient + maskImage
 function aiIconStyle(svgData: string, size: number): React.CSSProperties {
@@ -106,10 +106,11 @@ export const AIPillButton: React.FC<{
 
 Used as the **main highlight element** floating outside the product frame. Pill-shaped glass card with a plain dim drop shadow — **no border, no AI glow**. Based on Figma node 64:320. The AI affordance is conveyed by the gradient CTA button inside, not by the card's shadow.
 
-> **HARD RULE — Remotion:** `backdropFilter` and `WebkitBackdropFilter` are **required** on this
-> element. Background MUST be `rgba(244, 247, 250, 0.88)` — opacity below 1.0 is required for
-> the blur to composite. Do not raise opacity to 0.96 or remove backdropFilter. Add
-> `isolation: 'isolate'` to the AbsoluteFill or the nearest stacking-context parent.
+> **HARD RULE — Remotion:** the card background is the **opaque surface token**
+> `var(--surface-subtle)` (the card is solid, not glass — no `backdropFilter` on the card). The
+> translucent `rgba(244, 247, 250, 0.88)` + `backdropFilter` glass treatment is reserved for the
+> **AI generation area** (Templates 2 & 3, `AI_AREA_BASE`), NOT this card. The card carries **no
+> AI glow** — the only AI glow in the composition is on the CTA button (below).
 >
 > **DO NOT** nest `<AITextGenerationArea>` or any element using `AI_AREA_BASE` inside this card.
 > `AITextGenerationArea` is for standalone use on a page/frame. Nesting it here creates a
@@ -143,10 +144,7 @@ export const AIFloatingHighlight: React.FC<{
   return (
     <div style={{
       borderRadius: 40,
-      background: 'rgba(244, 247, 250, 0.88)',
-      backdropFilter: 'blur(8px)',
-      WebkitBackdropFilter: 'blur(8px)',
-      isolation: 'isolate',
+      background: 'var(--surface-subtle)',   // opaque surface token — the card is solid, not glass
       padding: '28px 24px 20px',
       boxShadow: '0 16px 48px rgba(0,0,0,0.18)',
       transform: `translateX(${slideX}px) scale(${scale})`,
@@ -176,11 +174,12 @@ export const AIFloatingHighlight: React.FC<{
           <span style={{ opacity: cursorOn }}>&#x258C;</span>
         </div>
       </div>
-      {/* CTA button — full width, same pill radius. No glow here: the card already glows. */}
+      {/* CTA button — full width, same pill radius. The AI glow lives on the CTA (the card has none). */}
       <div style={{
         borderRadius: 40, background: AI_GRADIENT, color: '#fff',
         height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
         fontFamily: '"Open Sans", sans-serif', fontWeight: 600, fontSize: 15,
+        boxShadow: '0 4px 16px rgba(9,91,177,0.30), 0 2px 10px rgba(215,70,245,0.18)', // AI glow — CTA only
       }}>
         <div style={{ ...aiIconStyle(sparklesSvg, 18), background: '#fff' }} />
         {ctaLabel}

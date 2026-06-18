@@ -143,7 +143,7 @@ apply a gradient to an icon:
 
 ```tsx
 <div className="gradient-icon">
-  <Icon icon={star} size="large" title="AI feature" />
+  <Icon icon={sparkles} size="large" title="AI feature" />  {/* AI icon = sparkles; star is NOT an AI icon */}
 </div>
 ```
 
@@ -153,6 +153,10 @@ set — no manual gradient needed for Button icons.
 ---
 
 ## Border Gradients
+
+**RETIRED — do not use.** Gradient borders are retired across IONOS; use a solid
+token border (`var(--border-base)`) or no border. (Previously used by the
+secondary AI button; that styling is retired.)
 
 Technique: `::before` pseudo-element with `mask-composite: exclude`:
 
@@ -185,8 +189,9 @@ Technique: `::before` pseudo-element with `mask-composite: exclude`:
 }
 ```
 
-This technique is already used by the AI Button component
-(`uds-btn-ai-secondary` in `Button.style.css`).
+This technique was formerly used by the secondary AI button
+(`uds-btn-ai-secondary` in `Button.style.css`); that styling is retired and no
+longer uses a gradient border.
 
 ---
 
@@ -270,6 +275,11 @@ Tailwind v4 supports `bg-radial-*` and `bg-conic-*`:
 ---
 
 ## Animatable Gradient Properties
+
+**Scope: live interactive web components only.** In GENERATED
+illustrations/assets (Remotion compositions), the AI gradient is a STATIC
+diagonal (45°) — NEVER animate or interpolate the gradient angle. Animate the
+AI *moment* with glow/bloom/opacity, not angle.
 
 UDS registers gradient properties as animatable via `@property` (defined in
 `Button.style.css`):

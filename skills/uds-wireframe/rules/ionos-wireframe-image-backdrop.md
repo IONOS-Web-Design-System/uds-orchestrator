@@ -157,29 +157,31 @@ Layer order (document order, no z-index games):
    on the negative-space side, containing the feature's UI (segmented control, radio list,
    primary CTA — real UDS components or tight sketches). **Panel chrome follows the
    Floating Highlight Card template (`ionos-wireframe-ai-animations.md`): a borderless
-   glass surface with a pulsing AI glow — NO border of any kind (dashed AND gradient
-   borders are retired panel styles). The AI gradient belongs to the CTA inside, not the
-   panel chrome.**
+   glass surface with a plain neutral drop shadow (no AI glow — AI glow is on the CTA
+   only) — NO border of any kind (dashed AND gradient borders are retired panel styles).
+   The AI gradient belongs to the CTA inside, not the panel chrome.**
 
    ```tsx
    // Floating Highlight Card chrome (see ionos-wireframe-ai-animations.md for the full
-   // animated version with enter spring + glow pulse):
-   const gp = Math.sin((frame % 84) / 84 * Math.PI * 2); // glow pulse
+   // animated version with enter spring):
    <div style={{
      position: 'absolute', left: '5%', top: '30%', width: 280,
      borderRadius: 24, padding: 20,
-     background: 'rgba(244, 247, 250, 0.88)',
+     background: 'var(--surface-subtle)',
      backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-     boxShadow: `0 24px 64px rgba(0,0,0,0.35), 0 0 ${24 + gp * 14}px rgba(180,16,231,${0.18 + gp * 0.12})`,
+     boxShadow: '0 24px 64px rgba(0,0,0,0.35)',
    }}>
      {/* options list; CTA: linear-gradient(45deg,#095BB1,#D746F5) + white text;
-         sparkle icon accent: #B410E7 */}
+         sparkle icon accent: var(--color-ai-primary-end, #D746F5) */}
    </div>
    ```
 
    If the panel shows a generating/loading moment, use the mandatory `ai-subtle`
-   treatment from `ionos-ai-features` (calm `#FAE7FE → #FFFFFF` oscillation,
-   ≥10–15 frames, no hard cut).
+   treatment from `ionos-ai-features` for the AI 'thinking' indicator only (calm
+   `var(--color-ai-subtle-start) → var(--color-ai-subtle-end)` oscillation, ≥10–15
+   frames, no hard cut). The `ai-subtle` gradient is a TOKEN with light AND dark values —
+   prefer `var(--color-ai-subtle-start)`/`var(--color-ai-subtle-end)` (auto light/dark)
+   over the light-only `#FAE7FE → #FFFFFF` hex.
 
 6. **Connector line** — a thin line from the panel's edge to the headline's marquee,
    ending in a filled dot. **The connector is ALWAYS axis-aligned — a single horizontal
@@ -273,16 +275,17 @@ Layer order:
      </div>
      ```
 
-   - **Prompt bubble (optional):** a prompt surface follows `ionos-ai-features` — the
-     `ai-subtle` gradient background, borderless, soft shadow — **never a dashed or
-     bordered outline (retired styles)** — with a tiny accent sparkle icon (`#B410E7`),
-     a muted caption (e.g. "Anforderung KI Website-Generator"), and a short bold request
-     line:
+   - **Prompt bubble (optional):** a prompt surface follows `ionos-ai-features` — prompt
+     bubbles use `var(--surface-base)`; reserve `ai-subtle` for the AI 'thinking'
+     indicator only — borderless, soft shadow — **never a dashed or bordered outline
+     (retired styles)** — with a tiny accent sparkle icon (`var(--color-ai-primary-end,
+     #D746F5)`), a muted caption (e.g. "Anforderung KI Website-Generator"), and a short
+     bold request line:
 
      ```tsx
      <div style={{
        position: 'absolute', /* offset from the cluster */ maxWidth: 300,
-       background: 'linear-gradient(120deg, #FAE7FE, #FFFFFF)', // ai-subtle prompt surface
+       background: 'var(--surface-base)', // prompt bubble surface
        borderRadius: 14, padding: 16,
        boxShadow: '0 16px 48px rgba(0,0,0,0.3)',
      }}>
@@ -330,11 +333,12 @@ What THIS rule adds on top:
    placeholder palette.
 4. **1-2 floating highlight fragments** overlapping the wireframe's edge — a prompt
    bubble and/or a small mini-toolbar pill, per the **Floating Highlight Card template**
-   (`ionos-wireframe-ai-animations.md`): borderless glass surface + pulsing AI glow, no
-   border of any kind. The prompt bubble uses the `ai-subtle` surface
-   (`linear-gradient(120deg, #FAE7FE, #FFFFFF)`) with a muted caption and a gradient CTA
-   (e.g. "✨ Seite erstellen" — `linear-gradient(45deg, #095BB1, #D746F5)`, white text).
-   The AI gradient belongs to CTAs only, never to fragment chrome.
+   (`ionos-wireframe-ai-animations.md`): borderless glass surface + plain neutral drop
+   shadow (no AI glow — AI glow is on the CTA only), no border of any kind. The prompt
+   bubble uses `var(--surface-base)` (reserve `ai-subtle` for the AI 'thinking' indicator
+   only) with a muted caption and a gradient CTA (e.g. "✨ Seite erstellen" —
+   `linear-gradient(45deg, #095BB1, #D746F5)`, white text). The AI gradient belongs to
+   CTAs only, never to fragment chrome.
 
 ## Color harmony (all styles)
 
@@ -346,7 +350,7 @@ of-a-piece with the imagery — never a brand-default background fighting the ph
   mix the dominant hue toward the brand navy (`#001B41`) at roughly 60-80% darkness. E.g.
   dominant teal `#2E6F73` → gradient `#0E2B33 → #001B41`; warm terracotta `#B86B4C` →
   `#3A1F14 → #001B41`. Keep it calm and dark enough that white text and glass panels read.
-- **What never changes**: panel glass stays neutral (`rgba(244,247,250,0.88)`), the
+- **What never changes**: panel glass stays neutral (`var(--surface-subtle)`), the
   blue→magenta AI gradient stays exactly `#095BB1 → #D746F5` (CTAs/badges only), brand
   component colors stay tokenized. Harmony lives in the ROOT background, scrims, and
   subtle shadow tints — not in recolored UI.
