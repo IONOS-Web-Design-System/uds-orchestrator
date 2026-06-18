@@ -30,8 +30,14 @@ guaranteed to move in sync. Never interpolate opacity separately with different 
 Per the official Remotion text-animations skill: **always use string slicing for typewriter
 effects. Never use per-character opacity** (per-word spans cause reflow and jitter).
 
+**The slice index MUST stay within `[0, text.length]` — clamp BOTH ends.** A negative index
+makes `text.slice(0, n)` count from the END of the string, so a typing beat that starts on a
+later frame renders a garbled partial string BEFORE its start frame, then hard-cuts to empty
+at the start frame and re-types — a "double-typing" / hard-dissolve jitter. `Math.min(length, …)`
+only caps the top; you MUST also floor at 0 (via `extrapolateLeft: 'clamp'` AND `Math.max(0, …)`).
+
 ```tsx
-// ✓ CORRECT — single .slice() node, stable layout
+// ✓ CORRECT — typing from frame 0, single .slice() node, stable layout
 const CHAR_FRAMES = 2;                     // frames per character
 const BLINK_FRAMES = 16;                   // cursor cycle length
 
@@ -40,6 +46,15 @@ const charCount = Math.min(
   Math.floor(frame / CHAR_FRAMES),
 );
 const typedText = text.slice(0, charCount);
+
+// ✓ CORRECT — typing that starts AFTER an entrance (e.g. frame 20): clamp BOTH ends so the
+// index can never go negative before the start frame.
+const delayedCount = Math.max(0, Math.min(
+  text.length,
+  Math.floor(interpolate(frame, [20, 55], [0, text.length],
+    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })),
+));
+const delayedText = text.slice(0, delayedCount);
 
 // Cursor blink — frame-driven opacity cycle
 const cursorOpacity = interpolate(
@@ -70,6 +85,9 @@ const cursorOpacity = interpolate(
 
 // ❌ WRONG — per-word span opacity causes reflow
 // ❌ WRONG — clipPath wipe looks like a reveal, not typing
+// ❌ WRONG — delayed typing missing extrapolateLeft / Math.max(0,…): the index is negative
+//    before frame 20, slice(0,-n) shows trailing garbage, then hard-cuts to "" and re-types:
+//    Math.min(text.length, Math.floor(interpolate(frame, [20, 55], [0, text.length], { extrapolateRight: 'clamp' })))
 ```
 
 ## Text rendering stability — no live transforms on text containers
