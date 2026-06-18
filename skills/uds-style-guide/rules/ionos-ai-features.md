@@ -12,6 +12,15 @@ the standard brand blue/sky palette. Use it ONLY for genuinely AI-driven afforda
 (prompt inputs, "generate"/"improve with AI" actions, AI result callouts, AI badges).
 Never use it for ordinary CTAs — those stay on brand blue/sky.
 
+**Operational test (is this an AI feature?):** apply the AI gradient / AI templates ONLY when
+the feature itself performs AI generation or inference — a prompt/chat assistant, a
+"generate"/"improve with AI" action, or an AI result. A badge or CTA earns the gradient ONLY if
+it labels an AI capability; a non-AI badge or CTA (security/SSL, sale, status, hosting,
+e-commerce, dashboards) stays on brand blue/sky with no AI gradient or AI glow. In this pipeline
+the moderator makes this explicit via `illustrationBrief.aiFeature` (true → AI styling, false →
+brand blue/sky only) — "CTAs/badges only" is a *placement* limit, not a license to use the AI
+gradient on a non-AI badge.
+
 ## Gradient tokens (ionos brand, from `@ionos-web-design-system/core`)
 
 | Token (CSS custom property) | Value (ionos) | Use |
@@ -33,10 +42,11 @@ hand-converted — use these exact hex values when hardcoding:
 | Token | Hex |
 |---|---|
 | `ai-primary-start` (IONOS blue) | `#095BB1` |
-| `ai-primary-end` (magenta) | `#D746F5` |
-| `ai-subtle-start` (light) | `#FAE7FE` |
-| `ai-subtle-end` (light) | `#FFFFFF` |
-| AI accent / semantic-ai | `#B410E7` |
+| `ai-primary-end` (magenta, = IONOS purple-400) | `#D746F5` — AI gradient end; also the promotional-shape colour (same on light + dark) |
+| `ai-subtle-start` | light `#FAE7FE` · dark `oklch(0.3696 0.1806 304.15)` — scheme-aware token; prefer `var(--color-ai-subtle-start)` |
+| `ai-subtle-end` | light `#FFFFFF` · dark `oklch(0.229 0.0801 256.64)` — prefer `var(--color-ai-subtle-end)` |
+| purple-500 `#B410E7` | **RETIRED — do not use in any scenario** |
+| "generating" text (purple-600) `#8212C2` | transient AI-generating text colour only; reverts to `var(--text-base)` / `var(--text-subtle)` once generation completes |
 
 The gradient **starts blue and ends magenta** — `#095BB1 → #D746F5`. A purple-only or
 pink-only gradient is wrong; the blue start is what makes it read as IONOS.
@@ -67,11 +77,12 @@ These effects are calm and premium — they signal AI without overpowering the c
 **Every AI interaction must include a visible loading/generating state** between the
 trigger (button click) and the result reveal. A direct cut from action to result looks
 broken. The loading state:
-- Uses the `ai-subtle` gradient (`#FAE7FE → #FFFFFF`) as a calm animated background on
-  the generating surface (slow oscillation via `interpolate()` on `opacity` or position)
+- Shows the `ai-subtle` gradient (`var(--color-ai-subtle-start)` → `var(--color-ai-subtle-end)`;
+  light `#FAE7FE → #FFFFFF`, dark via the token) ONLY on the AI **'thinking' indicator** — e.g. a
+  text-placeholder / typing bar — never as a general panel, prompt-bubble, or card surface
 - Lasts at least 10–15 frames (at 30fps) — long enough to read as deliberate processing
-- May include a pulsing AI star icon (`#B410E7`, low opacity oscillation) or a soft
-  gradient scan across the content area
+- May pulse a `filled-sparkles` AI icon in the AI accent `#D746F5` (low-opacity oscillation), or a
+  soft gradient scan across the content area — never use the retired `#B410E7`
 - Resolves into the result reveal with a fade or slide — never a hard cut
 
 ```css
@@ -79,12 +90,15 @@ background: linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai
 color: #fff;
 ```
 
-## Subtle AI surfaces — prompt & generating states
+## Subtle AI surfaces — the 'thinking' indicator ONLY
 
-Prompt inputs and "generating…" surfaces use the **ai-subtle** gradient as a calm
-background (optionally a slow moving gradient to convey activity):
+`ai-subtle` is a **scheme-aware token** — `--color-ai-subtle-start/end` carry BOTH light and dark
+values. Reserve it for the AI **'thinking' indicator** only — e.g. a text-placeholder bar that
+animates while the model "thinks". It is NOT a general surface: prompt inputs, panels, bubbles,
+and cards use `var(--surface-base)` / `var(--surface-subtle)`, never `ai-subtle`.
 
 ```css
+/* AI 'thinking' indicator only — the token carries light + dark */
 background: linear-gradient(120deg, var(--color-ai-subtle-start), var(--color-ai-subtle-end));
 ```
 
@@ -96,7 +110,7 @@ background: linear-gradient(120deg, var(--color-ai-subtle-start), var(--color-ai
 | Variant | Appearance |
 |---|---|
 | `primary`   | Full gradient background + white text |
-| `secondary` | Gradient border + gradient text (transparent bg) |
+| `secondary` | Gradient text on transparent bg (**gradient borders are retired** — no gradient border) |
 | `tertiary`  | Gradient text only (transparent bg) |
 
 ```tsx
