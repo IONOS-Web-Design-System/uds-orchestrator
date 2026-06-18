@@ -53,6 +53,14 @@ Per-generator hazards to OMIT:
 - **illustration** `feature`: describe *structure and intent* (which UDS components, what
   copy slots, what data the screen shows, what motion if `intent:animation`) — not pixel
   coordinates. The agent builds real components; over-specifying layout fights the system.
+  - **Preserve an explicit device frame.** If the request shows the UI ON or INSIDE a physical
+    device — a phone / tablet / laptop, a "device mockup", or "on the `<device>`'s screen" —
+    the `feature` MUST keep that framing: name the device class and state that the interface is
+    composited INTO the device's screen (e.g. "a front-on **tablet device frame**; inside its
+    screen, the IONOS GPT chat UI fades in…"). agent-svc carries transparent device-frame
+    mockup assets and selects one only when the `feature` names the device, so flattening this
+    to a bare "app shell" or "chat window" drops the frame. Add a device only when the request
+    asked for one.
 
 Budget: keep each `feature` under 1200 characters — the orchestrator appends ~600 chars of
 shared context (and, for hybrid, the embed contract). Lead with the most load-bearing
