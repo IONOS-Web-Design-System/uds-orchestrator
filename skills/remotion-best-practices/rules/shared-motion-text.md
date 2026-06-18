@@ -30,8 +30,20 @@ guaranteed to move in sync. Never interpolate opacity separately with different 
 Per the official Remotion text-animations skill: **always use string slicing for typewriter
 effects. Never use per-character opacity** (per-word spans cause reflow and jitter).
 
+**The slice index MUST stay within `[0, text.length]` — clamp BOTH ends.** A negative index
+makes `text.slice(0, n)` count from the END of the string, so a typing beat that starts on a
+later frame renders a garbled partial string BEFORE its start frame, then hard-cuts to empty
+at the start frame and re-types — a "double-typing" / hard-dissolve jitter. `Math.min(length, …)`
+only caps the top; you MUST also floor at 0 (via `extrapolateLeft: 'clamp'` AND `Math.max(0, …)`).
+
+**The typing cursor must be ZERO-WIDTH so it never reflows the text.** A normal inline cursor
+adds width the ghost does not reserve, so at the end of a line the trailing word wraps when the
+cursor shows and un-wraps when it hides (or when typing ends) — the last word "jumps". Give the
+cursor `display: 'inline-block', width: 0, overflow: 'visible'` and blink it via `opacity` —
+never by conditionally mounting it (`{show && <span>▌</span>}` toggles width → wrap jitter).
+
 ```tsx
-// ✓ CORRECT — single .slice() node, stable layout
+// ✓ CORRECT — typing from frame 0, single .slice() node, stable layout
 const CHAR_FRAMES = 2;                     // frames per character
 const BLINK_FRAMES = 16;                   // cursor cycle length
 
@@ -40,6 +52,15 @@ const charCount = Math.min(
   Math.floor(frame / CHAR_FRAMES),
 );
 const typedText = text.slice(0, charCount);
+
+// ✓ CORRECT — typing that starts AFTER an entrance (e.g. frame 20): clamp BOTH ends so the
+// index can never go negative before the start frame.
+const delayedCount = Math.max(0, Math.min(
+  text.length,
+  Math.floor(interpolate(frame, [20, 55], [0, text.length],
+    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })),
+));
+const delayedText = text.slice(0, delayedCount);
 
 // Cursor blink — frame-driven opacity cycle
 const cursorOpacity = interpolate(
@@ -64,12 +85,19 @@ const cursorOpacity = interpolate(
                 whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: '#001B41',
                 overflow: 'hidden' }}>
     {typedText}
-    <span style={{ opacity: cursorOpacity }}>&#x258C;</span>
+    {/* Zero-width cursor: never reflows the trailing word; blink via opacity, never by mounting */}
+    <span style={{ opacity: cursorOpacity, display: 'inline-block', width: 0, overflow: 'visible' }}>&#x258C;</span>
   </div>
 </div>
 
 // ❌ WRONG — per-word span opacity causes reflow
 // ❌ WRONG — clipPath wipe looks like a reveal, not typing
+// ❌ WRONG — full-width inline cursor or {show && <span>▌</span>}: adds width the ghost lacks,
+//    so the last word wraps/clips when the cursor shows and un-wraps when it hides or typing
+//    ends — the trailing word "jumps". Use the zero-width cursor above.
+// ❌ WRONG — delayed typing missing extrapolateLeft / Math.max(0,…): the index is negative
+//    before frame 20, slice(0,-n) shows trailing garbage, then hard-cuts to "" and re-types:
+//    Math.min(text.length, Math.floor(interpolate(frame, [20, 55], [0, text.length], { extrapolateRight: 'clamp' })))
 ```
 
 ## Text rendering stability — no live transforms on text containers
