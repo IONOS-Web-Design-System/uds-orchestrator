@@ -56,8 +56,12 @@ validate. Otherwise proceed normally from step 1.
    genuinely missing or ambiguous — one short batch with smart defaults (brand=ionos,
    colorScheme=light, mode=auto, showroom=dev-local, dimensions 1280×720, durationSec=3,
    loop=false, variants=1, market=de). For an **animated** asset, also confirm whether it
-   should **loop seamlessly** (`loop:true`) or play once (`loop:false`, the default). Mind the
-   canvas-size → hybrid-look and image crop-safety notes in `human-interactive.md`.
+   should **loop seamlessly** (`loop:true`) or play once (`loop:false`, the default).
+   For any **illustration or hybrid**, ask explicitly whether it should be a **still**
+   (single frame, the default) or **animated**; if animated, also ask **what kind of
+   motion** is wanted and write that motion description into the `brief` (a still gets no
+   motion words). See the "still or animated" round in `human-interactive.md`.
+   Mind the canvas-size → hybrid-look and image crop-safety notes in `human-interactive.md`.
 
 3. **Enrich and assemble** the `UnifiedBrief` JSON (shape and dimension ranges per
    `human-interactive.md`). Write the `brief` text yourself using the enrichment +

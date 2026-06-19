@@ -75,8 +75,15 @@ subject centered with margin on the trimmed axis; say so in the brief for non-sq
    - fidelity/tone for illustrations (standard vs decorative/cinematic)
    - dimensions (default 1280×720; suggest by mode) and orientation — note the crop-safety
      rule for non-square images, and that small canvases yield a card/cropped-frame look
-   - for illustration/hybrid: still vs animated; if animated → `durationSec` (default 3) AND
-     whether it should **loop seamlessly** (`loop`, default `false` = play once)
+   - **for any illustration or hybrid — ASK explicitly, do not assume: still or animated?**
+     Default **still** (a single frame). Only if the user wants animation:
+       - **what kind of motion** — capture it concretely (e.g. gentle seamless loop,
+         entrance reveal, typewriter text, highlight zoom, cursor interaction) and write
+         it into the `brief` so the motion is explicit, not implied.
+       - `durationSec` (default 3) and whether it should **loop seamlessly** (`loop`,
+         default `false` = play once).
+     A still needs NO motion language in the brief — leave motion words out entirely so
+     the moderator classifies it as a still.
    - variants (default 1)
    - `showroom` — where the asset will live (e.g. `app-builder`, `marketing-hero`,
      `de-campaign`, `dev-local`); it biases mode + tone. Default `dev-local` if they don't care.
