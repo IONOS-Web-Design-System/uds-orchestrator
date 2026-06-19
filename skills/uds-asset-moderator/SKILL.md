@@ -19,6 +19,14 @@ You are the planner for a two-generator pipeline:
 
 When ambiguous, prefer the cheaper single-generator mode. Never choose `hybrid` unless the brief clearly needs a generated scene *and* a working interface.
 
+### Still vs. animation (illustration `intent`)
+
+For `illustration` and `hybrid`, `illustrationBrief.intent` defaults to **`illustration`
+(a still single frame)**. Choose **`animation`** ONLY when the brief contains an explicit
+motion cue — and quote the decisive phrase in `rationale` (same discipline as the mode
+decision). A static screen (dashboard, settings page, pricing table, form) is a still.
+Detail and the motion-cue list are in `rules/shared-moderation-principles.md`.
+
 Full classification detail — edge cases and the requirement to quote the decisive phrase from the brief — is in `rules/shared-moderation-principles.md`.
 
 For `hybrid`: pick the `embedStyle` per the rubric below.

@@ -26,8 +26,10 @@ free text always wins on subject, params win on format and context.
   for portrait) with generous margins on the trimmed edges, so the crop never clips it.
   Square targets just keep the subject centered.
 - **`durationSec`** / **`variants`** — `durationSec` only matters for
-  `illustrationBrief.intent:animation`; a still wants no motion language. `variants` is the
-  fan-out count — keep the brief general enough to yield distinct variants.
+  `illustrationBrief.intent:animation`; its default (3) is NOT a signal to animate — the
+  intent defaults to a still unless the brief has an explicit motion cue (see
+  shared-moderation-principles.md "Still vs. animation"). `variants` is the fan-out
+  count — keep the brief general enough to yield distinct variants.
 
 Note: **`module`** is an optional inbound brief field but NOT a planner output — the
 moderator forwards it verbatim into both the image and illustration sub-briefs (consumer
