@@ -84,6 +84,7 @@ subject centered with margin on the trimmed axis; say so in the brief for non-sq
          default `false` = play once).
      A still needs NO motion language in the brief — leave motion words out entirely so
      the moderator classifies it as a still.
+
    **Composition pattern — infer first, confirm only when ambiguous:**
 
    Use the table below to map what you already know (dimensions, brief intent, mode) onto
