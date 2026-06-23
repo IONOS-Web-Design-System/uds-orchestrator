@@ -517,3 +517,112 @@ width: 200   // use canvas_width × 0.62 minimum
 - Highlight card: bottom-anchored, enters from **below** (`translateY` from +50–70px → 0) with slight scale (0.92 → 1.0), arrives ~10–15 frames after the frame. Because the card uses `bottom` positioning, a positive `translateY` offset pushes it downward off-screen — interpolate toward 0 for the entry.
 - **Card entrance must terminate exactly** at `translateY(0) scale(1)` before any typing/text beat starts. Use `Easing.bezier(0.34, 1.56, 0.64, 1)` with clamp (terminates exactly), or snap the spring: `raw > 0.995 ? 1 : raw`. An unsettled spring keeps the text re-rasterizing → shimmer.
 - After both elements settle, **the frame only** may drift very slowly right (~1–2px/frame) to reinforce depth — never the highlight card (text shimmers under sub-pixel drift; the frame's image content does not)
+
+## Pattern 7 — Connector Line (pure illustration)
+
+**When:** `Composition pattern: product-frame-connector-line` — the brief asks to "point
+to" or "highlight a specific named feature inside the app." The full product frame is
+visible (no zoom/crop); the AI highlight card sits outside the frame; an axis-aligned
+connector line links the card's edge to the feature point inside the frame.
+
+**This pattern is for pure illustration only.** It does NOT require a generated background
+image. For the hybrid equivalent (connector from a floating panel to a headline in a photo),
+see `ionos-wireframe-image-backdrop.md` "Style: image-backdrop with feature pointer."
+
+### DOM structure
+
+```tsx
+<AbsoluteFill style={{ overflow: 'hidden' }}>
+  {/* 1 — product frame (full size, no crop) */}
+  <div style={{
+    position: 'absolute',
+    top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+    width: 860, height: 560,   // fits within canvas with margin
+    overflow: 'hidden', borderRadius: 12,
+  }}>
+    {/* product UI — sidebar + client-app zone with a MARKED target point */}
+    {/* Mark the connector anchor: a small colored dot or selection indicator
+        at the feature's location (e.g. a specific row, button, or region).
+        This anchor must be positioned absolutely so its coordinates are known. */}
+  </div>
+
+  {/* 2 — axis-aligned connector line (TWO divs: horizontal + optional vertical L-elbow) */}
+  {/* A diagonal/slanted line is FORBIDDEN — use only horizontal or vertical segments. */}
+  {/* Plan layout so the card anchor and the frame feature share the same Y (horizontal
+      run) or the same X (vertical run). */}
+  <div style={{
+    position: 'absolute',
+    top: ANCHOR_Y - 1,          // same Y as the card anchor point
+    left: FRAME_FEATURE_X,      // starts at the feature point inside the frame
+    width: CARD_LEFT_EDGE - FRAME_FEATURE_X,
+    height: 2,
+    background: '#8212C2',      // same accent as the selection marquee
+  }} />
+  {/* Dot endpoint at the frame feature */}
+  <div style={{
+    position: 'absolute',
+    left: FRAME_FEATURE_X - 5, top: ANCHOR_Y - 5,
+    width: 10, height: 10, borderRadius: '50%', background: '#8212C2',
+  }} />
+
+  {/* 3 — floating highlight card (Floating Highlight Card anatomy — see panel chrome rules below) */}
+  <div style={{
+    position: 'absolute',
+    left: CARD_LEFT_EDGE,
+    top: ANCHOR_Y - cardHeight / 2,
+    borderRadius: 40,
+    background: 'var(--surface-subtle)',
+    padding: '28px 24px 20px',
+    boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
+    zIndex: 100,
+  }}>
+    {/* AI content + CTA */}
+  </div>
+</AbsoluteFill>
+```
+
+### Layout and positioning rules
+
+- **L-elbow when vertical alignment is impossible.** If the card anchor and the feature
+  point cannot share the same Y or X (different rows and different columns), use TWO
+  axis-aligned segments meeting at a right-angle corner. Never one diagonal segment.
+- **Feature target anchor.** The feature point inside the frame MUST have a clear visual
+  indicator in the product UI — a subtle dashed ring, a selection dot (`border: 2px dashed
+  #8212C2`), or a highlighted row/cell. Without the indicator, the connector ends
+  in empty space and the viewer cannot see what it is pointing to.
+- **Counterbalance.** Place the card on the OPPOSITE side from where the frame feature
+  sits. If the feature is in the right panel, the card floats left — the line crosses
+  horizontally, which reads as purposeful.
+- **Card must not overlap the indicated feature.** The card's body must not cover the
+  target point — leave the target visible so the viewer can follow the line.
+
+### Animation guidance
+
+- Frame is present from frame 0, settled immediately — it is stable context, not the hero.
+- Connector line grows from the feature point toward the card (`width: 0 → full` over
+  15–20 frames, `easing: linear`).
+- Card flies in from outside the canvas edge, arriving as the line finishes growing
+  (+5 frame stagger after line completes). Use `AIFloatingHighlight` spring entrance from
+  `ionos-wireframe-ai-animations.md`.
+- Feature target indicator: fade in or scale 0.8→1 simultaneously with the line growth.
+
+---
+
+## Panel chrome rules (applies to ALL patterns in this file)
+
+These rules govern the visual treatment of ALL floating cards, prompt bubbles, mini-toolbars,
+and highlight elements in every pattern above. They also appear in `ionos-wireframe-ai-animations.md`
+and `ionos-wireframe-image-backdrop.md`; stated here so pure-illustration jobs always have them.
+
+**No AI glow on panel/card chrome.** The only AI glow in any composition is on the CTA
+button inside the card — the `linear-gradient(45deg, #095BB1, #D746F5)` fill plus
+`boxShadow: '0 4px 16px rgba(9,91,177,0.30), 0 2px 10px rgba(215,70,245,0.18)'` on the
+button. The card's outer chrome (`boxShadow` on the `borderRadius: 40` wrapper) is always
+a **plain neutral drop shadow** (`0 16px 48px rgba(0,0,0,0.35)`). Never a colored,
+gradient, or AI-tinted outer shadow on the card.
+
+**No dashed borders on panels.** Dashed borders (`border: 2px dashed ...`) are reserved
+exclusively for the **selection marquee** inside the product frame's client-app zone —
+the design-tool affordance that marks the content being acted on. Panel chrome, prompt
+bubbles, mini-toolbars, stat chips, and the Floating Highlight Card wrapper are always
+borderless. This style was retired; applying it to panels is wrong.
