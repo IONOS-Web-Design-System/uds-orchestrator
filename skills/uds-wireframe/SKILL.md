@@ -49,6 +49,23 @@ All rules are inlined below. Quick navigation:
 | `ionos-wireframe-decorative-mode` | Decorative mode setup, device frames, Bar/BarGroup helpers, glass card system, HTML preview |
 | `ionos-wireframe-micro-animations` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in, variant switcher |
 | `ionos-wireframe-asset-integration` | Local file and Figma URL asset integration, pipeline catalog `role:`-driven selection & placement, staggered reveal |
+| `ionos-wireframe-image-backdrop` | **Hybrid image-backdrop compositions** — all 4 embed styles (feature-pointer with connector line, full-bleed, interface-asset, floating-card); color harmony; animation hooks. Read when brief contains `[HYBRID EMBED CONTRACT]` |
+| `ionos-wireframe-small-format` | **Small-format illustrations** (< ~512px both axes) — icon-story grammar, cropped-product-frame pattern, icon sizing, loop motion rules, hybrid-in-small-format embed styles |
+
+## Pattern → Rule routing
+
+When the brief names a `Composition pattern:` (set by the moderator), load the corresponding rule **in addition to** `ionos-wireframe-composition` and `ionos-wireframe-product-frame`:
+
+| Pattern name | Extra rule to load |
+|---|---|
+| `product-frame-full`, `product-frame-bottom-bleed`, `product-frame-zoom-cutout`, `product-frame-square` | `ionos-wireframe-product-frame` (already in index — confirm loaded) |
+| `product-frame-connector-line` | `ionos-wireframe-product-frame` — read the "Connector Line" section |
+| `image-backdrop-feature-pointer`, `image-backdrop-full-bleed`, `interface-asset`, `floating-card` | `ionos-wireframe-image-backdrop` |
+| `small-icon-story`, `small-cropped-frame` | `ionos-wireframe-small-format` |
+
+When `dimensions.w < 512 AND dimensions.h < 512` and no `Composition pattern:` is set, default to `small-cropped-frame` for product briefs and `small-icon-story` for abstract briefs.
+
+When the brief contains `[HYBRID EMBED CONTRACT]`, always load `ionos-wireframe-image-backdrop` — the contract's `Style:` line names the exact section to follow.
 
 ## Output Format
 
