@@ -84,6 +84,27 @@ subject centered with margin on the trimmed axis; say so in the brief for non-sq
          default `false` = play once).
      A still needs NO motion language in the brief — leave motion words out entirely so
      the moderator classifies it as a still.
+   **Composition pattern — infer first, confirm only when ambiguous:**
+
+   Use the table below to map what you already know (dimensions, brief intent, mode) onto
+   a pattern name. Write the chosen name into the `brief` as `Composition pattern: <name> — `.
+   Only ask the user if two patterns are plausible and the choice changes the visual
+   meaningfully (e.g. "connector line to a specific feature" vs "floating highlight no line").
+
+   | Conditions | Default pattern |
+   |---|---|
+   | `mode=illustration`, brief describes an inline editing action ("select this text", "resize this image") | `product-frame-zoom-cutout` |
+   | `mode=illustration`, brief says "point to / highlight a specific feature inside the app" | `product-frame-connector-line` |
+   | `mode=illustration`, landscape canvas too short for a full UI (w > 2×h) | `product-frame-bottom-bleed` |
+   | `mode=illustration`, square canvas (w ≈ h, large) | `product-frame-square` |
+   | `mode=illustration`, square canvas (w ≈ h, small < 512) | `small-cropped-frame` (or `small-icon-story` for abstract concept) |
+   | `mode=illustration`, no special condition above | `product-frame-full` |
+   | `mode=hybrid`, `embedStyle` set by moderator | map embedStyle → pattern name (see `shared-brief-enrichment.md`) |
+
+   **If you ask:** frame it as one short question with smart defaults, e.g.:
+   > "Should I point the AI highlight at a specific element inside the app with a
+   > connector line (like a design tool pointer), or just float it outside freely?
+   > Default: floating freely."
    - variants (default 1)
    - `showroom` — where the asset will live (e.g. `app-builder`, `marketing-hero`,
      `de-campaign`, `dev-local`); it biases mode + tone. Default `dev-local` if they don't care.
