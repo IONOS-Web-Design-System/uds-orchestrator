@@ -61,6 +61,43 @@ Per-generator hazards to OMIT:
     mockup assets and selects one only when the `feature` names the device, so flattening this
     to a bare "app shell" or "chat window" drops the frame. Add a device only when the request
     asked for one.
+  - **Name the composition pattern as the first element of the feature text.** This is
+    the primary signal `agent-svc` uses to select the correct wireframe rule. Choose the
+    most specific pattern that fits the brief and available dimensions:
+
+    **Large-canvas illustration (no generated image, w ≥ 512 OR h ≥ 512):**
+    - `product-frame-full` — full product frame, centered; 1 floating highlight; no crop.
+      Use as default when none of the more specific conditions below apply.
+    - `product-frame-bottom-bleed` — landscape canvas too short for the full frame height;
+      frame bleeds bottom; highlight right-of-center.
+    - `product-frame-zoom-cutout` — brief focuses on an inline editing interaction
+      (text selection, in-page generation); zoom so the interaction target is at canvas
+      center; frame bleeds 2-3 sides; highlight on the opposite side.
+    - `product-frame-connector-line` — brief asks to "point to" or "highlight a specific
+      feature inside the app"; full frame; highlight card outside; axis-aligned connector
+      line from highlight to the feature inside the frame.
+    - `product-frame-square` — canvas is square (w ≈ h); frame bleeds right; highlight
+      left-anchored and fully contained.
+
+    **Hybrid (generated image present — mode = hybrid):**
+    The moderator sets `embedStyle`; map it to the pattern name for the feature text:
+    - `background-pointer` → `image-backdrop-feature-pointer`
+    - `background-full` → `image-backdrop-full-bleed`
+    - `interface-asset` → `interface-asset`
+    - `floating-card` → `floating-card`
+
+    **Small format (w < 512 AND h < 512):**
+    - `small-icon-story` — abstract concept, integration story, no specific product screen.
+    - `small-cropped-frame` — brief is about a specific product screen or feature.
+
+    **Format:** begin the illustration feature with exactly:
+    `Composition pattern: <name> — ` followed by the normal structure/intent description.
+
+    Example:
+    > `Composition pattern: product-frame-bottom-bleed — IONOS Website Builder editor
+    > (dark navy shell, left icon sidebar, client-app zone with bike-shop header and hero
+    > image); floating highlight card right-of-center with "✨ Seite erstellen" AI CTA;
+    > entrance: frame eases in from above, card flies in from right at +15 frames, hold.`
 
 Budget: keep each `feature` under 1200 characters — the orchestrator appends ~600 chars of
 shared context (and, for hybrid, the embed contract). Lead with the most load-bearing
