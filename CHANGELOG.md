@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.4.0...v2.4.1) (2026-06-24)
+
+
+### Miscellaneous
+
+* **image:** audit image skills, setup the clear image types and remove the contradicts rules ([5ca9c7f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/5ca9c7fa72acbd5c6a23b9b8a1d2204057ce1862))
+
 ## [2.4.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.3.0...v2.4.0) (2026-06-24)
 
 
