@@ -28,14 +28,56 @@ submit it.
   contains a full UnifiedBrief, **skip the interview** and go straight to submit — see the
   Pre-flight note below.
 
+## UnifiedBrief wire format
+
+**This is the exact JSON shape the `imagine-trigger` endpoint accepts.** Memorize it — wrong
+field names cause a silent `400` with no useful error message.
+
+```json
+{
+  "requestId": "kebab-case-slug-max-56-chars",
+  "brand": "ionos",
+  "mode": "illustration",
+  "market": "de",
+  "colorScheme": "light",
+  "showroom": "dev-local",
+  "brief": "…enriched brief text…",
+  "dimensions": { "w": 1280, "h": 720 },
+  "durationSec": 5,
+  "loop": false,
+  "variants": 1,
+  "callbackUrl": "https://n8nwh.ionos.org/webhook/mock-callback"
+}
+```
+
+**Critical field rules — verify every brief against these before sending:**
+
+| Field | Correct | Common mistake |
+|---|---|---|
+| `dimensions` | `{ "w": 1280, "h": 720 }` | ❌ `{ "width": 1280, "height": 720 }` — **causes 400** |
+| `embedStyle` | **not a top-level field** | ❌ do not include — it is an internal moderator plan value, not part of the UnifiedBrief; adding it does not change rendering and may cause rejection |
+| `style` | **not a field** | ❌ do not include — there is no `style` key in the schema |
+| `brand` | one of `ionos strato fasthosts homepl strefa udag world4you arsys` | ❌ anything else causes 400 |
+| `mode` | one of `auto image illustration hybrid` | ❌ anything else causes 400 |
+| `market` | one of `de en es fr pl it nl gb` | ❌ `uk` is rejected (ISO 639-1 reads it as Ukrainian) |
+| `variants` | 1–4 | ❌ ≥ 5 causes 400 |
+| `durationSec` | 1–30 | ❌ > 30 causes 400 |
+| `dimensions.w` | 256–2048 | ❌ out of range causes 400 |
+| `dimensions.h` | 180–2048 | ❌ out of range causes 400 |
+| `requestId` | ≤ 56 chars | ❌ longer is rejected |
+
+> **STOP before every submit:** run through this table. A `400` from the safe-gate gives no
+> field-level error message — you will not know which field failed without checking this list.
+
 ## Instructions
 
 **Pre-flight — is this already a finished brief?** If `$ARGUMENTS` (or the user's message)
 already contains a complete UnifiedBrief JSON — it has at least `brief`, `brand`, and `mode`
-or `dimensions` — do NOT re-interview the user. Parse it, sanity-check it (required fields
-present; dimension ranges per `human-interactive.md`), then jump straight to step 4 (show it
-back for a final OK) and step 5 (submit). Load any rules from step 1 only if you need them to
-validate. Otherwise proceed normally from step 1.
+or `dimensions` — do NOT re-interview the user. Parse it, validate it against the
+**§ UnifiedBrief wire format** table above (check field names, allowed values, and ranges),
+correct any issues silently, then jump straight to step 4 (show it back for a final OK) and
+step 5 (submit). Load any rules from step 1 only if you need them to validate. Otherwise
+proceed normally from step 1.
 
 1. **Load the rules** (read, do not summarize to the user):
    - `skills/uds-asset-moderator/SKILL.md` — mode rubric, `===PLAN===` contract, embedStyle.
@@ -105,6 +147,17 @@ validate. Otherwise proceed normally from step 1.
       `requestId`, `callbackUrl`, `brand`, `mode`, `dimensions`, etc. (Ensure step 3 put
       `requestId` and a `callbackUrl` — e.g. `https://n8nwh.ionos.org/webhook/mock-callback` —
       inside the brief.)
+
+      > **⛔ MANDATORY pre-send check — do not skip this step.**
+      > Before running the curl below, verify the assembled JSON against the wire-format table
+      > in **§ UnifiedBrief wire format** above. Specifically confirm:
+      > 1. `dimensions` uses `"w"` and `"h"` — **not** `"width"` / `"height"`.
+      > 2. `embedStyle` and `style` are **absent** from the top-level object.
+      > 3. `brand`, `mode`, and `market` are one of their listed allowed values.
+      > 4. `variants` ≤ 4, `durationSec` ≤ 30, `dimensions.w` 256–2048, `dimensions.h` 180–2048.
+      > 5. `requestId` ≤ 56 chars and `callbackUrl` is present.
+      > If any check fails, fix the brief and show the corrected JSON to the user before sending.
+
       ```bash
       curl -s -X POST \
         -H "Content-Type: application/json" \
