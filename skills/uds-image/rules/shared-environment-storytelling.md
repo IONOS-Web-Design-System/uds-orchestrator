@@ -63,7 +63,7 @@ or beige folder. Aim for at least one visually strong colour in the foreground.
 
 **Encoding template** — use this exact structure, filling in trade-specific objects:
 
-> `"shallow depth of field portrait photography, [colourful foreground object A] and
+> `"shallow depth of field, editorial photography style, [colourful foreground object A] and
 > [colourful foreground object B] lying on the surface immediately in front of the
 > camera lens, rendered as out-of-focus bokeh in the lower frame — [character
 > description, in sharp focus] — background of [dense enumeration of environment
@@ -126,7 +126,7 @@ The character's appearance should match someone who is mid-shift, not a model on
 - **Attire:** functional workwear showing appropriate use — an apron with slight marks,
   a well-worn shirt, practical footwear. NOT pristine or brand-new looking.
 - **Expression:** genuine and in-the-moment — either warm direct eye contact (portrait)
-  or natural focus directed at the task (person-scenario). NOT a posed corporate smile.
+  or natural focus directed at the task (scene). NOT a posed corporate smile.
 - **Hands and skin:** real hands with natural skin texture. Encode: `"natural skin texture,
   realistic hands"`.
 
@@ -135,14 +135,16 @@ The character's appearance should match someone who is mid-shift, not a model on
 Build the prompt in this strict order. Face and camera distance are locked first.
 Foreground is added last and only if the shot permits it.
 
-1. **Face anchor + camera shot** (CRITICAL — first sentence, always)
-   → chosen using the decision ladder in SKILL.md CRITICAL RULE #1
+1. **Face anchor + camera shot** (CRITICAL — first sentence for `portrait` and `avatar`)
+   → for `scene` and `scenario`, omit the face anchor; begin with the action or device
+     description instead; only add a face anchor if the brief explicitly requests it
+   → for `portrait` and `avatar`, chosen using the decision ladder in SKILL.md CRITICAL RULE #1
 2. **Character** — demographics, build, attire with wear, object in hand, frame position
 3. **Background density** — `"background of floor-to-ceiling [shelving/counter/wall] packed
    tightly with [enumerate 4-6 specific items], all softly blurred"`
 4. **Lighting** — `"[named light source] casting [quality and direction] light"`
 5. **Natural appearance** — hair, skin texture, expression
-6. **Photography style** — `"documentary portrait photography, editorial photography style"`
+6. **Photography style** — `"documentary editorial photography style"`
 7. **Foreground bokeh (optional — add only if shot distance allows)**
    Gate condition: include this sentence only when the camera is at waist-up or
    wider distance. Skip it for close/medium shots where it would compete with face.
@@ -150,7 +152,7 @@ Foreground is added last and only if the shot permits it.
    surface immediately in front of the camera lens, rendered as out-of-focus bokeh at
    the bottom edge of the frame"`
 
-Example (carpenter, waist-up, left placement — foreground included):
+Example (carpenter portrait — waist-up, left placement, foreground included):
 > `"full face clearly visible from hairline to chin, waist-up shot showing complete upper
 > body. a Black man in his 40s, solid muscular build, resting one hand on the edge of a
 > finished oak dining table, wearing a well-worn leather apron with sawdust and marks over
@@ -159,12 +161,12 @@ Example (carpenter, waist-up, left placement — foreground included):
 > pipe clamps, half-finished cabinet doors, scattered chisels, and sawdust-covered surfaces,
 > all softly blurred. warm natural light from large side workshop windows casting long
 > gentle shadows across the floor. hair worn naturally, natural skin texture, genuine
-> confident expression. documentary portrait photography, editorial photography style.
+> confident expression. documentary editorial photography style.
 > shallow depth of field, a weathered hand plane and curled wood shavings lying on the
 > workbench surface immediately in front of the camera lens, rendered as out-of-focus bokeh
 > at the bottom edge of the frame."`
 
-Example (carpenter, extra-wide landscape full-body — foreground included at base):
+Example (carpenter portrait — extra-wide landscape full-body, foreground included):
 > `"full face clearly visible from hairline to chin, extra-wide establishing shot, character
 > occupying one vertical third of the frame, full body head to floor visible. a Black man
 > in his 40s, solid muscular build, arms crossed, wearing a well-worn leather apron over a
@@ -173,7 +175,7 @@ Example (carpenter, extra-wide landscape full-body — foreground included at ba
 > pipe clamps, half-finished cabinet doors, scattered chisels, and sawdust-covered surfaces,
 > all softly blurred. warm natural light from large side workshop windows casting long
 > gentle shadows across the workshop floor. hair worn naturally, natural skin texture,
-> trustworthy and competent expression. documentary portrait photography, editorial
-> photography style. shallow depth of field, a weathered hand plane and curled wood
-> shavings lying at the base of the frame immediately in front of the camera lens,
+> trustworthy and competent expression. documentary editorial photography style.
+> shallow depth of field, a weathered hand plane and curled wood shavings lying at the
+> base of the frame immediately in front of the camera lens,
 > rendered as out-of-focus bokeh."`

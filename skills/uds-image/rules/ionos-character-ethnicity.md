@@ -7,7 +7,10 @@ to the `shared-character-diversity` pool.
 
 ## Step 1 — Detect the target market
 
-Scan `showroom` and `feature` for these signals (case-insensitive):
+Scan `showroom` and `feature` for these signals (case-insensitive).
+If no signal is found, skip to the "No market signal detected" pool in Step 2 — do NOT
+fall back to the balanced `shared-character-diversity` pool; IONOS has its own brand
+default that is applied instead.
 
 | Market | Signals to match |
 |---|---|

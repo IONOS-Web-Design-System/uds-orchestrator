@@ -1,19 +1,40 @@
 # Image type: avatar
 
 Use when the output will be used as a profile picture, team member card, or small square
-thumbnail (typically 96×96 – 512×512 px). The face is always visible and identifiable, but
-the shot distance, camera angle, and background vary to create natural diversity across a set.
+thumbnail. The face is always clearly visible and identifiable, but the shot distance,
+angle, background, and occupation context vary to create natural diversity across a set.
+
+An avatar can — and often should — relate to the character's occupation or scenario.
+The occupation context makes the avatar feel like a real person with a story, not a
+neutral headshot. A carpenter's avatar may show a workshop background; a developer's
+avatar may have a monitor behind them; a baker might hold a cup.
 
 ## When to apply
-Brief signals: "avatar", "profile photo", "team photo", "headshot for card", "96×96",
-"square format", any square crop intended to identify a specific person at small sizes.
+Brief signals: "avatar", "profile photo", "team photo", "headshot for card", "square
+format", any square crop intended to identify a specific person at small sizes.
 
 ## Aspect ratio
 Always 1:1. The face must read clearly at thumbnail scale.
 
 ## Face rule (non-negotiable)
 The main character's face must be 100% visible in every avatar — full forehead to chin, no
-cropping. This is the single hard constraint; everything else is intentionally varied.
+cropping at any angle. This is the single hard constraint; everything else is intentionally varied.
+
+## Occupation and scenario context — first-class signal
+
+The brief's character context (their job, setting, or story) should inform the avatar.
+Apply it through one or more of these levers:
+
+- **Background (strongest signal):** use the character's real work environment, softly
+  blurred behind them (see Background mode C below). A workshop, studio, shop floor, or
+  office in the background immediately communicates who they are.
+- **Prop in hand:** at medium shot distance, the character holds a profession-relevant
+  object. This single element identifies their role at a glance.
+- **Attire:** work-appropriate clothing — an apron, a smart casual shirt, a hard hat —
+  signals context without requiring a description.
+
+When the brief says nothing about occupation, default to a neutral background (mode A or B)
+but still populate the character with a plausible identity (see `shared-character-diversity`).
 
 ## Shot distance — choose one per generation
 Do not default to the same distance every time. Rotate across distances to create variety:
@@ -25,13 +46,20 @@ Do not default to the same distance every time. Rotate across distances to creat
 | Medium shot | Head to waist, hands may be visible | Contextual, grounded |
 
 At medium shot distance the person may hold a relevant prop (tool, notebook, coffee cup,
-device) — this adds story without making the image feel like a scenario shot.
+device) to convey occupation — this adds story without losing face focus.
 
 ## Camera angle — vary per generation
-- **Front view:** subject looks directly into the lens — warm, engaging, direct
-- **3/4 view:** body slightly turned 30–45° while face remains readable — natural, candid
-- **Slight side:** head turned to ~60°, face still clearly readable — editorial, confident
 
+Any angle where the face is clearly visible is valid. Do not restrict to front-facing
+only — variety across a set of avatars is valuable. Valid options include:
+
+- **Front view:** subject looks directly into the lens — warm, engaging, direct
+- **3/4 view:** body turned 30–45° while face remains readable — natural, candid
+- **Slight side:** head turned to ~60°, face clearly readable — editorial, confident
+- **Looking slightly up or down:** angled with the face still fully in frame — dynamic
+- **Candid angle:** caught mid-moment, slight turn, expression natural — authentic
+
+Any angle further than ~75° from front-on risks losing the face; avoid those.
 Avoid symmetrical dead-centre framing on every shot. Rule of thirds placement (face on
 one vertical third) reads more naturally than dead-centre.
 
@@ -82,5 +110,5 @@ As with lighting: describe the person, not the gear. Authentic photographic dive
 comes from the model's creative judgment, not from prompting a specific camera.
 
 ## Negative prompt additions (avatar-specific)
-Add to negativePrompt: "long shot, wide shot, full body, environment dominant,
-background in focus, multiple people, group shot, face cropped, face cut off".
+Add to negativePrompt: "long shot, wide shot, full body, background sharply in focus
+and competing with face, multiple people, group shot, face cropped, face cut off".

@@ -11,11 +11,12 @@ product/action is more important than who is doing it.
 **Tie-breaker — person + device ≠ automatically `scenario`.** A handheld device (phone,
 tablet, laptop) in the brief does NOT by itself make this a `scenario`. If the brief **names a
 person as the subject** doing a task (a baker checking reservations, an owner managing orders),
-the device is *held/used* and the **person stays the anchor** → use **`person-scenario`** (face
-visible, headroom, especially on landscape — a head must never be cropped just because a phone
-is in the shot). Only choose `scenario` when the brief makes the **screen/device itself the
-hero** — "close-up of the app", "the dashboard on screen", "the checkout moment", a deliberate
-over-the-shoulder/back shot of the screen — i.e. the face is genuinely not the point.
+the device is *held/used* and the person is part of the scene → use **`scene`** instead (apply
+landscape crop-safety: keep the person in the lower two-thirds; a head must never be cropped
+just because a phone is in the shot). Only choose `scenario` when the brief makes the
+**screen/device itself the hero** — "close-up of the app", "the dashboard on screen", "the
+checkout moment", a deliberate over-the-shoulder/back shot of the screen — i.e. the face is
+genuinely not the point.
 
 ## Composition rules
 - Focal point is the product interaction: device screen, hands on terminal, interface visible
@@ -173,7 +174,7 @@ Example (phone held showing app):
 > photography, editorial style, shallow depth of field."`
 
 ## Avoid
-- Person posing or looking at camera (this becomes portrait or person-scenario type)
+- Person posing or looking at camera (this becomes `portrait` or `scene` type)
 - Screen content that is sharp and readable — put "sharp readable screen text, UI text, legible interface labels" in negativePrompt
 - Plain white or studio backdrop — always suggest a real environment in the background
 - Device floating in blank space with no foreground or environmental context

@@ -31,17 +31,18 @@ Per-generator hazards to OMIT:
     reads candid and alive. Never a person standing idle, arms down, facing the lens head-on
     (unless the brief explicitly wants a front-on close-up, avatar, or portrait headshot).
   - **Landscape head-crop safety:** image-svc renders square then center-crops — a landscape
-    (w > h) target trims top/bottom. For any person in a landscape image, keep them in the lower
-    two-thirds with clear headroom (seated or behind a waist-height surface), or pull back to an
-    establishing shot — never let a head sit near the top edge.
+    (w > h) target trims top/bottom; a tall-ratio (h > w) target trims left/right. For any person
+    in a landscape image, keep them in the lower two-thirds with clear headroom (seated or behind a
+    waist-height surface), or pull back to an establishing shot — never let a head sit near the top
+    edge. For tall-ratio targets, keep the subject clear of the side edges.
   - **Lighting & mood:** default **bright, natural, vivid** — airy and uplifting, never moody or
     dark; warm/relaxed ("chill") tone, optionally a subtle film-like filter/grade. Set the mood
     with **colourful props + a soft bokeh background**. Only go cool/clinical when the subject
     demands it, kept bright and warmed with a practical accent.
   - **Device with a person:** a phone/tablet/laptop in the shot does NOT make the device the
-    subject. If a **person** is the named subject doing a task, keep their **face the anchor**
-    (person-scenario, headroom, crop-safe on landscape); the device is held/used. Only make the
-    screen the hero when the brief is explicitly about what's on screen.
+    subject. If a **person** is the named subject doing a task, the device is held/used and the
+    person stays the anchor (scene type, crop-safe on landscape). Only make the screen the hero
+    when the brief is explicitly about what's on screen (→ scenario type).
   - **Screen-based product is the focus** (the UI is the point — "show the dashboard", "the app
     on the phone"). Order it: **first** a natural use moment, **then** full-screen visibility via
     camera placement. Write a real moment (tapping a phone to pay at a counter, typing at a

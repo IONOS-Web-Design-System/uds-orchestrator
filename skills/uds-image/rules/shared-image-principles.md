@@ -28,12 +28,20 @@ all image types. Never leave character demographics undefined.
 ## Image type detection
 
 Before writing the prompt, identify which image type the brief describes and apply the
-matching rule file. If the brief is ambiguous, prefer `portrait` for person-focused briefs
-and `scenario` for product/usage-focused briefs.
+matching rule file.
 
-| Type | Rule file | Use when |
-|------|-----------|----------|
-| **avatar** | `image-type-avatar` | Square crop for profile/card use; face is focal point; medium close-up; 1:1 aspect ratio |
-| **person-scenario** | `image-type-person-scenario` | Subject is mid-action in their environment; story is told through what they're doing |
-| **portrait** | `image-type-portrait` | Subject faces camera in their environment; story told through identity, attire, props |
-| **scenario** | `image-type-scenario` | Product/interaction is the focal point; people are secondary or partial |
+**Tie-breaker rules:**
+- Brief names a person doing something in their environment (action is the story) → `scene`
+- Brief asks for the person to face the camera with their character and identity as the story → `portrait`
+- Brief focuses on a product, device, or interaction (person is secondary) → `scenario`
+- Brief needs a face-visible square crop for profile/card use → `avatar`
+
+When ambiguous between `scene` and `portrait`: ask whether the person's face and identity
+are the primary message (→ `portrait`) or whether the activity and setting are (→ `scene`).
+
+| Type | Rule file | Use when | Face guaranteed? |
+|------|-----------|----------|-----------------|
+| **avatar** | `image-type-avatar` | Face-focused square crop; face clearly visible at any angle; can show occupation context; 1:1 aspect ratio | Yes — always |
+| **scene** | `image-type-scene` | Subject mid-action in their environment; setting and action are the story; character fits in naturally | No — optional |
+| **portrait** | `image-type-portrait` | Subject faces camera; person's character, posture, and accessories are the story | Yes — always |
+| **scenario** | `image-type-scenario` | Product/interaction is focal point; people are secondary or partial | No |

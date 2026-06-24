@@ -1,12 +1,23 @@
 # Image type: portrait
 
-Use when the brief asks for a person looking toward the camera in their professional or
-personal environment — the person IS the subject and the story is told through their
-identity, attire, props, and setting.
+Use when the brief asks for a person facing the camera — the person IS the subject and
+the story is told through their character, posture, accessories, and setting. Portrait is
+about identity: who this person is and what they do, conveyed through how they stand,
+what they hold, and what surrounds them.
+
+**Not a dimension orientation.** "Portrait" refers to this image type (person facing
+camera), not to a tall/vertical canvas ratio. A 1280×720 landscape image can be a portrait
+type, and a 720×1280 tall image can be a scene type. Use `dimensions` to control the canvas;
+use this type when the character is the focal point facing the lens.
 
 ## When to apply
-Brief signals: "headshot", "portrait", "professional photo", "standing in their shop/office",
-"entrepreneur portrait", "team member photo", any brief asking for a person-facing-camera image.
+Brief signals: "portrait", "facing camera", "professional photo", "entrepreneur",
+"team member photo", "standing in their shop/office", any brief where the person's
+identity and character are the point — not what they're doing.
+
+**Distinction from scene:** if the brief describes a person mid-action in their environment
+where the setting and activity are the story → use **scene** instead. Portrait is for
+character; scene is for moments of life.
 
 ## Composition rules
 
@@ -14,22 +25,44 @@ Face visibility is a hard constraint. Camera shot is a preference that adjusts t
 See SKILL.md CRITICAL RULE #1 for the full decision ladder. The short version:
 
 - **Waist-up brief + any ratio:** use `"full face clearly visible from hairline to chin, waist-up shot showing complete upper body"` — leads the prompt.
-- **Full body / long shot + portrait ratio (2:3, 9:16):** use `"full face clearly visible from hairline to chin, full body in frame from head to floor"`.
+- **Full body / long shot + tall ratio (2:3, 3:4, 9:16):** use `"full face clearly visible from hairline to chin, full body in frame from head to floor"`.
 - **Full body / long shot + landscape ratio (16:9, 4:3):** landscape cannot fit a standing person at normal long-shot distance without cropping the face. Automatically use: `"full face clearly visible from hairline to chin, extra-wide establishing shot, character occupying one vertical third of the frame, full body head to floor visible"` — this is the only framing that reliably shows the face in landscape format.
 
 Always state the face anchor first — before the character description, before anything else.
-- Subject stands or sits naturally within their environment; background shows their workplace
-  or context in soft focus behind them
+- Subject stands, sits, or leans naturally within their environment
+- Background shows their workplace or context in soft focus behind them
 - Slight off-center framing (rule of thirds) feels more authentic than dead-center
-- Include at least one contextual prop or environmental element that signals their profession
-  (tools, products, workspace equipment, branded attire)
+- Include at least one profession-revealing prop or environmental element (tools, products,
+  workspace equipment, branded attire)
 
 ## Person direction
-- Subject faces the camera with a warm, confident, positive expression
-- Expression should feel like a brief, natural moment of eye contact — not a rigid forced smile
-- Posture: upright but relaxed; arms folded lightly, hands in pockets, or holding a relevant prop
-- Attire and accessories must fit the professional context described in the brief
-- The image should imply a story: who is this person, what do they do, why are they proud of it
+
+**Posture — vary widely.** Never default to one stance. Rotate across these options per
+generation:
+- Leaning forward with arms on a counter or desk, weight on elbows
+- Standing with one shoulder dropped, arms loosely at sides or one hand in a pocket
+- Seated with relaxed posture, one arm on the chair arm, body slightly angled
+- Weight shifted to one hip, arms crossed loosely or one hand holding a prop
+- Mid-movement — turning toward camera, caught mid-step, hand just lifting an object
+
+**Accessories and props — make them work-specific and story-telling.** The prop should
+answer "what does this person do?" immediately:
+- A barista: espresso cup held in both hands, slight steam visible
+- A carpenter: resting a hand on a finished piece of wood
+- A designer: holding a tablet or pen, sketchbook visible
+- A developer: small mechanical keyboard or mug of coffee in hand
+- An entrepreneur: phone or notebook, office behind them
+The prop is always held or actively engaged with — never floating or staged.
+
+**Expression:** a brief, natural moment of eye contact — not a rigid forced smile. The
+expression should match the character's context: confident and direct, warm and inviting,
+or quietly focused. Genuine, not rehearsed.
+
+**Attire:** functional workwear that fits the professional context. Well-worn or
+purposefully chosen — never pristine and brand-new looking unless that is the brand's
+explicit tone.
+
+The image should imply a story: who is this person, what do they do, why are they proud of it.
 
 ## Lighting
 - Soft, even, slightly warm — flattering and natural
@@ -59,7 +92,7 @@ the component, even though the subject is still making eye contact with the came
 ## Avoid
 - Tight face/shoulder headshot with no environment visible
 - Blank or plain-colour studio backdrop (use real environment)
-- Subject looking away from camera or mid-action (that is person-scenario type)
+- Subject looking away from camera or mid-action (that is `scene` type)
 - Overly corporate, stiff, "annual report" posture
 - Expressions that look rehearsed or artificially cheerful
 - Placing the character on the wrong side when a component and side are both specified

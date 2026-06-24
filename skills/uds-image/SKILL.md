@@ -17,7 +17,7 @@ You do not write code and you do not call any tool — you emit a single SPEC bl
 
 These override everything else. Violating any of them makes the image unusable.
 
-**1. Face visibility — `portrait` and `avatar` types only. Does NOT apply to `scenario` or `person-scenario`.**
+**1. Face visibility — `portrait` and `avatar` types only. Does NOT apply to `scenario` or `scene`.**
 
 For `portrait` and `avatar`: the face is the anchor. Resolve in this priority order:
 
@@ -30,19 +30,19 @@ Start from the brief's requested shot. Widen automatically if the face cannot fi
 
 | Brief requests | Aspect ratio | Use this framing |
 |---|---|---|
-| waist-up | portrait / square (1:1, 2:3, 3:4, 9:16) | `"full face clearly visible from hairline to chin, waist-up shot showing complete upper body"` |
+| waist-up | tall ratio or square (1:1, 2:3, 3:4, 9:16) | `"full face clearly visible from hairline to chin, waist-up shot showing complete upper body"` |
 | waist-up | landscape (16:9, 4:3, 3:2) | `"full face clearly visible from hairline to chin, waist-up shot with deliberate headroom — the head sits in the upper-middle of the frame with clear space above it and NEVER touches the top edge; subject seated or standing behind a waist-height surface so the body fills the lower frame"` |
-| full body / long shot | portrait (2:3, 3:4, 9:16) | `"full face clearly visible from hairline to chin, full body in frame from head to floor"` |
+| full body / long shot | tall ratio (2:3, 3:4, 9:16) | `"full face clearly visible from hairline to chin, full body in frame from head to floor"` |
 | full body / long shot | landscape (16:9, 4:3, 3:2) | `"full face clearly visible from hairline to chin, extra-wide establishing shot, character occupying one vertical third of the frame, full body visible from head to floor"` |
 | avatar | 1:1 | `"face as the focal point, eyes and full face clearly visible, head and shoulders in frame"` |
 
 **Crop-safety — image-svc renders a SQUARE then center-crops to the target ratio.** A
-**landscape** target (w > h) trims the **top and bottom**; a **portrait** target (h > w)
+**landscape** target (w > h) trims the **top and bottom**; a **tall-ratio** target (h > w)
 trims the **left and right**. So on a landscape target a head placed high in the frame is
 cropped off (this is exactly how a "waist-up" or standing subject loses its head at 16:9) —
-reserve headroom, seat the subject, or pull back to an establishing shot. On a portrait
+reserve headroom, seat the subject, or pull back to an establishing shot. On a tall-ratio
 target keep the subject clear of the side edges. This applies to **every** type, including
-`scenario` / `person-scenario`: people in a landscape scene must sit in the lower two-thirds
+`scenario` / `scene`: people in a landscape scene must sit in the lower two-thirds
 with clear space above their heads.
 
 **Priority 3 — Foreground objects (nice-to-have, conditional):**
@@ -51,10 +51,12 @@ face. Place it as the **last sentence** of `prompt`. See `shared-environment-sto
 
 ---
 
-For `scenario` and `person-scenario`: **do NOT prepend a face anchor.** The focal
-subject is the product, device, or action. Start `prompt` with the device/interaction
-description. A partial human element (hand, arm, blurred figure) is fine but the face
-must never become the compositional hero.
+For `scene` and `scenario`: **do NOT prepend a face anchor** unless the brief
+explicitly requests face visibility ("facing camera", "clear face", "recognizable
+person"). The focal subject is the environment, action, or device. Start `prompt`
+with the scene or interaction description. A partial human element (hand, arm,
+blurred figure, or figure turned away) is expected and valid — the face is not the
+compositional hero.
 
 Do NOT use `negativePrompt` for composition — it is ignored by the image model.
 
@@ -109,9 +111,9 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
 
 ## Image types
 Every photoreal brief falls into one of four types — detect and apply the matching rule:
-- `image-type-avatar` — square 1:1 crop for profile/card; face focal point; medium close-up head+shoulders
-- `image-type-person-scenario` — subject mid-action in their environment (NOT posing, NOT facing camera)
-- `image-type-portrait` — subject faces camera in their workplace; waist-up minimum; props reveal identity
+- `image-type-avatar` — face-focused; any angle where face is clearly visible; can show occupation/scenario context; face always fully in frame
+- `image-type-scene` — subject mid-action in their environment (NOT posing, NOT facing camera); face not required
+- `image-type-portrait` — subject faces camera; character-focused; varied posture; accessories and props reveal work identity; face always fully in frame
 - `image-type-scenario` — product/interaction is focal point; people are secondary or cropped
 
 ## Market & re-rendering
@@ -129,7 +131,7 @@ regenerate with the new `market`/showroom and tell them the result will differ.
 - `strato-character-ethnicity` (strato brand only) — analogous to the IONOS rule: DE → white primary, ES/IT → Mediterranean primary, and a ~80% white/Northern-European brand default when no market is named. Fully replaces `shared-character-diversity` for strato.
 - `shared-module-bias` — when the brief names a `Consumer module:`, biases the asset's scale/framing and default type to fit that component (`columns`, `customer_testimonial`, `textmedia`, `testimonial_slider`). Fills defaults only — the brief's explicit fields win.
 - `shared-environment-storytelling` — lived-in backgrounds, object interaction, depth layers (foreground blur), scenario lighting, natural appearance; apply whenever the brief places a person in a setting.
-- `image-type-person-scenario` / `image-type-portrait` / `image-type-scenario` — type-specific direction.
+- `image-type-avatar` / `image-type-scene` / `image-type-portrait` / `image-type-scenario` — type-specific direction.
 - `<brand>-image-photoreal` / `<brand>-image-cutout` (ionos) or `<brand>-image-style` — brand tone.
 - Palette + typography come from the co-inlined `uds-style-guide` for the active brand.
 

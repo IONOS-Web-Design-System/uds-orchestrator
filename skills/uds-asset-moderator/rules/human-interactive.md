@@ -49,7 +49,7 @@ the embed style, you don't set it):**
   (it auto-demotes). So for square/banner/badge sizes, expect a card or cropped-frame result.
 
 **Crop-safety (images):** image-svc renders a square then center-crops to the requested ratio —
-**landscape** (w > h) trims top & bottom, **portrait** (h > w) trims left & right. Keep the focal
+**landscape** (w > h) trims top & bottom, **tall ratio** (h > w) trims left & right. Keep the focal
 subject centered with margin on the trimmed axis; say so in the brief for non-square images.
 
 ## Conversation flow
@@ -124,9 +124,9 @@ state the camera shot in words.
 
 | You ask the user | uds-image type | Face guarantee | Shot to write into the brief |
 |---|---|---|---|
-| **avatar** (headshot / profile picture) | `avatar` | **Head & face always fully in frame** | "tightly-framed avatar, head and shoulders, full face from hairline to chin clearly visible, eyes to camera" — square (1:1) |
-| **portrait** (a specific person, recognizable) | `portrait` | **Head & face always fully in frame** | "portrait of <person>, waist-up, full face from hairline to chin clearly visible, facing camera, in <their setting>" |
-| **scene** (a person mid-action in a setting) | `person-scenario` | NOT guaranteed — face may be partial/cropped | name the action and environment; the person is context, not the anchor |
+| **avatar** (headshot / profile picture) | `avatar` | **Face always fully in frame at any angle** | "face clearly visible from hairline to chin" — square (1:1); optionally show occupation context in the background or via a prop |
+| **portrait** (person facing camera, character-focused) | `portrait` | **Face always fully in frame** | "full face clearly visible from hairline to chin, <shot distance>"; lead with the face anchor first; vary posture and include work-relevant accessories |
+| **scene** (a person mid-action in a setting) | `scene` | NOT guaranteed — only if brief explicitly requests it | name the action and environment; the person fits into the scene; omit face anchor unless the user asks for face visibility |
 | **landscape** (environment / product / wide setting) | `scenario` | NOT guaranteed — people secondary or cropped | describe the space/product; any people are incidental |
 
 Decision rule — state it to the user when relevant:
@@ -134,14 +134,16 @@ Decision rule — state it to the user when relevant:
   "our consultant", "a happy customer looking at the camera") → choose **portrait** (or
   **avatar** for a headshot). These are the ONLY modes where `uds-image` enforces
   "full face visible from hairline to chin" as a hard rule.
-- **Choose scene/landscape only when a clear, uncropped face is genuinely not required** —
-  e.g. hands on a keyboard, a figure walking away, a room. In these modes the model is
-  allowed to crop the head, so never use them when the person must be seen.
+- **Choose `scene` when the activity and setting are the story** and a clear face is not
+  required — e.g. a baker arranging pastries, a developer coding, a figure mid-stride. The
+  model may crop the face in this mode; that is intentional. Add the face anchor explicitly
+  only if the user asks for face visibility in a scene.
+- **Choose `scenario` when the product/device is the hero** — face is secondary or absent.
 
 Cautionary example: a "confident female marketing expert presenting to a client" written as a
-generic scene came back with **both heads cropped off** — correct because the system read it
-as `scenario` (face croppable). The fix is to choose **portrait** and write the face-visibility
-shot, so `uds-image`'s hard rule applies.
+generic scene came back with **both heads cropped off** — expected for a `scene` type, because
+face is not anchored. The fix is to choose **portrait** and write the face-visibility shot, so
+`uds-image`'s hard rule applies.
 
 Always put the camera shot in the brief text in plain words (shot distance + "full face
 visible" for avatar/portrait). `uds-image` detects the type from these words and maps the
