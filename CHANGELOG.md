@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.4.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.3.0...v2.4.0) (2026-06-24)
+
+
+### Features
+
+* **asset-moderator:** rubric — illustration intent defaults to still, animation needs a quoted motion cue ([9d171e2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9d171e2376244f10c142fc445dd82332420a4fab))
+* **imagine:** add composition-pattern inference step to human-interactive flow ([55373a8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/55373a874d628e41ae3e68114a089471c79dedf7))
+* **imagine:** dedicated still-or-animated round + what-motion follow-up ([176df7a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/176df7abb6676f0882a8ffccede1baeb9eed9091))
+* **moderator:** encode composition pattern name in illustration feature text ([ffd31c3](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ffd31c3c10868eab04330d3f688ad5d2e2941bfd))
+* **uds-asset-moderator:** preserve explicit device-frame intent in enrichment ([5432279](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/5432279a48b73142df918b11bb85d8f109cad578))
+* **wireframe:** add connector-line pattern + consolidate panel chrome rules ([73077b6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/73077b6d2aa67bf0ab3aa756bad1e3329e731878))
+
+
+### Bug Fixes
+
+* **imagine:** correct indentation and blank-line in composition-pattern block ([a5fe0a3](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a5fe0a35d154433f187262b301ca67b93ef7d546))
+* **imagine:** harden brief format check for lower model like haiku ([35f80a8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/35f80a87bdfdafbfbf5fd8724b7cd8f9ccc25231))
+* **remotion-best-practices:** zero-width typing cursor to stop trailing-word reflow ([1c66a0e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1c66a0e5e3dbbeadd25d2424e019aaa38c679b7f))
+* **skills:** resolve AI-template/affordance rule conflicts (per IONOS-team decisions) ([8d542ee](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/8d542eeb6c6b3181617ce83782fa533ed48b5427))
+* **wireframe:** add image-backdrop and small-format to rules index + pattern routing ([735f73a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/735f73afb739a4c3ec45740926bca2caf6353bcb))
+* **wireframe:** align AIFloatingHighlight shadow to 0.35 (matches product-frame.md) ([bd0a957](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/bd0a957abf3a4579ad263c0a87f916a1537f01ec))
+
+
+### Documentation
+
+* **imagine:** ask still-or-animated before the loop follow-up (match human-interactive order) ([f4b0705](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f4b07050105d641190f5137dbfa10ce33d8f2757))
+* **skills:** document the floating-card embed style (Figma 82:202 / 162:306) ([70378a1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/70378a17989a204090fac2cc720b165e031949ea))
+
 ## [2.3.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.2.1...v2.3.0) (2026-06-17)
 
 
