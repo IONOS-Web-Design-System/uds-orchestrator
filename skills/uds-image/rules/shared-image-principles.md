@@ -9,7 +9,9 @@
 - Always include in `negativePrompt`: "text, watermark, UI chrome, distorted hands,
   extra fingers, oversaturated, low quality, jpeg artifacts,
   readable screen text, readable whiteboard text, legible labels,
-  Apple logo, Nike logo, brand logo, corporate logo, product logo, visible logo".
+  Apple logo, Nike logo, brand logo, corporate logo, product logo, visible logo,
+  graphics or UI rendered on the back of a device, content on tablet back,
+  screen graphics on device lid, colourful pattern on laptop lid".
 - **Face and body framing must be stated positively in `prompt`, not in `negativePrompt`.**
   Negative prompts are weak composition signals — the image model ignores them under its
   default centre-crop bias. Instead encode framing as a positive instruction, e.g.:

@@ -16,6 +16,7 @@ The background density and disorder must match the trade or setting:
 | Studio / creative (photographer, designer) | Pinboards with references, half-finished work, open notebooks, cables, equipment in use |
 | Office / tech | Dual monitors, notebooks, coffee cups, cables — not a pristine empty desk |
 | Retail / service | Shelves stocked with product, display materials, everyday wear-and-tear visible |
+| Home / lifestyle (solopreneur, creative, freelancer) | A warm sofa or armchair with a laptop; a large tropical or leafy plant behind the subject; warm sandy or ochre wall; soft ambient interior light (no direct sun); a coffee or notebook as the only foreground object. **Do NOT fill with clutter** — warmth comes from the color palette and plant, not visual noise. |
 
 Encode background density explicitly in the prompt:
 - ✅ `"shelves packed with ceramic pieces in various stages of completion behind her, workbench scattered with clay tools and scraps"`
@@ -30,8 +31,8 @@ This is the single most powerful authenticity signal.
 | Trade | Object to hold or interact with |
 |---|---|
 | Potter / ceramicist | Holding a finished piece (bowl, cup, vase) with both hands |
-| Carpenter / woodworker | Resting a hand on a finished piece, holding a hand plane or chisel |
-| Barista / café | Hands on the espresso machine portafilter, holding a cup mid-pour |
+| Carpenter / woodworker | Holding a hand plane or chisel; or one hand loosely in pocket |
+| Barista / café | Holding a cup mid-pour; or hands around an espresso cup |
 | Chef / baker | Holding a finished dish, rolling pin, or stirring a bowl |
 | Mechanic / builder | Holding a tool appropriate to the trade |
 | Knowledge worker | Holding a tablet, pen, or looking at a screen |
@@ -39,6 +40,13 @@ This is the single most powerful authenticity signal.
 Never leave the character's hands empty or arms simply folded when an object interaction
 can replace or complement the pose. Encode as: `"holding [object] with both hands"` or
 `"hands actively engaged with [object]"`.
+
+**Portrait type surface-contact guard:** For `portrait` type, NEVER encode
+`"resting one hand on [surface]"` or `"hand on workbench/bench/table"`. This surface-
+contact language changes the camera angle — the model renders the hand-on-surface
+interaction from the side at bench height, which sends the face out of frame. Use
+`"holding X in one hand"` or `"one hand in pocket"` instead. This guard applies only to
+portrait — for `scene` type, surface contact is the correct mid-action anchor.
 
 ## Depth layers
 
@@ -90,6 +98,7 @@ indicator glow, a warm lamp) so it never reads cold or sterile.
 | Workshop / trade | Bright neutral daylight from large side windows; direct sunshine casting crisp shadows; cool overhead industrial light |
 | Coffee shop / restaurant | Warm ambient pendant light; bright neutral window light at midday; cool morning light before the rush |
 | Home office / desk | Cool-neutral morning window light; soft diffused daylight; bright direct sunshine on the desk surface |
+| Home / lifestyle (sofa, living room) | Soft warm ambient interior light — diffused and even, no harsh directional sun; warm tones (3000–4500 K); the plant and warm wall carry the color, light stays gentle and inviting |
 | Outdoor | Clear direct sunshine, straight-on; bright overcast neutral sky; dappled light through trees |
 | Studio / product | Soft diffused neutral window light; clean even interior light; cool-neutral ambient |
 

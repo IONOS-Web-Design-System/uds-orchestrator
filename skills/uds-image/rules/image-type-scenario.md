@@ -69,15 +69,33 @@ over a dashboard in discussion. Hands and posture are natural to the action. Enc
 `"tapping their phone on the contactless card reader at the bakery counter, screen facing up"`,
 `"glancing down at the phone held casually in one hand at the café table"`.
 
-**2. Then make the full screen clearly visible — by MOVING THE CAMERA, not the device.** Put the
-camera where it would *naturally* catch the screen during that moment, so the whole screen reads
-without anyone posing it:
-- **Phone:** shoot **over the shoulder or from above**, looking down at the phone held naturally in
-  the hand (the screen faces up toward this viewpoint); or a tap-to-pay moment with the screen up.
-- **Laptop / tablet:** shoot **over the shoulder or slightly above and beside** the person as they
-  work, catching the screen they are already facing; keyboard/hands in frame.
-- The screen faces the camera because the camera occupies the natural over-the-user / over-the-
-  counter viewpoint — NOT because the subject aimed the device at it.
+**2. Then make the full screen clearly visible — by MOVING THE CAMERA, not the device.**
+
+Choose the camera angle that fits the brief. Three named patterns (detailed prompt templates
+in `image-type-scene.md`):
+
+- **Overhead / top-down (Pattern B):** camera 50–75° above the workspace looking down.
+  Screen faces upward and is fully visible. Person enters peripherally — only hands/forearms
+  at the frame edge. The desk surface (warm wood, cream, light concrete) fills 30–50% of the
+  frame as a texture layer. Best for: "workspace from above", laptop or phone on a table,
+  overhead editorial feel. Encode: `"overhead shot from approximately 60 degrees above,
+  looking down at [surface] desk surface, hands and forearms entering from [left/bottom],
+  device screen facing upward clearly visible"`.
+
+- **Behind-the-person / over-shoulder (Pattern C):** camera behind and slightly to the side,
+  looking toward the screen. Back of head + shoulder as a **compositional shape at the frame
+  edge** — face never appears. Screen faces the camera naturally. Best for: dashboard/app
+  on laptop, "over someone's shoulder" feel. Encode: `"over-the-shoulder shot from behind
+  and slightly above to the right, partial back of head and shoulder at the frame edge,
+  [device] with screen clearly visible and facing the viewer"`.
+
+- **Eye-level with surface anchor (Pattern A):** camera at eye-level or slightly elevated.
+  Person sits or stands naturally, keyboard/device in front of them. Best for: two people
+  at a screen, customer at a counter, team working together. Encode: `"slightly elevated
+  eye-level shot, [person] at a [surface], [device] screen visible from the side/front"`.
+
+The screen faces the camera because the camera occupies the natural over-the-user /
+over-the-counter viewpoint — NOT because the subject aimed the device at it.
 
 Keep the **entire** screen in frame, unclipped (no head/hand covering it), in sharp focus and the
 brightest element. If the natural angle can't show the whole screen, **move or widen the camera —

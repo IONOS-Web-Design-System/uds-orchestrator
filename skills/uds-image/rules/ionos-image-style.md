@@ -4,6 +4,24 @@
   Cloud `#F4F7FA`, plus warm neutrals (cream, sand, light wood).
 - **Tone:** professional, trustworthy, optimistic, modern. Warm and approachable — not
   cold or corporate. Scenes feel like a good, productive day.
+- **Target audience — character profile:** IONOS people are **more established and mature**
+  than Strato's audience. Default age range is **mid-30s to early 50s** — a small business
+  owner, an experienced freelance consultant, a manager making real decisions. Encode age
+  explicitly: `"a white woman in her early 40s"`, `"a Black man in his late 30s"`.
+  Read `shared-character-appearance` for the occupation → appearance reasoning approach,
+  then apply within these IONOS-specific boundaries:
+  - **Hair:** clean, well-kept, naturally worn — neat shoulder-length, short professional,
+    or a tidy practical style. Styled but not overdone. Never tousled, never casual bun,
+    never the expressive/uncontrolled styles that signal Strato.
+  - **Accessories:** minimal and functional — a watch, simple stud earrings, reading
+    glasses on an older professional. No statement glasses frames, no headphones, no visible
+    tattoos — those belong to Strato.
+  - **Clothing:** smart-casual — fitted knitwear, neat blouses, clean casual shirts, well-cut
+    trousers. Never hoodies, never oversized tees, never streetwear-adjacent. The person has
+    dressed thoughtfully but comfortably.
+  - **Variants:** same rule as all brands — when `variants > 1` and brief is generic, omit
+    specific hair tokens; encode only a clothing vibe (`"smart casual knitwear"`) and let
+    the image model vary hair naturally across variants.
 - **Lighting:** natural and varied — cool-neutral morning light, direct sunshine,
   bright neutral midday, or warm ambient when the scene calls for it. Never the same
   golden afternoon light by default. Avoid dark, moody, or dramatically shadowed scenes.

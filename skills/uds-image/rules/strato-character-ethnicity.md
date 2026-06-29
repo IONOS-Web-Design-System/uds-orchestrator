@@ -1,10 +1,15 @@
 # STRATO — character ethnicity by market
 
 Overrides the ethnicity pool in `shared-character-diversity` for the `strato` brand.
-STRATO is a German-market hosting brand, so its core customer base is predominantly
-white / Northern-European. Before choosing an ethnicity, scan the brief's `showroom`
-field and `feature` text for market signals. Apply the matching market pool below. If no
-signal is found, use the STRATO brand default (also white-primary).
+STRATO is a German-market hosting brand. Its audience is **younger** than IONOS —
+early-to-mid 20s to early 30s. Age encodings below reflect this. Before choosing an
+ethnicity, scan the brief's `showroom` field and `feature` text for market signals.
+
+## Age range — brand default
+STRATO characters are in their **20s to early 30s**. Use this unless the brief
+specifies otherwise. Example encodings: `"a white woman in her mid-20s"`,
+`"a white man in his late 20s"`, `"a Mediterranean man in his early 30s"`.
+Never default to 40s or 50s — that is the IONOS audience profile.
 
 ## Step 1 — Detect the target market
 
@@ -23,38 +28,38 @@ then scan the `feature` text for country/language names if no prefix is found.
 
 ### Germany (DE)
 
-Primary market is white / Northern-European. Reflect the core customer demographic.
+Primary market is white / Northern-European. Age range: 20s–early 30s.
 
 | Ethnicity | Weight | Exact prompt encoding |
 |---|---|---|
-| White / Northern-European | ~80 % | `"a white man in his 40s"` / `"a white woman in her 30s"` |
-| Black / African descent | ~10 % | `"a Black man in his 30s"` |
-| East or South-East Asian | ~7 % | `"an East Asian woman in her 50s"` |
-| South Asian | ~3 % | `"a South Asian man in his 40s"` |
+| White / Northern-European | ~80 % | `"a white woman in her mid-20s"` / `"a white man in his late 20s"` |
+| Black / African descent | ~10 % | `"a Black man in his late 20s"` |
+| East or South-East Asian | ~7 % | `"an East Asian woman in her early 30s"` |
+| South Asian | ~3 % | `"a South Asian man in his late 20s"` |
 
 ### Spain (ES) and Italy (IT)
 
 Primary market is Mediterranean / Latin-European. Use the Mediterranean descriptor; do
-NOT use "Latino" (which models read as Latin American) or "Hispanic" (outside the encoding list).
+NOT use "Latino" (which models read as Latin American) or "Hispanic".
 
 | Ethnicity | Weight | Exact prompt encoding |
 |---|---|---|
-| Mediterranean / Latin-European | ~65 % | `"a Mediterranean man in his 40s with olive complexion and dark hair"` / `"a Mediterranean woman in her 30s"` |
-| White / Northern-European | ~20 % | `"a white man in his 50s"` |
-| Black / African descent | ~10 % | `"a Black woman in her 40s"` |
-| East or South-East Asian | ~5 % | `"an East Asian man in his 30s"` |
+| Mediterranean / Latin-European | ~65 % | `"a Mediterranean woman in her mid-20s with olive complexion"` / `"a Mediterranean man in his late 20s with olive complexion"` |
+| White / Northern-European | ~20 % | `"a white woman in her early 30s"` |
+| Black / African descent | ~10 % | `"a Black man in his late 20s"` |
+| East or South-East Asian | ~5 % | `"an East Asian woman in her mid-20s"` |
 
 ### No market signal detected — STRATO brand default
 
 Do **not** fall back to the balanced global pool. When no market is named the brand
-default skews white / Northern-European:
+default skews white / Northern-European, age 20s–early 30s:
 
 | Ethnicity | Weight | Exact prompt encoding |
 |---|---|---|
-| White / Northern-European | ~80 % | `"a white man in his 40s"` / `"a white woman in her 30s"` |
-| Black / African descent | ~10 % | `"a Black man in his 30s"` |
-| East or South-East Asian | ~7 % | `"an East Asian woman in her 50s"` |
-| South Asian | ~3 % | `"a South Asian man in his 40s"` |
+| White / Northern-European | ~80 % | `"a white woman in her mid-20s"` / `"a white man in his late 20s"` |
+| Black / African descent | ~10 % | `"a Black man in his late 20s"` |
+| East or South-East Asian | ~7 % | `"an East Asian woman in her early 30s"` |
+| South Asian | ~3 % | `"a South Asian man in his late 20s"` |
 
 Do not guess a market — a detected market signal (Step 1) always overrides this default.
 
@@ -63,8 +68,19 @@ Do not guess a market — a detected market signal (Step 1) always overrides thi
 - Closed pool: use only the encodings listed above — do not invent descriptors.
 - Always encode the chosen ethnicity explicitly in `prompt` — never leave it unspecified.
 - Sample **in proportion to the weights above**: across a session the distribution should
-  approximate the listed percentages, so the highest-weight entry (white) legitimately
-  recurs most often. Vary within that distribution for realism, but never flatten the pool
-  to an even rotation, which would erase the brand-default skew.
-- Body-shape and age guidance from `shared-character-diversity` are unchanged.
+  approximate the listed percentages. Vary within that distribution for realism, but never
+  flatten the pool to an even rotation, which would erase the brand-default skew.
 - Never encode ethnicity in `negativePrompt`.
+
+## Character appearance (Strato-specific — supplements ethnicity encoding)
+
+After choosing ethnicity and age, apply the Strato character appearance signals from
+`strato-image-style`. **Vary the combination across images** — do not repeat the same
+hair + accessory + clothing combination. The goal is a cast of distinct individuals who
+all feel unmistakably Strato, not the same person rendered repeatedly.
+
+- **Hair:** choose ONE from the hair variety pool in `strato-image-style`. When the brief
+  does not specify hair, omit the hair token and let the image model vary naturally.
+- **Accessory:** choose ONE or none from the accessory pool. Do not stack.
+- **Clothing:** choose ONE from the clothing pool — hoodie is NOT the default every time.
+- **Never** encode all three dimensions as the same combination across multiple images.

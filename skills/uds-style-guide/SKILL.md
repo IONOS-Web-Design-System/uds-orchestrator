@@ -23,9 +23,9 @@ Identify the target brand first, then go to the matching rule file:
 | Brand | Font | Rule File | Status |
 |-------|------|-----------|--------|
 | **ionos** | Overpass / Open Sans | `rules/ionos-color-palette.md`, `rules/ionos-typography.md`, `rules/ionos-assets.md` | Full |
-| **strato** | Nunito Sans | `rules/strato.md` | Stub |
+| **strato** | Poppins | `rules/strato.md` | Full |
 | **fasthosts** | Poppins | `rules/fasthosts.md` | Stub |
-| **homepl** | Lato | `rules/homepl.md` | Stub |
+| **homepl** | Azo Sans | `rules/homepl.md` | Full |
 | **strefa** | Lato | `rules/strefa.md` | Stub |
 | **udag** | Nunito Sans | `rules/udag.md` | Stub |
 | **world4you** | Nunito Sans | `rules/world4you.md` | Stub |
@@ -65,6 +65,39 @@ IONOS typefaces: **Overpass** for headlines, **Open Sans** for everything else.
 > `var(--text-base)`, `var(--surface-base-invert)` / `var(--text-base-invert)`,
 > `var(--surface-subtlest)`, `var(--surface-semantic-ai)` / `var(--text-semantic-ai)` — always
 > pairing a `--surface-*` with its matching `--text-*`. See `uds-usage-best-practices`.
+
+## Quick Reference — Strato Brand
+
+| Color | HEX | Role |
+|-------|-----|------|
+| Brand Orange | `#FF8800` | Logo, hero stage, primary brand anchor |
+| Dark Orange | `#FF5C00` | Dark Orange Gradient endpoint |
+| Light Orange | `#FFC700` | Brand Orange Gradient endpoint |
+| Blue | `#272CB2` | CTA, buttons, interactive elements |
+| Dark Blue | `#2F2F70` | Primary website text |
+
+Strato typeface: **Poppins** for both headings and body.
+
+Strato signature gradients:
+- **Brand Orange**: `#FF8800` → `#FFC700` (warm/sunny hero)
+- **Dark Orange**: `#FF5C00` → `#FF8800` (high-energy CTA)
+- **Blue**: `#272CB2` → `#2F2F70` (dark/premium sections)
+
+See `rules/strato.md` for the full palette, usage rules, and contrast-approved combinations.
+
+## Quick Reference — home.pl Brand
+
+| Color | HEX | Role |
+|-------|-----|------|
+| Brand Red | `#E20000` | Logo, primary CTAs, sole brand colour anchor |
+| Light Red | `#FF2A2A` | Hover / interactive highlight state |
+| Background | `#F5F7FA` | Default page surface (cool grey-blue) |
+| Dark text | `#1B1B1B` | Primary text (soft near-black) |
+| Dark sections | `#2E3842` | Nav, footer, dark UI areas |
+
+home.pl typeface: **Azo Sans** for both headings and body.
+
+Brand identity principle: **one red accent per composition, maximum** — never a red background, never multiple red elements. Warmth comes from the subject's expression and attire, not from lighting colour. See `rules/homepl.md` for the full palette and the three image rules (Timeless, Warmth over Tech, Red Accent).
 
 ## CSS Import Pattern
 

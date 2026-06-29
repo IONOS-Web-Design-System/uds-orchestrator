@@ -48,18 +48,47 @@ Per-generator hazards to OMIT:
     reads candid and alive. Never a person standing idle, arms down, facing the lens head-on
     (unless the brief explicitly wants a front-on close-up, avatar, or portrait headshot).
   - **Landscape head-crop safety:** image-svc renders square then center-crops — a landscape
-    (w > h) target trims top/bottom; a tall-ratio (h > w) target trims left/right. For any person
-    in a landscape image, keep them in the lower two-thirds with clear headroom (seated or behind a
-    waist-height surface), or pull back to an establishing shot — never let a head sit near the top
-    edge. For tall-ratio targets, keep the subject clear of the side edges.
+    (w > h) target trims top/bottom. For any person in a landscape image, keep them in the lower
+    two-thirds with clear headroom (seated or behind a waist-height surface), or pull back to an
+    establishing shot — never let a head sit near the top edge.
   - **Lighting & mood:** default **bright, natural, vivid** — airy and uplifting, never moody or
     dark; warm/relaxed ("chill") tone, optionally a subtle film-like filter/grade. Set the mood
     with **colourful props + a soft bokeh background**. Only go cool/clinical when the subject
     demands it, kept bright and warmed with a practical accent.
   - **Device with a person:** a phone/tablet/laptop in the shot does NOT make the device the
-    subject. If a **person** is the named subject doing a task, the device is held/used and the
-    person stays the anchor (scene type, crop-safe on landscape). Only make the screen the hero
-    when the brief is explicitly about what's on screen (→ scenario type).
+    subject. If a **person** is the named subject doing a task, keep their **face the anchor**
+    (person-scenario, headroom, crop-safe on landscape); the device is held/used. Only make the
+    screen the hero when the brief is explicitly about what's on screen.
+  - **Device physics — the screen cannot face both the person AND the camera at the same time.**
+    Never write "screen facing forward and fully visible to the lens" when a person is also
+    looking at the device — that instruction is physically impossible and causes the image model
+    to hallucinate UI content onto the BACK surface of the device (a tablet back or laptop lid
+    showing colourful graphics). There are exactly two correct strategies:
+
+    **Strategy A — Device as prop (person is the hero, `portrait` or `scene` type):**
+    The screen naturally faces the person; the camera sees the plain back. This is physically
+    correct and looks natural. Do NOT mention screen content at all. Encode the device as a
+    physical object only:
+    - Phone/tablet: `"holding a tablet naturally in their right hand, resting at waist height"`
+    - The back of the device should be a plain clean surface — add to negativePrompt:
+      `"graphics or UI rendered on the back of the device, content on tablet back, screen
+      graphics on device lid"`.
+
+    **Strategy B — Screen as hero (`scenario` type, or two-person scene):**
+    The camera must occupy a position where the screen naturally faces it:
+    - Phone/tablet: device flat on a surface, screen facing up; or person from over-the-shoulder
+      angle so screen faces camera. Encode: `"non-branded tablet lying flat on the desk, screen
+      facing upward, fully visible from above"`.
+    - Laptop: `"non-branded laptop on the desk, lid open at 105 degrees facing the camera,
+      over-the-shoulder shot from slightly above"`. Add `"non-branded"` positively — negativePrompt
+      alone does not suppress the Apple logo.
+    - Two-person scene: one person faces camera, one looks at the screen — the camera position
+      between them can naturally see both face and partial screen without physical contradiction.
+  - **Landscape crop-safety — use a physical anchor, not prose headroom:** `prose headroom
+    instructions ("clear space above the head") are routinely ignored by the model.` Instead
+    seat the subject behind a desk or counter: `"subject seated behind a waist-height white desk,
+    upper body well above the desk surface, clear open space above the head"` — the desk creates a
+    structural mid-frame anchor that keeps the face in the upper-middle of a 16:9/4:3 frame.
   - **Screen-based product is the focus** (the UI is the point — "show the dashboard", "the app
     on the phone"). Order it: **first** a natural use moment, **then** full-screen visibility via
     camera placement. Write a real moment (tapping a phone to pay at a counter, typing at a
@@ -71,51 +100,6 @@ Per-generator hazards to OMIT:
 - **illustration** `feature`: describe *structure and intent* (which UDS components, what
   copy slots, what data the screen shows, what motion if `intent:animation`) — not pixel
   coordinates. The agent builds real components; over-specifying layout fights the system.
-  - **Preserve an explicit device frame.** If the request shows the UI ON or INSIDE a physical
-    device — a phone / tablet / laptop, a "device mockup", or "on the `<device>`'s screen" —
-    the `feature` MUST keep that framing: name the device class and state that the interface is
-    composited INTO the device's screen (e.g. "a front-on **tablet device frame**; inside its
-    screen, the IONOS GPT chat UI fades in…"). agent-svc carries transparent device-frame
-    mockup assets and selects one only when the `feature` names the device, so flattening this
-    to a bare "app shell" or "chat window" drops the frame. Add a device only when the request
-    asked for one.
-  - **Name the composition pattern as the first element of the feature text.** This is
-    the primary signal `agent-svc` uses to select the correct wireframe rule. Choose the
-    most specific pattern that fits the brief and available dimensions:
-
-    **Large-canvas illustration (no generated image, w ≥ 512 OR h ≥ 512):**
-    - `product-frame-full` — full product frame, centered; 1 floating highlight; no crop.
-      Use as default when none of the more specific conditions below apply.
-    - `product-frame-bottom-bleed` — landscape canvas too short for the full frame height;
-      frame bleeds bottom; highlight right-of-center.
-    - `product-frame-zoom-cutout` — brief focuses on an inline editing interaction
-      (text selection, in-page generation); zoom so the interaction target is at canvas
-      center; frame bleeds 2-3 sides; highlight on the opposite side.
-    - `product-frame-connector-line` — brief asks to "point to" or "highlight a specific
-      feature inside the app"; full frame; highlight card outside; axis-aligned connector
-      line from highlight to the feature inside the frame.
-    - `product-frame-square` — canvas is square (w ≈ h); frame bleeds right; highlight
-      left-anchored and fully contained.
-
-    **Hybrid (generated image present — mode = hybrid):**
-    The moderator sets `embedStyle`; map it to the pattern name for the feature text:
-    - `background-pointer` → `image-backdrop-feature-pointer`
-    - `background-full` → `image-backdrop-full-bleed`
-    - `interface-asset` → `interface-asset`
-    - `floating-card` → `floating-card`
-
-    **Small format (w < 512 AND h < 512):**
-    - `small-icon-story` — abstract concept, integration story, no specific product screen.
-    - `small-cropped-frame` — brief is about a specific product screen or feature.
-
-    **Format:** begin the illustration feature with exactly:
-    `Composition pattern: <name> — ` followed by the normal structure/intent description.
-
-    Example:
-    > `Composition pattern: product-frame-bottom-bleed — IONOS Website Builder editor
-    > (dark navy shell, left icon sidebar, client-app zone with bike-shop header and hero
-    > image); floating highlight card right-of-center with "✨ Seite erstellen" AI CTA;
-    > entrance: frame eases in from above, card flies in from right at +15 frames, hold.`
 
 Budget: keep each `feature` under 1200 characters — the orchestrator appends ~600 chars of
 shared context (and, for hybrid, the embed contract). Lead with the most load-bearing

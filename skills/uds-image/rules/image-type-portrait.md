@@ -48,11 +48,18 @@ generation:
 **Accessories and props — make them work-specific and story-telling.** The prop should
 answer "what does this person do?" immediately:
 - A barista: espresso cup held in both hands, slight steam visible
-- A carpenter: resting a hand on a finished piece of wood
+- A carpenter: holding a hand plane or chisel, or one hand loosely in pocket
 - A designer: holding a tablet or pen, sketchbook visible
-- A developer: small mechanical keyboard or mug of coffee in hand
-- An entrepreneur: phone or notebook, office behind them
-The prop is always held or actively engaged with — never floating or staged.
+- A developer: mug of coffee in hand, or pen in hand
+- An entrepreneur: phone or notebook in hand, or weight shifted with arm at side
+
+**Critical — held, never rested.** For portrait type, always encode props as `"holding X"`
+or `"hand in pocket"` — NEVER `"resting one hand on [surface]"` or `"hand on workbench"`.
+Surface-contact language triggers a low-angle workbench composition where the camera looks
+at the hands from the side, sending the face out of frame. The person must stay upright
+with the face naturally in the upper portion of the frame. If the background includes a
+workbench, the person stands IN FRONT of it (not behind it leaning over it):
+`"standing in front of a workshop bench, [prop] held in one hand, facing the camera"`.
 
 **Expression:** a brief, natural moment of eye contact — not a rigid forced smile. The
 expression should match the character's context: confident and direct, warm and inviting,
@@ -89,6 +96,19 @@ rule-of-thirds framing.
 The gaze-angle tilt ensures visual flow leads the viewer's eye toward the content area of
 the component, even though the subject is still making eye contact with the camera.
 
+## Variant count guidance
+
+Portrait type is reliable. However, **trade worker portraits** (carpenter, baker, mechanic,
+builder) in **landscape orientation** carry a higher crop-failure rate — the image model has
+a strong prior toward the workbench/hands composition that occasionally overrides the face
+anchor. This is a model-level tendency, not a prompt error.
+
+**Rule of thumb:**
+- Standard professional (office, creative, service): `variants: 1–2` sufficient
+- Trade worker in landscape: request `variants: 3` — expect 2/3 to be face-visible portraits
+- Any portrait where face visibility is non-negotiable: use tall ratio (h > w) instead of
+  landscape; the crop doesn't remove top/bottom and success rate is near 100%
+
 ## Avoid
 - Tight face/shoulder headshot with no environment visible
 - Blank or plain-colour studio backdrop (use real environment)
@@ -96,3 +116,4 @@ the component, even though the subject is still making eye contact with the came
 - Overly corporate, stiff, "annual report" posture
 - Expressions that look rehearsed or artificially cheerful
 - Placing the character on the wrong side when a component and side are both specified
+- `"resting one hand on [surface]"` — use `"holding X in hand"` or `"one hand in pocket"` instead
