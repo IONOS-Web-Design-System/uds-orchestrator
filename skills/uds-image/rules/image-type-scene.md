@@ -55,9 +55,7 @@ enter the composition.
 the brief calls for a "from above", "flat lay adjacent", or "workspace overview" feel.
 Works especially well for laptop/device briefs where the screen should be clearly visible.
 
-**Crop-safety note:** overhead shots have natural symmetry — the key action (hands on
-keyboard, device screen) should sit center-frame with no subject element near the top or
-bottom edge.
+**Composition note:** overhead shots have natural symmetry — the key action (hands on keyboard, device screen) should sit center-frame for the strongest composition.
 
 ```
 "overhead shot looking straight down from directly above, bird's-eye view,
@@ -230,13 +228,9 @@ Do NOT describe the UI in fine detail — describe the layout type: "a business 
 with a circular metric and navigation sidebar", "a warm e-commerce storefront with
 product grid and hero image", "a website with a large hero image and navigation bar."
 
-## Crop-safety (non-square canvases)
+## Composition across aspect ratios
 
-image-svc renders a square frame then center-crops to the target ratio:
-- **Landscape (w > h)** trims top and bottom — for patterns B and C, keep the screen
-  and key foreground objects in the center horizontal band; the person's partial presence
-  at the edges will be trimmed but that is acceptable (they are peripheral by design)
-- **Tall ratio (h > w)** trims left and right — keep the screen and foreground centered
+image-svc generates natively at the target aspect ratio; no crop occurs. Landscape targets are natively wide, tall targets natively tall. For patterns B and C, keep the screen and key foreground objects center-frame as a natural compositional anchor — the person's partial presence at the edges is peripheral by design and stays within the native canvas.
 
 ## Person direction
 

@@ -23,11 +23,8 @@ Brief signals: "using", "working on", "cooking", "at their desk", "in their shop
   subject behind a counter, desk, or workbench — the barrier sits at waist level so the action
   (typing, handling a component, reviewing something) happens below chin height and the face
   remains naturally above it and fully in frame. This is the most reliable pattern for combining
-  a visible face with visible hands-on activity. **For landscape targets (16:9, 4:3):** prose
-  headroom instructions are ignored by the model — the desk/counter anchor is mandatory, not
-  optional. Encode as: `"subject seated behind a waist-height desk, upper body well above the
-  desk surface, clear open space above the head"` — this is the only reliable way to prevent the
-  face from floating to the top edge and being cropped by the landscape center-crop.
+  a visible face with visible hands-on activity. Encode as: `"subject seated behind a waist-height
+  desk, upper body well above the desk surface, clear open space above the head"`.
 - Subject must be mid-action — hands engaged, body oriented toward the task, NOT facing camera
 - Framing can be off-center; subject does not need to be in the middle of the frame
 - Camera angle: eye-level or slightly elevated; avoid straight-on symmetrical framing

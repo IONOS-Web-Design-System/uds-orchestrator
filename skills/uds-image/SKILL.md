@@ -36,14 +36,7 @@ Start from the brief's requested shot. Widen automatically if the face cannot fi
 | full body / long shot | landscape (16:9, 4:3, 3:2) | `"full face clearly visible from hairline to chin, extra-wide establishing shot, character occupying one vertical third of the frame, full body visible from head to floor"` |
 | avatar | 1:1 | `"face as the focal point, eyes and full face clearly visible, head and shoulders in frame"` |
 
-**Crop-safety — image-svc renders a SQUARE then center-crops to the target ratio.** A
-**landscape** target (w > h) trims the **top and bottom**; a **tall-ratio** target (h > w)
-trims the **left and right**. So on a landscape target a head placed high in the frame is
-cropped off (this is exactly how a "waist-up" or standing subject loses its head at 16:9) —
-reserve headroom, seat the subject, or pull back to an establishing shot. On a tall-ratio
-target keep the subject clear of the side edges. This applies to **every** type, including
-`scenario` / `scene`: people in a landscape scene must sit in the lower two-thirds
-with clear space above their heads.
+**Native aspect-ratio rendering — image-svc generates natively at the target aspect ratio; no crop occurs.** Landscape targets are natively wide, tall targets natively tall. Compose for the actual canvas using the shot-type guidance per image type — head placement and spacing no longer need to compensate for a crop. Follow the per-type framing without the legacy crop-survival tactics.
 
 **Priority 3 — Foreground objects (nice-to-have, conditional):**
 Add foreground bokeh only when the shot distance allows it without competing for the

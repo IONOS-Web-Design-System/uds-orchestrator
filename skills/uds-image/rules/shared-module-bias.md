@@ -21,6 +21,3 @@ dimensions — those come from the brief's `dimensions` and are enforced downstr
 - **Unknown or absent module** → apply no module bias; follow the brief and normal
   `shared-image-principles` image-type detection.
 - A module's **default asset type** applies only when the brief does not already pin one.
-- The **crop-safety** guidance still applies on top of the module framing: a full-bleed
-  `customer_testimonial` on a landscape target still loses its top/bottom, so keep the
-  subject and any reserved text space inside the surviving central band.

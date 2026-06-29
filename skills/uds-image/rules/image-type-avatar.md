@@ -111,4 +111,4 @@ comes from the model's creative judgment, not from prompting a specific camera.
 
 ## Negative prompt additions (avatar-specific)
 Add to negativePrompt: "long shot, wide shot, full body, background sharply in focus
-and competing with face, multiple people, group shot, face cropped, face cut off".
+and competing with face, multiple people, group shot".

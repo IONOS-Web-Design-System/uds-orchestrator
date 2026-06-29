@@ -26,7 +26,7 @@ See SKILL.md CRITICAL RULE #1 for the full decision ladder. The short version:
 
 - **Waist-up brief + any ratio:** use `"full face clearly visible from hairline to chin, waist-up shot showing complete upper body"` — leads the prompt.
 - **Full body / long shot + tall ratio (2:3, 3:4, 9:16):** use `"full face clearly visible from hairline to chin, full body in frame from head to floor"`.
-- **Full body / long shot + landscape ratio (16:9, 4:3):** landscape cannot fit a standing person at normal long-shot distance without cropping the face. Automatically use: `"full face clearly visible from hairline to chin, extra-wide establishing shot, character occupying one vertical third of the frame, full body head to floor visible"` — this is the only framing that reliably shows the face in landscape format.
+- **Full body / long shot + landscape ratio (16:9, 4:3):** use an extra-wide establishing shot so the face fits naturally in the natively wide canvas. Automatically use: `"full face clearly visible from hairline to chin, extra-wide establishing shot, character occupying one vertical third of the frame, full body head to floor visible"`.
 
 Always state the face anchor first — before the character description, before anything else.
 - Subject stands, sits, or leans naturally within their environment
@@ -99,7 +99,7 @@ the component, even though the subject is still making eye contact with the came
 ## Variant count guidance
 
 Portrait type is reliable. However, **trade worker portraits** (carpenter, baker, mechanic,
-builder) in **landscape orientation** carry a higher crop-failure rate — the image model has
+builder) in **landscape orientation** carry a higher framing-failure rate — the image model has
 a strong prior toward the workbench/hands composition that occasionally overrides the face
 anchor. This is a model-level tendency, not a prompt error.
 
@@ -107,7 +107,7 @@ anchor. This is a model-level tendency, not a prompt error.
 - Standard professional (office, creative, service): `variants: 1–2` sufficient
 - Trade worker in landscape: request `variants: 3` — expect 2/3 to be face-visible portraits
 - Any portrait where face visibility is non-negotiable: use tall ratio (h > w) instead of
-  landscape; the crop doesn't remove top/bottom and success rate is near 100%
+  landscape; tall canvases naturally fit upright subjects and success rate is near 100%
 
 ## Avoid
 - Tight face/shoulder headshot with no environment visible
