@@ -4,6 +4,23 @@ Turn the raw request into a self-contained `feature` brief each generator can ac
 WITHOUT seeing the original request or the other generator's brief. Enrich — do not
 merely copy the request.
 
+**Reframe a mis-scoped request — render the message, not a literal low-information visual.**
+Before classifying and enriching, check the request's *intent* against the *visual it
+prescribes*. When a request pins a low-information visual (a single bare icon, a lone
+shield/badge/lock/checkmark mark, a flat pictogram, "icon-based, no text") **and** its real
+purpose is to communicate a claim or value proposition — especially when it carries marketing
+copy (a headline or value line, e.g. a German claim like "DSGVO-konform, Ihre Daten bleiben in
+Deutschland") — do NOT faithfully shrink it to a text-less graphic. An `image` feature must
+omit all text (image models garble glyphs), so routing such a request to `image` throws the
+message away and yields a generic icon. Instead **reframe it to a content card the message can
+live in**: classify `illustration`, and carry the claim into real copy slots — a headline, a
+short subline, and a labelled badge/indicator/status chip — composed as a compact UDS card
+(the prescribed icon, if useful, becomes one small element inside the card, not the whole
+asset). Quote the decisive signal (the value-prop or copy the asset must convey) in
+`rationale`, the same discipline as the mode decision. A genuine mark with NO message — a
+favicon, a decorative spot illustration, a logo lockup — correctly stays `image`; this reframe
+applies only when a *message* is the point.
+
 A good `feature` states, in this order, only what applies:
 1. **Focal subject** — name it concretely (not "a scene" but "a small bakery storefront at
    dawn"). One subject; resolve vague nouns into specifics.
