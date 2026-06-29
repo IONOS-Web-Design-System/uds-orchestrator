@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.5.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.4.1...v2.5.0) (2026-06-29)
+
+
+### Features
+
+* **skills:** character-appearance reasoning + image-type & brand-style refinements ([50a67cd](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/50a67cdc919d4edec2df70d9013dbc6d2539544f))
+* **uds-asset-moderator:** reframe mis-scoped low-info requests into content cards ([1da6b7c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1da6b7c86c86c0917507fdbee5517a1783d4d986))
+* **uds-showroom:** persona skill + ionos/ai-app-builder DJ persona ([7211ac4](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/7211ac4983b974a391aad3d4c5b1c617d85ed2f5))
+
+
+### Bug Fixes
+
+* **image-skills:** retire obsolete crop-safety rules (center-crop removed in image-svc) ([2b6c844](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/2b6c8448336e027c11af411f56c5265a855502a4))
+
 ## [2.4.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.4.0...v2.4.1) (2026-06-24)
 
 
