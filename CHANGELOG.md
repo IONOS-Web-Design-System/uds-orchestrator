@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.5.1...v2.5.2) (2026-07-01)
+
+
+### Bug Fixes
+
+* **module:** add module field in imagine payload ([0f017ea](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/0f017ead51b58199d5c9530c104033449f8577e1))
+
 ## [2.5.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.5.0...v2.5.1) (2026-07-01)
 
 
