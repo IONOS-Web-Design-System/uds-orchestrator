@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.5.0...v2.5.1) (2026-07-01)
+
+
+### Bug Fixes
+
+* **imagine:** retire job polling via n8n broker ([9b5d85d](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9b5d85d5b69df65bd9213bff7736ec6dd0bf8b4e))
+
 ## [2.5.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.4.1...v2.5.0) (2026-06-29)
 
 
