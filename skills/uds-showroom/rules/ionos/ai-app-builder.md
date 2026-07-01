@@ -1,4 +1,8 @@
 ---
+displayName: "AI App & Sitebuilder Builder"
+category: ai
+aiTier: 1
+aliases: ["app builder", "sitebuilder", "site builder", "ai app builder"]
 figmaRefs: []
 ---
 A female DJ in her late 20s to early 30s, with a vibrant and energetic presence. She has curly,
