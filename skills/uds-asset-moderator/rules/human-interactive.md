@@ -159,10 +159,10 @@ implementation. In brief:
 - **External / VPN** (no token — VPN only; run from a **local** Claude Code session, NOT a
   cowork cloud sandbox, which can't reach the VPN): POST the **UnifiedBrief directly** (the flat
   brief JSON — NO `payload:` wrapper; it already carries `requestId` + `callbackUrl`) to
-  `https://n8nwh.ionos.org/webhook/imagine-trigger` (unauthenticated), then poll
-  `GET https://n8nwh.ionos.org/webhook/imagine-jobs?requestId=<id>` every 15 s until `status`
-  is `done`/`partial`/`error`. Download each `variantUrls` entry (unauthenticated n8n proxy
-  URLs) to `/tmp` and render: images inline, video/animation as a labelled link to the saved file.
+  `https://n8nwh.ionos.org/webhook/imagine-trigger` (unauthenticated), then poll the moderator
+  **directly** — `GET http://uds-moderator.sandbox.lan:8080/jobs/<id>` (token-free) — every 15 s
+  until `status` is `done`/`partial`/`error`. Download each `outputs` entry (unauthenticated n8n
+  proxy URLs) to `/tmp` and render: images inline, video/animation as a labelled link to the saved file.
 - **Offline / sandbox** (smoke-test can't reach the pipeline — a cowork cloud sandbox, or VPN
   off): do NOT show curl or ask the user to poll. Print the finished UnifiedBrief as a
   copy-paste `json` block and tell them to open a **local** Claude Code session (desktop app or

@@ -10,8 +10,9 @@ agent-svc, orchestrated by uds-moderator). You do the prompt engineering FOR the
 describe the asset they want, you produce a ready, enriched **UnifiedBrief** and offer to
 submit it.
 
-> **Where to run this:** the external submit / poll / download steps reach `n8nwh.ionos.org`,
-> an IONOS-internal host. Run `/imagine` from a **local** Claude Code session (the CLI or the
+> **Where to run this:** submit + download reach `n8nwh.ionos.org`, and status polling reaches
+> `uds-moderator.sandbox.lan:8080` (the moderator, directly) — both IONOS-internal hosts on the
+> same corporate VPN. Run `/imagine` from a **local** Claude Code session (the CLI or the
 > Claude Code desktop app) connected to the IONOS VPN. It does **not** work in Claude Code on
 > the web / a **cowork cloud sandbox** — those run in a network-isolated VM that cannot reach
 > the VPN. If the connectivity smoke-test (step 5B.1) fails, do not retry blindly: tell the
@@ -122,22 +123,27 @@ proceed normally from step 1.
    token, and prints inspect commands.
 
    **B. External / VPN** (default when local dev stack is absent):
-   No token required — the `/imagine` bridge endpoints (`imagine-trigger` / `imagine-jobs`) are
-   unauthenticated and protected by network isolation. The only requirement is the IONOS VPN,
-   since `n8nwh.ionos.org` is corp-internal (NXDOMAIN publicly, RFC1918).
+   No token required. **Submit** goes to the `imagine-trigger` bridge on `n8nwh.ionos.org`
+   (unauthenticated); **status polling goes directly to the moderator** at
+   `http://uds-moderator.sandbox.lan:8080/jobs/<requestId>` (also unauthenticated — protected by
+   network isolation + the unguessable `requestId`). Downloads stay n8n `…/webhook/download?…`
+   proxies. All are corp-internal (RFC1918), so the only requirement is the IONOS VPN.
 
    **First-time setup (show this the first time the external path is used):**
-   > **VPN required:** `n8nwh.ionos.org` is only reachable over the IONOS internal VPN.
-   > Connect before running `/imagine`. No token or config is needed.
+   > **VPN required:** `n8nwh.ionos.org` (submit/download) and `uds-moderator.sandbox.lan`
+   > (status polling) are only reachable over the IONOS internal VPN. Connect before running
+   > `/imagine`. No token or config is needed.
 
-   1. **Smoke-test connectivity** before submitting (only on first use per session):
+   1. **Smoke-test connectivity** before submitting (only on first use per session). Test the
+      **moderator** — it's the polling host and the one most likely to be unrouted (a specific
+      sandbox subnet), so if it answers, the VPN is up and `n8nwh.ionos.org` is reachable too:
       ```bash
       curl -s -o /dev/null -w "%{http_code}" --max-time 8 \
-        "https://n8nwh.ionos.org/webhook/imagine-jobs?requestId=smoke-test"
+        "http://uds-moderator.sandbox.lan:8080/health"
       ```
-      - `404` → connected (requestId just not found — proceed to step 2).
-      - curl error / timeout / DNS failure → **not reachable from this session.** Do NOT show
-        the user curl commands or ask them to poll anything, and do not retry blindly. Go to
+      - `200` → connected (moderator reachable — proceed to step 2).
+      - curl error / timeout / DNS failure / non-200 → **not reachable from this session.** Do NOT
+        show the user curl commands or ask them to poll anything, and do not retry blindly. Go to
         **"Offline / sandbox handoff"** below. This is the expected path inside a cowork cloud
         sandbox (network-isolated, no VPN) and also when the local VPN is simply not connected.
 
@@ -167,15 +173,17 @@ proceed normally from step 1.
       Confirm `status: "accepted"` in the response. If the body lacks it, the moderator safe-gate
       rejected the brief — show the body and stop.
 
-   3. **Monitor in background** — write a polling script to `/tmp/poll-<requestId>.sh`:
+   3. **Monitor in background** — poll the moderator's status endpoint **directly** (token-free;
+      NOT n8n). Write a polling script to `/tmp/poll-<requestId>.sh`:
       ```bash
       #!/usr/bin/env bash
       REQ="$1"
       for i in $(seq 1 90); do
         RESP=$(curl -s --max-time 10 \
-          "https://n8nwh.ionos.org/webhook/imagine-jobs?requestId=$REQ")
+          "http://uds-moderator.sandbox.lan:8080/jobs/$REQ")
         STATUS=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo "unknown")
         echo "[$i/90] $STATUS"
+        # done|partial|error are terminal; planning|running are in-flight (keep polling)
         if [[ "$STATUS" == "done" || "$STATUS" == "error" || "$STATUS" == "partial" ]]; then
           echo "$RESP" > "/tmp/$REQ-result.json"
           echo "COMPLETE: $STATUS"
@@ -188,9 +196,10 @@ proceed normally from step 1.
       *"Job `<requestId>` submitted — monitoring in background (polls every 15 s, up to 22 min)."*
 
    4. **Download bytes + render** once the background Bash notifies completion: read
-      `/tmp/<requestId>-result.json`. Its `variantUrls` map values are **unauthenticated n8n
-      proxy URLs** (`…/webhook/image-download?…` / `…/webhook/download?…`) — VPN-reachable, not
-      internal-VM URLs. For each `<variant>: <url>` pair:
+      `/tmp/<requestId>-result.json`. Its `outputs` object holds `images` and/or `videos` maps
+      (`{ "<variant>": "<url>" }`); the URLs are **unauthenticated n8n proxy URLs**
+      (`…/webhook/image-download?…` / `…/webhook/download?…`) — VPN-reachable, not internal-VM
+      URLs. For each `<variant>: <url>` pair across both maps:
       - Derive the extension from the URL's `format=` query param: `png`/`jpg`/`jpeg`/`webp` →
         image; `mp4`/`webm`/`gif` → video; default `png`.
       - Download to a local file:
@@ -287,7 +296,7 @@ proceed normally from step 1.
    UnifiedBrief, apply the change — for "other markets" set the new `market` **and** the showroom
    prefix (so the ethnicity/locale rules pick it up); for "add context" append the user's new
    direction into the `brief` text — then **mint a NEW `requestId`** and submit it through
-   **step 5B exactly like a first run** (`imagine-trigger` → poll `imagine-jobs` → download →
+   **step 5B exactly like a first run** (`imagine-trigger` → poll the moderator `/jobs` → download →
    render). Warn the user up front: this is a **full generation** (takes the usual minutes and
    produces a fresh, different result — not a copy of the previous one).
 
