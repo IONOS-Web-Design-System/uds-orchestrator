@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.6.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.5.2...v2.6.0) (2026-07-01)
+
+
+### Features
+
+* **uds-showroom:** catalog frontmatter (displayName/category/aiTier/aliases) ([cf1cdc3](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/cf1cdc367f49e52be5d163d2e4a43e46c8df9681))
+* **uds-showroom:** seed ionos catalog — 16 AI personas + non-AI stubs ([43d164b](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/43d164b49cfdf9399132166c787001ce81c49e6b))
+
 ## [2.5.2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.5.1...v2.5.2) (2026-07-01)
 
 
