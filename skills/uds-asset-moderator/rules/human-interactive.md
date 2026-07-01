@@ -32,7 +32,14 @@ you write the brief.
 ```
 
 **Dimension ranges by mode:** image 256–2048 × 256–2048; illustration 320–1920 × 180–1080;
-hybrid is the intersection 320–1920 × 256–1080. There is no `module` field — it is downstream-only.
+hybrid is the intersection 320–1920 × 256–1080.
+
+**`module` (OPTIONAL, ≤64 chars):** set it only when the user names a specific downstream
+component the asset embeds into — `columns`, `customer_testimonial`, `textmedia`, or
+`testimonial_slider`. It biases the generators' framing/scale for that component and routes the
+result. **Never ask for it**; infer only when clearly stated, and leave it unset otherwise. Set
+just the field — image-svc adds its own `Consumer module:` directive from it; do not write that
+line into the `brief`.
 
 **`loop` (boolean, default `false`):** only meaningful for an **animated** illustration/hybrid.
 `true` constrains the animation to a seamless loop (final frame == first frame) for continuous

@@ -66,6 +66,7 @@ field names cause a silent `400` with no useful error message.
 | `dimensions.w` | 256–2048 | ❌ out of range causes 400 |
 | `dimensions.h` | 180–2048 | ❌ out of range causes 400 |
 | `requestId` | ≤ 56 chars | ❌ longer is rejected |
+| `module` | *(optional)* ≤ 64 chars — a downstream **component** the asset embeds into: `columns`, `customer_testimonial`, `textmedia`, `testimonial_slider` | ❌ don't invent one; **omit** unless the asset clearly targets a specific component (it biases the generators' framing/scale + routes the result) |
 
 > **STOP before every submit:** run through this table. A `400` from the safe-gate gives no
 > field-level error message — you will not know which field failed without checking this list.
@@ -105,11 +106,18 @@ proceed normally from step 1.
    `human-interactive.md`). For an **animated** asset, also confirm whether it should
    **loop seamlessly** (`loop:true`) or play once (`loop:false`, the default).
    Mind the canvas-size → hybrid-look and image crop-safety notes in `human-interactive.md`.
+   **Module (optional — do NOT ask):** if the user names a specific downstream component the
+   asset will embed into (a `columns` card, a `customer_testimonial`, a `textmedia` block, a
+   `testimonial_slider`), note it for step 3's `module` field so the generators bias framing/scale
+   for that component. Infer only when clearly stated; otherwise leave `module` unset.
 
 3. **Enrich and assemble** the `UnifiedBrief` JSON (shape and dimension ranges per
    `human-interactive.md`). Write the `brief` text yourself using the enrichment +
    param-mapping rules. Generate a kebab-case `requestId` (≤56 chars) from the subject, and set
    a `callbackUrl` (polling doesn't use it — default `https://n8nwh.ionos.org/webhook/mock-callback`).
+   If you inferred a downstream component in step 2, set the optional top-level `module` field to
+   it (e.g. `"module": "customer_testimonial"`). Do **not** hand-write a `Consumer module:` line
+   into the `brief` — image-svc adds that itself from the `module` field.
 
 4. **Show the user** the assembled UnifiedBrief JSON plus a one-line plain-English summary of
    what will be generated. Let them tweak any field before submitting.
