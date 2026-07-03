@@ -2,7 +2,7 @@
 displayName: "AI Website Builder"
 category: ai
 aiTier: 1
-aliases: ["website builder", "site builder"]
+aliases: ["website builder", "site builder", "mywebsite", "mywebsite now", "ionos mywebsite now", "mywebsite con soporte de n8n"]
 figmaRefs: []
 ---
 A woman in her early 30s with an entrepreneurial spark — the founder of a small independent
