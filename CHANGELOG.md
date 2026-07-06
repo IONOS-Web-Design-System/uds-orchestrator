@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.7.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.6.0...v2.7.0) (2026-07-06)
+
+
+### Features
+
+* **showroom:** alias MyWebsite → ai-website-builder ([7b64188](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/7b64188876dab3255ea73f8653f37b7d947d0a7f))
+
+
+### Bug Fixes
+
+* **uds-wireframe:** backdrop never darkened (no scrim/overlay; text-shadow or local panel only) + backdrop always static (no zoom/fade/pan/parallax; only floating UI animates) ([d80d2c6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d80d2c64425828ef5eb44c6f7e16801bac87b0f3))
+
 ## [2.6.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.5.2...v2.6.0) (2026-07-01)
 
 
