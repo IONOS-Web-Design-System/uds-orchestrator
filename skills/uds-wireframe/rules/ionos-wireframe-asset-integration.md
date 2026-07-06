@@ -23,7 +23,7 @@ Extract `fileKey` + `nodeId` (`node-id=1-2` → `1:2`), call
 `mcp__plugin_figma_figma__get_screenshot(fileKey, nodeId)` for a 7-day URL, embed via `<img>`, and
 leave a comment with the source URL so it can be re-fetched when it expires.
 
-**Placement quick-reference:** Hero — full-width `object-cover`, dark overlay + centered headline/CTA.
+**Placement quick-reference:** Hero — full-width `object-cover`, centered headline/CTA made legible with a text-shadow or a local panel behind the text (NEVER a dark overlay/scrim over the image).
 Card — `object-cover object-top`, caption below. Aside — rounded + bordered, small caption.
 
 ---

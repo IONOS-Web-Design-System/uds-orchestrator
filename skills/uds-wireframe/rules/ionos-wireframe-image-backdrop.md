@@ -42,7 +42,7 @@ Layer order (document order, no z-index games):
    with `objectFit: 'cover'`, `overflow: 'hidden'`, and a soft shadow.
 
    **The one-frame rule:** everything that reads as part of the pictured scene — the
-   imagery, the headline rendered over it, its scrim — lives INSIDE this card, inside a
+   imagery and the headline rendered over it (text-shadow only — no scrim) — live INSIDE this card, inside a
    single `scene` wrapper that receives any backdrop-motion transform. When the frame
    zooms or moves, imagery and in-frame typography move TOGETHER; a headline that stays
    put while the image zooms behind it breaks the illusion and is wrong.
@@ -58,7 +58,7 @@ Layer order (document order, no z-index games):
        <Img src={staticFile('<slug>.png')}
             style={{ width: '100%', height: '100%', objectFit: 'cover',
                      objectPosition: '30% 40%' /* crop onto the focal area */ }} />
-       {/* headline + scrim live HERE, inside the scene wrapper (see step 3) */}
+       {/* headline lives HERE (text-shadow, no scrim), inside the scene wrapper (see step 3) */}
      </div>
    </div>
    ```
@@ -74,61 +74,24 @@ Layer order (document order, no z-index games):
    letterboxed or framed as a small picture inside the canvas** — the backdrop card is a
    window onto a region of the scene, not a photo frame around all of it.
 
-   **Backdrop motion** (contract line `Backdrop motion:`, animation intent only — applies
-   to the pointer AND full-bleed styles): **imagery motion is PURPOSED, never decorative.
-   Idle Ken Burns — continuous aimless zoom or pan — is banned.** Exactly three motions
-   are sanctioned; use the one(s) the narrative calls for, otherwise the backdrop stays
-   static:
-
-   1. **Highlight zoom** — zoom toward the region being highlighted, *synchronized with
-      the highlight element's entrance* (the marquee/panel/badge that refers to it). The
-      zoom SETTLES — it runs over ~15-25 frames as the highlight appears, then holds:
-
-      ```tsx
-      const frame = useCurrentFrame();
-      // marquee enters at MARQUEE_IN; the zoom accompanies it, then holds.
-      const z = interpolate(frame, [MARQUEE_IN, MARQUEE_IN + 20], [1.0, 1.08],
-        { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-      // the transform goes on the SCENE WRAPPER (one-frame rule) — imagery AND the
-      // in-frame headline zoom together; never transform the <Img> alone:
-      <div style={{ width: '100%', height: '100%',
-                    transformOrigin: '30% 40%',          // zoom INTO the highlighted region
-                    transform: `scale(${z})` }}>
-        <Img src={staticFile('<slug>.png')}
-             style={{ width: '100%', height: '100%', objectFit: 'cover',
-                      objectPosition: '30% 40%' /* the highlighted region */ }} />
-        {/* headline + scrim here — they ride the same transform */}
-      </div>
-      ```
-
-      `transformOrigin` must match the focal `objectPosition` — the zoom moves INTO the
-      highlighted area, tying camera and highlight together. The marquee, connector, and
-      badge are canvas-level annotations: they draw in AFTER the zoom settles (at or
-      after `MARQUEE_IN + 20`), wrapping the headline's settled position.
-
-   2. **Entrance fade+move** — when the image container itself pops into view (or
-      leaves): opacity 0→1 with a small translate/scale (e.g. `translateY 24→0`,
-      `scale 0.97→1`) over ~12-18 frames, using the same `flyIn` curve as the floating
-      fragments (micro-animations Pattern 5). After the entrance, the imagery holds.
-
-   3. **Interaction response** — only when a cursor-flow animation (micro-animations
-      cursor pattern) crosses or clicks the image container: a subtle settle response
-      synchronized to the cursor event frames — `scale 1.0→1.02` easing back to 1.0, or
-      a ≤8px parallax shift. The image reacts to the interaction; it does not move on
-      its own.
-
-   Without a `Backdrop motion:` line in the contract, the backdrop stays fully static.
+   **Backdrop motion** (contract line `Backdrop motion:`): the background image is ALWAYS
+   STATIC. NEVER fade it in, zoom, pan, Ken-Burns, parallax, or drift the imagery — there
+   is NO sanctioned backdrop motion, in ANY embed style. Put NO transform/opacity animation
+   on the scene wrapper or the `<Img>` itself. ONLY the floating UI fragments and annotations
+   (cards, marquee, connector, badge, cursor flow) animate: they draw/fly in (micro-animations
+   Pattern 5) over an already-fully-visible, static backdrop, then settle. This holds
+   regardless of animation intent — the backdrop is the still stage; only the overlay moves.
 
 3. **Headline over the image (inside the scene wrapper)** — a short bold heading (brand heading font, white) rendered
    as a UI text layer on top of the backdrop. The illustration owns this text — it is NOT
-   baked into the image. Guarantee contrast with a text-shadow or a local gradient scrim:
+   baked into the image. Guarantee contrast with a text-shadow or a small local panel
+   behind the text — NEVER a scrim/gradient over the image (keep it at full brightness):
 
    ```tsx
    <h1 style={{
      position: 'absolute', /* over a calm region of the backdrop */
      fontFamily: 'Overpass, sans-serif', fontWeight: 800, color: '#fff',
-     textShadow: '0 2px 24px rgba(0,0,0,0.55)', // or place over a scrim:
-     // background: 'linear-gradient(transparent, rgba(0,27,65,0.55))' on a wrapper
+     textShadow: '0 2px 24px rgba(0,0,0,0.55)', // text-shadow only — do NOT darken the image
      margin: 0,
    }}>URBAN BIKES</h1>
    ```
@@ -296,11 +259,10 @@ Layer order:
 
 Animation hooks: stagger the cluster in with **Pattern 5 — Element Fly-In** (primary card
 first, toolbar and bubble at +0.3-0.5s offsets); at most one fragment may idle with
-**Pattern 4 — Float / Gentle Bob** (`floatBob`). The backdrop is **static by default**;
-when the contract includes a `Backdrop motion:` line, apply one of the three PURPOSED
-motions from the pointer section (highlight zoom synced to a highlight element, entrance
-fade+move of the image layer, or a cursor-interaction response) — idle Ken Burns is
-banned here too.
+**Pattern 4 — Float / Gentle Bob** (`floatBob`). The backdrop image is **ALWAYS static** —
+even when the contract includes a `Backdrop motion:` line, the image itself never moves (no
+zoom, fade, pan, parallax, or drift). Only the floating fragments/annotations animate over
+the still backdrop.
 
 ## Style: interface-asset
 
@@ -329,8 +291,8 @@ What THIS rule adds on top:
    canvas**, sitting on the gradient root with rounded corners and a soft shadow.
 3. **The catalog image is the hero/media asset INSIDE the wireframe** — placed in the
    interface's hero/media slot with `objectFit: 'cover'`, with the headline text rendered
-   over it per the composition rules (welcome headline, contrast via text-shadow or
-   scrim). Placeholder bars/content blocks sit below the hero, per the product-frame
+   over it per the composition rules (welcome headline, contrast via text-shadow or a
+   local panel — never a scrim over the image). Placeholder bars/content blocks sit below the hero, per the product-frame
    placeholder palette.
 4. **1-2 floating highlight fragments** overlapping the wireframe's edge — a prompt
    bubble and/or a small mini-toolbar pill, per the **Floating Highlight Card template**
@@ -373,12 +335,12 @@ of-a-piece with the imagery — never a brand-default background fighting the ph
   `#3A1F14 → #001B41`. Keep it calm and dark enough that white text and glass panels read.
 - **What never changes**: panel glass stays neutral (`var(--surface-subtle)`), the
   blue→magenta AI gradient stays exactly `#095BB1 → #D746F5` (CTAs/badges only), brand
-  component colors stay tokenized. Harmony lives in the ROOT background, scrims, and
-  subtle shadow tints — not in recolored UI.
-- **Contrast supervision**: when the contract says the imagery is `light`, put a darker
-  scrim (`linear-gradient(transparent, rgba(0,27,65,0.55))`) behind any headline/text over
-  the imagery; when `dark`, white text may sit directly on it. Glow shadows may tint
-  toward the dominant hue at low opacity instead of pure black.
+  component colors stay tokenized. Harmony lives in the ROOT background and subtle shadow
+  tints — not in recolored UI, and NEVER in a scrim/overlay/darkening layer over the image.
+- **Contrast supervision**: NEVER darken the backdrop image — no scrim, overlay, tint, or
+  gradient over it; keep it at FULL brightness. Guarantee text contrast with a text-shadow
+  or a local solid/glass panel behind the headline/text ONLY (sized to the text, not the
+  image). Glow shadows may tint toward the dominant hue at low opacity instead of pure black.
 - When the contract says "no measured imagery tones available", use the brand navy family
   (`#0E1A2D → #001B41`) and keep contrast high.
 
