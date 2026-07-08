@@ -166,10 +166,12 @@ implementation. In brief:
 - **External / VPN** (no token — VPN only; run from a **local** Claude Code session, NOT a
   cowork cloud sandbox, which can't reach the VPN): POST the **UnifiedBrief directly** (the flat
   brief JSON — NO `payload:` wrapper; it already carries `requestId` + `callbackUrl`) to
-  `https://n8nwh.ionos.org/webhook/imagine-trigger` (unauthenticated), then poll the moderator
+  `https://n8nwh.ionos.org/webhook/moderator-trigger` (unauthenticated — n8n holds the moderator's
+  bearer token as its own credential and attaches it server-side), then poll the moderator
   **directly** — `GET http://uds-moderator.sandbox.lan:8080/jobs/<id>` (token-free) — every 15 s
-  until `status` is `done`/`partial`/`error`. Download each `outputs` entry (unauthenticated n8n
-  proxy URLs) to `/tmp` and render: images inline, video/animation as a labelled link to the saved file.
+  until `status` is `done`/`partial`/`error`. Download each `outputs` entry (durable **public
+  IONOS S3 URLs**, no auth) to `/tmp` and render: images inline, video/animation as a labelled
+  link to the saved file.
 - **Offline / sandbox** (smoke-test can't reach the pipeline — a cowork cloud sandbox, or VPN
   off): do NOT show curl or ask the user to poll. Print the finished UnifiedBrief as a
   copy-paste `json` block and tell them to open a **local** Claude Code session (desktop app or
@@ -189,8 +191,9 @@ identical motion/layout):
 2. **Different format** — re-encode a variant as `mp4`/`webm`/`gif`/`png` poster (re-render).
 3. **Add context & regenerate** — fold new direction into the brief → fresh generation.
 
-Re-render (1 & 2) goes through `…/webhook/imagine-rerender` (flat ReRenderBrief, unauthenticated)
-→ poll the unauthenticated `…/webhook/download` proxy per market.
+Re-render (1 & 2) goes through `…/webhook/rerender-trigger` (flat ReRenderBrief, unauthenticated)
+→ poll the moderator directly (`GET /jobs/<renderId>`, token-free) → download each market's
+public S3 URL.
 
 **Image** — there is **no image re-render**. Photoreal images carry no rendered text, and
 `image-download` only serves the already-generated file. So:
