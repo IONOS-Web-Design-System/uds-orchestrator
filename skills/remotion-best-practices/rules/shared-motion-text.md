@@ -159,3 +159,44 @@ until the container's transform has reached its terminal values.
 **Sequencing rule:** complete all card transforms first (entrance, scale, settle), THEN
 start the typing beat. Overlapping a typing animation with a moving/scaling ancestor is
 the most common cause of typography jitter.
+
+## Camera moves (zoom + pan) — pan in screen space, keep the subject framed
+
+A "camera" is a `transform` on a wrapper `<div>` combining a zoom (`scale`) and a pan
+(`translate`). Getting the composition order wrong throws the subject off-screen.
+
+**1. Order matters: put `translate()` BEFORE `scale()`.** CSS applies `transform`
+right-to-left, so `scale(s) translate(px)` translates in the *scaled* coordinate space —
+the on-screen pan becomes `px * s`. A pan value picked as screen pixels then overshoots by
+the zoom factor (a 560px pan at 3.2× moves 1792px and flies the subject out of a 1280px
+frame). Pan in screen space by translating first, or divide the pan by the scale.
+
+```tsx
+// ❌ WRONG — pan is multiplied by scale; subject leaves the frame during the zoom
+transform: `scale(${scale}) translate(${panX}px, ${panY}px)`
+
+// ✅ CORRECT — translate (screen px) applied AFTER scale
+transform: `translate(${panX}px, ${panY}px) scale(${scale})`
+// (equivalently, if you must keep scale first, use translate(${panX / scale}px, ...))
+```
+
+**2. Keep the focal element inside the viewport for the whole move.** After the transform,
+the tracked element's on-screen centre must stay within `0..width` / `0..height` at every
+frame — never pan it fully off-frame. To *follow a moving target* (e.g. a typing caret),
+compute the pan each frame so the target stays centred, rather than hard-coding endpoints:
+
+```tsx
+// caretScreenX = target's x in screen space at scale 1; keep it at the viewport centre
+const panX = width / 2 - caretScreenX * scale;   // screen-space pan; pair with translate()-first
+```
+
+**3. Cap the zoom so the subject stays visible.** If the whole focal element (width `W`)
+must remain in a viewport of width `VW`, keep `scale <= VW / W`. Scaling a 584px element to
+3.2× in a 1280px frame makes it 1869px — wider than the frame — so it can no longer be seen
+whole. Prefer restrained pushes (≈1.1–1.8×) for "zoom in" beats; reserve larger zooms for a
+genuine macro detail and then keep that detail centred with rule 2.
+
+**4. Text stability still applies during camera moves.** A live camera transform on an
+ancestor re-rasterizes any text under it (see rule above). Do not run the typing beat while
+the camera scale is still changing — hold the zoom steady (constant `scale`) across the
+typing frames, and only pan by whole-pixel amounts during typing.
