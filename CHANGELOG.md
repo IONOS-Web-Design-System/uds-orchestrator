@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.9.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.8.0...v2.9.0) (2026-07-08)
+
+
+### Features
+
+* **imagine:** emit ordered figmaReferences for multiple Figma links ([339d468](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/339d4685136d19aa4559d2705504517f1cc2362b))
+* **remotion-skill:** camera-move correctness rule (zoom + pan) ([07b8460](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/07b8460a4aecad2f6b4270ed6dfc5c6133cfb01b))
+
+
+### Documentation
+
+* **imagine:** surface the moderator's figmaUrl reference field ([1b3bd0b](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1b3bd0b2f4c6bde1f1f86a30bae022ccba937612))
+* **imagine:** surface the moderator's figmaUrl reference field ([4b664e7](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/4b664e74e07c5f52848e56a05e5b5e6fd67e041c))
+
 ## [2.8.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.7.0...v2.8.0) (2026-07-08)
 
 
