@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.8.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.7.0...v2.8.0) (2026-07-08)
+
+
+### Features
+
+* **imagine:** submit/rerender via token-free n8n ingress webhooks ([de6b561](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/de6b561cc7b74fdc7458d1b17fe88a07a90197ff))
+* **imagine:** submit/rerender via token-free n8n ingress webhooks ([2cd711a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/2cd711a85db17838f553c9b751adcdd14efc5439))
+
+
+### Bug Fixes
+
+* **imagine:** repoint external/VPN path to the moderator directly (n8n removed) ([f58af97](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f58af976d9a38815b1b2f70baf4fc66210162c7c))
+
 ## [2.7.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.6.0...v2.7.0) (2026-07-06)
 
 
