@@ -74,17 +74,18 @@ a silent `400` with no useful error message.
 | `dimensions.h` | 180–2048 | ❌ out of range causes 400 |
 | `requestId` | ≤ 56 chars | ❌ longer is rejected |
 | `module` | *(optional)* ≤ 64 chars — a downstream **component** the asset embeds into: `columns`, `customer_testimonial`, `textmedia`, `testimonial_slider` | ❌ don't invent one; **omit** unless the asset clearly targets a specific component (it biases the generators' framing/scale + routes the result) |
-| `figmaUrl` | *(optional)* a real `figma.com` URL — a design **reference**. Prefer a full **node** URL (`…?node-id=NN-NN`) so the moderator renders that exact node, not the whole file. The moderator inspects it and threads it to the generators (image mode → style/conditioning or shown on-screen; illustration/hybrid → reconstruct/animate). | ❌ don't bury the link in `brief` — it must be this **top-level field**; a non-`figma.com` URL **causes 400** |
-| `figmaReferences` | *(optional)* an **ordered array** of `{ "url": "<figma.com node URL>", "role"?: "keyframe"｜"style"｜"screen-content"｜"reconstruct" }` — use instead of `figmaUrl` when the user gives **several** links (e.g. an animation storyboard). Order matters. `role` may be omitted (auto-classified). Wins over `figmaUrl`. Cap 12. | ❌ don't put multiple links in one `figmaUrl` string; ❌ don't bury them in `brief` |
+| `figmaUrl` | *(optional)* a real `figma.com` URL — a design **reference**, used as the **auto/unroled shorthand for a SINGLE link**. Prefer a full **node** URL (`…?node-id=NN-NN`) so the moderator renders that exact node, not the whole file; it inspects the node and auto-classifies the role. When you know the role the reference should play (see `figmaReferences`), use that field instead — **even for one link**. | ❌ don't bury the link in `brief` — it must be this **top-level field**; a non-`figma.com` URL **causes 400** |
+| `figmaReferences` | *(optional)* an **ordered array** of `{ "url": "<figma.com node URL>", "role"?: … }` — the way to assign an **explicit role**, for a **single OR multiple** links. The moderator now honors an explicit role in **any** mode (it no longer infers it from mode alone), so this is the reliable lever. Roles: **`screen-content`** = show this UI design ON a device's screen in the asset (needs a **node** URL; use image/hybrid mode); **`reconstruct`** = rebuild/animate the design as the asset itself (illustration/hybrid); **`style`** = brand/aesthetic reference only; **`keyframe`** = one frame of an ordered animation storyboard. Omit `role` to auto-classify. Order matters. Wins over `figmaUrl`. Cap 12. | ❌ don't put multiple links in one `figmaUrl` string; ❌ don't bury them in `brief` |
 
 > **STOP before every submit:** run through this table. A `400` from the safe-gate gives no
 > field-level error message — you will not know which field failed without checking this list.
 >
 > **Figma reference (`figmaUrl` / `figmaReferences`):** these are **top-level siblings** of
 > `brief`, never part of the `brief` text. The canonical JSON example above omits both (they're
-> optional). One link → `"figmaUrl": "https://www.figma.com/design/<key>/<name>?node-id=12-34"`.
-> Several links (ordered) → use the top-level array instead:
-> `"figmaReferences": [{ "url": "https://www.figma.com/design/<key>/<name>?node-id=12-34", "role": "keyframe" }, …]`.
+> optional). One link with **no** specific role → `"figmaUrl": "https://www.figma.com/design/<key>/<name>?node-id=12-34"`.
+> A link with an **explicit role** (`screen-content` / `reconstruct` / `style`), or several ordered
+> links, → use the top-level array instead:
+> `"figmaReferences": [{ "url": "https://www.figma.com/design/<key>/<name>?node-id=12-34", "role": "screen-content" }, …]`.
 > Never set both — `figmaReferences` wins if present.
 
 ## Instructions
@@ -127,21 +128,28 @@ proceed normally from step 1.
    `testimonial_slider`), note it for step 3's `module` field so the generators bias framing/scale
    for that component. Infer only when clearly stated; otherwise leave `module` unset.
    **Figma reference (optional — detect, do NOT ask for one):** if the user's message contains a
-   `figma.com` URL, treat it as a design **reference**, not part of the description: note it for
-   step 3's top-level `figmaUrl` field and **do not** repeat the raw link inside the `brief` text.
-   Then **restate what it will do** so the user can steer `mode` (no extra question — infer from
-   the mode you already picked): in **image** mode the design becomes a style/conditioning
-   reference (or, if it's a UI design, is shown on the device's screen); in **illustration/hybrid**
-   it can be reconstructed and/or animated. If the link has no `?node-id=`, say the whole file
-   will be used and offer to take a specific node URL for a tighter reference.
+   `figma.com` URL, treat it as a design **reference**, not part of the description — keep the raw
+   link OUT of the `brief` text. Then decide the reference's **role** from the user's intent. The
+   moderator honors an explicit role in **any** mode, so the role — not the mode — is what reliably
+   gets the reference used correctly; do **not** leave a clear role to be guessed:
+   - **`screen-content`** — the user wants this UI/screen design shown **on a device's screen** in
+     the asset ("our eshop on a laptop", "the app running on a phone", "this dashboard on a
+     monitor"). This is the common case for a pasted product/UI design. It needs a **node** URL (the
+     moderator renders that node and composites it) — if the link has no `?node-id=`, ask for a
+     specific node URL, since without it there is nothing to put on the screen. Pick **image** mode
+     (or **hybrid** if the scene also animates) — a device screen has no place in a pure illustration.
+   - **`reconstruct`** — the user wants the design itself **rebuilt / animated** as the asset
+     (design → animated layers, e.g. a login→dashboard flow). Pick **illustration** or **hybrid** mode.
+   - **`style`** — the design is only a **brand / aesthetic** reference (colors, mood, look), not
+     literal content to reproduce. Any mode.
+   - **omit the role** only when the intent is genuinely unclear — the moderator auto-classifies.
+   **Restate in one line** what the reference will do so the user can steer, then carry it (with its
+   role) to step 3.
    **Multiple Figma links:** if the message contains **more than one** `figma.com` URL, collect
-   them **in the order given** for step 3's top-level `figmaReferences` array instead of the
-   single `figmaUrl` — never both. Tag each entry's `role`: if the user framed the links as an
-   ordered sequence (e.g. "as an animation sequence," a numbered list of frames) →
-   `role:"keyframe"` for each; a link the user calls out as a style/brand reference →
-   `role:"style"`; otherwise omit `role` (auto-classified downstream). As with a single link,
-   keep every URL out of the `brief` text — but do write the per-beat motion description (what
-   happens between/at each keyframe) into `brief`.
+   them **in the order given** for step 3's `figmaReferences` array. Tag each entry's `role` per the
+   rubric above; an ordered animation sequence (a numbered list of frames, "as a storyboard") →
+   `role:"keyframe"` for each. Keep every URL out of the `brief` text — but do write the per-beat
+   motion description (what happens between/at each keyframe) into `brief`.
 
 3. **Enrich and assemble** the `UnifiedBrief` JSON (shape and dimension ranges per
    `human-interactive.md`). Write the `brief` text yourself using the enrichment +
@@ -150,14 +158,15 @@ proceed normally from step 1.
    If you inferred a downstream component in step 2, set the optional top-level `module` field to
    it (e.g. `"module": "customer_testimonial"`). Do **not** hand-write a `Consumer module:` line
    into the `brief` — image-svc adds that itself from the `module` field.
-   If the user supplied a **single** Figma link in step 2, set the optional top-level `figmaUrl`
-   field to it verbatim (e.g. `"figmaUrl": "https://www.figma.com/design/<key>/<name>?node-id=12-34"`)
-   and make sure that link does **not** also appear in the `brief` text — the moderator inspects
-   `figmaUrl` and threads it to the generators; a link left only inside `brief` is ignored.
-   If the user supplied **multiple** Figma links, set the top-level `figmaReferences` field
-   instead — an **ordered** array of `{ "url": "...", "role"?: "keyframe" | "style" |
-   "screen-content" | "reconstruct" }` per step 2's role tagging (cap 12 entries) — and **omit
-   `figmaUrl` entirely**. Never set both `figmaUrl` and `figmaReferences` on the same brief.
+   **Figma reference:** if you inferred an explicit **role** in step 2 (`screen-content` /
+   `reconstruct` / `style` / `keyframe`) — for one link OR several — set the top-level
+   `figmaReferences` array of `{ "url": "...", "role": "..." }` in order (cap 12 entries) and
+   **omit `figmaUrl`**. Only when a **single** link has **no** role (genuinely auto) use the
+   top-level `figmaUrl` shorthand instead. Never set both on the same brief. In every case the
+   link(s) must **not** also appear in the `brief` text — the moderator inspects the top-level
+   field and threads it to the generators; a link left only inside `brief` is ignored. For a
+   `screen-content` reference, make sure the URL includes `?node-id=` (no node ⇒ nothing to
+   composite onto the screen).
 
 4. **Show the user** the assembled UnifiedBrief JSON plus a one-line plain-English summary of
    what will be generated. Let them tweak any field before submitting.
@@ -214,12 +223,13 @@ proceed normally from step 1.
       > 3. `brand`, `mode`, and `market` are one of their listed allowed values.
       > 4. `variants` ≤ 4, `durationSec` ≤ 30, `dimensions.w` 256–2048, `dimensions.h` 180–2048.
       > 5. `requestId` ≤ 56 chars and `callbackUrl` is present.
-      > 6. If a **single** Figma reference was given: `figmaUrl` is a **top-level** field holding
-      >    a real `figma.com` URL — **not** embedded in `brief`. Omit the field entirely if there
-      >    is no reference.
-      > 7. If **multiple** Figma links were given: `figmaReferences` is a top-level **ordered
-      >    array** of `{url, role?}` (each `url` a real `figma.com` URL, ≤12), `figmaUrl` is
-      >    **absent**, and no link appears in `brief`.
+      > 6. Any Figma reference with an inferred **role** (`screen-content` / `reconstruct` /
+      >    `style` / `keyframe`) — single or multiple — is in the top-level `figmaReferences`
+      >    **ordered array** of `{url, role}` (each `url` a real `figma.com` URL, ≤12) with
+      >    `figmaUrl` **absent**. A `screen-content` entry's URL includes `?node-id=`.
+      > 7. A **single, unroled** Figma link may instead use the top-level `figmaUrl` string (a real
+      >    `figma.com` URL). Never set both `figmaUrl` and `figmaReferences`; never embed a link in
+      >    `brief`. Omit both fields entirely if there is no reference.
       > If any check fails, fix the brief and show the corrected JSON to the user before sending.
 
       ```bash
