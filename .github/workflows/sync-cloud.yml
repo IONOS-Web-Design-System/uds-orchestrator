@@ -1,0 +1,65 @@
+# Cloud skills sync — push-based, github-hosted. Companion to sync-sideload.yml
+# (self-hosted, sandbox targets, retained). The cloud moderator is public; the two
+# generators are private and reached by SSH ProxyJump THROUGH the moderator. Each VM
+# bind-mounts ~/pipeline/uds-orchestrator read-only into the service container.
+# Clear-in-place keeps the bind-mount dir inode stable.
+name: sync-cloud
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      git_ref:
+        description: 'Tag or commit to sync (defaults to latest release)'
+        required: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    environment: production-cloud
+    steps:
+      - name: Resolve ref to sync
+        id: ref
+        run: |
+          if [ -n "${{ inputs.git_ref }}" ]; then
+            echo "value=${{ inputs.git_ref }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.ref.outputs.value }}
+
+      - name: Install SSH key (known_hosts covers moderator + both generators)
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.CLOUD_SSH_DEPLOY_KEY }}
+          known_hosts: ${{ vars.CLOUD_KNOWN_HOSTS }}
+
+      - name: Push skills to all cloud targets (moderator direct; generators via ProxyJump)
+        run: |
+          echo "${{ steps.ref.outputs.value }}" > .skills-version
+          MOD=root@${{ vars.CLOUD_MODERATOR_HOST }}
+          push() {
+            # $1 = ssh target, $2 = extra ssh opts (e.g. ProxyJump)
+            tar czf - --exclude=.git --exclude=node_modules . \
+              | ssh $2 -o StrictHostKeyChecking=yes "$1" \
+                'mkdir -p ~/pipeline/uds-orchestrator && find ~/pipeline/uds-orchestrator -mindepth 1 -delete && tar xzf - -C ~/pipeline/uds-orchestrator'
+          }
+          push "$MOD" ""
+          push "root@${{ vars.CLOUD_ILLUS_HOST }}" "-o ProxyJump=$MOD"
+          push "root@${{ vars.CLOUD_IMAGE_HOST }}" "-o ProxyJump=$MOD"
+
+      - name: Verify all cloud targets
+        run: |
+          MOD=root@${{ vars.CLOUD_MODERATOR_HOST }}
+          verify() {
+            ssh $2 -o StrictHostKeyChecking=yes "$1" \
+              'echo -n "  synced: "; cat ~/pipeline/uds-orchestrator/.skills-version; echo -n "  SKILL.md files: "; find ~/pipeline/uds-orchestrator -name SKILL.md | wc -l'
+          }
+          echo "moderator:"; verify "$MOD" ""
+          echo "illus-gen:"; verify "root@${{ vars.CLOUD_ILLUS_HOST }}" "-o ProxyJump=$MOD"
+          echo "image-gen:"; verify "root@${{ vars.CLOUD_IMAGE_HOST }}" "-o ProxyJump=$MOD"
+          # Skills are read per generation job; a restart is not required for new jobs
+          # to pick them up. To force: ssh <target> 'docker restart pipeline-<svc>'.
