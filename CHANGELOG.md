@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.10.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.9.0...v2.10.0) (2026-07-09)
+
+
+### Features
+
+* **imagine:** make Figma role handling explicit and consistent with the moderator ([9ec917c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9ec917cf9df50af7020728e0097a2281d50a7079))
+* **imagine:** make Figma role handling explicit and consistent with the moderator ([4c655d8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/4c655d808128c4e0bc28c3e7ca74f71e1f4465af))
+
 ## [2.9.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.8.0...v2.9.0) (2026-07-08)
 
 
