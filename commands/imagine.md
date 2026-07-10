@@ -10,17 +10,16 @@ agent-svc, orchestrated by uds-moderator). You do the prompt engineering FOR the
 describe the asset they want, you produce a ready, enriched **UnifiedBrief** and offer to
 submit it.
 
-> **Where to run this:** submit and re-render go through **n8n ingress webhooks**
-> (`n8nwh.ionos.org`), which are **unauthenticated** — n8n holds the moderator's bearer token
-> as its own credential and attaches it server-side, so this session never needs a token.
-> Status polling stays **directly on the moderator** at `uds-moderator.sandbox.lan:8080`
-> (also token-free). Asset downloads are durable **public IONOS S3 URLs**. All hosts
-> (`n8nwh.ionos.org` and `uds-moderator.sandbox.lan`) are corp-internal, reachable only over
-> the IONOS corporate VPN. Run `/imagine` from a **local** Claude Code session (the CLI or the
-> Claude Code desktop app) connected to the IONOS VPN. It does **not** work in Claude Code on
-> the web / a **cowork cloud sandbox** — those run in a network-isolated VM that cannot reach
-> the VPN. If the connectivity smoke-test (step 5B.1) fails, do not retry blindly: tell the
-> user to re-run `/imagine` from a local VPN-connected session.
+> **Where to run this:** submit, re-render, and status-polling all go **directly to the
+> uds-moderator** — it is the sole API gateway (n8n is no longer in the path). Every call
+> carries an `Authorization: Bearer <key>` header. By **default** the moderator is the
+> **public cloud** instance (`http://213.165.77.120:8080`), reachable from any network — so
+> `/imagine` now works from a local session **and** from Claude Code on the web / a cowork
+> cloud sandbox, as long as it has the moderator key. If you instead target the **internal
+> sandbox** moderator (`http://uds-moderator.sandbox.lan:8080`), that host is corp-VPN-only —
+> connect first. See **§ Connecting to the moderator** for the base-URL + key resolution.
+> Asset downloads are durable **public IONOS S3 URLs** (no token). If the connectivity
+> smoke-test (step 5B.1) fails, do not retry blindly — go to the offline handoff.
 
 ## Arguments
 
@@ -28,18 +27,17 @@ submit it.
   hero for the AI website builder showing a storefront and a floating assistant panel"). May
   be empty — if so, ask the user what they want to create.
 - `$ARGUMENTS` may instead be a **complete UnifiedBrief JSON** handed off from another session
-  (e.g. an `/imagine` run inside a cowork sandbox that couldn't submit). The user may paste the
+  (e.g. an `/imagine` run that couldn't reach the moderator). The user may paste the
   JSON directly or send it as `submit this imagine brief: { … }`. When the input already
   contains a full UnifiedBrief, **skip the interview** and go straight to submit — see the
   Pre-flight note below.
 
 ## UnifiedBrief wire format
 
-**This is the exact `UnifiedBrief` shape the moderator accepts.** At submit (external/VPN
-path), POST this JSON **as-is, flat, with no wrapper** to the n8n ingress webhook (step
-5B.2) — n8n builds the internal `{ requestId, payload, callbackUrl }` envelope and attaches
-its own moderator credential before forwarding. Memorize the shape — wrong field names cause
-a silent `400` with no useful error message.
+**This is the exact `UnifiedBrief` shape the moderator accepts as the `payload`.** At submit,
+you wrap this brief in the moderator's `{ requestId, payload, callbackUrl }` envelope and POST
+it to **`<MODERATOR_BASE>/create`** with a bearer key (step 5B.2). Memorize the shape — wrong
+field names cause a silent `400` with no useful error message.
 
 ```json
 {
@@ -87,6 +85,38 @@ a silent `400` with no useful error message.
 > links, → use the top-level array instead:
 > `"figmaReferences": [{ "url": "https://www.figma.com/design/<key>/<name>?node-id=12-34", "role": "screen-content" }, …]`.
 > Never set both — `figmaReferences` wins if present.
+
+## Connecting to the moderator
+
+Before any moderator call (submit / re-render / poll), resolve **two values** — do this once
+per session and reuse them. All three call types send `-H "Authorization: Bearer $MODERATOR_TOKEN"`.
+
+**`MODERATOR_BASE`** (base URL, no trailing slash):
+1. `$MODERATOR_BASE` if set in the environment.
+2. else a `MODERATOR_BASE=` line in `$HOME/pipeline-local/secrets/agent-svc.env`, if that file exists.
+3. else the default **`http://213.165.77.120:8080`** (the public cloud moderator).
+   *(This becomes `https://<moderator-domain>` once TLS is fronted — a one-value change here.)*
+   For the internal sandbox moderator instead, set `MODERATOR_BASE=http://uds-moderator.sandbox.lan:8080` (corp-VPN only).
+
+**`MODERATOR_TOKEN`** (the bearer key for this client):
+1. `$MODERATOR_TOKEN` if set.
+2. else read `AGENT_AUTH_TOKEN=` (fallback `MODERATOR_AUTH_TOKEN=`) from `$HOME/pipeline-local/secrets/agent-svc.env`.
+3. else **prompt the user once** for their moderator key, and offer to save it to
+   `$HOME/pipeline-local/secrets/imagine.env` as `MODERATOR_TOKEN=<key>` so future runs skip the prompt.
+
+Resolve both with a small snippet at the start of the submit path:
+
+```bash
+PL="$HOME/pipeline-local/secrets"
+MODERATOR_BASE="${MODERATOR_BASE:-$(grep -h '^MODERATOR_BASE=' "$PL/agent-svc.env" "$PL/imagine.env" 2>/dev/null | tail -1 | cut -d= -f2-)}"
+MODERATOR_BASE="${MODERATOR_BASE:-http://213.165.77.120:8080}"
+MODERATOR_TOKEN="${MODERATOR_TOKEN:-$(grep -h -E '^(MODERATOR_TOKEN|AGENT_AUTH_TOKEN|MODERATOR_AUTH_TOKEN)=' "$PL/imagine.env" "$PL/agent-svc.env" 2>/dev/null | tail -1 | cut -d= -f2-)}"
+```
+
+If `MODERATOR_TOKEN` is still empty after that, ask the user for their key (do not proceed to a
+mutation without it — `/create` and `/rerender` reject an unauthenticated request with `401`).
+Polling `/jobs` may be token-free today, but always send the header anyway so it keeps working
+once per-client keys are enforced.
 
 ## Instructions
 
@@ -174,46 +204,39 @@ proceed normally from step 1.
 5. **Offer to submit (do not auto-fire).** Ask: submit now, or hand back the brief?
    Detect context first, then use the matching path:
 
-   **A. Local dev** (`$HOME/pipeline-local/secrets/agent-svc.env` exists):
-   Write the payload to a temp `*.json` and run `dev/gen.sh <file>` from the uds-moderator
-   checkout — it builds the `{requestId, payload, callbackUrl}` envelope, supplies the bearer
-   token, and prints inspect commands.
+   **A. Local dev** (`$HOME/pipeline-local/secrets/agent-svc.env` exists AND a local uds-moderator
+   stack is running): write the payload to a temp `*.json` and run `dev/gen.sh <file>` from the
+   uds-moderator checkout — it builds the `{requestId, payload, callbackUrl}` envelope, supplies
+   the bearer token, targets the local moderator, and prints inspect commands. This is a shortcut
+   for the local-stack workflow; the remote path (B) works too if you set `MODERATOR_BASE`.
 
-   **B. External / VPN** (default when local dev stack is absent):
-   **Submit** (`POST .../webhook/moderator-trigger`) and **re-render**
-   (`POST .../webhook/rerender-trigger`) go to **n8n ingress webhooks** at `n8nwh.ionos.org` —
-   these are **unauthenticated**; n8n holds the moderator's bearer token as its own credential
-   and attaches it server-side when forwarding to the moderator, so no token is needed here.
-   **Status polling** (`GET /jobs/<requestId>`) stays **directly on the moderator** at
-   `http://uds-moderator.sandbox.lan:8080` — also token-free (protected by network isolation +
-   the unguessable `requestId`). **Downloads** are durable **public IONOS S3 URLs**. All hosts
-   are reachable only over the IONOS VPN.
+   **B. Direct to moderator** (default): submit, re-render, and poll all go **directly to the
+   moderator** at `MODERATOR_BASE`, each with the bearer key. Resolve `MODERATOR_BASE` +
+   `MODERATOR_TOKEN` per **§ Connecting to the moderator** first. Downloads are durable **public
+   IONOS S3 URLs** (no token).
 
-   **First-time setup (show this the first time the external path is used):**
-   > **VPN required:** `n8nwh.ionos.org` and `uds-moderator.sandbox.lan` are only reachable over
-   > the IONOS internal VPN. Connect before running `/imagine`. No token needed — submit and
-   > re-render go through unauthenticated n8n webhooks that hold the moderator credential for you.
+   **First-time setup (show this the first time the direct path is used):**
+   > **Moderator key required.** `/imagine` submits straight to the uds-moderator with a bearer
+   > key. By default it targets the **public cloud** moderator (reachable from anywhere). The key
+   > is read from `$HOME/pipeline-local/secrets/` if present, otherwise I'll ask you for it once
+   > (and can save it for next time). To use the internal **sandbox** moderator instead, set
+   > `MODERATOR_BASE=http://uds-moderator.sandbox.lan:8080` and connect to the IONOS VPN first.
 
-   1. **Smoke-test connectivity** before submitting (only on first use per session). Test the
-      **moderator** directly — both it and `n8nwh.ionos.org` are corp-internal on the same VPN,
-      so if `/health` answers, the VPN is up and the whole flow (n8n submit/re-render + moderator
-      poll) is reachable:
+   1. **Smoke-test connectivity** before submitting (only on first use per session). Hit the
+      moderator's `/health` (free, no token):
       ```bash
-      curl -s -o /dev/null -w "%{http_code}" --max-time 8 \
-        "http://uds-moderator.sandbox.lan:8080/health"
+      curl -s -o /dev/null -w "%{http_code}" --max-time 8 "$MODERATOR_BASE/health"
       ```
-      - `200` → connected (moderator reachable — proceed to step 2).
+      - `200` → reachable — proceed to step 2.
       - curl error / timeout / DNS failure / non-200 → **not reachable from this session.** Do NOT
         show the user curl commands or ask them to poll anything, and do not retry blindly. Go to
-        **"Offline / sandbox handoff"** below. This is the expected path inside a cowork cloud
-        sandbox (network-isolated, no VPN) and also when the local VPN is simply not connected.
+        **"Offline / handoff"** below. (Expected if `MODERATOR_BASE` is the sandbox host and the
+        VPN is not connected. The public cloud default should be reachable from any network.)
 
-   2. **Submit** to the n8n ingress webhook `POST .../webhook/moderator-trigger`. Send the flat
-      UnifiedBrief **as-is, no wrapper** — it already carries its own `requestId` and
-      `callbackUrl` (the moderator would push the result there, but `/imagine` polls instead, so
-      a placeholder like `https://n8nwh.ionos.org/webhook/mock-callback` is fine — delivery
-      failing is harmless). n8n builds the internal moderator envelope and attaches its own
-      moderator credential; **no `Authorization` header is sent or needed here.**
+   2. **Submit** to `POST $MODERATOR_BASE/create` — wrap the flat UnifiedBrief in the moderator's
+      envelope `{ "requestId": <brief.requestId>, "payload": <flat UnifiedBrief>, "callbackUrl":
+      <brief.callbackUrl> }` and send the bearer. The `callbackUrl` may be the mock placeholder
+      (`/imagine` polls instead of receiving a push, so a failed delivery is harmless).
 
       > **⛔ MANDATORY pre-send check — do not skip this step.**
       > Before running the curl below, verify the UnifiedBrief against the wire-format table in
@@ -232,25 +255,26 @@ proceed normally from step 1.
       >    `brief`. Omit both fields entirely if there is no reference.
       > If any check fails, fix the brief and show the corrected JSON to the user before sending.
 
+      Build the envelope and submit (the payload here is the flat UnifiedBrief you assembled):
       ```bash
       curl -s -X POST \
+        -H "Authorization: Bearer $MODERATOR_TOKEN" \
         -H "Content-Type: application/json" \
-        -d '<flat UnifiedBrief JSON>' \
-        "https://n8nwh.ionos.org/webhook/moderator-trigger"
+        -d '{"requestId":"<requestId>","payload":<flat UnifiedBrief JSON>,"callbackUrl":"<callbackUrl>"}' \
+        "$MODERATOR_BASE/create"
       ```
-      Confirm `"status":"accepted"` in the response (`202`). `500 {"error":"moderator_unreachable"}`
-      → the moderator itself is down, nothing more to do from here; `400` → the brief failed
-      validation (check the wire-format table — brand/mode/variants/duration/dimensions gates).
-      Show the body and stop on either.
+      Confirm `"status":"accepted"` in the response (`202`). `401` → the bearer key is missing or
+      wrong (re-check `MODERATOR_TOKEN`); `400` → the brief failed validation (check the wire-format
+      table — brand/mode/variants/duration/dimensions gates). Show the body and stop on either.
 
-   3. **Monitor in background** — poll the moderator's status endpoint **directly** (token-free;
-      NOT n8n). Write a polling script to `/tmp/poll-<requestId>.sh`:
+   3. **Monitor in background** — poll the moderator's status endpoint (send the bearer; it's
+      accepted whether or not `/jobs` is currently enforced). Write a polling script to
+      `/tmp/poll-<requestId>.sh`:
       ```bash
       #!/usr/bin/env bash
-      REQ="$1"
+      REQ="$1"; BASE="$2"; TOK="$3"
       for i in $(seq 1 90); do
-        RESP=$(curl -s --max-time 10 \
-          "http://uds-moderator.sandbox.lan:8080/jobs/$REQ")
+        RESP=$(curl -s --max-time 10 -H "Authorization: Bearer $TOK" "$BASE/jobs/$REQ")
         STATUS=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo "unknown")
         echo "[$i/90] $STATUS"
         # done|partial|error are terminal; planning|running are in-flight (keep polling)
@@ -262,14 +286,14 @@ proceed normally from step 1.
         sleep 15
       done
       ```
-      Run it with `run_in_background: true` passing `<requestId>` as the only arg. Tell the user:
+      Run it with `run_in_background: true`, passing `<requestId>`, `$MODERATOR_BASE`, and
+      `$MODERATOR_TOKEN` as the three args. Tell the user:
       *"Job `<requestId>` submitted — monitoring in background (polls every 15 s, up to 22 min)."*
 
    4. **Download bytes + render** once the background Bash notifies completion: read
       `/tmp/<requestId>-result.json`. Its `outputs` object holds `images` and/or `videos` maps
-      (`{ "<variant>": "<url>" }`); the URLs are **durable public IONOS S3 URLs**
-      (`https://s3-eu-central-2.ionoscloud.com/…/<variant>.<ext>`) — reachable over the VPN, no
-      token. For each `<variant>: <url>` pair across both maps:
+      (`{ "<variant>": "<url>" }`); the URLs are **durable public IONOS S3 URLs** — reachable
+      without a token. For each `<variant>: <url>` pair across both maps:
       - Derive the extension from the URL path's file suffix: `.png`/`.jpg`/`.jpeg`/`.webp` →
         image; `.mp4`/`.webm`/`.gif` → video; default `png`.
       - Download to a local file:
@@ -282,33 +306,33 @@ proceed normally from step 1.
       Render all variants. On `error` status, display the `error` field instead. If a single
       variant download fails, report that variant and continue rendering the rest.
 
-   **Offline / sandbox handoff** (when step 1's smoke-test can't reach the pipeline — e.g. a
-   cowork cloud sandbox, or the VPN is not connected): you still did the prompt-engineering
-   here; hand the finished brief off for a local session to submit. **No terminal, no curl, no
-   manual polling for the user.**
-   1. Tell the user plainly: *"I can't reach the IONOS asset pipeline from this session (it's
-      network-isolated / off-VPN), so I can't generate the image right here — but your brief is
-      ready to go."*
+   **Offline / handoff** (when step 1's smoke-test can't reach the moderator — e.g. the sandbox
+   base is set but the VPN is off, or a fully network-isolated session): you still did the
+   prompt-engineering here; hand the finished brief off for a session that can reach it. **No
+   terminal, no curl, no manual polling for the user.**
+   1. Tell the user plainly: *"I can't reach the uds-moderator from this session, so I can't
+      generate the image right here — but your brief is ready to go."*
    2. Print the complete **UnifiedBrief as a single copy-paste ` ```json ` block** (the full
       flat brief, including `requestId` + `callbackUrl`).
    3. Give these next steps in plain language:
-      > **To generate it:** open a **local Claude Code session** — the Claude Code **desktop
-      > app** or the `claude` CLI — while connected to the IONOS VPN. Run **`/imagine`** and
-      > **paste the brief above** when asked (or send it as `submit this imagine brief: <paste>`).
-      > It will submit, wait, and show the finished image(s) right in the chat — you don't need
-      > a terminal. (The pasted brief skips the questions and goes straight to submit.)
+      > **To generate it:** open a Claude Code session that can reach the moderator (the desktop
+      > app or `claude` CLI; the default cloud moderator works from any network — a sandbox base
+      > needs the IONOS VPN). Run **`/imagine`** and **paste the brief above** when asked (or send
+      > it as `submit this imagine brief: <paste>`). It will submit, wait, and show the finished
+      > image(s) right in the chat — you don't need a terminal. (The pasted brief skips the
+      > questions and goes straight to submit.)
    4. Only if the user explicitly asks to run it themselves in a terminal, give them the raw
-      `curl` submit one-liner (step 5B.2 — no token needed, the n8n webhook is unauthenticated)
-      + the poll command. Otherwise don't show curl at all.
+      `curl` submit one-liner (step 5B.2 — including the `Authorization: Bearer` header with
+      their key) + the poll command. Otherwise don't show curl at all.
 
    **Hand back (user declines to submit, reachable or not):** print the UnifiedBrief JSON for
-   them to keep. Offer the `curl` one-liner only if they want to fire it manually.
+   them to keep. Offer the `curl` one-liner (with the bearer header) only if they want to fire it manually.
 
 6. **Offer next steps (proactive menu, after every result).** Once results render, proactively
    present how to move forward. The available options and their **cost** differ by asset type —
    show only the ones that apply and state the cost plainly. This continues the already-reachable
-   session from step 5B (no new smoke-test); if any call can't reach the pipeline, fall back to
-   the **Offline / sandbox handoff**.
+   session from step 5B (no new smoke-test); if any call can't reach the moderator, fall back to
+   the **Offline / handoff**.
 
    **If the result is an illustration / animation** (it has **video** variants — re-render is
    cheap: it reuses the composition, no new AI generation, identical motion/layout):
@@ -330,32 +354,33 @@ proceed normally from step 1.
 
    **Step 6A — Re-render (illustration / animation only).** Localises an existing animation into
    more markets (and/or re-encodes the format) by re-rendering the composition — no new AI
-   generation. Goes through the n8n rerender webhook (unauthenticated; same credential model as
-   submit).
+   generation. Goes **directly to the moderator** `POST $MODERATOR_BASE/rerender` with the bearer.
    1. Ask **which markets** (`de`/`en`/`es`/`fr`/`pl`/`it`/`nl`/`gb`) and, for option (2),
       **which format** (`mp4`/`webm`/`gif`/`png` poster) — ask the format each time. `us`/`uk`
       are **not** valid markets.
    2. **Use the ORIGINAL `requestId`** from step 5B (the one you submitted) plus the **`variant`
       key** from the result's `outputs.videos` map (e.g. `v1`). The moderator resolves the
       internal illustration sub-render itself — do **not** pass a `-illus` id.
-   3. **Submit** to the n8n webhook `POST .../webhook/rerender-trigger` (no `Authorization`
-      header needed; no `callbackUrl` — the result is poll-only):
+   3. **Submit** `POST $MODERATOR_BASE/rerender` with the bearer (no `callbackUrl` — the result is
+      poll-only). The body is the flat rerender request, **not** a `/create` envelope:
       ```bash
-      curl -s -X POST -H "Content-Type: application/json" \
+      curl -s -X POST \
+        -H "Authorization: Bearer $MODERATOR_TOKEN" -H "Content-Type: application/json" \
         -d '{"requestId":"<original-requestId>","variant":"<v>","markets":["en","fr"],"format":"mp4"}' \
-        "https://n8nwh.ionos.org/webhook/rerender-trigger"
+        "$MODERATOR_BASE/rerender"
       ```
-      Capture `renderId` from the `202` response. `400 {"error":"invalid_rerender_request"}` →
-      missing/empty `requestId` or `variant`; `502 {"error":"rerender_unavailable"}` → the
-      moderator rejected or couldn't be reached (unknown requestId, bad market/variant, or it's
-      down) — show the body and stop on either.
-   4. **Poll `/jobs/<renderId>`** (token-free, same as a first run) — the moderator tracks the
+      Capture `renderId` from the `202` response. `401` → bad/missing bearer key;
+      `400 {"error":"rerender_rejected",...}` → missing/empty `requestId`/`variant` or an invalid
+      market/variant (the moderator relays the reason in `detail`); `404 {"error":"run_not_found"}`
+      → unknown `requestId`; `502 {"error":"rerender_trigger_failed"}` → the render backend couldn't
+      be reached. Show the body and stop on any error.
+   4. **Poll `$MODERATOR_BASE/jobs/<renderId>`** (send the bearer) — the moderator tracks the
       re-render as its own job keyed by `renderId`. Background poller to `/tmp/poll-<renderId>.sh`:
       ```bash
       #!/usr/bin/env bash
-      RID="$1"
+      RID="$1"; BASE="$2"; TOK="$3"
       for i in $(seq 1 60); do
-        RESP=$(curl -s --max-time 10 "http://uds-moderator.sandbox.lan:8080/jobs/$RID")
+        RESP=$(curl -s --max-time 10 -H "Authorization: Bearer $TOK" "$BASE/jobs/$RID")
         STATUS=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo "unknown")
         echo "[$i/60] $STATUS"
         if [[ "$STATUS" == "done" || "$STATUS" == "error" || "$STATUS" == "partial" ]]; then
@@ -364,7 +389,8 @@ proceed normally from step 1.
         sleep 15
       done
       ```
-      Run with `run_in_background: true`, passing `<renderId>`. Tell the user the re-render is running.
+      Run with `run_in_background: true`, passing `<renderId>`, `$MODERATOR_BASE`, `$MODERATOR_TOKEN`.
+      Tell the user the re-render is running.
    5. **Download + render each market** once complete: read `/tmp/<renderId>-result.json`; its
       `outputs.videos` is a **`{ "<market>": "<S3 url>" }`** map. For each market, download the
       public S3 URL (extension from the URL path suffix) to `/tmp/<renderId>-<market>.<ext>`, then
@@ -376,9 +402,9 @@ proceed normally from step 1.
    UnifiedBrief, apply the change — for "other markets" set the new `market` **and** the showroom
    prefix (so the ethnicity/locale rules pick it up); for "add context" append the user's new
    direction into the `brief` text — then **mint a NEW `requestId`** and submit it through
-   **step 5B exactly like a first run** (n8n `moderator-trigger` webhook → poll the moderator
-   `/jobs` → download → render). Warn the user up front: this is a **full generation** (takes the usual minutes and
-   produces a fresh, different result — not a copy of the previous one).
+   **step 5B exactly like a first run** (envelope → `POST $MODERATOR_BASE/create` with the bearer →
+   poll `/jobs` → download → render). Warn the user up front: this is a **full generation** (takes
+   the usual minutes and produces a fresh, different result — not a copy of the previous one).
 
 Keep it conversational and fast. Never block on questions you can answer from the brief or
 sensible defaults.
