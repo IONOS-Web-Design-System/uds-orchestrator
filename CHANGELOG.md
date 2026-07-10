@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.11.0...v2.12.0) (2026-07-10)
+
+
+### Features
+
+* **imagine:** default token to ~/.claude/settings.json env + setup script ([b44903a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/b44903ad6a1c65e194d5ad6e9e22d1b2634ea4a6))
+
 ## [2.11.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.10.0...v2.11.0) (2026-07-10)
 
 
