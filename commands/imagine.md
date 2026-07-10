@@ -13,7 +13,8 @@ submit it.
 > **Where to run this:** submit, re-render, and status-polling all go **directly to the
 > uds-moderator** — it is the sole API gateway (n8n is no longer in the path). Every call
 > carries an `Authorization: Bearer <key>` header. By **default** the moderator is the
-> **public cloud** instance (`http://213.165.77.120:8080`), reachable from any network — so
+> **public cloud** instance over HTTPS (`https://uds-moderator.213-165-77-120.sslip.io`),
+> reachable from any network — so
 > `/imagine` now works from a local session **and** from Claude Code on the web / a cowork
 > cloud sandbox, as long as it has the moderator key. If you instead target the **internal
 > sandbox** moderator (`http://uds-moderator.sandbox.lan:8080`), that host is corp-VPN-only —
@@ -94,8 +95,8 @@ per session and reuse them. All three call types send `-H "Authorization: Bearer
 **`MODERATOR_BASE`** (base URL, no trailing slash):
 1. `$MODERATOR_BASE` if set in the environment.
 2. else a `MODERATOR_BASE=` line in `$HOME/pipeline-local/secrets/agent-svc.env`, if that file exists.
-3. else the default **`http://213.165.77.120:8080`** (the public cloud moderator).
-   *(This becomes `https://<moderator-domain>` once TLS is fronted — a one-value change here.)*
+3. else the default **`https://uds-moderator.213-165-77-120.sslip.io`** (the public cloud moderator, HTTPS via Caddy + Let's Encrypt).
+   *(This sslip.io name is a temporary stopgap; swap to `https://uds-moderator.ionos.org` here once corporate DNS provisions it — a one-value change.)*
    For the internal sandbox moderator instead, set `MODERATOR_BASE=http://uds-moderator.sandbox.lan:8080` (corp-VPN only).
 
 **`MODERATOR_TOKEN`** (the bearer key for this client):
@@ -109,7 +110,7 @@ Resolve both with a small snippet at the start of the submit path:
 ```bash
 PL="$HOME/pipeline-local/secrets"
 MODERATOR_BASE="${MODERATOR_BASE:-$(grep -h '^MODERATOR_BASE=' "$PL/agent-svc.env" "$PL/imagine.env" 2>/dev/null | tail -1 | cut -d= -f2-)}"
-MODERATOR_BASE="${MODERATOR_BASE:-http://213.165.77.120:8080}"
+MODERATOR_BASE="${MODERATOR_BASE:-https://uds-moderator.213-165-77-120.sslip.io}"
 MODERATOR_TOKEN="${MODERATOR_TOKEN:-$(grep -h -E '^(MODERATOR_TOKEN|AGENT_AUTH_TOKEN|MODERATOR_AUTH_TOKEN)=' "$PL/imagine.env" "$PL/agent-svc.env" 2>/dev/null | tail -1 | cut -d= -f2-)}"
 ```
 
