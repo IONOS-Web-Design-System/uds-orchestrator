@@ -99,13 +99,17 @@ per session and reuse them. All three call types send `-H "Authorization: Bearer
    *(This sslip.io name is a temporary stopgap; swap to `https://uds-moderator.ionos.org` here once corporate DNS provisions it — a one-value change.)*
    For the internal sandbox moderator instead, set `MODERATOR_BASE=http://uds-moderator.sandbox.lan:8080` (corp-VPN only).
 
-**`MODERATOR_TOKEN`** (the bearer key for this client):
-1. `$MODERATOR_TOKEN` if set.
-2. else read `AGENT_AUTH_TOKEN=` (fallback `MODERATOR_AUTH_TOKEN=`) from `$HOME/pipeline-local/secrets/agent-svc.env`.
-3. else **prompt the user once** for their moderator key, and offer to save it to
-   `$HOME/pipeline-local/secrets/imagine.env` as `MODERATOR_TOKEN=<key>` so future runs skip the prompt.
+**`MODERATOR_TOKEN`** (the bearer key for this client) — resolution order:
+1. **`$MODERATOR_TOKEN`** — its **default home is the `env` block of the user's Claude Code
+   settings, `~/.claude/settings.json`** (Claude Code exports that env to every tool run). This is
+   where external users store their key once (see **First-time token setup** below). A shell
+   `export MODERATOR_TOKEN=…` works too.
+2. else the dev-stack fallback: `AGENT_AUTH_TOKEN=` (or `MODERATOR_AUTH_TOKEN=`) in
+   `$HOME/pipeline-local/secrets/agent-svc.env`.
+3. else **prompt once**, then persist to `~/.claude/settings.json` via the setup script (below) so
+   future sessions never prompt again — and use the just-entered value for the current run too.
 
-Resolve both with a small snippet at the start of the submit path:
+Resolve both at the start of the submit path (env-first — the settings.json `env` provides them):
 
 ```bash
 PL="$HOME/pipeline-local/secrets"
@@ -114,10 +118,34 @@ MODERATOR_BASE="${MODERATOR_BASE:-https://uds-moderator.213-165-77-120.sslip.io}
 MODERATOR_TOKEN="${MODERATOR_TOKEN:-$(grep -h -E '^(MODERATOR_TOKEN|AGENT_AUTH_TOKEN|MODERATOR_AUTH_TOKEN)=' "$PL/imagine.env" "$PL/agent-svc.env" 2>/dev/null | tail -1 | cut -d= -f2-)}"
 ```
 
-If `MODERATOR_TOKEN` is still empty after that, ask the user for their key (do not proceed to a
-mutation without it — `/create` and `/rerender` reject an unauthenticated request with `401`).
-Polling `/jobs` may be token-free today, but always send the header anyway so it keeps working
-once per-client keys are enforced.
+### First-time token setup (how a user adds their key to the environment)
+
+The token lives in the **user's own environment, never in this command** (the command ships to
+everyone via the plugin — a key baked in here would leak to all). An operator issues the user a
+`client` key out-of-band; the user stores it **once**:
+
+- **Recommended — run the setup script** (merge-safe: writes `env.MODERATOR_TOKEN` into
+  `~/.claude/settings.json`, preserving everything else; refuses to clobber invalid JSON):
+  ```bash
+  node <uds-orchestrator-plugin-dir>/scripts/set-moderator-token.mjs
+  # prompts (hidden) for the key. Add `--base <url>` to also pin a non-default MODERATOR_BASE.
+  ```
+- **Or add it manually** to `~/.claude/settings.json`:
+  ```json
+  { "env": { "MODERATOR_TOKEN": "<your-client-key>" } }
+  ```
+Either way, **restart the Claude Code session** so the `env` is picked up. Afterwards `/imagine`
+finds the key automatically — no prompt, no key in the command. (The key sits in plaintext in the
+user's own config, same as any API key in a dotfile; rotate/revoke via the moderator allowlist.)
+
+**If `/imagine` reaches submit with no token** (resolution 1–2 empty): ask the user for their key,
+use it for the current run, **and** persist it by running the setup script with the value piped in
+(locate `scripts/set-moderator-token.mjs` in this plugin's own directory) so they're set next time:
+```bash
+MODERATOR_TOKEN="<the key the user gave>" node <plugin-dir>/scripts/set-moderator-token.mjs
+```
+Never proceed to a mutation (`/create`, `/rerender`) without a token — they return `401`. Always
+send the bearer on `/jobs` polling too, so it keeps working now that per-client keys are enforced.
 
 ## Instructions
 
@@ -218,9 +246,11 @@ proceed normally from step 1.
 
    **First-time setup (show this the first time the direct path is used):**
    > **Moderator key required.** `/imagine` submits straight to the uds-moderator with a bearer
-   > key. By default it targets the **public cloud** moderator (reachable from anywhere). The key
-   > is read from `$HOME/pipeline-local/secrets/` if present, otherwise I'll ask you for it once
-   > (and can save it for next time). To use the internal **sandbox** moderator instead, set
+   > key. By default it targets the **public cloud** moderator (reachable from anywhere). Store your
+   > key once — run `node <plugin-dir>/scripts/set-moderator-token.mjs` (writes `env.MODERATOR_TOKEN`
+   > into `~/.claude/settings.json`) or add `{"env":{"MODERATOR_TOKEN":"<key>"}}` there yourself, then
+   > restart the session — see **§ Connecting to the moderator → First-time token setup**. Without it
+   > I'll ask once and persist it for you. To use the internal **sandbox** moderator instead, set
    > `MODERATOR_BASE=http://uds-moderator.sandbox.lan:8080` and connect to the IONOS VPN first.
 
    1. **Smoke-test connectivity** before submitting (only on first use per session). Hit the
