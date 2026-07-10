@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.11.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.10.0...v2.11.0) (2026-07-10)
+
+
+### Features
+
+* **imagine:** default MODERATOR_BASE to the HTTPS sslip.io endpoint ([b896c3c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/b896c3c9ff6157cf54f6710a2ba0dac367e0c0d2))
+* **imagine:** submit/rerender/poll direct to moderator with a bearer key ([ac473a3](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ac473a3d3200d380bd3406ee69ad152fdf8450a0))
+
 ## [2.10.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.9.0...v2.10.0) (2026-07-09)
 
 
