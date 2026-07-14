@@ -162,22 +162,30 @@ After the user is happy, OFFER to submit (do not auto-fire). The `/imagine` comm
 full submission + monitoring logic — see step 5 of `commands/imagine.md` for the canonical
 implementation. In brief:
 
-- **Local dev** (`$HOME/pipeline-local/secrets/agent-svc.env` present): run `dev/gen.sh <brief.json>`.
-- **External / VPN** (no token — VPN only; run from a **local** Claude Code session, NOT a
-  cowork cloud sandbox, which can't reach the VPN): POST the **UnifiedBrief directly** (the flat
-  brief JSON — NO `payload:` wrapper; it already carries `requestId` + `callbackUrl`) to
-  `https://n8nwh.ionos.org/webhook/moderator-trigger` (unauthenticated — n8n holds the moderator's
-  bearer token as its own credential and attaches it server-side), then poll the moderator
-  **directly** — `GET http://uds-moderator.sandbox.lan:8080/jobs/<id>` (token-free) — every 15 s
-  until `status` is `done`/`partial`/`error`. Download each `outputs` entry (durable **public
-  IONOS S3 URLs**, no auth) to `/tmp` and render: images inline, video/animation as a labelled
-  link to the saved file.
-- **Offline / sandbox** (smoke-test can't reach the pipeline — a cowork cloud sandbox, or VPN
-  off): do NOT show curl or ask the user to poll. Print the finished UnifiedBrief as a
-  copy-paste `json` block and tell them to open a **local** Claude Code session (desktop app or
-  `claude` CLI) on the VPN, run `/imagine`, and paste the brief — a pasted brief skips the
-  questions and goes straight to submit.
-- **Hand back** (user declines): print the UnifiedBrief JSON; offer the `curl` one-liner only if asked.
+Everything goes **directly to the uds-moderator** — it is the sole API gateway (n8n is retired).
+The default target is the **public cloud** moderator over **HTTPS**
+(`https://uds-moderator.213-165-77-120.sslip.io`), reachable from any network, so `/imagine` works
+from a local session AND from Claude Code on the web / a cowork sandbox — given the bearer key.
+Resolve `MODERATOR_BASE` + `MODERATOR_TOKEN` per imagine.md's **Connecting to the moderator**
+(env-first: `$MODERATOR_TOKEN` from `~/.claude/settings.json`, else dev secrets, else prompt).
+
+- **Submit:** wrap the flat UnifiedBrief in the moderator envelope
+  `{ "requestId": <id>, "payload": <the flat brief>, "callbackUrl": <cb> }` and
+  `POST $MODERATOR_BASE/create` with `Authorization: Bearer $MODERATOR_TOKEN` (→ 202
+  `{requestId,status:"accepted"}`; `400` = brief failed the wire-format gate; `401` = bad/missing key).
+- **Poll:** `GET $MODERATOR_BASE/jobs/<id>` — **send the bearer** — every 15 s until `status` is
+  `done`/`partial`/`error`. Download each `outputs` entry (durable **public IONOS S3 URLs**, no
+  auth) to `/tmp` and render: images inline, video/animation as a labelled link to the saved file.
+- **Local dev** (`$HOME/pipeline-local/secrets/agent-svc.env` + a local stack): `dev/gen.sh <brief.json>`
+  is the shortcut (builds the envelope + supplies the token, targets the local moderator).
+- **Sandbox moderator** (opt-in only): set `MODERATOR_BASE=http://uds-moderator.sandbox.lan:8080`
+  (corp-VPN only) — not the default.
+- **Offline / unreachable** (the smoke-test can't reach `MODERATOR_BASE` — e.g. the sandbox base
+  with the VPN off): do NOT show curl or ask the user to poll. Print the finished UnifiedBrief as a
+  copy-paste `json` block and tell them to run `/imagine` from a session that can reach the
+  moderator and paste the brief — a pasted brief skips the questions and goes straight to submit.
+- **Hand back** (user declines): print the UnifiedBrief JSON; offer the `curl` one-liner (with the
+  `Authorization: Bearer` header) only if asked.
 
 ## After results: proactively offer next steps
 
@@ -191,9 +199,10 @@ identical motion/layout):
 2. **Different format** — re-encode a variant as `mp4`/`webm`/`gif`/`png` poster (re-render).
 3. **Add context & regenerate** — fold new direction into the brief → fresh generation.
 
-Re-render (1 & 2) goes through `…/webhook/rerender-trigger` (flat ReRenderBrief, unauthenticated)
-→ poll the moderator directly (`GET /jobs/<renderId>`, token-free) → download each market's
-public S3 URL.
+Re-render (1 & 2) goes **directly to the moderator**: `POST $MODERATOR_BASE/rerender` with the
+flat ReRenderBrief `{requestId, variant, markets, format}` and `Authorization: Bearer $MODERATOR_TOKEN`
+(→ 202 `{renderId}`) → poll `GET $MODERATOR_BASE/jobs/<renderId>` (send the bearer) → download each
+market's public S3 URL. Use the ORIGINAL `requestId` + the `variant` key from `outputs.videos`.
 
 **Image** — there is **no image re-render**. Photoreal images carry no rendered text, and
 `image-download` only serves the already-generated file. So:
