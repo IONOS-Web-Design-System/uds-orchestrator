@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.12.0...v2.12.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* **imagine:** human-interactive rules use the direct public-cloud moderator API ([957dfe2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/957dfe2ac1d7dc97d4bfdadae5c084b4bb574ebb))
+
 ## [2.12.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.11.0...v2.12.0) (2026-07-10)
 
 
