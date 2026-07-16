@@ -77,7 +77,7 @@ consistency contract: `paletteRefs` MUST be hex values from the brand palette
 - Keep each `feature` under 1200 characters; the orchestrator appends ~600 chars of context.
 - Never request rendered text, logos, or UI chrome in an image brief — image models garble them.
 - Never reproduce the brief's own Context / heading / subheading / description as rendered text in
-  ANY asset — image OR illustration. That copy is the host component's chrome. See
+  ANY asset (image, illustration, animation, or hybrid). That copy is the host component's chrome. See
   `rules/shared-brief-parsing.md`.
 
 ## Color harmony (hybrid)

@@ -51,6 +51,10 @@ Do NOT instruct any generator to render the brief's Context / heading / subheadi
   read as real (a generic status pill, a nav item, a placeholder metric, lorem / █ redaction). They
   must be generic and must not restate the component's copy. Prefer icons, bars, and gradient chips
   wherever a real label is not load-bearing.
+- **Headline / overlay slots** — where an embed style structurally calls for a headline over the
+  imagery (e.g. a hybrid `background-pointer`), that headline STAYS: render a **synthesized,
+  paraphrased-into-English headline that conveys the message**, never the brief's verbatim heading,
+  and never empty lorem / redaction in a load-bearing headline slot.
 
 ## Structural markers are chrome — consume them as intent, never draw them
 
