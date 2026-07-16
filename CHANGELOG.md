@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.13.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.12.1...v2.13.0) (2026-07-16)
+
+
+### Features
+
+* **moderator:** parse structured component briefs, never echo copy into assets ([bb11327](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/bb11327662755901baf576a37e892bc24da58304))
+* **moderator:** wire brief-parsing rule into SKILL + enrichment hook-ins ([9d5d878](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9d5d8785e9e63da907f29b3d2f9a725130fa0c73))
+
+
+### Bug Fixes
+
+* **moderator:** reconcile no-echo rule with reframe + hybrid-headline contracts ([00e7119](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/00e711978c987b1e35693caf8eee0d4c2cd09d1e))
+
 ## [2.12.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.12.0...v2.12.1) (2026-07-14)
 
 
