@@ -19,7 +19,12 @@ short subline, and a labelled badge/indicator/status chip — composed as a comp
 asset). Quote the decisive signal (the value-prop or copy the asset must convey) in
 `rationale`, the same discipline as the mode decision. A genuine mark with NO message — a
 favicon, a decorative spot illustration, a logo lockup — correctly stays `image`; this reframe
-applies only when a *message* is the point.
+applies only when a *message* is the point. **When the claim arrives as marker-identified
+component copy** (a `Context:` line, a `#`/`##` heading, or description — see
+`rules/shared-brief-parsing.md`), the copy slots carry a
+**synthesized, paraphrased-into-English rendering of the message** (or a generic placeholder), NEVER
+the brief's verbatim heading/subheading/description — the German example above names the *message
+to convey*, not text to reproduce. Free-form (unmarked) requests are unaffected.
 
 A good `feature` states, in this order, only what applies:
 1. **Focal subject** — name it concretely (not "a scene" but "a small bakery storefront at
@@ -100,6 +105,9 @@ Per-generator hazards to OMIT:
 - **illustration** `feature`: describe *structure and intent* (which UDS components, what
   copy slots, what data the screen shows, what motion if `intent:animation`) — not pixel
   coordinates. The agent builds real components; over-specifying layout fights the system.
+  Copy slots must be **synthesized / generic** (placeholder labels, lorem, redaction bars) — NEVER
+  the brief's own heading, subheading, or description text, which the host component already renders
+  (see `rules/shared-brief-parsing.md`).
 
 Budget: keep each `feature` under 1200 characters — the orchestrator appends ~600 chars of
 shared context (and, for hybrid, the embed contract). Lead with the most load-bearing
