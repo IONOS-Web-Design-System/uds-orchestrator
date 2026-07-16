@@ -100,6 +100,9 @@ Per-generator hazards to OMIT:
 - **illustration** `feature`: describe *structure and intent* (which UDS components, what
   copy slots, what data the screen shows, what motion if `intent:animation`) — not pixel
   coordinates. The agent builds real components; over-specifying layout fights the system.
+  Copy slots must be **synthesized / generic** (placeholder labels, lorem, redaction bars) — NEVER
+  the brief's own heading, subheading, or description text, which the host component already renders
+  (see `rules/shared-brief-parsing.md`).
 
 Budget: keep each `feature` under 1200 characters — the orchestrator appends ~600 chars of
 shared context (and, for hybrid, the embed contract). Lead with the most load-bearing
