@@ -1,7 +1,7 @@
 {
   "name": "uds-orchestrator",
   "description": "Claude Code plugin for the IONOS Universal Design System (UDS). Project setup, component/token best practices, Figma-to-code orchestration, and browser verification.",
-  "version": "2.13.0",
+  "version": "2.13.1",
   "author": {
     "name": "IONOS Web Design System",
     "email": "bowei.xiao@ionos.com"
