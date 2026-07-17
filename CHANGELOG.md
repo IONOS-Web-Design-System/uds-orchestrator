@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.13.0...v2.13.1) (2026-07-17)
+
+
+### Bug Fixes
+
+* **imagine:** align /imagine with the moderator's unified references[] contract ([fd89066](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/fd8906631c874ca33d58d5501a332205dd879907))
+
 ## [2.13.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.12.1...v2.13.0) (2026-07-16)
 
 
