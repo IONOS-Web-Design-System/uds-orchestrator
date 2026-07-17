@@ -14,9 +14,12 @@ you write the brief.
 
 ## UnifiedBrief shape (target output)
 
+This is the pure `payload` — the moderator's `/create` envelope carries `requestId` and
+`callbackUrl` at its own top level (`{ requestId, payload, callbackUrl }`); do NOT put either
+inside this shape.
+
 ```json
 {
-  "requestId": "<kebab, ≤56 chars, unique>",
   "brief": "<enriched, self-contained creative brief>",
   "brand": "ionos | strato | fasthosts | homepl | strefa | udag | world4you | arsys",
   "colorScheme": "light | dark",
@@ -27,9 +30,15 @@ you write the brief.
   "loop": <true | false>,
   "variants": <1–4>,
   "market": "de | en | es | fr | pl | it | nl | gb",
-  "callbackUrl": "<url>"
+  "references": [{ "url": "<figma.com node URL>" }]
 }
 ```
+
+**`references` (OPTIONAL):** an ordered array of reference objects, each with exactly one of
+`url` (a real `figma.com` node URL, prefer `…?node-id=NN-NN`) or `assetSlug` (a pre-published
+catalog asset), an optional `role` (`screen-content | reconstruct | style | keyframe`, omit to
+auto-classify), and an optional `note` (free-text intent, e.g. "the dashboard on the laptop
+screen"). Order matters. Cap 12. Keep links out of the `brief` text.
 
 **Dimension ranges by mode:** image 256–2048 × 256–2048; illustration 320–1920 × 180–1080;
 hybrid is the intersection 320–1920 × 256–1080.
@@ -169,8 +178,8 @@ from a local session AND from Claude Code on the web / a cowork sandbox — give
 Resolve `MODERATOR_BASE` + `MODERATOR_TOKEN` per imagine.md's **Connecting to the moderator**
 (env-first: `$MODERATOR_TOKEN` from `~/.claude/settings.json`, else dev secrets, else prompt).
 
-- **Submit:** wrap the flat UnifiedBrief in the moderator envelope
-  `{ "requestId": <id>, "payload": <the flat brief>, "callbackUrl": <cb> }` and
+- **Submit:** wrap the pure-brief `payload` (no `requestId`/`callbackUrl` inside it) in the
+  moderator envelope `{ "requestId": <id>, "payload": <the pure brief>, "callbackUrl": <cb> }` and
   `POST $MODERATOR_BASE/create` with `Authorization: Bearer $MODERATOR_TOKEN` (→ 202
   `{requestId,status:"accepted"}`; `400` = brief failed the wire-format gate; `401` = bad/missing key).
 - **Poll:** `GET $MODERATOR_BASE/jobs/<id>` — **send the bearer** — every 15 s until `status` is

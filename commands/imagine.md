@@ -35,14 +35,13 @@ submit it.
 
 ## UnifiedBrief wire format
 
-**This is the exact `UnifiedBrief` shape the moderator accepts as the `payload`.** At submit,
-you wrap this brief in the moderator's `{ requestId, payload, callbackUrl }` envelope and POST
-it to **`<MODERATOR_BASE>/create`** with a bearer key (step 5B.2). Memorize the shape — wrong
-field names cause a silent `400` with no useful error message.
+**This is the exact brief the moderator accepts as the `payload`.** At submit you wrap it in the
+moderator's `{ requestId, payload, callbackUrl }` envelope — the top-level `requestId`/`callbackUrl`
+are authoritative and the `payload` must NOT repeat them — and POST to
+**`<MODERATOR_BASE>/create`** with a bearer key (step 5B.2). Wrong field names cause a silent `400`.
 
 ```json
 {
-  "requestId": "kebab-case-slug-max-56-chars",
   "brand": "ionos",
   "mode": "illustration",
   "market": "de",
@@ -53,7 +52,7 @@ field names cause a silent `400` with no useful error message.
   "durationSec": 5,
   "loop": false,
   "variants": 1,
-  "callbackUrl": "https://n8nwh.ionos.org/webhook/mock-callback"
+  "references": [{ "url": "https://www.figma.com/design/<key>/<name>?node-id=12-34", "role": "screen-content", "note": "our eshop on the laptop screen" }]
 }
 ```
 
@@ -71,21 +70,18 @@ field names cause a silent `400` with no useful error message.
 | `durationSec` | 1–30 | ❌ > 30 causes 400 |
 | `dimensions.w` | 256–2048 | ❌ out of range causes 400 |
 | `dimensions.h` | 180–2048 | ❌ out of range causes 400 |
-| `requestId` | ≤ 56 chars | ❌ longer is rejected |
+| `requestId` | **envelope-level, not a `payload` field** — required, ≤ 56 chars | ❌ longer is rejected; ❌ don't put it inside `payload` (it belongs at the envelope top level, alongside `callbackUrl`) |
 | `module` | *(optional)* ≤ 64 chars — a downstream **component** the asset embeds into: `columns`, `customer_testimonial`, `textmedia`, `testimonial_slider` | ❌ don't invent one; **omit** unless the asset clearly targets a specific component (it biases the generators' framing/scale + routes the result) |
-| `figmaUrl` | *(optional)* a real `figma.com` URL — a design **reference**, used as the **auto/unroled shorthand for a SINGLE link**. Prefer a full **node** URL (`…?node-id=NN-NN`) so the moderator renders that exact node, not the whole file; it inspects the node and auto-classifies the role. When you know the role the reference should play (see `figmaReferences`), use that field instead — **even for one link**. | ❌ don't bury the link in `brief` — it must be this **top-level field**; a non-`figma.com` URL **causes 400** |
-| `figmaReferences` | *(optional)* an **ordered array** of `{ "url": "<figma.com node URL>", "role"?: … }` — the way to assign an **explicit role**, for a **single OR multiple** links. The moderator now honors an explicit role in **any** mode (it no longer infers it from mode alone), so this is the reliable lever. Roles: **`screen-content`** = show this UI design ON a device's screen in the asset (needs a **node** URL; use image/hybrid mode); **`reconstruct`** = rebuild/animate the design as the asset itself (illustration/hybrid); **`style`** = brand/aesthetic reference only; **`keyframe`** = one frame of an ordered animation storyboard. Omit `role` to auto-classify. Order matters. Wins over `figmaUrl`. Cap 12. | ❌ don't put multiple links in one `figmaUrl` string; ❌ don't bury them in `brief` |
+| `references` | *(optional)* an **ordered array** of reference objects, each with **exactly one** of `url` (a real `figma.com` node URL — prefer `…?node-id=NN-NN`) or `assetSlug` (a pre-published catalog asset), an optional `role`, and an optional `note` (free-text intent, e.g. "the dashboard on the laptop screen"). Roles: **`screen-content`** = show this UI ON a device screen (needs a node URL; image/hybrid); **`reconstruct`** = rebuild/animate the design as the asset (illustration/hybrid); **`style`** = brand/aesthetic reference; **`keyframe`** = one frame of an ordered storyboard; omit to auto-classify. Order matters. Cap 12. | ❌ don't bury links in `brief`; ❌ don't set both `url` and `assetSlug` on one entry; a non-`figma.com` `url` **causes 400** |
 
 > **STOP before every submit:** run through this table. A `400` from the safe-gate gives no
 > field-level error message — you will not know which field failed without checking this list.
 >
-> **Figma reference (`figmaUrl` / `figmaReferences`):** these are **top-level siblings** of
-> `brief`, never part of the `brief` text. The canonical JSON example above omits both (they're
-> optional). One link with **no** specific role → `"figmaUrl": "https://www.figma.com/design/<key>/<name>?node-id=12-34"`.
-> A link with an **explicit role** (`screen-content` / `reconstruct` / `style`), or several ordered
-> links, → use the top-level array instead:
-> `"figmaReferences": [{ "url": "https://www.figma.com/design/<key>/<name>?node-id=12-34", "role": "screen-content" }, …]`.
-> Never set both — `figmaReferences` wins if present.
+> **References (`references`):** a **top-level sibling** of `brief`, never part of the `brief`
+> text. Each entry is `{ "url" | "assetSlug", "role"?, "note"? }`. One un-roled link →
+> `[{ "url": "https://www.figma.com/design/<key>/<name>?node-id=12-34" }]`. A roled or multi-link
+> case → `[{ "url": "…", "role": "screen-content", "note": "…" }, …]`. Omit `references` entirely
+> if there is no reference.
 
 ## Connecting to the moderator
 
@@ -202,30 +198,33 @@ proceed normally from step 1.
    - **`style`** — the design is only a **brand / aesthetic** reference (colors, mood, look), not
      literal content to reproduce. Any mode.
    - **omit the role** only when the intent is genuinely unclear — the moderator auto-classifies.
-   **Restate in one line** what the reference will do so the user can steer, then carry it (with its
-   role) to step 3.
+   Also **capture any per-reference intent the user expresses as that entry's `note`** (free-text,
+   e.g. "the dashboard on the laptop screen"). **Restate in one line** what the reference will do so
+   the user can steer, then carry it (with its role and note) to step 3's `references` array.
    **Multiple Figma links:** if the message contains **more than one** `figma.com` URL, collect
-   them **in the order given** for step 3's `figmaReferences` array. Tag each entry's `role` per the
+   them **in the order given** for step 3's `references` array. Tag each entry's `role` per the
    rubric above; an ordered animation sequence (a numbered list of frames, "as a storyboard") →
    `role:"keyframe"` for each. Keep every URL out of the `brief` text — but do write the per-beat
    motion description (what happens between/at each keyframe) into `brief`.
 
 3. **Enrich and assemble** the `UnifiedBrief` JSON (shape and dimension ranges per
-   `human-interactive.md`). Write the `brief` text yourself using the enrichment +
-   param-mapping rules. Generate a kebab-case `requestId` (≤56 chars) from the subject, and set
-   a `callbackUrl` (polling doesn't use it — default `https://n8nwh.ionos.org/webhook/mock-callback`).
+   `human-interactive.md`) — this is the pure **`payload`**; do NOT include `requestId` or
+   `callbackUrl` in it. Write the `brief` text yourself using the enrichment + param-mapping
+   rules. Separately, generate a kebab-case `requestId` (≤56 chars) from the subject, and
+   determine the `callbackUrl` (polling doesn't use it — default
+   `https://n8nwh.ionos.org/webhook/mock-callback`) — both are set only at the **envelope** top
+   level when you submit (step 5B.2), never inside the payload.
    If you inferred a downstream component in step 2, set the optional top-level `module` field to
    it (e.g. `"module": "customer_testimonial"`). Do **not** hand-write a `Consumer module:` line
    into the `brief` — image-svc adds that itself from the `module` field.
-   **Figma reference:** if you inferred an explicit **role** in step 2 (`screen-content` /
-   `reconstruct` / `style` / `keyframe`) — for one link OR several — set the top-level
-   `figmaReferences` array of `{ "url": "...", "role": "..." }` in order (cap 12 entries) and
-   **omit `figmaUrl`**. Only when a **single** link has **no** role (genuinely auto) use the
-   top-level `figmaUrl` shorthand instead. Never set both on the same brief. In every case the
-   link(s) must **not** also appear in the `brief` text — the moderator inspects the top-level
-   field and threads it to the generators; a link left only inside `brief` is ignored. For a
-   `screen-content` reference, make sure the URL includes `?node-id=` (no node ⇒ nothing to
-   composite onto the screen).
+   **Figma reference:** set the top-level `references` array — each entry `{ "url": "...", "role"?:
+   "...", "note"?: "..." }` (or `{ "assetSlug": "...", "role"?: "...", "note"?: "..." }` for a
+   pre-published catalog asset) — in order (cap 12 entries). For a **single, un-roled** link use
+   the shorthand `[{ "url": "..." }]`. Carry forward any `note` you captured in step 2. In every
+   case the link(s) must **not** also appear in the `brief` text — the moderator inspects the
+   top-level `references` field and threads it to the generators; a link left only inside `brief`
+   is ignored. For a `screen-content` reference, make sure the URL includes `?node-id=` (no node
+   ⇒ nothing to composite onto the screen).
 
 4. **Show the user** the assembled UnifiedBrief JSON plus a one-line plain-English summary of
    what will be generated. Let them tweak any field before submitting.
@@ -264,9 +263,10 @@ proceed normally from step 1.
         **"Offline / handoff"** below. (Expected if `MODERATOR_BASE` is the sandbox host and the
         VPN is not connected. The public cloud default should be reachable from any network.)
 
-   2. **Submit** to `POST $MODERATOR_BASE/create` — wrap the flat UnifiedBrief in the moderator's
-      envelope `{ "requestId": <brief.requestId>, "payload": <flat UnifiedBrief>, "callbackUrl":
-      <brief.callbackUrl> }` and send the bearer. The `callbackUrl` may be the mock placeholder
+   2. **Submit** to `POST $MODERATOR_BASE/create` — wrap the pure-brief `payload` in the
+      moderator's envelope `{ "requestId": <the requestId you generated in step 3>, "payload": <the
+      pure UnifiedBrief — no requestId/callbackUrl inside it>, "callbackUrl": <the callbackUrl you
+      determined in step 3> }` and send the bearer. The `callbackUrl` may be the mock placeholder
       (`/imagine` polls instead of receiving a push, so a failed delivery is harmless).
 
       > **⛔ MANDATORY pre-send check — do not skip this step.**
@@ -277,21 +277,21 @@ proceed normally from step 1.
       > 3. `brand`, `mode`, and `market` are one of their listed allowed values.
       > 4. `variants` ≤ 4, `durationSec` ≤ 30, `dimensions.w` 256–2048, `dimensions.h` 180–2048.
       > 5. `requestId` ≤ 56 chars and `callbackUrl` is present.
-      > 6. Any Figma reference with an inferred **role** (`screen-content` / `reconstruct` /
-      >    `style` / `keyframe`) — single or multiple — is in the top-level `figmaReferences`
-      >    **ordered array** of `{url, role}` (each `url` a real `figma.com` URL, ≤12) with
-      >    `figmaUrl` **absent**. A `screen-content` entry's URL includes `?node-id=`.
-      > 7. A **single, unroled** Figma link may instead use the top-level `figmaUrl` string (a real
-      >    `figma.com` URL). Never set both `figmaUrl` and `figmaReferences`; never embed a link in
-      >    `brief`. Omit both fields entirely if there is no reference.
+      > 6. Every Figma/catalog reference (single or multiple, roled or not) is in the top-level
+      >    `references` **ordered array** of `{url | assetSlug, role?, note?}` (≤12; each `url` a
+      >    real `figma.com` URL; a `screen-content` entry's URL includes `?node-id=`); no link is
+      >    embedded in `brief`. Omit `references` entirely if there is no reference.
+      > 7. The `payload` does **not** contain `requestId` or `callbackUrl` — those are set only at
+      >    the **envelope** top level (see the curl body below), never duplicated inside `payload`.
       > If any check fails, fix the brief and show the corrected JSON to the user before sending.
 
-      Build the envelope and submit (the payload here is the flat UnifiedBrief you assembled):
+      Build the envelope and submit — `payload` is the pure brief you assembled (no inner
+      `requestId`/`callbackUrl`); those two values are lifted to the envelope's top level:
       ```bash
       curl -s -X POST \
         -H "Authorization: Bearer $MODERATOR_TOKEN" \
         -H "Content-Type: application/json" \
-        -d '{"requestId":"<requestId>","payload":<flat UnifiedBrief JSON>,"callbackUrl":"<callbackUrl>"}' \
+        -d '{"requestId":"<requestId>","payload":<pure UnifiedBrief JSON — no requestId/callbackUrl>,"callbackUrl":"<callbackUrl>"}' \
         "$MODERATOR_BASE/create"
       ```
       Confirm `"status":"accepted"` in the response (`202`). `401` → the bearer key is missing or
@@ -343,8 +343,9 @@ proceed normally from step 1.
    terminal, no curl, no manual polling for the user.**
    1. Tell the user plainly: *"I can't reach the uds-moderator from this session, so I can't
       generate the image right here — but your brief is ready to go."*
-   2. Print the complete **UnifiedBrief as a single copy-paste ` ```json ` block** (the full
-      flat brief, including `requestId` + `callbackUrl`).
+   2. Print the complete **UnifiedBrief as a single copy-paste ` ```json ` block** — the brief
+      `payload` plus the `requestId` + `callbackUrl` you determined, bundled together for hand-off
+      (the receiving session's Pre-flight step splits them back into `payload` + envelope at submit).
    3. Give these next steps in plain language:
       > **To generate it:** open a Claude Code session that can reach the moderator (the desktop
       > app or `claude` CLI; the default cloud moderator works from any network — a sandbox base
