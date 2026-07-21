@@ -5,12 +5,11 @@ Before choosing an ethnicity, scan the brief's `showroom` field and `feature` te
 market signals. Apply the matching market pool below. If no signal is found, fall back
 to the `shared-character-diversity` pool.
 
-## Step 1 — Detect the target market
+## Step 1 — Determine the target market
 
-Scan `showroom` and `feature` for these signals (case-insensitive).
-If no signal is found, skip to the "No market signal detected" pool in Step 2 — do NOT
-fall back to the balanced `shared-character-diversity` pool; IONOS has its own brand
-default that is applied instead.
+If the brief supplies an explicit `Market:` field, use that value directly (it is authoritative).
+Otherwise, infer it by scanning the `showroom` prefix, then the `feature` text, for a country/locale signal.
+If neither yields a signal, use the IONOS brand default (~80% white/Northern-European).
 
 | Market | Signals to match |
 |---|---|
