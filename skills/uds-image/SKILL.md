@@ -56,7 +56,22 @@ Do NOT use `negativePrompt` for composition — it is ignored by the image model
 **2. No rendered text, logos, or UI chrome** — garbled by every image model. Put these
 terms in `negativePrompt` only.
 
-**3. Aspect ratio from dimensions** — map `dimensions.w × dimensions.h` to the nearest
+**3. No abstract UI overlays or graphic "AI" marks floating in a photoreal scene.**
+A photoreal image depicts ONLY a real, physical scene. It must NEVER contain floating or
+composited interface graphics: no floating chips, cards, badges, pills, panels, tooltips,
+prompt bubbles, HUD / heads-up graphics, selection marquees, connector lines, progress rings,
+glowing or gradient icons, or **sparkle / star "AI" marks** hovering in the air or over a
+device. App UI is allowed ONLY when it appears realistically **on a device's own screen**
+(a phone / laptop / tablet display), never floating beside, above, or in front of it. These
+overlays are the illustration layer's job (agent-svc composites them afterwards); baking them
+into the photo double-renders them and looks wrong. This is a **positive authoring rule** — do
+not write such elements INTO `prompt` (`negativePrompt` is ignored for composition, so it
+cannot remove them once written). **If the incoming brief or shared creative context names such
+an element — e.g. a `Composition:` line saying "floating AI reminder chip, top-right", or an
+"AI feature" glow / sparkle — treat it as illustration-layer intent and OMIT it entirely.**
+Render only the clean scene with calm negative space where that overlay will later sit.
+
+**4. Aspect ratio from dimensions** — map `dimensions.w × dimensions.h` to the nearest
 supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
 
 ## Principles
