@@ -95,10 +95,8 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
   abundant, soft, natural light — a bright airy room, generous daylight, a sunny relaxed mood —
   with believable vivid colour. The image should feel **well-lit and uplifting, never moody,
   dark, or underexposed.** A **subtle film-like filter / colour grade** is welcome (a gentle warm
-  or soft-pastel wash that ties the palette together). Warmth is the default tone; cool / neutral /
-  clinical light is a *deliberate* choice only when the subject demands it (e.g. a server hall),
-  and even then keep it bright and warm it with a practical accent so it never reads cold or
-  sterile. Vary the quality per scene, but keep the overall feel bright, natural, and inviting.
+  or soft-pastel wash that ties the palette together). Let the COLOUR TEMPERATURE follow the scene
+  and the brand's photoreal rules (do NOT hardcode a single default here). Vary the quality per scene, but keep the overall feel bright, natural, and inviting.
 - **Colour & mood via objects + bokeh.** Conceptualise the mood with **colourful props** (a
   mustard sweater, a teal mug, fresh flowers, a bright product) and a **soft bokeh background** —
   bright out-of-focus light, blurred people/space behind. These carry the bright-chill feel far
