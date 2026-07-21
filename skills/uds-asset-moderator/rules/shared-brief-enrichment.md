@@ -52,14 +52,14 @@ Per-generator hazards to OMIT:
     mid-moment (walking, laughing, reaching, gesturing) with a slight natural motion blur** so it
     reads candid and alive. Never a person standing idle, arms down, facing the lens head-on
     (unless the brief explicitly wants a front-on close-up, avatar, or portrait headshot).
-  - **Landscape head-crop safety:** image-svc renders square then center-crops — a landscape
-    (w > h) target trims top/bottom. For any person in a landscape image, keep them in the lower
-    two-thirds with clear headroom (seated or behind a waist-height surface), or pull back to an
-    establishing shot — never let a head sit near the top edge.
-  - **Lighting & mood:** default **bright, natural, vivid** — airy and uplifting, never moody or
-    dark; warm/relaxed ("chill") tone, optionally a subtle film-like filter/grade. Set the mood
-    with **colourful props + a soft bokeh background**. Only go cool/clinical when the subject
-    demands it, kept bright and warmed with a practical accent.
+  - **Landscape aspect-ratio safety:** image-svc renders natively at the target aspect ratio.
+    For any person in a landscape image, compose them within the safe frame area (avoid extreme
+    edges); if seated or behind a surface, use that anchor to keep the head in the middle-to-upper
+    frame and away from the top edge. Pull back to an establishing shot if needed.
+  - **Lighting & mood:** default **bright, natural, scene-appropriate** — airy and uplifting, never moody or
+    dark. Set the mood with **colourful props + a soft bokeh background**. Warm, relaxed, cool/clinical,
+    or energetic tones all work; match the tone to the subject and brief intent, kept bright with
+    natural or practical accents.
   - **Device with a person:** a phone/tablet/laptop in the shot does NOT make the device the
     subject. If a **person** is the named subject doing a task, keep their **face the anchor**
     (person-scenario, headroom, crop-safe on landscape); the device is held/used. Only make the
@@ -89,11 +89,12 @@ Per-generator hazards to OMIT:
       alone does not suppress the Apple logo.
     - Two-person scene: one person faces camera, one looks at the screen — the camera position
       between them can naturally see both face and partial screen without physical contradiction.
-  - **Landscape crop-safety — use a physical anchor, not prose headroom:** `prose headroom
+  - **Landscape aspect-ratio safety — use a physical anchor, not prose headroom:** `prose headroom
     instructions ("clear space above the head") are routinely ignored by the model.` Instead
     seat the subject behind a desk or counter: `"subject seated behind a waist-height white desk,
     upper body well above the desk surface, clear open space above the head"` — the desk creates a
-    structural mid-frame anchor that keeps the face in the upper-middle of a 16:9/4:3 frame.
+    structural mid-frame anchor that keeps the face centered and away from frame edges in
+    landscape formats.
   - **Screen-based product is the focus** (the UI is the point — "show the dashboard", "the app
     on the phone"). Order it: **first** a natural use moment, **then** full-screen visibility via
     camera placement. Write a real moment (tapping a phone to pay at a counter, typing at a
@@ -109,9 +110,9 @@ Per-generator hazards to OMIT:
   the brief's own heading, subheading, or description text, which the host component already renders
   (see `rules/shared-brief-parsing.md`).
 
-Budget: keep each `feature` under 1200 characters — the orchestrator appends ~600 chars of
-shared context (and, for hybrid, the embed contract). Lead with the most load-bearing
-detail so truncation never drops the subject.
+Budget: keep each `feature` under ~1500 characters; the orchestrator appends up to ~2500
+(shared context + hybrid embed contract), hard-capped at 5000 combined. Lead with the most
+load-bearing detail so truncation never drops the subject.
 
 When the request is terse, enrich from the params (see `shared-param-mapping.md`) and the
 brand identity — do not ask questions here (this is the machine plan path; the interactive
