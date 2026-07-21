@@ -64,9 +64,9 @@ the embed style, you don't set it):**
   the canvas, large icons), never a whole UI shrunk to fit. The pointer look is unavailable here
   (it auto-demotes). So for square/banner/badge sizes, expect a card or cropped-frame result.
 
-**Crop-safety (images):** image-svc renders a square then center-crops to the requested ratio —
-**landscape** (w > h) trims top & bottom, **tall ratio** (h > w) trims left & right. Keep the focal
-subject centered with margin on the trimmed axis; say so in the brief for non-square images.
+**Aspect-ratio safety (images):** image-svc renders natively at the target aspect ratio — no
+centering step. For non-square images, position the focal subject within the frame bounds to
+avoid unexpected cropping at the edges; anchor key details to the center-to-midpoint region.
 
 ## Conversation flow
 
@@ -89,8 +89,8 @@ subject centered with margin on the trimmed axis; say so in the brief for non-sq
      clearly visible — NEVER the subject holding the device up to the lens, and never a lone idle
      device. For a pixel-accurate UI, suggest `hybrid` mode instead.
    - fidelity/tone for illustrations (standard vs decorative/cinematic)
-   - dimensions (default 1280×720; suggest by mode) and orientation — note the crop-safety
-     rule for non-square images, and that small canvases yield a card/cropped-frame look
+   - dimensions (default 1280×720; suggest by mode) and orientation — note the aspect-ratio
+     safety rule for non-square images, and that small canvases yield a card/cropped-frame look
    - **for any illustration or hybrid — ASK explicitly, do not assume: still or animated?**
      Default **still** (a single frame). Only if the user wants animation:
        - **what kind of motion** — capture it concretely (e.g. gentle seamless loop,
