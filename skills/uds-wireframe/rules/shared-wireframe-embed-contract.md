@@ -358,7 +358,7 @@ Layer order:
    carries a `SAFE AREA:` line, reserve that transparent blank margin on the right/bottom and
    keep all elements inside the remaining content box; anything popping past an edge extends
    past the TOP edge only, never the reserved right/bottom margin.
-2. **Product view** — a UDS-component wireframe of the IONOS builder/editor: a top bar (e.g.
+2. **Product view** — a UDS-component wireframe of the brand's builder/editor: a top bar (e.g.
    a Publish action), a left checklist, and a website canvas. Build it per the standard
    wireframe composition rules (`ionos-wireframe-composition.md`, `ionos-wireframe-product-frame.md`).
    Use `staticFile()` for any in-product hero/media slot the supplied catalog image belongs
@@ -404,7 +404,7 @@ Layer order:
    `SAFE AREA:` line, reserve that transparent margin the same way as `product-pop-out`
    (right/bottom stays empty; any pop-out extends past the TOP edge only).
 2. **Device mockup** — a tablet OR browser-window mockup (with window chrome, e.g. the
-   three-dot traffic-light row) containing the IONOS product UI as a UDS wireframe inside its
+   three-dot traffic-light row) containing the brand product UI as a UDS wireframe inside its
    screen area. The interface content BLEEDS slightly UNDER the bezel — there is no white gap
    between the mockup frame and the screen content. Use `staticFile()` for any in-screen media
    slot the supplied catalog image belongs in — never a generated image there.

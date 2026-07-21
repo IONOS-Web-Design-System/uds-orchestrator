@@ -9,7 +9,7 @@ This file now holds only IONOS-specific color values for the parts the shared fi
 references semantically:
 
 - Brand gradient root (`var(--color-gradient-start) → var(--color-gradient-end)`): IONOS
-  Blue → Dark Midnight, `linear-gradient(135deg, #0B2A63 0%, #001B41 100%)`.
+  Blue → Dark Midnight — see `uds-style-guide`.
 - Brand AI gradient (`var(--color-ai-primary-start) → var(--color-ai-primary-end)`):
   `#095BB1 → #D746F5` (blue → magenta) — see `uds-style-guide/rules/ionos-ai-features.md`.
 - AI-generating accent purple used for the selection marquee only (never the AI CTA
