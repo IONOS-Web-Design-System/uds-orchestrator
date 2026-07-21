@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.13.2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.13.1...v2.13.2) (2026-07-21)
+
+
+### Bug Fixes
+
+* **uds-wireframe:** drop fabricated var(--color-ai-generating-accent); use concrete accent + pointer ([9052978](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/90529788c9d962061aa10cf02170878d4abecca3))
+
+
+### Documentation
+
+* **asset-moderator:** delete obsolete center-crop rules; align feature-length budget ([5ce76bd](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/5ce76bdb3a7bd53e488c54523cc3e1d1398f7a34))
+* **asset-moderator:** purge remaining center-crop guidance + align feature-length in sibling rules ([1a7d253](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1a7d2537e19fac865b2bbaf6f1880a6afb83665b))
+* **uds-image:** defer photoreal colour temperature to the brand rules (fix warm/cool contradiction) ([24513a3](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/24513a356e8ab19283c8ebbd00508dc6fcc4d7d2))
+* **uds-image:** ethnicity rule uses explicit Market field first, prose fallback ([07703ff](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/07703ffcf50f45002af7121adc0f44f08ec6897a))
+* **uds-image:** forbid abstract UI overlays/AI marks in photoreal scenes ([4c72732](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/4c72732fd8fd8fe665d5bf8668936ff0b0fc62e9))
+* **uds-wireframe:** neutralize brand-coupled prose in shared contract; drop stale gradient hex annotation ([f796ebf](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f796ebf0e4c285d8aedebb0886770ef6778de0da))
+* **uds-wireframe:** shared embed-contract (all brands) + author product-pop-out/device-mockup composite styles ([b706c0a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/b706c0a1e53a8c68a10b0d183aa8bf416d467294))
+
 ## [2.13.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.13.0...v2.13.1) (2026-07-17)
 
 
