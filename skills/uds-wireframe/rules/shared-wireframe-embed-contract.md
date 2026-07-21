@@ -122,7 +122,10 @@ Layer order (document order, no z-index games):
    // ACCENT: the brand's AI-generating accent purple (uds-style-guide — for IONOS this is
    // the ai-features "generating" purple-600 / product-frame marquee accent). Solid stroke
    // only — never the AI CTA gradient itself.
-   const ACCENT = 'var(--color-ai-generating-accent)';
+   // AI 'generating'-text accent — no dedicated CSS token exists for this specific accent;
+   // resolve the concrete value from the brand rule (IONOS: #8212C2, see
+   // ionos-wireframe-image-backdrop.md / uds-style-guide ionos-ai-features).
+   const ACCENT = '#8212C2';
    <div style={{
      position: 'absolute', inset: -14, // wraps the headline wrapper
      border: `2px dashed ${ACCENT}`, pointerEvents: 'none',
