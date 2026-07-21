@@ -74,7 +74,7 @@ consistency contract: `paletteRefs` MUST be hex values from the brand palette
 ## Sub-brief rules
 
 - Each `feature` text must be a self-contained brief — the generators never see the original request.
-- Keep each `feature` under 1200 characters; the orchestrator appends ~600 chars of context.
+- Keep each `feature` under ~1500 characters; the orchestrator appends shared context (and, for hybrid, the embed contract) up to ~2500 characters, hard-capped at 5000 combined.
 - Never request rendered text, logos, or UI chrome in an image brief — image models garble them.
 - Never reproduce the brief's own Context / heading / subheading / description as rendered text in
   ANY asset (image, illustration, animation, or hybrid). That copy is the host component's chrome. See

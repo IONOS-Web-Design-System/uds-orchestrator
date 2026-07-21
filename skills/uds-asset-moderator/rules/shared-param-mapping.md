@@ -18,13 +18,7 @@ free text always wins on subject, params win on format and context.
   imagery, regionally plausible persona cues (defer specifics to the uds-image skill).
 - **`dimensions`** — drive framing and, for hybrid, `embedStyle` eligibility
   (`background-pointer` needs w ≥ 800 AND h ≥ 450). Tall-ratio vs landscape changes
-  composition; say so. **Crop-safety:** image-svc generates a square frame and then
-  center-crops it to the requested ratio, so a non-square target trims one axis —
-  **landscape** (w > h) trims TOP and BOTTOM, **tall ratio** (h > w) trims LEFT and RIGHT.
-  The image `feature` and `sharedContext.compositionPlan` MUST keep the full focal subject
-  inside the surviving central band (the horizontal band for landscape, the vertical band
-  for tall-ratio targets) with generous margins on the trimmed edges, so the crop never
-  clips it. Square targets just keep the subject centered.
+  composition; say so.
 - **`durationSec`** / **`variants`** — `durationSec` only matters for
   `illustrationBrief.intent:animation`; its default (3) is NOT a signal to animate — the
   intent defaults to a still unless the brief has an explicit motion cue (see
