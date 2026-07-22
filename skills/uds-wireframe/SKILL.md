@@ -42,31 +42,31 @@ All rules are inlined below. Quick navigation:
 
 | Rule file | Covers |
 |---|---|
-| `ionos-wireframe-remotion-template` | **Read first for Remotion jobs** — VariantProps schema, Root.tsx contract, TypeScript error triage |
-| `ionos-wireframe-ai-animations` | **AI animation templates** — copy-ready Remotion code for button, loading state, radial bloom, sparkle pulse. Preview: http://localhost:4200/ai-templates |
-| `ionos-wireframe-product-frame` | Product frame structure, **verified icon allowlist** (system + brandmark), contrast rules, feature pop-out, **constrained viewport cropping patterns** (bottom bleed, zoom-to-highlight, counterbalance rule) |
-| `ionos-wireframe-composition` | Standard layout patterns, component selection, placeholder content guidelines |
-| `ionos-wireframe-decorative-mode` | Decorative mode setup, device frames, Bar/BarGroup helpers, glass card system, HTML preview |
-| `ionos-wireframe-micro-animations` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in, variant switcher |
-| `ionos-wireframe-asset-integration` | Local file and Figma URL asset integration, pipeline catalog `role:`-driven selection & placement, staggered reveal |
-| `shared-wireframe-embed-contract` | **Hybrid embed-contract geometry — all 6 embed styles, every brand** (feature-pointer with connector line, full-bleed, interface-asset, floating-card, product-pop-out, device-mockup); color harmony; animation hooks. Read when brief contains `[HYBRID EMBED CONTRACT]` |
-| `ionos-wireframe-image-backdrop` | IONOS-specific embed-contract notes only — the geometry itself lives in `shared-wireframe-embed-contract` |
-| `ionos-wireframe-small-format` | **Small-format illustrations** (< ~512px both axes) — icon-story grammar, cropped-product-frame pattern, icon sizing, loop motion rules, hybrid-in-small-format embed styles |
+| `ionos/remotion-template.md` | **Read first for Remotion jobs** — VariantProps schema, Root.tsx contract, TypeScript error triage |
+| `ionos/ai-animations.md` | **AI animation templates** — copy-ready Remotion code for button, loading state, radial bloom, sparkle pulse. Preview: http://localhost:4200/ai-templates |
+| `ionos/product-frame.md` | Product frame structure, **verified icon allowlist** (system + brandmark), contrast rules, feature pop-out, **constrained viewport cropping patterns** (bottom bleed, zoom-to-highlight, counterbalance rule) |
+| `ionos/composition.md` | Standard layout patterns, component selection, placeholder content guidelines |
+| `ionos/decorative-mode.md` | Decorative mode setup, device frames, Bar/BarGroup helpers, glass card system, HTML preview |
+| `ionos/micro-animations.md` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in, variant switcher |
+| `ionos/asset-integration.md` | Local file and Figma URL asset integration, pipeline catalog `role:`-driven selection & placement, staggered reveal |
+| `shared/embed-contract.md` | **Hybrid embed-contract geometry — all 6 embed styles, every brand** (feature-pointer with connector line, full-bleed, interface-asset, floating-card, product-pop-out, device-mockup); color harmony; animation hooks. Read when brief contains `[HYBRID EMBED CONTRACT]` |
+| `ionos/image-backdrop.md` | IONOS-specific embed-contract notes only — the geometry itself lives in `shared/embed-contract.md` |
+| `ionos/small-format.md` | **Small-format illustrations** (< ~512px both axes) — icon-story grammar, cropped-product-frame pattern, icon sizing, loop motion rules, hybrid-in-small-format embed styles |
 
 ## Pattern → Rule routing
 
-When the brief names a `Composition pattern:` (set by the moderator), load the corresponding rule **in addition to** `ionos-wireframe-composition` and `ionos-wireframe-product-frame`:
+When the brief names a `Composition pattern:` (set by the moderator), load the corresponding rule **in addition to** `ionos/composition.md` and `ionos/product-frame.md`:
 
 | Pattern name | Extra rule to load |
 |---|---|
-| `product-frame-full`, `product-frame-bottom-bleed`, `product-frame-zoom-cutout`, `product-frame-square` | `ionos-wireframe-product-frame` (already in index — confirm loaded) |
-| `product-frame-connector-line` | `ionos-wireframe-product-frame` — read the "Connector Line" section |
-| `image-backdrop-feature-pointer`, `image-backdrop-full-bleed`, `interface-asset`, `floating-card` | `shared-wireframe-embed-contract` |
-| `small-icon-story`, `small-cropped-frame` | `ionos-wireframe-small-format` |
+| `product-frame-full`, `product-frame-bottom-bleed`, `product-frame-zoom-cutout`, `product-frame-square` | `ionos/product-frame.md` (already in index — confirm loaded) |
+| `product-frame-connector-line` | `ionos/product-frame.md` — read the "Connector Line" section |
+| `image-backdrop-feature-pointer`, `image-backdrop-full-bleed`, `interface-asset`, `floating-card` | `shared/embed-contract.md` |
+| `small-icon-story`, `small-cropped-frame` | `ionos/small-format.md` |
 
 When `dimensions.w < 512 AND dimensions.h < 512` and no `Composition pattern:` is set, default to `small-cropped-frame` for product briefs and `small-icon-story` for abstract briefs.
 
-When the brief contains `[HYBRID EMBED CONTRACT]`, always load `shared-wireframe-embed-contract` — it covers all six embed styles (the 4 legacy backdrop/asset/card styles plus the `product-pop-out` and `device-mockup` composites) for every brand. The contract's `Style:` line (or, for the two composites, the `[PRODUCT-POP-OUT COMPOSITE]` / `[DEVICE-MOCKUP COMPOSITE]` tag) names the exact section to follow.
+When the brief contains `[HYBRID EMBED CONTRACT]`, always load `shared/embed-contract.md` — it covers all six embed styles (the 4 legacy backdrop/asset/card styles plus the `product-pop-out` and `device-mockup` composites) for every brand. The contract's `Style:` line (or, for the two composites, the `[PRODUCT-POP-OUT COMPOSITE]` / `[DEVICE-MOCKUP COMPOSITE]` tag) names the exact section to follow.
 
 ## Output Format
 

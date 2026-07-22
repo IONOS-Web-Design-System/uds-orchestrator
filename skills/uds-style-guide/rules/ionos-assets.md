@@ -131,7 +131,7 @@ control*).
    app, the populated dashboard, the deployed page, the finished card.
    Typically a browser / editor / app-shell mockup. Dense, content-rich,
    the "magic result." Place center-right of the canvas. The base surface
-   theme follows `shared-wireframe-surface-theme.md` — light by default,
+   theme follows `uds-wireframe/rules/shared/surface-theme.md` — light by default,
    dark ONLY when `colorScheme === 'dark'` or the brief is explicitly
    decorative. AI accents (gradient, sparkle) apply on either base.
 
