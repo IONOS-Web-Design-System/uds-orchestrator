@@ -189,10 +189,10 @@ const ContextAnchor = ({ label, size = 'large' }: { label: string; size?: 'large
   const fs = size === 'large' ? 24 : size === 'medium' ? 18 : 13;
   return (
     <span style={{
-      fontFamily: 'var(--base/font/heading)',
+      fontFamily: 'var(--uds-font-title)',
       fontSize: fs,
       fontWeight: 600,
-      color: 'var(--neutral/white)',
+      color: 'var(--text-base-invert)',
       letterSpacing: '-0.02em',
       opacity: 0.92,
       display: 'block',
@@ -370,7 +370,7 @@ Wrap the device frame in a padded relative container, then use `position: absolu
     display: 'flex', alignItems: 'center', gap: 8,
     animation: 'flyIn 0.55s cubic-bezier(0.16,1,0.3,1) 0.4s both',
   }}>
-    <Icon group="system" name="bell" size={14} style={{ color: 'var(--brand/ionos-sky-300)' }} />
+    <Icon group="system" name="bell" size={14} style={{ color: '#11C7E6' }} />
     <Bar w="80px" h={7} op={0.45} />
   </div>
 </div>
@@ -469,7 +469,7 @@ Reference table:
 | Table cell | `<Bar w="75%" h={8} op={0.16} />` | |
 | Tag / badge label | `<Bar w="48px" h={7} op={0.22} />` | |
 
-**Rule:** Never use real text in decorative mode. Even one-word labels must be bars. The only exception: a proper brand name (e.g. "IONOS") that must be visually recognisable — in that case use real text with `var(--neutral/white)`.
+**Rule:** Never use real text in decorative mode. Even one-word labels must be bars. The only exception: a proper brand name (e.g. "IONOS") that must be visually recognisable — in that case use real text with `var(--text-base-invert)`.
 
 **Button placeholder:**
 ```tsx
@@ -513,10 +513,10 @@ Icons are the visual focal points in decorative mode. Use `group="system"` for U
 
 ```tsx
 const ICON_COLORS = {
-  sky:   { bg: 'rgba(17, 199, 230, 0.12)',  border: 'rgba(17, 199, 230, 0.25)',  icon: 'var(--brand/ionos-sky-300)' },
-  green: { bg: 'rgba(18, 207, 118, 0.12)',  border: 'rgba(18, 207, 118, 0.25)',  icon: 'var(--utility/green-300)' },
-  amber: { bg: 'rgba(255, 170, 0, 0.12)',   border: 'rgba(255, 170, 0, 0.25)',   icon: 'var(--utility/yellow-300)' },
-  rose:  { bg: 'rgba(255, 97, 89, 0.12)',   border: 'rgba(255, 97, 89, 0.25)',   icon: 'var(--utility/red-300)' },
+  sky:   { bg: 'rgba(17, 199, 230, 0.12)',  border: 'rgba(17, 199, 230, 0.25)',  icon: '#11C7E6' },
+  green: { bg: 'rgba(18, 207, 118, 0.12)',  border: 'rgba(18, 207, 118, 0.25)',  icon: '#12CF76' },
+  amber: { bg: 'rgba(255, 170, 0, 0.12)',   border: 'rgba(255, 170, 0, 0.25)',   icon: '#FFAA00' },
+  rose:  { bg: 'rgba(255, 97, 89, 0.12)',   border: 'rgba(255, 97, 89, 0.25)',   icon: '#FF6159' },
 } as const;
 type IconColorKey = keyof typeof ICON_COLORS;
 ```
@@ -727,8 +727,8 @@ After writing the `.tsx`, always also write `/tmp/uds-decorative-preview.html` �
 </style>
 
 <!-- Usage: -->
-<div class="icon-shape icon-settings icon-sky" style="width:52px;height:52px;border-radius:13px;color:var(--brand/ionos-sky-300)"></div>
-<div class="icon-shape icon-lock icon-green" style="width:52px;height:52px;border-radius:13px;color:var(--utility/green-300)"></div>
+<div class="icon-shape icon-settings icon-sky" style="width:52px;height:52px;border-radius:13px;color:#11C7E6"></div>
+<div class="icon-shape icon-lock icon-green" style="width:52px;height:52px;border-radius:13px;color:#12CF76"></div>
 ```
 
 Pick the closest matching icon from settings / lock / chart / cloud / check / bell. If none fits exactly, use the generic `.icon-shape` class without a specific `icon-*` modifier — it renders as a solid circle silhouette, which is visually honest about approximation.
