@@ -21,11 +21,12 @@ The hybrid imageBrief MUST:
 
 The imageBrief MUST additionally:
 - include a clear, calm surface or region in the imagery (a wall, a product face, an open
-  area) near which the rendered headline will sit — the headline is drawn by the
-  illustration, so that region must tolerate white text over it.
+  area) that the illustration will mark with a selection marquee as its pointer target — no
+  marketing headline is rendered there (see `shared-brief-parsing.md` no-marketing-heading),
+  so the region only needs to stay calm and uncluttered enough for the marquee to read clearly.
 
-The `compositionPlan` MUST state both the panel side and the headline position
-(e.g. "panel on the left over the negative space; headline upper-right over the teal wall").
+The `compositionPlan` MUST state both the panel side and the marquee/pointer-target region
+(e.g. "panel on the left over the negative space; selection marquee upper-right over the teal wall").
 
 Note: the illustration will show the backdrop **cropped/zoomed to its relevant region**
 (objectFit cover + objectPosition on the focal area) — the imageBrief should still
@@ -36,7 +37,9 @@ describe the **full scene**; the crop happens in the illustration, not the image
 The imageBrief MUST additionally produce imagery that works as an **in-interface hero**:
 - a single subject with a composition that **crops well to a wide media slot**
   (objectFit cover in a landscape hero region),
-- a **calm region** that tolerates a headline text overlay rendered by the illustration.
+- a **calm region** left as intentional negative space inside the hero slot — no marketing
+  headline is rendered over it (see `shared-brief-parsing.md` no-marketing-heading); the calm
+  space simply keeps the hero from feeling cluttered.
 
 The `compositionPlan` MUST state the interface type (e.g. "CMS editor shell with left
 icon sidebar") and where the floating fragments sit (e.g. "prompt bubble bottom-left

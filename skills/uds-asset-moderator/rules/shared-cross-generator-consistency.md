@@ -12,8 +12,9 @@ verbatim, so write it so it reads identically to each:
   are appended later as a `Color harmony:` block — see SKILL.md; do not pre-guess them.)
 - **`tone`** — 3–5 adjectives that read the same to a photo model and a UI composer
   ("calm, premium, trustworthy"), not generator-specific jargon.
-- **`compositionPlan`** — one sentence locating the negative space / panel side / headline
-  region so the image leaves room exactly where the illustration will place UI.
+- **`compositionPlan`** — one sentence locating the negative space / panel side / message
+  region so the image leaves room exactly where the illustration will place UI (never a
+  rendered marketing headline — see `shared-brief-parsing.md` no-marketing-heading).
 
 The orchestrator owns the compositing mechanics. It appends the `[HYBRID EMBED CONTRACT]`
 (per `embedStyle`) to the illustrationBrief itself, so:
