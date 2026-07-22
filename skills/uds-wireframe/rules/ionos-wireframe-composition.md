@@ -169,8 +169,8 @@ Good wireframe content is plausible — it helps the viewer understand the layou
 
 | Region | Use this |
 |--------|----------|
-| Headlines | Short, relevant to the product ("Your hosting, simplified") |
-| Body copy | 1–2 sentences on product value ("Everything you need to get online.") |
+| Section labels / titles | Short functional labels or section titles — NOT a marketing headline/tagline (see `shared-wireframe-no-marketing-heading`) |
+| Body copy | 1–2 short functional sentences describing the UI region — generic placeholder, not marketing copy |
 | Buttons | Real CTAs ("Get started", "Learn more", "Sign in") |
 | Lists | 3–5 realistic items matching the domain |
 | Prices | Realistic ranges ("€3.99/mo", "$12/month") |
