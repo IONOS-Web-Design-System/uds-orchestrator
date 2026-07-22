@@ -1,3 +1,7 @@
+---
+motion: [animation]
+---
+
 # Wireframe Interaction Animations
 
 > **Scope: decorative mode wireframes only.** Standard wireframes do not include animations. If the user requests a standard (mid-fi) wireframe, skip this file entirely.

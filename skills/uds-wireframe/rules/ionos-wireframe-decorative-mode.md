@@ -1,3 +1,7 @@
+---
+decorative: true
+---
+
 # Wireframe Decorative Mode
 
 ## What "decorative" means
