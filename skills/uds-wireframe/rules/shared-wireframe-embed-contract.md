@@ -8,6 +8,12 @@ is the exact geometry to build. This file is geometry-only: brand colour always 
 — never hardcode a brand hex here. Reference colour semantically ("the brand gradient", "the
 brand AI gradient") and resolve the actual value per the active `brand` at generation time.
 
+The embedded product interface's **base surface theme** (root/panels/cards/text) follows
+`shared-wireframe-surface-theme`: bind it to the `colorScheme`-resolved UDS surface tokens —
+do NOT hardcode a dark panel background/gradient to make it look premium. Light is the default;
+a dark base only when `colorScheme='dark'` or the brief asks for dark. (The AI gradient accents
+are independent — see that rule.)
+
 | embedStyle code | Contract `Style:` line (as dispatched) | Section |
 |---|---|---|
 | `background-pointer` | `Style: image-backdrop with feature pointer` | [Style: image-backdrop with feature pointer](#style-image-backdrop-with-feature-pointer) |
