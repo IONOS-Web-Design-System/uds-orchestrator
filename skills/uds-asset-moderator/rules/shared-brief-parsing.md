@@ -51,10 +51,14 @@ Do NOT instruct any generator to render the brief's Context / heading / subheadi
   read as real (a generic status pill, a nav item, a placeholder metric, lorem / █ redaction). They
   must be generic and must not restate the component's copy. Prefer icons, bars, and gradient chips
   wherever a real label is not load-bearing.
-- **Headline / overlay slots** — where an embed style structurally calls for a headline over the
-  imagery (e.g. a hybrid `background-pointer`), that headline STAYS: render a **synthesized,
-  paraphrased-into-English headline that conveys the message**, never the brief's verbatim heading,
-  and never empty lorem / redaction in a load-bearing headline slot.
+- **No marketing headline / subheading — even in headline-capable slots.** Do NOT render a
+  marketing headline or subheading/tagline in the asset (the page's message line), even where an
+  embed style could structurally host one (e.g. `background-pointer`, `floating-card`, the
+  composites). The host component renders the heading/subheading beside the asset, so the asset must
+  not carry it — not even a synthesized restatement. Leave the headline slot out and convey the
+  message through the composition (interface, scene, badges, functional micro-labels). See
+  `uds-wireframe/rules/shared-wireframe-no-marketing-heading.md`. (An author's *explicit*
+  render-this-text instruction is still honoured per "Never suppress explicitly-requested text".)
 
 ## Structural markers are chrome — consume them as intent, never draw them
 
