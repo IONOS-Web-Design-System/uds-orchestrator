@@ -19,18 +19,49 @@ Secondary floating elements (tool chips, stat pills) are allowed as decoration b
 
 The product shell and the client-app zone are two visually distinct layers. Never mix their colors.
 
-### Product shell (IONOS editor/app)
+**Base shell follows `shared-wireframe-surface-theme.md`; do NOT hardcode a dark panel on a
+light render.** The shell's frame/sidebar/panel backgrounds derive from `colorScheme`-resolved
+UDS surface tokens, and **light is the default**. Render the dark-navy shell ONLY when
+`colorScheme === 'dark'`, or the brief is explicitly decorative/cinematic (see
+`ionos-wireframe-decorative-mode`) — a generic "AI feature" or "premium" brief is NOT, by
+itself, a dark request.
+
+### Product shell — light default (`colorScheme !== 'dark'`, non-decorative)
 
 | Zone | Background | Icon / text color |
 |---|---|---|
-| Outer frame | `linear-gradient(180deg, #011B43, #0E1A2D)` | — |
-| Left tool sidebar | `linear-gradient(180deg, #011B43, #1A3475)` | white `rgba(255,255,255,0.8)` |
-| Right properties panel | `linear-gradient(180deg, #021C45, #1B3676)` | `#9DC2D9` for bars/data, white for labels |
+| Outer frame | `var(--surface-base)` | — |
+| Left tool sidebar | `var(--surface-subtle)` | `var(--text-base)`, 0.8 opacity idle / 1.0 active |
+| Right properties panel | `var(--surface-subtlest)` | `var(--text-subtle)` for bars/data, `var(--text-base)` for labels |
+| Active sidebar item | next-darker surface tier (e.g. `var(--surface-subtlest)` against a `var(--surface-subtle)` sidebar) | `var(--text-base)` |
+| Header action: "Publish" | `#1A91DE` (sky blue fill) — brand CTA, unaffected by scheme | white |
+| Header action: "Preview" | transparent + `border: 1px solid var(--border-subtle)` | `var(--text-base)` |
+
+**Decorative/abstract elements inside a light shell:**
+- Icon buttons: `var(--text-base)` SVG icons, `opacity: 0.8` idle, `1.0` active
+- Property panel rows: `var(--surface-subtlest)` background, bar fill `var(--text-subtle)`
+- Analytics / stat indicators: `var(--text-subtle)` for values and bars
+- Placeholder bars in the shell: `var(--surface-subtlest)` (neutral cool-grey) — NOT the
+  steel-blue-on-dark treatment below, NOT sky `#11C7E6`
+
+### Product shell — dark variant (`colorScheme === 'dark'`, or explicit decorative brief ONLY)
+
+Use this branch only when the composition is genuinely dark-themed or decorative — never as
+the default. Values use the defined IONOS palette darks (`ionos-color-palette.md`: Dark
+Midnight `#001B41`, Dark Blue `#0B2A63`, Blue Black `#02102B`) rather than invented hex — Dark
+Blue is the palette's own "background specifically for the white logo," which is exactly the
+sidebar's role here.
+
+| Zone | Background | Icon / text color |
+|---|---|---|
+| Outer frame | `linear-gradient(180deg, #001B41, #02102B)` | — |
+| Left tool sidebar | `linear-gradient(180deg, #001B41, #0B2A63)` | white `rgba(255,255,255,0.8)` |
+| Right properties panel | `linear-gradient(180deg, #001B41, #0B2A63)` | `#9DC2D9` for bars/data, white for labels |
 | Active sidebar item | `rgba(255,255,255,0.12)` overlay on sidebar | white |
 | Header action: "Publish" | `#1A91DE` (sky blue fill) | white |
 | Header action: "Preview" | transparent + `border: 1px solid rgba(255,255,255,0.5)` | white |
 
-**Decorative/abstract elements inside the product shell:**
+**Decorative/abstract elements inside the dark shell variant:**
 - Icon buttons: white SVG icons, `opacity: 0.8` idle, `1.0` active
 - Property panel rows: `background: rgba(63,94,135,0.6)`, bar fill `#9DC2D9`
 - Analytics / stat indicators: `#9DC2D9` for values and bars
@@ -38,12 +69,19 @@ The product shell and the client-app zone are two visually distinct layers. Neve
 
 ### Client-app zone (the website being edited)
 
-This is a completely separate inner panel with its own light theme — it MUST contrast with the dark shell:
+This is a completely separate inner panel — a real website preview, not tool chrome — so it
+keeps its own literal light theme regardless of the shell's `colorScheme`. It must always read
+as a distinct layer from the shell:
+- **Against the dark shell variant:** contrast is automatic — a light panel on a dark chrome.
+- **Against the light shell default:** the shell is light too, so separate by elevation, not
+  opposing color — a strong `boxShadow` plus a lighter/whiter surface than the shell's
+  `var(--surface-base)`.
 
 ```tsx
-// Client app zone — visually isolated from the product shell
+// Client app zone — visually isolated from the product shell (light shell default:
+// separated by elevation/shadow; dark shell variant: separated by light-on-dark contrast)
 <div style={{
-  background: '#F4F7FA',          // var(--surface-subtle) — light, distinct from dark shell
+  background: '#F4F7FA',          // var(--surface-subtle) — the website's own fixed light theme
   borderRadius: 7,
   overflow: 'hidden',
   boxShadow: '2px 12px 26px rgba(0,0,0,0.22), 6px 48px 48px rgba(0,0,0,0.19)',
@@ -57,7 +95,8 @@ This is a completely separate inner panel with its own light theme — it MUST c
 </div>
 ```
 
-**Text placeholder bars in the client app**: `#BCC8D4` (cool-grey-300), NOT white or dark.
+**Text placeholder bars in the client app**: `#BCC8D4` (cool-grey-300), NOT white or dark —
+fixed, part of the client-app's own light theme in both shell branches.
 **AI selection target inside client app**: `border: 2px dashed #8212C2` — the text-selection marquee ONLY. The floating highlight card itself has NO border; it uses a plain neutral drop shadow (no AI glow — the AI glow is on the CTA button only) (see "Floating Highlight Card" below).
 
 ## Product Frame — Content Detail Rules
@@ -71,9 +110,13 @@ Always include these realistic anchors (scale with frame size):
   - Medium (500–900px): left sidebar + hero + 1–2 content rows, no right panel
   - Small (<500px): hero only, minimal nav
 
+Diagram below illustrates the dark shell **variant** (concrete hex shown for clarity); the light
+**default** renders the identical structure with the colorScheme-resolved tokens from the table
+above (`var(--surface-base)` frame, `var(--surface-subtle)` sidebar, `var(--surface-subtlest)` panel).
+
 ```
-┌─ IONOS Product Shell (dark: #011B43 → #0E1A2D) ───────────────────┐
-│ [sidebar: #011B43→#1A3475]  [CLIENT APP: #F4F7FA]  [panel: #021C45]│
+┌─ IONOS Product Shell — dark variant (#001B41 → #02102B) ──────────┐
+│ [sidebar: #001B41→#0B2A63]  [CLIENT APP: #F4F7FA]  [panel: #001B41→#0B2A63]│
 │  W logo                     ┌─────────────────┐    [#9DC2D9 bars]  │
 │  ──────────────             │ [client header]  │    [dropdowns]     │
 │  icon  ←white               │ [hero image]     │    [analytics]     │
@@ -124,6 +167,10 @@ If TypeScript reports an error on an icon import, the **path is wrong** — fix 
 - `ionos-light` has blue fills → readable on **light/white** backgrounds
 - `ionos-dark` has white fills → readable on **dark** backgrounds
 
+Pick the variant per `colorScheme`, not a fixed default (see `shared-wireframe-surface-theme.md`
+"Match the brandmark to the scheme"): the product shell is light by default, so `ionos-light` is
+the shell's default brandmark; `ionos-dark` applies only in the dark shell variant.
+
 ## AI Icon Usage Guidelines
 
 All 6 IONOS AI icons use **ai-primary gradient fill** (`linear-gradient(45deg, #095BB1, #D746F5)`).
@@ -168,14 +215,25 @@ Import without `dist/` — sub-path export only. **Do not guess names — webpac
 
 ## Contrast Rule (product frame context)
 
-The product shell is dark; the client-app zone is light. Never mix their palettes:
+**Light shell default:** shell and client-app zone are both light-toned; differentiate via
+elevation (`boxShadow`) and a lighter/whiter surface for the client-app panel, not via opposing
+themes.
+- Shell icons / text: `var(--text-base)`, 0.8 opacity idle / 1.0 active
+- Shell decorative bars: `var(--text-subtle)`
+- Client-app text bars: `#BCC8D4` (fixed — the client-app's own light theme)
+- Floating pop-out / glass elements: `var(--surface-subtle)` (see "Floating Highlight Card" below)
+
+**Dark shell variant (`colorScheme === 'dark'` or decorative — NOT the default):** here, and only
+here, the product shell is dark while the client-app zone stays light. Never mix their palettes:
 - Shell icons / text: white (`rgba(255,255,255,0.8–1.0)`)
 - Shell decorative bars: `#9DC2D9`
 - Client-app text bars: `#BCC8D4`
 - Floating pop-out / glass elements over dark: `rgba(255,255,255,0.85–0.96)` fill — keep alpha high or the dark shell bleeds through as grey
 
 **Icon colour inside panels**: key on the container's own background, not the outer gradient.
-`ionos-dark` brandmark (white fills) → on dark shell. `ionos-light` (blue fills) → inside the light client-app zone.
+Match the brandmark to the scheme (per `shared-wireframe-surface-theme.md`): `ionos-light`
+(blue fills) on the light shell default and inside the light client-app zone; `ionos-dark`
+(white fills) only on the dark shell variant.
 
 ## Floating Highlight Card — Always Outside the Frame
 
@@ -283,7 +341,7 @@ const frameDrift = interpolate(frame, [60, 90], [0, -60], { extrapolateLeft: 'cl
 
 ## Frame Layout Rules
 
-- IONOS logo: always the real SVG brandmark (`ionos-dark` variant on dark shell), never a placeholder bar
+- IONOS logo: always the real SVG brandmark, never a placeholder bar — pick the variant per `colorScheme` (`ionos-light` on the light shell default, `ionos-dark` only on the dark shell variant)
 - Client app image: always use `<Img src={staticFile(imageSlug + '.png')}>` from the asset catalog
 - Never use sky `#11C7E6` in the product shell — that is a CTA colour; use `#9DC2D9` for shell decorative elements
 - AI feature affordances: see `uds-style-guide/ionos-ai-features` for gradient button, generating surface, and animation rules
@@ -381,7 +439,7 @@ When the AI feature is an **inline editing action** (text selection, image resiz
     top: '50%', transform: 'translateY(-50%)',
     zIndex: 100,
     borderRadius: 24,
-    background: 'rgba(255, 255, 255, 0.97)',
+    background: 'var(--surface-subtle)',
     boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
     // contains tone tabs, option checkboxes, AI CTA button
   }}>

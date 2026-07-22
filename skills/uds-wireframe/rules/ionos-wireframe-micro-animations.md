@@ -59,7 +59,7 @@ const FLOATERS = [
     rot: '-1.5deg', delay: '1.3s', bobH: -6,
     content: (
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <Icon group="system" name="bell" size={14} style={{ color: 'var(--brand/ionos-sky-300)' }} />
+        <Icon group="system" name="bell" size={14} style={{ color: '#11C7E6' }} />
         <Bar w="88px" h={7} op={0.50} />
       </div>
     ),
@@ -71,7 +71,7 @@ const FLOATERS = [
     rot: '1deg', delay: '0.7s', bobH: -8,
     content: (
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <Icon group="system" name="check-circle" size={16} style={{ color: 'var(--utility/green-300)' }} />
+        <Icon group="system" name="check-circle" size={16} style={{ color: '#12CF76' }} />
         <Bar w="64px" h={7} op={0.45} />
       </div>
     ),

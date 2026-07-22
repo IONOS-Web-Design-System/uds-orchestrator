@@ -37,9 +37,10 @@ Rules for the four opaque styles (`background-pointer`, `background-full`, `inte
   (transparent roots render black in mp4).
 - **Never cover the imagery's focal subject.** The contract / composition plan says which
   side has negative space — that side gets the floating UI. (For interface-asset this
-  applies inside the hero/media slot: keep the headline over the imagery's calm region.)
-- **Critical content margins.** Keep headlines, buttons, and badges within the middle 90%
-  of the canvas; nothing critical within ~48px of a canvas edge.
+  applies inside the hero/media slot: keep the floating fragments over the imagery's calm
+  region, not its focal subject.)
+- **Critical content margins.** Keep floating UI — panels, buttons, and badges — within the
+  middle 90% of the canvas; nothing critical within ~48px of a canvas edge.
 - **Still gate.** Frame 0 must already show the backdrop image plus the floating UI cleanly
   composed — no empty canvas, no elements mid-flight off-screen.
 
@@ -49,8 +50,9 @@ contract — see their sections below for their own still-gate and margin rules.
 ## Style: image-backdrop with feature pointer
 
 Story: the AI feature acts on the user's content shown in the imagery. The image is a
-large rounded card; a headline rendered OVER it is "selected" with design-tool visual
-language, and a floating feature panel points at it.
+large rounded card; a calm negative-space region of it is "selected" with design-tool
+visual language — a marquee, not a rendered headline (see `shared-brief-parsing.md`
+no-marketing-heading) — and a floating feature panel points at it.
 
 Layer order (document order, no z-index games):
 
@@ -63,24 +65,22 @@ Layer order (document order, no z-index games):
    roughly **75-90% of the canvas**, offset toward one side (per the composition plan),
    with `objectFit: 'cover'`, `overflow: 'hidden'`, and a soft shadow.
 
-   **The one-frame rule:** everything that reads as part of the pictured scene — the
-   imagery and the headline rendered over it (text-shadow only — no scrim) — live INSIDE this card, inside a
-   single `scene` wrapper that receives any backdrop-motion transform. When the frame
-   zooms or moves, imagery and in-frame typography move TOGETHER; a headline that stays
-   put while the image zooms behind it breaks the illusion and is wrong.
+   **The one-frame rule:** the imagery lives INSIDE this card, inside a single `scene`
+   wrapper that receives any backdrop-motion transform — the pictured scene is
+   self-contained in this one frame. Canvas-level annotations (marquee, panel, connector,
+   badge) are NOT part of it — they draw in separately (see below).
 
    ```tsx
    <div style={{
      position: 'absolute', top: '6%', right: '4%', width: '82%', height: '88%',
      borderRadius: 24, overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.45)',
    }}>
-     {/* scene wrapper: ONE transform moves imagery + in-frame text together */}
+     {/* scene wrapper: the transform that moves the imagery on any backdrop motion */}
      <div style={{ width: '100%', height: '100%',
                    transform: `scale(${z})`, transformOrigin: '30% 40%' }}>
        <Img src={staticFile('<slug>.png')}
             style={{ width: '100%', height: '100%', objectFit: 'cover',
                      objectPosition: '30% 40%' /* crop onto the focal area */ }} />
-       {/* headline lives HERE (text-shadow, no scrim), inside the scene wrapper (see step 3) */}
      </div>
    </div>
    ```
@@ -104,25 +104,13 @@ Layer order (document order, no z-index games):
    Pattern 5) over an already-fully-visible, static backdrop, then settle. This holds
    regardless of animation intent — the backdrop is the still stage; only the overlay moves.
 
-3. **Headline over the image (inside the scene wrapper)** — a short bold heading (brand heading font, white) rendered
-   as a UI text layer on top of the backdrop. The illustration owns this text — it is NOT
-   baked into the image. Guarantee contrast with a text-shadow or a small local panel
-   behind the text — NEVER a scrim/gradient over the image (keep it at full brightness):
-
-   ```tsx
-   <h1 style={{
-     position: 'absolute', /* over a calm region of the backdrop */
-     fontFamily: 'Overpass, sans-serif', fontWeight: 800, color: '#fff',
-     textShadow: '0 2px 24px rgba(0,0,0,0.55)', // text-shadow only — do NOT darken the image
-     margin: 0,
-   }}>URBAN BIKES</h1>
-   ```
-
-4. **Selection marquee around the headline** — dashed accent border + 4 square corner
-   handles, sized slightly larger than the headline box. **This in-scene selection
-   affordance is the ONLY place a dashed border is allowed** — it depicts content
-   selection (design-tool language), not panel chrome. Panels, bubbles, and badges never
-   use dashed outlines (retired style — see `ionos-ai-features`):
+3. **Selection marquee over a calm negative-space region of the imagery** — the
+   composition plan's stated calm surface/region (no marketing headline is rendered
+   there — see `shared-brief-parsing.md` no-marketing-heading) gets a dashed accent
+   border + 4 square corner handles, sized to comfortably wrap that region. **This
+   in-scene selection affordance is the ONLY place a dashed border is allowed** — it
+   depicts content selection (design-tool language), not panel chrome. Panels, bubbles,
+   and badges never use dashed outlines (retired style — see `ionos-ai-features`):
 
    ```tsx
    // ACCENT: the brand's AI-generating accent purple (uds-style-guide — for IONOS this is
@@ -133,7 +121,7 @@ Layer order (document order, no z-index games):
    // ionos-wireframe-image-backdrop.md / uds-style-guide ionos-ai-features).
    const ACCENT = '#8212C2';
    <div style={{
-     position: 'absolute', inset: -14, // wraps the headline wrapper
+     position: 'absolute', inset: -14, // wraps the selected negative-space region
      border: `2px dashed ${ACCENT}`, pointerEvents: 'none',
    }}>
      {(['top','bottom'] as const).map(v => (['left','right'] as const).map(h => (
@@ -145,7 +133,7 @@ Layer order (document order, no z-index games):
    </div>
    ```
 
-5. **Floating feature panel** — a compact panel half-overlapping the backdrop card's edge
+4. **Floating feature panel** — a compact panel half-overlapping the backdrop card's edge
    on the negative-space side, containing the feature's UI (segmented control, radio list,
    primary CTA — real UDS components or tight sketches). **Panel chrome follows the
    Floating Highlight Card template (`ionos-wireframe-ai-animations.md`): a borderless
@@ -175,7 +163,7 @@ Layer order (document order, no z-index games):
    always use `var(--color-ai-subtle-start)`/`var(--color-ai-subtle-end)` (auto light/dark)
    rather than a hardcoded light-only fallback.
 
-6. **Connector line** — a thin line from the panel's edge to the headline's marquee,
+5. **Connector line** — a thin line from the panel's edge to the selection marquee,
    ending in a filled dot. **The connector is ALWAYS axis-aligned — a single horizontal
    or vertical segment. Slanted/diagonal connectors are not allowed.** Plan the layout
    so the panel's anchor point and the marquee's edge midpoint share the same `y`
@@ -197,8 +185,8 @@ Layer order (document order, no z-index games):
        div meeting at the corner — still never a tilted segment. */}
    ```
 
-7. **Optional accent badge** — one small circular badge (brand accent fill, icon +
-   1-2 words like "KI Text") near the headline:
+6. **Optional accent badge** — one small circular badge (brand accent fill, icon +
+   1-2 words like "KI Text") near the marquee:
 
    ```tsx
    <div style={{
@@ -216,8 +204,9 @@ Animation hooks (reference the patterns in `ionos-wireframe-micro-animations.md`
 re-invent them): panel enters with **Pattern 5 — Element Fly-In** (`flyIn`); the marquee
 draws in right after (animate `strokeDashoffset` on an SVG rect, or fade + scale the dashed
 div from 1.04→1); the badge pops last (scale 0.6→1 overshoot, same `flyIn` curve); the
-connector line can grow from the panel toward the dot. Backdrop and headline are present
-from frame 0.
+connector line can grow from the panel toward the dot. The backdrop (including the calm
+region the marquee wraps) is present from frame 0; only the marquee, panel, badge, and
+connector animate in.
 
 ## Style: image-backdrop full-bleed
 
@@ -243,8 +232,9 @@ Layer order:
    surface anatomy: white/light background, rounded corners (16-20px), soft shadow
    (`0 24px 64px rgba(0,0,0,0.3)`).
 
-   - **Primary card (always):** a mini product/feature card — title, supporting line, CTA
-     button, and media slots. The same catalog image may be reused INSIDE the card's media
+   - **Primary card (always):** a compact functional UI card with status/label elements, a
+     CTA button, and optional media slots. No marketing headline/subline — only functional
+     labels and UI chrome. The same catalog image may be reused INSIDE the card's media
      slots (`<Img src={staticFile('<slug>.png')} style={{ objectFit: 'cover' }} />` in a
      small rounded container) — that reuse is intentional, not a bug.
    - **Mini-toolbar (optional):** a small horizontal pill of icon buttons with one prominent
@@ -297,14 +287,15 @@ the still backdrop.
 Story: the product feature IS a full interface (e.g. a CMS/editor shell), and the
 generated imagery serves as that interface's content. Reference 64:320: a dark navy
 brand-gradient base; the main interface wireframe (editor shell with a left icon sidebar)
-is the centerpiece; the imagery sits inside it as the hero media with a welcome headline
-over it; a prompt bubble and a mini-toolbar float over the wireframe's edge.
+is the centerpiece; the imagery sits inside it as the hero media, with a calm negative-space
+region left inside that slot (no rendered marketing headline — see `shared-brief-parsing.md`
+no-marketing-heading); a prompt bubble and a mini-toolbar float over the wireframe's edge.
 
 This is a **normal wireframe composition** — build the interface itself per the standard
 rules and do not re-invent them here:
 
 - `ionos-wireframe-composition.md` — layout patterns, component selection, placeholder
-  content, headline-over-media treatment.
+  content, hero-media treatment.
 - `ionos-wireframe-asset-integration.md` — catalog asset placement
   (`<Img src={staticFile('<slug>.png')} />`, never plain `<img>`).
 - `ionos-wireframe-product-frame.md` — the product shell's color system (sidebar,
@@ -319,10 +310,10 @@ What THIS rule adds on top:
 2. **Main interface wireframe** — the centerpiece, covering roughly **70-85% of the
    canvas**, sitting on the gradient root with rounded corners and a soft shadow.
 3. **The catalog image is the hero/media asset INSIDE the wireframe** — placed in the
-   interface's hero/media slot with `objectFit: 'cover'`, with the headline text rendered
-   over it per the composition rules (welcome headline, contrast via text-shadow or a
-   local panel — never a scrim over the image). Placeholder bars/content blocks sit below the hero, per the product-frame
-   placeholder palette.
+   interface's hero/media slot with `objectFit: 'cover'`. Leave a calm, uncluttered
+   negative-space region within that slot — no marketing headline is rendered over it (see
+   `shared-brief-parsing.md` no-marketing-heading); never a scrim over the image. Placeholder
+   bars/content blocks sit below the hero, per the product-frame placeholder palette.
 4. **1-2 floating highlight fragments** overlapping the wireframe's edge — a prompt
    bubble and/or a small mini-toolbar pill, per the **Floating Highlight Card template**
    (`ionos-wireframe-ai-animations.md`): borderless glass surface + plain neutral drop
@@ -341,7 +332,7 @@ conveyed by **2–3 small elements that FLOAT and INTERSECT** the card:
 - they overlap the card's **edges/corners** AND/OR rest **ON the image** over its quiet regions —
   e.g. an AI/feature badge on a corner, a labelled chip (icon + 1–3 words) on an edge, a compact
   brand-blue icon pill (2–3 glyphs) on the image, and optionally a small info panel (tag chips +
-  short headline + AI CTA) intersecting one edge;
+  panel label + AI CTA) intersecting one edge;
 - each floating element carries a **large, prominent neutral drop shadow** (e.g.
   `0 16px 40px rgba(0,0,0,0.22)`) so it reads as clearly **elevated above the card** — a shadow,
   **never an AI glow** (the only AI glow is on the AI CTA);
@@ -456,19 +447,20 @@ imagery — never a brand-default background fighting the photo:
   component colors stay tokenized. Harmony lives in the ROOT background and subtle shadow
   tints — not in recolored UI, and NEVER in a scrim/overlay/darkening layer over the image.
 - **Contrast supervision**: NEVER darken the backdrop image — no scrim, overlay, tint, or
-  gradient over it; keep it at FULL brightness. Guarantee text contrast with a text-shadow
-  or a local solid/glass panel behind the headline/text ONLY (sized to the text, not the
-  image). Glow shadows may tint toward the dominant hue at low opacity instead of pure black.
+  gradient over it; keep it at FULL brightness. Guarantee contrast for any functional UI
+  text (panel captions, buttons, badges) with a text-shadow or a local solid/glass panel
+  behind that text ONLY (sized to the text, not the image). Glow shadows may tint toward
+  the dominant hue at low opacity instead of pure black.
 - When the contract says "no measured imagery tones available", use the brand's dark
   navy/base family and keep contrast high.
 
 ## Verifying
 
 Verify with the still gate: frame 0 shows the backdrop imagery plus the floating UI cleanly
-composed — pointer style additionally shows the headline, marquee, panel, and connector;
+composed — pointer style additionally shows the marquee, panel, and connector;
 full-bleed style shows the cluster over negative space with the photo's focal subject fully
 visible; interface-asset style shows the full interface wireframe on the gradient root with
-the imagery already filling its hero/media slot, the headline over it, and the floating
+the imagery already filling its hero/media slot and the floating
 fragment(s) overlapping the wireframe's edge; floating-card style shows the single dominant
 image card with its 2-3 intersecting elements already settled; product-pop-out shows the
 interface fully laid out with the character's head already clear of its top edge; device-mockup
