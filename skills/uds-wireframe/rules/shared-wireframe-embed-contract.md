@@ -232,8 +232,9 @@ Layer order:
    surface anatomy: white/light background, rounded corners (16-20px), soft shadow
    (`0 24px 64px rgba(0,0,0,0.3)`).
 
-   - **Primary card (always):** a mini product/feature card — title, supporting line, CTA
-     button, and media slots. The same catalog image may be reused INSIDE the card's media
+   - **Primary card (always):** a compact functional UI card with status/label elements, a
+     CTA button, and optional media slots. No marketing headline/subline — only functional
+     labels and UI chrome. The same catalog image may be reused INSIDE the card's media
      slots (`<Img src={staticFile('<slug>.png')} style={{ objectFit: 'cover' }} />` in a
      small rounded container) — that reuse is intentional, not a bug.
    - **Mini-toolbar (optional):** a small horizontal pill of icon buttons with one prominent
@@ -331,7 +332,7 @@ conveyed by **2–3 small elements that FLOAT and INTERSECT** the card:
 - they overlap the card's **edges/corners** AND/OR rest **ON the image** over its quiet regions —
   e.g. an AI/feature badge on a corner, a labelled chip (icon + 1–3 words) on an edge, a compact
   brand-blue icon pill (2–3 glyphs) on the image, and optionally a small info panel (tag chips +
-  short headline + AI CTA) intersecting one edge;
+  panel label + AI CTA) intersecting one edge;
 - each floating element carries a **large, prominent neutral drop shadow** (e.g.
   `0 16px 40px rgba(0,0,0,0.22)`) so it reads as clearly **elevated above the card** — a shadow,
   **never an AI glow** (the only AI glow is on the AI CTA);
