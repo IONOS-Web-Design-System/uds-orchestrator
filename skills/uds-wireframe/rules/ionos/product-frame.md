@@ -19,11 +19,11 @@ Secondary floating elements (tool chips, stat pills) are allowed as decoration b
 
 The product shell and the client-app zone are two visually distinct layers. Never mix their colors.
 
-**Base shell follows `shared-wireframe-surface-theme.md`; do NOT hardcode a dark panel on a
+**Base shell follows `shared/surface-theme.md`; do NOT hardcode a dark panel on a
 light render.** The shell's frame/sidebar/panel backgrounds derive from `colorScheme`-resolved
 UDS surface tokens, and **light is the default**. Render the dark-navy shell ONLY when
 `colorScheme === 'dark'`, or the brief is explicitly decorative/cinematic (see
-`ionos-wireframe-decorative-mode`) — a generic "AI feature" or "premium" brief is NOT, by
+`ionos/decorative-mode.md`) — a generic "AI feature" or "premium" brief is NOT, by
 itself, a dark request.
 
 ### Product shell — light default (`colorScheme !== 'dark'`, non-decorative)
@@ -167,7 +167,7 @@ If TypeScript reports an error on an icon import, the **path is wrong** — fix 
 - `ionos-light` has blue fills → readable on **light/white** backgrounds
 - `ionos-dark` has white fills → readable on **dark** backgrounds
 
-Pick the variant per `colorScheme`, not a fixed default (see `shared-wireframe-surface-theme.md`
+Pick the variant per `colorScheme`, not a fixed default (see `shared/surface-theme.md`
 "Match the brandmark to the scheme"): the product shell is light by default, so `ionos-light` is
 the shell's default brandmark; `ionos-dark` applies only in the dark shell variant.
 
@@ -231,7 +231,7 @@ here, the product shell is dark while the client-app zone stays light. Never mix
 - Floating pop-out / glass elements over dark: `rgba(255,255,255,0.85–0.96)` fill — keep alpha high or the dark shell bleeds through as grey
 
 **Icon colour inside panels**: key on the container's own background, not the outer gradient.
-Match the brandmark to the scheme (per `shared-wireframe-surface-theme.md`): `ionos-light`
+Match the brandmark to the scheme (per `shared/surface-theme.md`): `ionos-light`
 (blue fills) on the light shell default and inside the light client-app zone; `ionos-dark`
 (white fills) only on the dark shell variant.
 
@@ -243,7 +243,7 @@ The AI feature highlight is a **sibling of the product frame at the `AbsoluteFil
 ```tsx
 // Floating highlight card — pill-shaped glass, NO border, plain neutral drop shadow
 // (no AI glow — the AI glow is on the CTA button only). For the animated
-// pulse see ionos-wireframe-ai-animations.md (AIFloatingHighlight).
+// pulse see ionos/ai-animations.md (AIFloatingHighlight).
 <div style={{
   position: 'absolute',
   borderRadius: 40,                          // large pill — NOT 16
@@ -585,7 +585,7 @@ connector line links the card's edge to the feature point inside the frame.
 
 **This pattern is for pure illustration only.** It does NOT require a generated background
 image. For the hybrid equivalent (connector from a floating panel to a headline in a photo),
-see `ionos-wireframe-image-backdrop.md` "Style: image-backdrop with feature pointer."
+see `ionos/image-backdrop.md` "Style: image-backdrop with feature pointer."
 
 ### DOM structure
 
@@ -661,7 +661,7 @@ see `ionos-wireframe-image-backdrop.md` "Style: image-backdrop with feature poin
   15–20 frames, `easing: linear`).
 - Card flies in from outside the canvas edge, arriving as the line finishes growing
   (+5 frame stagger after line completes). Use `AIFloatingHighlight` spring entrance from
-  `ionos-wireframe-ai-animations.md`.
+  `ionos/ai-animations.md`.
 - Feature target indicator: fade in or scale 0.8→1 simultaneously with the line growth.
 
 ---
@@ -669,8 +669,8 @@ see `ionos-wireframe-image-backdrop.md` "Style: image-backdrop with feature poin
 ## Panel chrome rules (applies to ALL patterns in this file)
 
 These rules govern the visual treatment of ALL floating cards, prompt bubbles, mini-toolbars,
-and highlight elements in every pattern above. They also appear in `ionos-wireframe-ai-animations.md`
-and `ionos-wireframe-image-backdrop.md`; stated here so pure-illustration jobs always have them.
+and highlight elements in every pattern above. They also appear in `ionos/ai-animations.md`
+and `ionos/image-backdrop.md`; stated here so pure-illustration jobs always have them.
 
 **No AI glow on panel/card chrome.** The only AI glow in any composition is on the CTA
 button inside the card — the `linear-gradient(45deg, #095BB1, #D746F5)` fill plus

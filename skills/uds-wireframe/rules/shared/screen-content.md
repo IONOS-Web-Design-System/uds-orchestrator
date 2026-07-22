@@ -15,7 +15,7 @@ the screen content — a real device is added around it later, so:
 - **On-brand.** Use the brand palette and type from the uds-style-guide skill (reference color
   semantically via tokens — never hardcode a hex here). Apply the AI gradient only for a genuine
   AI affordance, per uds-style-guide.
-- **Base surface theme follows `colorScheme`.** Per `shared-wireframe-surface-theme`, theme the
+- **Base surface theme follows `colorScheme`.** Per `shared/surface-theme.md`, theme the
   bare interface's surfaces with the `colorScheme`-resolved UDS surface/text tokens — light by
   default; do NOT hardcode a dark panel background unless `colorScheme='dark'` or the brief asks
   for dark.

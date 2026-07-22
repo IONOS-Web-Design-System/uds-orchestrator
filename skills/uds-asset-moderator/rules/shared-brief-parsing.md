@@ -57,7 +57,7 @@ Do NOT instruct any generator to render the brief's Context / heading / subheadi
   composites). The host component renders the heading/subheading beside the asset, so the asset must
   not carry it — not even a synthesized restatement. Leave the headline slot out and convey the
   message through the composition (interface, scene, badges, functional micro-labels). See
-  `uds-wireframe/rules/shared-wireframe-no-marketing-heading.md`. (An author's *explicit*
+  `uds-wireframe/rules/shared/no-marketing-heading.md`. (An author's *explicit*
   render-this-text instruction is still honoured per "Never suppress explicitly-requested text".)
 
 ## Structural markers are chrome — consume them as intent, never draw them

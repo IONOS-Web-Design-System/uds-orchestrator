@@ -17,7 +17,7 @@ live in**: classify `illustration`, and carry the claim as the card's **function
 labelled badge/indicator/status chip and the supporting visual — composed as a compact UDS card
 (the prescribed icon, if useful, becomes one small element inside the card, not the whole
 asset). Do NOT render it as a marketing headline or subline/tagline — the host provides the
-heading; see `rules/shared-brief-parsing.md` and `uds-wireframe/rules/shared-wireframe-no-marketing-heading.md`. Quote the decisive signal (the value-prop or copy the asset must convey) in
+heading; see `rules/shared-brief-parsing.md` and `uds-wireframe/rules/shared/no-marketing-heading.md`. Quote the decisive signal (the value-prop or copy the asset must convey) in
 `rationale`, the same discipline as the mode decision. A genuine mark with NO message — a
 favicon, a decorative spot illustration, a logo lockup — correctly stays `image`; this reframe
 applies only when a *message* is the point. **When the claim arrives as marker-identified

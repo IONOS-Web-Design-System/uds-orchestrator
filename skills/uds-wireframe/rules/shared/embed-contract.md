@@ -9,7 +9,7 @@ is the exact geometry to build. This file is geometry-only: brand colour always 
 brand AI gradient") and resolve the actual value per the active `brand` at generation time.
 
 The embedded product interface's **base surface theme** (root/panels/cards/text) follows
-`shared-wireframe-surface-theme`: bind it to the `colorScheme`-resolved UDS surface tokens —
+`shared/surface-theme.md`: bind it to the `colorScheme`-resolved UDS surface tokens —
 do NOT hardcode a dark panel background/gradient to make it look premium. Light is the default;
 a dark base only when `colorScheme='dark'` or the brief asks for dark. (The AI gradient accents
 are independent — see that rule.)
@@ -118,7 +118,7 @@ Layer order (document order, no z-index games):
    // only — never the AI CTA gradient itself.
    // AI 'generating'-text accent — no dedicated CSS token exists for this specific accent;
    // resolve the concrete value from the brand rule (IONOS: #8212C2, see
-   // ionos-wireframe-image-backdrop.md / uds-style-guide ionos-ai-features).
+   // ionos/image-backdrop.md / uds-style-guide ionos-ai-features).
    const ACCENT = '#8212C2';
    <div style={{
      position: 'absolute', inset: -14, // wraps the selected negative-space region
@@ -136,13 +136,13 @@ Layer order (document order, no z-index games):
 4. **Floating feature panel** — a compact panel half-overlapping the backdrop card's edge
    on the negative-space side, containing the feature's UI (segmented control, radio list,
    primary CTA — real UDS components or tight sketches). **Panel chrome follows the
-   Floating Highlight Card template (`ionos-wireframe-ai-animations.md`): a borderless
+   Floating Highlight Card template (`ionos/ai-animations.md`): a borderless
    glass surface with a plain neutral drop shadow (no AI glow — AI glow is on the CTA
    only) — NO border of any kind (dashed AND gradient borders are retired panel styles).
    The AI gradient belongs to the CTA inside, not the panel chrome.**
 
    ```tsx
-   // Floating Highlight Card chrome (see ionos-wireframe-ai-animations.md for the full
+   // Floating Highlight Card chrome (see ionos/ai-animations.md for the full
    // animated version with enter spring):
    <div style={{
      position: 'absolute', left: '5%', top: '30%', width: 280,
@@ -200,7 +200,7 @@ Layer order (document order, no z-index games):
    </div>
    ```
 
-Animation hooks (reference the patterns in `ionos-wireframe-micro-animations.md` — do not
+Animation hooks (reference the patterns in `ionos/micro-animations.md` — do not
 re-invent them): panel enters with **Pattern 5 — Element Fly-In** (`flyIn`); the marquee
 draws in right after (animate `strokeDashoffset` on an SVG rect, or fade + scale the dashed
 div from 1.04→1); the badge pops last (scale 0.6→1 overshoot, same `flyIn` curve); the
@@ -294,11 +294,11 @@ no-marketing-heading); a prompt bubble and a mini-toolbar float over the wirefra
 This is a **normal wireframe composition** — build the interface itself per the standard
 rules and do not re-invent them here:
 
-- `ionos-wireframe-composition.md` — layout patterns, component selection, placeholder
+- `ionos/composition.md` — layout patterns, component selection, placeholder
   content, hero-media treatment.
-- `ionos-wireframe-asset-integration.md` — catalog asset placement
+- `ionos/asset-integration.md` — catalog asset placement
   (`<Img src={staticFile('<slug>.png')} />`, never plain `<img>`).
-- `ionos-wireframe-product-frame.md` — the product shell's color system (sidebar,
+- `ionos/product-frame.md` — the product shell's color system (sidebar,
   panels, header actions) and the one-frame-one-highlight composition rule.
 
 What THIS rule adds on top:
@@ -316,7 +316,7 @@ What THIS rule adds on top:
    bars/content blocks sit below the hero, per the product-frame placeholder palette.
 4. **1-2 floating highlight fragments** overlapping the wireframe's edge — a prompt
    bubble and/or a small mini-toolbar pill, per the **Floating Highlight Card template**
-   (`ionos-wireframe-ai-animations.md`): borderless glass surface + plain neutral drop
+   (`ionos/ai-animations.md`): borderless glass surface + plain neutral drop
    shadow (no AI glow — AI glow is on the CTA only), no border of any kind. The prompt
    bubble uses `var(--surface-base)` (reserve `ai-subtle` for the AI 'thinking' indicator
    only) with a muted caption and a gradient CTA (e.g. "✨ Seite erstellen" —
@@ -357,7 +357,7 @@ Layer order:
    past the TOP edge only, never the reserved right/bottom margin.
 2. **Product view** — a UDS-component wireframe of the brand's builder/editor: a top bar (e.g.
    a Publish action), a left checklist, and a website canvas. Build it per the standard
-   wireframe composition rules (`ionos-wireframe-composition.md`, `ionos-wireframe-product-frame.md`).
+   wireframe composition rules (`ionos/composition.md`, `ionos/product-frame.md`).
    Use `staticFile()` for any in-product hero/media slot the supplied catalog image belongs
    in — **never a generated image** in that slot. The interface is the DOMINANT full-frame
    base, laid out across (roughly) the full canvas.

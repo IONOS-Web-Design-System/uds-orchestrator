@@ -17,7 +17,7 @@ model's aesthetic choice. This is a form decision the design system owns, not th
 - **Light is the default.** `colorScheme` defaults to `light` → a light interface base.
   Render a **dark** interface base ONLY when `colorScheme === 'dark'`, OR when the brief
   explicitly asks for a dark / decorative / cinematic look (decorative mode — see
-  `ionos-wireframe-decorative-mode`). A generic "hero"/"premium"/AI brief is NOT a dark
+  `ionos/decorative-mode.md`). A generic "hero"/"premium"/AI brief is NOT a dark
   request.
 - **AI accents are independent of the base theme.** The brand AI gradient on CTAs / prompt
   bubbles, the sparkle mark, and the `ai-subtle` 'thinking' surface still apply for a genuine
