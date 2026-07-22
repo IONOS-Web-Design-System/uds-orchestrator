@@ -439,7 +439,7 @@ When the AI feature is an **inline editing action** (text selection, image resiz
     top: '50%', transform: 'translateY(-50%)',
     zIndex: 100,
     borderRadius: 24,
-    background: 'rgba(255, 255, 255, 0.97)',
+    background: 'var(--surface-subtle)',
     boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
     // contains tone tabs, option checkboxes, AI CTA button
   }}>

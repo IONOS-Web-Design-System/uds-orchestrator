@@ -130,8 +130,10 @@ control*).
 1. **Main frame = the OUTPUT.** What the feature PRODUCES — the generated
    app, the populated dashboard, the deployed page, the finished card.
    Typically a browser / editor / app-shell mockup. Dense, content-rich,
-   the "magic result." Place center-right of the canvas. Darker surfaces
-   are typical for AI/premium contexts (deep navy gradient).
+   the "magic result." Place center-right of the canvas. The base surface
+   theme follows `shared-wireframe-surface-theme.md` — light by default,
+   dark ONLY when `colorScheme === 'dark'` or the brief is explicitly
+   decorative. AI accents (gradient, sparkle) apply on either base.
 
 2. **Pop-out = the INPUT / affordance.** What the user TYPED, CLICKED,
    DRAGGED, or SAID to trigger the result. The pop-out is ALWAYS the
@@ -149,11 +151,12 @@ control*).
    sits outside. A pop-out floating clear of the main frame is the wrong
    pattern. A pop-out fully inside reads as a modal — also wrong.
 
-4. **Contrast carries the elevation, not borders.** Light pop-out on dark
-   main frame (the IONOS-AI standard, as in Tab 2): white surface, soft
-   drop shadow, no border. Dark pop-out on light main frame is the inverse
-   for light-themed compositions. Avoid thick outlines or harsh strokes;
-   let the value contrast do the layering work.
+4. **Contrast carries the elevation, not borders.** The pop-out uses surface
+   tokens that contrast with the main frame's base theme: on a light main
+   frame (the default), use a lighter pop-out; on a dark main frame
+   (when `colorScheme === 'dark'` or decorative), use a white/bright pop-out.
+   Soft drop shadow, no border — let the value contrast do the layering
+   work, not outlines or harsh strokes.
 
 5. **Placement and aspect:**
    - **Position:** left-edge intersection, vertically centered or slightly
