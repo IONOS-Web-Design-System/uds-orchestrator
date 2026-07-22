@@ -24,15 +24,17 @@ Identify the target brand first, then go to the matching rule file:
 |-------|------|-----------|--------|
 | **ionos** | Overpass / Open Sans | `rules/ionos-color-palette.md`, `rules/ionos-typography.md`, `rules/ionos-assets.md` | Full |
 | **strato** | Poppins | `rules/strato.md` | Full |
-| **fasthosts** | Poppins | `rules/fasthosts.md` | Stub |
+| **fasthosts** | AntennaCond | `rules/fasthosts.md` | Stub |
 | **homepl** | Azo Sans | `rules/homepl.md` | Full |
-| **strefa** | Lato | `rules/strefa.md` | Stub |
-| **udag** | Nunito Sans | `rules/udag.md` | Stub |
-| **world4you** | Nunito Sans | `rules/world4you.md` | Stub |
-| **arsys** | Inter | `rules/arsys.md` | Stub |
+| **strefa** | Montserrat | `rules/strefa.md` | Stub |
+| **udag** | Inter | `rules/udag.md` | Stub |
+| **world4you** | Inter / Satoshi | `rules/world4you.md` | Stub |
+| **arsys** | Open Sans / FS Blake | `rules/arsys.md` | Stub |
 
 "Full" = Figma-sourced colors + typography + principles documented.  
 "Stub" = font known; colors and detailed guidelines need Figma data to complete. For stub brands, read `rules/shared-identity-principles.md` for universal principles and note that brand-specific color data is not yet available.
+
+Per-brand fonts/markets: see `rules/shared-brand-overview.md` (authoritative) and each brand's rule file.
 
 ## Reading Order
 
