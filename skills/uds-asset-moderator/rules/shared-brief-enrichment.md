@@ -13,18 +13,20 @@ copy (a headline or value line, e.g. a German claim like "DSGVO-konform, Ihre Da
 Deutschland") — do NOT faithfully shrink it to a text-less graphic. An `image` feature must
 omit all text (image models garble glyphs), so routing such a request to `image` throws the
 message away and yields a generic icon. Instead **reframe it to a content card the message can
-live in**: classify `illustration`, and carry the claim into real copy slots — a headline, a
-short subline, and a labelled badge/indicator/status chip — composed as a compact UDS card
+live in**: classify `illustration`, and carry the claim as the card's **functional content** — a
+labelled badge/indicator/status chip and the supporting visual — composed as a compact UDS card
 (the prescribed icon, if useful, becomes one small element inside the card, not the whole
-asset). Quote the decisive signal (the value-prop or copy the asset must convey) in
+asset). Do NOT render it as a marketing headline or subline/tagline — the host provides the
+heading; see `rules/shared-brief-parsing.md` and `uds-wireframe/rules/shared-wireframe-no-marketing-heading.md`. Quote the decisive signal (the value-prop or copy the asset must convey) in
 `rationale`, the same discipline as the mode decision. A genuine mark with NO message — a
 favicon, a decorative spot illustration, a logo lockup — correctly stays `image`; this reframe
 applies only when a *message* is the point. **When the claim arrives as marker-identified
 component copy** (a `Context:` line, a `#`/`##` heading, or description — see
-`rules/shared-brief-parsing.md`), the copy slots carry a
-**synthesized, paraphrased-into-English rendering of the message** (or a generic placeholder), NEVER
-the brief's verbatim heading/subheading/description — the German example above names the *message
-to convey*, not text to reproduce. Free-form (unmarked) requests are unaffected.
+`rules/shared-brief-parsing.md`), any functional copy slots (badges, status pills, micro-labels)
+carry a **synthesized, paraphrased-into-English** rendering (or a generic placeholder), NEVER the
+brief's verbatim heading/subheading/description AND never a marketing headline/subline — the German
+example above names the *message to convey*, not text to reproduce. Free-form (unmarked) requests
+are unaffected.
 
 A good `feature` states, in this order, only what applies:
 1. **Focal subject** — name it concretely (not "a scene" but "a small bakery storefront at
