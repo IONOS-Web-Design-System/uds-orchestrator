@@ -118,6 +118,8 @@ highlight. This is a sanctioned badge use per `uds-style-guide/rules/ionos-ai-fe
   service icons, connectors, and card/panel chrome stay on brand tokens (brand blue /
   `surface-*`) — do NOT fill them with the gradient (a navy "premium" chip with no gradient
   is NOT the AI signature either).
+- **Size it as an accent, not the hero:** a compact pill (~24–32px tall) or a small circular
+  badge — it annotates the composition; it must not out-size the central motif / cropped frame.
 - Do NOT substitute brand sky/cyan (`#11C7E6`) for the AI signal — that is a generic CTA
   colour, not the AI signature (see `ionos-ai-features`). An AI feature with no gradient
   anywhere is a miss.
