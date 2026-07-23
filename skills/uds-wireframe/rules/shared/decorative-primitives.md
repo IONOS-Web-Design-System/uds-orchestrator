@@ -81,7 +81,7 @@ Size affects everything: larger means more sections, more glass cards, more floa
 [optional: table or secondary section]
 [3–4 floating pop-out elements]
 [cursor flow animation + 2 card reactions]
-[typography anchor: 20–28px, Overpass, prominent position]
+[typography anchor: 20–28px, the brand's display font (see the brand's typography rule — `uds-style-guide/rules/ionos-typography.md` for IONOS), prominent position]
 ```
 
 **Medium (500px):**
@@ -90,7 +90,7 @@ Size affects everything: larger means more sections, more glass cards, more floa
 [1 main content section — 2 columns or 3 cards]
 [1–2 floating pop-out elements]
 [cursor flow or card reaction — pick one]
-[typography anchor: 16–20px, Overpass]
+[typography anchor: 16–20px, the brand's display font (see the brand's typography rule — `uds-style-guide/rules/ionos-typography.md` for IONOS)]
 ```
 
 **Small (250px):**
