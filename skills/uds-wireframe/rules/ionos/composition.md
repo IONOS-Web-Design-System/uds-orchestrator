@@ -199,7 +199,7 @@ function StatusBadge({ status }: { status: keyof typeof STATUS_STYLES }) {
   return (
     <span style={{
       backgroundColor: s.bg,
-      // Dark Midnight text via a semantic token (or hex '#001B41') — NOT a Figma path
+      // Dark Midnight text via a token (hex: ionos-color-palette.md) — NOT a Figma path
       color: 'var(--text-base)',
       borderLeft: `3px solid ${s.token}`,
       fontFamily: 'Open Sans, sans-serif',
@@ -236,11 +236,11 @@ The hex fallback does not save you (a malformed-name `var()` fails before the fa
 | Need | Use this |
 |------|----------|
 | White (text/icon on dark) | `var(--text-base-invert)` or hex `#fff` |
-| Default dark screen text | `var(--text-base)` or hex `#001B41` |
+| Default dark screen text | `var(--text-base)` |
 | Default card / surface | `var(--surface-base)` |
 | Dark / inverted surface | `var(--surface-base-invert)` (pair with `--text-base-invert`) |
 | Subtle backdrop | `var(--surface-subtlest)` |
-| A specific brand colour | the literal **hex** from uds-style-guide (e.g. `#003D8F`) |
+| A specific brand colour | the literal hex — see `ionos-color-palette.md` |
 
 ```tsx
 // ✅ Correct — semantic token, or hex. Pair surface + its foreground for contrast.

@@ -50,7 +50,7 @@ accent; resolve the concrete value from the brand's color rule (e.g. `ionos/prod
     width: 10, height: 10, borderRadius: '50%', background: ACCENT,
   }} />
 
-  {/* 3 — floating highlight card (Floating Highlight Card anatomy — see panel chrome rules below) */}
+  {/* 3 — floating highlight card (Floating Highlight Card anatomy + panel chrome rules — see shared/floating-card.md) */}
   <div style={{
     position: 'absolute',
     left: CARD_LEFT_EDGE,
@@ -88,6 +88,6 @@ accent; resolve the concrete value from the brand's color rule (e.g. `ionos/prod
 - Connector line grows from the feature point toward the card (`width: 0 → full` over
   15–20 frames, `easing: linear`).
 - Card flies in from outside the canvas edge, arriving as the line finishes growing
-  (+5 frame stagger after line completes). Use `AIFloatingHighlight` spring entrance from
-  `ionos/ai-animations.md`.
+  (+5 frame stagger after line completes). Use the Floating Highlight Card's spring
+  fly-in entrance — see `shared/floating-card.md`.
 - Feature target indicator: fade in or scale 0.8→1 simultaneously with the line growth.

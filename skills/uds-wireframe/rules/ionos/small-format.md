@@ -108,11 +108,9 @@ pulse outward, logos ease/float in, a lock clicks once. Frame-driven only (`useC
 + `interpolate`) — never CSS transitions. A still `illustration` intent needs no motion.
 
 **Looping motion goes on non-text layers only.** Float/bob/pulse the icons, logos, rings, and
-connectors — NOT a chip, pill, label, or any element that renders readable text. A perpetual
-`Math.sin`/`Math.cos` float (or an unclamped `spring()`) on a text-bearing element re-rasterizes
-its glyphs every frame and shimmers. Text chips fly in once and then hold still; if a chip must
-appear to float, float a sibling backdrop layer and keep the text layer static. This is
-gate-enforced (`text-stability`) — see remotion-best-practices "Text rendering stability".
+connectors — NOT a chip, pill, label, or any element that renders readable text. Text-stability
+(never animate a transform on text-bearing layers; avoid shimmer/sub-pixel drift): see
+remotion-best-practices `shared-motion-text.md` (always in effect).
 
 ## Hybrid in small format (generated image present)
 

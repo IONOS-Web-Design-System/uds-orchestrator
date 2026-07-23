@@ -22,9 +22,9 @@ import { svgData as chatAiSvg }      from '@ionos-web-design-system/icon/system/
 import { svgData as envelopeAiSvg }  from '@ionos-web-design-system/icon/system/filled-envelope-ai';
 // ✗ star / filled-star are NOT AI icons   ✗ filled-ai-phone not yet in package
 
-const AI_GRADIENT    = 'linear-gradient(45deg, #095BB1, #D746F5)'; // CTA — static 45°, NEVER rotate
-const AI_PRIMARY_END = '#D746F5';  // text/image bars
-const AI_LABEL_COLOR = '#8212C2';  // purple-600 — AI "generating" text colour (transient; revert to var(--text-base)/var(--text-subtle) once generation completes)
+const AI_GRADIENT    = 'linear-gradient(45deg, #095BB1, #D746F5)'; // CTA — static 45°, NEVER rotate. #095BB1 = var(--color-ai-primary-start), #D746F5 = var(--color-ai-primary-end) — hardcode in Remotion (CSS custom properties may not resolve in a render); see uds-style-guide/rules/ionos-ai-features.md
+const AI_PRIMARY_END = '#D746F5';  // var(--color-ai-primary-end) — text/image bars (hardcode in Remotion; see uds-style-guide/rules/ionos-ai-features.md)
+const AI_LABEL_COLOR = '#8212C2';  // purple-600 — AI "generating" text colour; see uds-style-guide/rules/ionos-ai-features.md (transient; revert to var(--text-base)/var(--text-subtle) once generation completes)
 
 // Gradient-filled AI icon — background:gradient + maskImage
 function aiIconStyle(svgData: string, size: number): React.CSSProperties {
@@ -105,18 +105,10 @@ export const AIPillButton: React.FC<{
 
 ## Floating Highlight Card
 
-Used as the **main highlight element** floating outside the product frame. Pill-shaped glass card with a plain dim drop shadow — **no border, no AI glow**. Based on Figma node 64:320. The AI affordance is conveyed by the gradient CTA button inside, not by the card's shadow.
+Static card chrome (surface, shadow, anatomy): see `shared/floating-card.md`.
 
-> **HARD RULE — Remotion:** the card background is the **opaque surface token**
-> `var(--surface-subtle)` (the card is solid, not glass — no `backdropFilter` on the card). The
-> translucent `rgba(244, 247, 250, 0.88)` + `backdropFilter` glass treatment is reserved for the
-> **AI generation area** (Templates 2 & 3, `AI_AREA_BASE`), NOT this card. The card carries **no
-> AI glow** — the only AI glow in the composition is on the CTA button (below).
->
-> **DO NOT** nest `<AITextGenerationArea>` or any element using `AI_AREA_BASE` inside this card.
-> `AITextGenerationArea` is for standalone use on a page/frame. Nesting it here creates a
-> white box-in-box with double shadow. The card IS the glass surface — place the header, text,
-> and button directly as children with no inner background container.
+Animated Remotion template — spring fly-in entrance, settle-and-snap, typing cursor. Based on
+Figma node 64:320.
 
 ```tsx
 import { useCurrentFrame, spring, interpolate } from 'remotion';
@@ -169,7 +161,7 @@ export const AIFloatingHighlight: React.FC<{
           {text}
         </div>
         <div style={{ position: 'absolute', inset: 0,
-                      font: '600 18px/1.35 "Overpass", sans-serif', color: '#001B41',
+                      font: '600 18px/1.35 "Overpass", sans-serif', color: '#001B41', // Dark Midnight — see ionos/product-frame-color.md
                       whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflow: 'hidden' }}>
           {text}
           <span style={{ opacity: cursorOn }}>&#x258C;</span>
@@ -238,7 +230,7 @@ export const AITextGenerationArea: React.FC<{
           {generatedText}
         </div>
         <div style={{ position: 'absolute', inset: 0,
-                      font: '600 20px/1.35 "Overpass", sans-serif', color: '#001B41',
+                      font: '600 20px/1.35 "Overpass", sans-serif', color: '#001B41', // Dark Midnight — see ionos/product-frame-color.md
                       whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflow: 'hidden' }}>
           {typedText}
           <span style={{ opacity: cursorOpacity }}>&#x258C;</span>
@@ -290,7 +282,7 @@ export const AIImageGenerationArea: React.FC<{
         <div style={{ display: 'flex', gap: 8 }}>
           <div style={{ height: 48, borderRadius: 6, background: AI_PRIMARY_END, opacity: 0.35, flex: 2,
                         transform: `scaleX(${barScale(0.25)})`, transformOrigin: 'left' }} />
-          <div style={{ height: 48, borderRadius: 6, background: '#095BB1', opacity: 0.25, flex: 1,
+          <div style={{ height: 48, borderRadius: 6, background: '#095BB1', opacity: 0.25, flex: 1, // var(--color-ai-primary-start) — hardcode in Remotion; see uds-style-guide/rules/ionos-ai-features.md
                         transform: `scaleX(${barScale(0.40)})`, transformOrigin: 'left' }} />
         </div>
         <div style={{ height: 14, borderRadius: 6, background: AI_PRIMARY_END, opacity: 0.25, width: '60%',
@@ -310,7 +302,7 @@ import { AbsoluteFill } from 'remotion';
 import { type VariantProps } from './schema';
 
 export const MyComposition: React.FC<VariantProps> = ({ fps = 30, headline }) => (
-  <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', background: '#F4F7FA' }}>
+  <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', background: '#F4F7FA' }}>  {/* var(--surface-subtle) — hardcode in Remotion; see uds-style-guide/rules/ionos-ai-features.md */}
     <div style={{ width: 560, display: 'flex', flexDirection: 'column', gap: 20, padding: 32 }}>
       <AITextGenerationArea startFrame={15} endFrame={65}
         productLabel="AI Website-Generator" generatedText={headline} />

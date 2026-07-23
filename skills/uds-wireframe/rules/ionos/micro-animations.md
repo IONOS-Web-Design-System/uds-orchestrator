@@ -23,14 +23,9 @@ The purpose of animations in decorative mode is to **simulate real UI interactio
 
 Pick at most **2 active animation sequences** per composition. More than that creates visual noise that dilutes the narrative.
 
-> **Float/bob applies to non-text layers only.** A perpetual float/bob on an element that
-> contains readable text (a stat card's label, a notification pill's caption, a headline)
-> re-rasterizes its glyphs every frame → visible shimmer. If a floating pop-out contains text,
-> either (a) let it fly in once and **hold still** afterward (no looping bob), or (b) **split**
-> it — bob a non-text backdrop/icon layer while the text layer stays static. In **Remotion
-> renders this is gate-enforced** (the `text-stability` gate fails the build on a perpetual
-> `Math.sin/cos` or unclamped `spring()` transform over text) and all motion must be
-> frame-driven anyway — see remotion-best-practices "Text rendering stability".
+> **Float/bob applies to non-text layers only.** Text-stability (never animate a transform on
+> text-bearing layers; avoid shimmer/sub-pixel drift): see remotion-best-practices
+> `shared-motion-text.md` (always in effect).
 
 ---
 
