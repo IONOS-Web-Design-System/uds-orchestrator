@@ -50,7 +50,8 @@ All rules are inlined below. Quick navigation:
 | `shared/constrained-viewport.md` | **Constrained viewport cropping patterns** (bottom bleed, zoom-to-highlight, square canvas, counterbalance rule) |
 | `shared/connector-line.md` | Connector-line pattern (pure illustration) — feature pop-out with an axis-aligned line to a marked target |
 | `shared/floating-card.md` | Floating Highlight Card anatomy + panel chrome rules (applies to all patterns) |
-| `ionos/decorative-mode.md` | Decorative mode setup, device frames, Bar/BarGroup helpers, glass card system, HTML preview |
+| `ionos/decorative-mode.md` | Decorative mode narrative, concrete IONOS color values for the shared primitives below, brand logos, typography anchor, HTML preview, composition examples |
+| `shared/device-frames.md`, `shared/placeholder-bars.md`, `shared/icon-cards.md`, `shared/glass-card.md`, `shared/background-patterns.md`, `shared/decorative-primitives.md` | Brand-agnostic decorative-mode primitives — device frame wrapping, Bar/BarGroup helpers, icon cards, glass card system, background patterns, transparent canvas / illustration size / pop-outs / ThemeProvider / image integration |
 | `ionos/micro-animations.md` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in, variant switcher |
 | `ionos/asset-integration.md` | Local file and Figma URL asset integration, pipeline catalog `role:`-driven selection & placement, staggered reveal |
 | `shared/embed-preamble.md` | **Hybrid embed-contract preamble — every brand.** Read first when brief contains `[HYBRID EMBED CONTRACT]`; then the per-style file below matching the brief's `Style:` line |
