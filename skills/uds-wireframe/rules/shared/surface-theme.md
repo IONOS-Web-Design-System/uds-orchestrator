@@ -20,8 +20,8 @@ model's aesthetic choice. This is a form decision the design system owns, not th
   explicitly asks for a dark / decorative / cinematic look (decorative mode — see
   `ionos/decorative-mode.md`). A generic "hero"/"premium"/AI brief is NOT a dark
   request.
-- **AI accents are independent of the base theme.** The brand AI gradient on CTAs / prompt
-  bubbles, the sparkle mark, and the `ai-subtle` 'thinking' surface still apply for a genuine
+- **AI accents are independent of the base theme.** The brand AI gradient on AI CTAs /
+  badges / prompt bubbles, the sparkle mark, and the `ai-subtle` 'thinking' surface still apply for a genuine
   AI affordance per `ionos-ai-features`, on light OR dark bases. The base surface theme rule
   above governs the *interface chrome*, not these AI accents.
 - **Match the brandmark to the scheme.** Use the light-scheme brandmark on a light base and
