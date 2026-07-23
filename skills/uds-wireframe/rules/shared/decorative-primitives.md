@@ -108,7 +108,7 @@ Size affects everything: larger means more sections, more glass cards, more floa
 
 The most visually dynamic decorative compositions have **one or two elements that escape the device frame boundary** — a stat card floating above the screen edge, a notification pill bleeding outside the laptop bezel. These tell the viewer "this is important".
 
-> **If a pop-out contains readable text, do not loop a float/bob on it** — the perpetual motion re-rasterizes its glyphs every frame and shimmers. Let it fly in once and hold, or bob only a non-text backdrop/icon layer. In Remotion renders this is gate-enforced (`text-stability`); see remotion-best-practices "Text rendering stability".
+> Text-stability (never animate a transform on text-bearing layers; avoid shimmer/sub-pixel drift): see remotion-best-practices `shared-motion-text.md` (always in effect).
 
 Wrap the device frame in a padded relative container, then use `position: absolute` to place pop-out elements:
 
