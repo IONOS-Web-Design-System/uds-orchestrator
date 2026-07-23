@@ -21,7 +21,7 @@ export default function MyIllustration() {
   return (
     // ThemeProvider takes ONLY children. Brand/platform/colorScheme are applied
     // as data-* attributes on a wrapping element (NOT props on ThemeProvider).
-    // data-brand is the brand's own slug (e.g. "ionos") — never hardcode a brand
+    // data-brand is the brand's own slug — never hardcode a brand
     // name in this shared file; substitute the render's actual brand.
     <div data-brand="{brand}" data-platform="comfortable" data-color-scheme="dark" style={{ display: 'inline-block', background: 'transparent' }}>
       <ThemeProvider>
@@ -159,7 +159,7 @@ The slight tilt (`rotate(1.5deg)`) and shadow make the card feel like it's physi
 // Wireframe illustration — not production code
 // ThemeProvider takes ONLY children. Brand/platform/colorScheme are applied as
 // data-* attributes on a wrapping element (NOT props on ThemeProvider).
-// data-brand is the brand's own slug (e.g. "ionos") — never hardcode a brand
+// data-brand is the brand's own slug — never hardcode a brand
 // name in this shared file; substitute the render's actual brand.
 <div data-brand="{brand}" data-platform="comfortable" data-color-scheme="dark">
   <ThemeProvider>
