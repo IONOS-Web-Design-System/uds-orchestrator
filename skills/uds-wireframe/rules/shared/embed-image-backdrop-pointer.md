@@ -90,8 +90,8 @@ Layer order (document order, no z-index games):
 4. **Floating feature panel** — a compact panel half-overlapping the backdrop card's edge
    on the negative-space side, containing the feature's UI (segmented control, radio list,
    primary CTA — real UDS components or tight sketches). **Panel chrome follows the
-   Floating Highlight Card template (see `shared/floating-card.md`): a borderless
-   glass surface with a plain neutral drop shadow (no AI glow — AI glow is on the CTA
+   Floating Highlight Card template (see `shared/floating-card.md` for the surface rule):
+   borderless, with a plain neutral drop shadow (no AI glow — AI glow is on the CTA
    only) — NO border of any kind (dashed AND gradient borders are retired panel styles).
    The AI gradient belongs to the CTA inside, not the panel chrome.**
 

@@ -37,7 +37,7 @@ What THIS rule adds on top:
    bars/content blocks sit below the hero, per the product-frame placeholder palette.
 4. **1-2 floating highlight fragments** overlapping the wireframe's edge — a prompt
    bubble and/or a small mini-toolbar pill, per the **Floating Highlight Card template**
-   (see `shared/floating-card.md`): borderless glass surface + plain neutral drop
+   (see `shared/floating-card.md` for the surface rule): borderless, plain neutral drop
    shadow (no AI glow — AI glow is on the CTA only), no border of any kind. The prompt
    bubble uses `var(--surface-base)` (reserve `ai-subtle` for the AI 'thinking' indicator
    only) with a muted caption and a gradient CTA (e.g. "✨ Seite erstellen" —
