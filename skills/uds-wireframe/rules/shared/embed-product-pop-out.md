@@ -16,7 +16,8 @@ Layer order:
    past the TOP edge only, never the reserved right/bottom margin.
 2. **Product view** — a UDS-component wireframe of the brand's builder/editor: a top bar (e.g.
    a Publish action), a left checklist, and a website canvas. Build it per the standard
-   wireframe composition rules (`ionos/composition.md`, `ionos/product-frame.md`).
+   wireframe composition rules (`ionos/composition.md`, `ionos/product-frame-color.md`,
+   `shared/frame-anatomy.md`).
    Use `staticFile()` for any in-product hero/media slot the supplied catalog image belongs
    in — **never a generated image** in that slot. The interface is the DOMINANT full-frame
    base, laid out across (roughly) the full canvas.

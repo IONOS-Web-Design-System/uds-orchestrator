@@ -18,8 +18,9 @@ rules and do not re-invent them here:
   content, hero-media treatment.
 - `ionos/asset-integration.md` — catalog asset placement
   (`<Img src={staticFile('<slug>.png')} />`, never plain `<img>`).
-- `ionos/product-frame.md` — the product shell's color system (sidebar,
-  panels, header actions) and the one-frame-one-highlight composition rule.
+- `ionos/product-frame-color.md` — the product shell's color system (sidebar,
+  panels, header actions).
+- `shared/frame-anatomy.md` — the one-frame-one-highlight composition rule.
 
 What THIS rule adds on top:
 

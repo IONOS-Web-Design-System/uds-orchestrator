@@ -44,8 +44,12 @@ All rules are inlined below. Quick navigation:
 |---|---|
 | `ionos/remotion-template.md` | **Read first for Remotion jobs** — VariantProps schema, Root.tsx contract, TypeScript error triage |
 | `ionos/ai-animations.md` | **AI animation templates** — copy-ready Remotion code for button, loading state, radial bloom, sparkle pulse. Preview: http://localhost:4200/ai-templates |
-| `ionos/product-frame.md` | Product frame structure, **verified icon allowlist** (system + brandmark), contrast rules, feature pop-out, **constrained viewport cropping patterns** (bottom bleed, zoom-to-highlight, counterbalance rule) |
+| `ionos/product-frame-color.md` | IONOS product frame color values — color system, **verified icon allowlist** (system + brandmark), AI icon usage |
 | `ionos/composition.md` | Standard layout patterns, component selection, placeholder content guidelines |
+| `shared/frame-anatomy.md` | Brand-agnostic product frame structure — composition rule, content detail rules, contrast rules, frame layout rules, animated overflow |
+| `shared/constrained-viewport.md` | **Constrained viewport cropping patterns** (bottom bleed, zoom-to-highlight, square canvas, counterbalance rule) |
+| `shared/connector-line.md` | Connector-line pattern (pure illustration) — feature pop-out with an axis-aligned line to a marked target |
+| `shared/floating-card.md` | Floating Highlight Card anatomy + panel chrome rules (applies to all patterns) |
 | `ionos/decorative-mode.md` | Decorative mode setup, device frames, Bar/BarGroup helpers, glass card system, HTML preview |
 | `ionos/micro-animations.md` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in, variant switcher |
 | `ionos/asset-integration.md` | Local file and Figma URL asset integration, pipeline catalog `role:`-driven selection & placement, staggered reveal |
@@ -57,12 +61,12 @@ All rules are inlined below. Quick navigation:
 
 ## Pattern → Rule routing
 
-When the brief names a `Composition pattern:` (set by the moderator), load the corresponding rule **in addition to** `ionos/composition.md` and `ionos/product-frame.md`:
+When the brief names a `Composition pattern:` (set by the moderator), load the corresponding rule **in addition to** `ionos/composition.md`, `shared/frame-anatomy.md`, and `ionos/product-frame-color.md`:
 
 | Pattern name | Extra rule to load |
 |---|---|
-| `product-frame-full`, `product-frame-bottom-bleed`, `product-frame-zoom-cutout`, `product-frame-square` | `ionos/product-frame.md` (already in index — confirm loaded) |
-| `product-frame-connector-line` | `ionos/product-frame.md` — read the "Connector Line" section |
+| `product-frame-full`, `product-frame-bottom-bleed`, `product-frame-zoom-cutout`, `product-frame-square` | `shared/constrained-viewport.md` (already in index — confirm loaded) |
+| `product-frame-connector-line` | `shared/connector-line.md` |
 | `image-backdrop-feature-pointer` | `shared/embed-preamble.md` + `shared/embed-image-backdrop-pointer.md` |
 | `image-backdrop-full-bleed` | `shared/embed-preamble.md` + `shared/embed-image-backdrop-full.md` |
 | `interface-asset` | `shared/embed-preamble.md` + `shared/embed-interface-asset.md` |
