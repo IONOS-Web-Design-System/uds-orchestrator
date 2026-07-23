@@ -101,8 +101,7 @@ Layer order (document order, no z-index games):
    <div style={{
      position: 'absolute', left: '5%', top: '30%', width: 280,
      borderRadius: 24, padding: 20,
-     background: 'var(--surface-subtle)',
-     backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+     background: 'var(--surface-subtle)', // opaque — no backdropFilter on the card itself
      boxShadow: '0 24px 64px rgba(0,0,0,0.35)',
    }}>
      {/* options list; CTA: linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end)) + white text;
