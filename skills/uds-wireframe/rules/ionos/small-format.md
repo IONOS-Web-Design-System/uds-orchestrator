@@ -101,26 +101,30 @@ Small icons read as noise on a small canvas. Size them **up**, relative to the c
 - Avoid sub-20px icons at this scale. The central motif of an icon-story can be very large
   (up to ~40% of the shorter canvas edge).
 
-## AI features — put the gradient on the motif, not a (non-existent) CTA
+## AI features — render one AI-gradient BADGE (keep it off chrome and plain icons)
 
 When the brief is a **genuine AI feature**, the composition MUST carry the IONOS AI
-signature. But the standard "AI gradient on the CTA / prompt button only" rule assumes a
-product-UI composition — and a small-format icon-story or cropped frame usually has **no CTA
-or prompt button**. Do not let that drop the gradient (the common failure: a plain cyan
-sparkle and no AI colour at all). At this scale the AI affordance **is** the focal element,
-so apply the brand AI gradient there:
+signature. The gradient's placement rule is unchanged and correct: it belongs to an **AI CTA
+or AI badge ONLY — never the panel chrome, the nav rail, connector lines, or a plain icon**
+(those stay on brand tokens). At small format there is usually no CTA, so the gradient's home
+is a **badge**: include one small **AI badge / status pill** — a labelled chip naming the AI
+capability (a short "AI" / "KI" label, optionally with the sparkle glyph inside it) — and fill
+**that badge** with the brand AI gradient. In an icon-story, sit the badge on or beside the
+central motif; in a cropped product frame, let it straddle the frame edge as the floating
+highlight. This is a sanctioned badge use per `uds-style-guide/rules/ionos-ai-features.md`
+(the gradient applies to an AI CTA **or badge**).
 
-- **Icon-story:** the **central motif** — the AI hub badge, the sparkle/`filled-sparkles`
-  glyph, or the circular motif icon — is filled with the AI gradient (not flat brand blue or
-  cyan).
-- **Cropped product frame:** the **primary floating highlight** — the AI prompt chip / result
-  badge straddling the frame edge — carries the AI gradient (its icon or its fill).
+- The badge is the **single** AI-gradient element. The sparkle glyph, the hub/central motif,
+  service icons, connectors, and card/panel chrome stay on brand tokens (brand blue /
+  `surface-*`) — do NOT fill them with the gradient (a navy "premium" chip with no gradient
+  is NOT the AI signature either).
+- Do NOT substitute brand sky/cyan (`#11C7E6`) for the AI signal — that is a generic CTA
+  colour, not the AI signature (see `ionos-ai-features`). An AI feature with no gradient
+  anywhere is a miss.
 
 Use the brand AI gradient exactly (hardcode in Remotion — CSS custom properties may not
 resolve in a render): `linear-gradient(45deg, #095BB1, #D746F5)` — `#095BB1` =
-`var(--color-ai-primary-start)`, `#D746F5` = `var(--color-ai-primary-end)`. See
-`uds-style-guide/rules/ionos-ai-features.md` for the tokens. Keep it on that one focal
-element — do NOT smear it across every icon, connector, or the background. A non-AI brief
+`var(--color-ai-primary-start)`, `#D746F5` = `var(--color-ai-primary-end)`. A non-AI brief
 stays on standard brand blue/sky with no gradient.
 
 ## Motion
