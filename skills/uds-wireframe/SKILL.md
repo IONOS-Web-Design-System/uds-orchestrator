@@ -43,16 +43,16 @@ All rules are inlined below. Quick navigation:
 | Rule file | Covers |
 |---|---|
 | `ionos/remotion-template.md` | **Read first for Remotion jobs** — VariantProps schema, Root.tsx contract, TypeScript error triage |
-| `ionos/ai-animations.md` | **AI animation templates** — copy-ready Remotion code for button, loading state, radial bloom, sparkle pulse. Preview: http://localhost:4200/ai-templates |
+| `ionos/ai-animations.md` | **AI animation templates** — copy-ready Remotion code for button, loading state, radial bloom, sparkle pulse |
 | `ionos/product-frame-color.md` | IONOS product frame color values — color system, **verified icon allowlist** (system + brandmark), AI icon usage |
 | `ionos/composition.md` | Standard layout patterns, component selection, placeholder content guidelines |
 | `shared/frame-anatomy.md` | Brand-agnostic product frame structure — composition rule, content detail rules, contrast rules, frame layout rules, animated overflow |
 | `shared/constrained-viewport.md` | **Constrained viewport cropping patterns** (bottom bleed, zoom-to-highlight, square canvas, counterbalance rule) |
 | `shared/connector-line.md` | Connector-line pattern (pure illustration) — feature pop-out with an axis-aligned line to a marked target |
 | `shared/floating-card.md` | Floating Highlight Card anatomy + panel chrome rules (applies to all patterns) |
-| `ionos/decorative-mode.md` | Decorative mode narrative, concrete IONOS color values for the shared primitives below, brand logos, typography anchor, HTML preview, composition examples |
+| `ionos/decorative-mode.md` | Decorative mode narrative, concrete IONOS color values for the shared primitives below, brand logos, typography anchor, composition examples |
 | `shared/device-frames.md`, `shared/placeholder-bars.md`, `shared/icon-cards.md`, `shared/glass-card.md`, `shared/background-patterns.md`, `shared/decorative-primitives.md` | Brand-agnostic decorative-mode primitives — device frame wrapping, Bar/BarGroup helpers, icon cards, glass card system, background patterns, transparent canvas / illustration size / pop-outs / ThemeProvider / image integration |
-| `ionos/micro-animations.md` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in, variant switcher |
+| `ionos/micro-animations.md` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in |
 | `ionos/asset-integration.md` | Local file and Figma URL asset integration, pipeline catalog `role:`-driven selection & placement, staggered reveal |
 | `shared/embed-preamble.md` | **Hybrid embed-contract preamble — every brand.** Read first when brief contains `[HYBRID EMBED CONTRACT]`; then the per-style file below matching the brief's `Style:` line |
 | `shared/embed-<style>.md` | Per-style embed geometry — one file per embed style (`product-pop-out`, `device-mockup`, `background-pointer`, `background-full`, `interface-asset`, `floating-card`); the loader inlines only the style this render uses |

@@ -1,14 +1,12 @@
 ---
 name: ionos-wireframe-ai-animations
-description: Ready-to-use Remotion templates for IONOS AI feature moments — CTA pill button, text-generation area, image-generation area. Copy directly into Composition.tsx. Preview at http://localhost:4200/ai-templates
+description: Ready-to-use Remotion templates for IONOS AI feature moments — CTA pill button, text-generation area, image-generation area. Copy directly into Composition.tsx.
 motion: [animation]
 metadata:
   tags: ionos, ai, animation, remotion, loading, neumorphism, template
 ---
 
 # IONOS AI Animation Templates
-
-**Live preview:** http://localhost:4200/ai-templates
 
 ---
 
