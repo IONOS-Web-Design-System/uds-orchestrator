@@ -6,8 +6,8 @@ brand's own color rule — e.g. `ionos/product-frame-color.md` for IONOS.
 
 ## Composition Rule — One Frame, One Highlight
 
-**Every IONOS product animation has exactly two primary elements:**
-1. **One main product frame** — the IONOS editor/app UI
+**Every product animation has exactly two primary elements:**
+1. **One main product frame** — the product/app UI
 2. **One floating highlight card** — the AI feature moment, always a sibling of the frame (never inside it)
 
 Secondary floating elements (tool chips, stat pills) are allowed as decoration but must be less prominent and also live outside the frame.
@@ -17,7 +17,7 @@ Secondary floating elements (tool chips, stat pills) are allowed as decoration b
 Always include these realistic anchors (scale with frame size):
 - **Catalog image asset** — pick from available assets via `staticFile()`; place in hero
 - **Big hero heading** — 24–40px, real contextual text (brand name, tagline)
-- **Product logo** — IONOS logo in shell header; client logo in client-app header
+- **Product logo** — brand logo in shell header; client logo in client-app header
 - **Size-dependent detail**:
   - Large frame (>900px wide): left sidebar + hero + content grid + right properties panel
   - Medium (500–900px): left sidebar + hero + 1–2 content rows, no right panel
@@ -27,11 +27,15 @@ Diagram below illustrates the dark shell **variant** (token names shown for orie
 the brand's color rule, e.g. `ionos/product-frame-color.md`, for the concrete hex values); the
 light **default** renders the identical structure with the colorScheme-resolved tokens
 (`var(--surface-base)` frame, `var(--surface-subtle)` sidebar, `var(--surface-subtlest)` panel).
+`DARK_SHELL_ACCENT` below is the brand's dark-shell-complementing accent for decorative
+bars/data in the dark variant — resolve the concrete value from the brand's color rule (e.g.
+`ionos/product-frame-color.md` "Product shell — dark variant") — never hardcode a brand hex
+in this shared file.
 
 ```
-┌─ IONOS Product Shell — dark variant (Dark Midnight → Blue Black) ─┐
-│ [sidebar: Dark Midnight→Dark Blue]  [CLIENT APP: #F4F7FA]  [panel: Dark Midnight→Dark Blue]│
-│  W logo                     ┌─────────────────┐    [#9DC2D9 bars]  │
+┌─ Product Shell — dark variant (dark navy gradient) ─┐
+│ [sidebar: dark navy gradient]  [CLIENT APP: #F4F7FA]  [panel: dark navy gradient]│
+│  W logo                     ┌─────────────────┐    [DARK_SHELL_ACCENT bars]  │
 │  ──────────────             │ [client header]  │    [dropdowns]     │
 │  icon  ←white               │ [hero image]     │    [analytics]     │
 │  icon                       │ "Brand Heading"  │                    │
@@ -53,20 +57,24 @@ themes.
 **Dark shell variant (`colorScheme === 'dark'` or decorative — NOT the default):** here, and only
 here, the product shell is dark while the client-app zone stays light. Never mix their palettes:
 - Shell icons / text: white (`rgba(255,255,255,0.8–1.0)`)
-- Shell decorative bars: `#9DC2D9`
+- Shell decorative bars: `DARK_SHELL_ACCENT` (see the brand's color rule, e.g.
+  `ionos/product-frame-color.md`, for the concrete value)
 - Client-app text bars: `#BCC8D4`
 - Floating pop-out / glass elements over dark: `rgba(255,255,255,0.85–0.96)` fill — keep alpha high or the dark shell bleeds through as grey
 
 **Icon colour inside panels**: key on the container's own background, not the outer gradient.
-Match the brandmark to the scheme (per `shared/surface-theme.md`): `ionos-light`
-(blue fills) on the light shell default and inside the light client-app zone; `ionos-dark`
-(white fills) only on the dark shell variant.
+Match the brandmark to the scheme (per `shared/surface-theme.md`): the brand's light-scheme
+brandmark variant (colored fills, readable on light) on the light shell default and inside the
+light client-app zone; the brand's dark-scheme brandmark variant (white/mono fills, readable
+on dark) only on the dark shell variant. Resolve the concrete asset name from the brand's
+color rule (e.g. `ionos/product-frame-color.md` "Brandmark Import") — never hardcode a
+brand-specific asset name in this shared file.
 
 ## Frame Layout Rules
 
-- Product logo: always the real SVG brandmark, never a placeholder bar — pick the variant per `colorScheme` (`ionos-light` on the light shell default, `ionos-dark` only on the dark shell variant)
+- Product logo: always the real SVG brandmark, never a placeholder bar — pick the light-scheme or dark-scheme brandmark variant per `colorScheme` (see the brand's color rule, e.g. `ionos/product-frame-color.md`, for the concrete asset names)
 - Client app image: always use `<Img src={staticFile(imageSlug + '.png')}>` from the asset catalog
-- Never use the sky accent color in the product shell — that is a CTA colour; use `#9DC2D9` for shell decorative elements
+- Never use the sky accent color in the product shell — that is a CTA colour; use `DARK_SHELL_ACCENT` for shell decorative elements (concrete value in the brand's color rule, e.g. `ionos/product-frame-color.md`)
 - AI feature affordances: see `uds-style-guide/ionos-ai-features` for gradient button, generating surface, and animation rules
 
 ## Product Frame — Animated Overflow

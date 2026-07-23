@@ -68,9 +68,10 @@ and `ionos/image-backdrop.md`; stated here so pure-illustration jobs always have
 
 **No AI glow on panel/card chrome.** The only AI glow in any composition is on the CTA
 button inside the card — the `linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end))`
-fill plus `boxShadow: '0 4px 16px rgba(9,91,177,0.30), 0 2px 10px rgba(215,70,245,0.18)'` on the
-button (concrete brand values — e.g. `ionos/product-frame-color.md` "AI Icon Usage
-Guidelines"). The card's outer chrome (`boxShadow` on the `borderRadius: 40` wrapper) is
+fill plus a matching tinted `boxShadow: '0 4px 16px color-mix(in srgb, var(--color-ai-primary-start) 30%, transparent), 0 2px 10px color-mix(in srgb, var(--color-ai-primary-end) 18%, transparent)'`
+on the button — both derived from the same brand-agnostic AI-gradient tokens (the brand's
+concrete gradient-stop hex values live in e.g. `ionos/product-frame-color.md` "AI Icon Usage
+Guidelines"; never hardcode them in this shared file). The card's outer chrome (`boxShadow` on the `borderRadius: 40` wrapper) is
 always a **plain neutral drop shadow** (`0 16px 48px rgba(0,0,0,0.35)`). Never a colored,
 gradient, or AI-tinted outer shadow on the card.
 
