@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.14.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.14.0...v2.14.1) (2026-07-23)
+
+
+### Bug Fixes
+
+* **wireframe:** channel small-format AI gradient to a BADGE (not motif/chrome); surface-theme allows badge ([1c22f8f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1c22f8f2ec239933895e272782663338dcd6c97a))
+* **wireframe:** small-format AI features apply the brand gradient to the motif (no CTA at this scale) ([a73273f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a73273f712b11dcf94d8785d4711c8a46145a173))
+* **wireframe:** spec the AI badge size (~24-32px accent, not hero) ([7bb242e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/7bb242ec2f6bdb04cd1ed545a4e05b4ad00bcfd0))
+
 ## [2.14.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.13.2...v2.14.0) (2026-07-23)
 
 
