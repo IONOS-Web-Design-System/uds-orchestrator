@@ -90,14 +90,14 @@ Layer order (document order, no z-index games):
 4. **Floating feature panel** — a compact panel half-overlapping the backdrop card's edge
    on the negative-space side, containing the feature's UI (segmented control, radio list,
    primary CTA — real UDS components or tight sketches). **Panel chrome follows the
-   Floating Highlight Card template (`ionos/ai-animations.md`): a borderless
+   Floating Highlight Card template (see `shared/floating-card.md`): a borderless
    glass surface with a plain neutral drop shadow (no AI glow — AI glow is on the CTA
    only) — NO border of any kind (dashed AND gradient borders are retired panel styles).
    The AI gradient belongs to the CTA inside, not the panel chrome.**
 
    ```tsx
-   // Floating Highlight Card chrome (see ionos/ai-animations.md for the full
-   // animated version with enter spring):
+   // Floating Highlight Card chrome (see shared/floating-card.md for the chrome spec
+   // and animated-entrance guidance):
    <div style={{
      position: 'absolute', left: '5%', top: '30%', width: 280,
      borderRadius: 24, padding: 20,

@@ -4,9 +4,9 @@ The AI feature highlight is a **sibling of the product frame at the `AbsoluteFil
 
 **Shape spec (confirmed from Figma node 64:320):**
 ```tsx
-// Floating highlight card — pill-shaped glass, NO border, plain neutral drop shadow
+// Floating highlight card — pill-shaped, NO border, plain neutral drop shadow
 // (no AI glow — the AI glow is on the CTA button only). For the animated
-// pulse see ionos/ai-animations.md (AIFloatingHighlight).
+// entrance (spring fly-in) see the "highlight must" motion notes below.
 <div style={{
   position: 'absolute',
   borderRadius: 40,                          // large pill — NOT 16
@@ -63,8 +63,9 @@ The AI feature highlight is a **sibling of the product frame at the `AbsoluteFil
 ## Panel chrome rules (applies to ALL patterns in this file)
 
 These rules govern the visual treatment of ALL floating cards, prompt bubbles, mini-toolbars,
-and highlight elements in every pattern above. They also appear in `ionos/ai-animations.md`
-and `ionos/image-backdrop.md`; stated here so pure-illustration jobs always have them.
+and highlight elements in every pattern above. This file is the single canonical source for
+this chrome — brand-specific animation and hybrid-image rules point back here rather than
+restating it, so pure-illustration jobs always have it too.
 
 **No AI glow on panel/card chrome.** The only AI glow in any composition is on the CTA
 button inside the card — the `linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end))`
@@ -80,3 +81,14 @@ exclusively for the **selection marquee** inside the product frame's client-app 
 the design-tool affordance that marks the content being acted on. Panel chrome, prompt
 bubbles, mini-toolbars, stat chips, and the Floating Highlight Card wrapper are always
 borderless. This style was retired; applying it to panels is wrong.
+
+**Surface vs. glass — HARD RULE.** The card's background is the **opaque surface token**
+(`var(--surface-subtle)`) — the card is solid, not glass; there is no `backdropFilter` on
+the card itself. The translucent glass + `backdropFilter` treatment belongs to a separate
+composition element (the AI generation area used in text/image-generation moments), never
+to this card.
+
+**Never nest a generation-area container inside this card.** Nesting a glass generation-area
+container (its own background + blur) inside the Floating Highlight Card produces a white
+box-in-box with a double shadow. The card IS the surface — place its header, text/content,
+and CTA button directly as children, with no inner background container.

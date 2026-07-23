@@ -105,18 +105,10 @@ export const AIPillButton: React.FC<{
 
 ## Floating Highlight Card
 
-Used as the **main highlight element** floating outside the product frame. Pill-shaped glass card with a plain dim drop shadow — **no border, no AI glow**. Based on Figma node 64:320. The AI affordance is conveyed by the gradient CTA button inside, not by the card's shadow.
+Static card chrome (surface, shadow, anatomy): see `shared/floating-card.md`.
 
-> **HARD RULE — Remotion:** the card background is the **opaque surface token**
-> `var(--surface-subtle)` (the card is solid, not glass — no `backdropFilter` on the card). The
-> translucent `rgba(244, 247, 250, 0.88)` + `backdropFilter` glass treatment is reserved for the
-> **AI generation area** (Templates 2 & 3, `AI_AREA_BASE`), NOT this card. The card carries **no
-> AI glow** — the only AI glow in the composition is on the CTA button (below).
->
-> **DO NOT** nest `<AITextGenerationArea>` or any element using `AI_AREA_BASE` inside this card.
-> `AITextGenerationArea` is for standalone use on a page/frame. Nesting it here creates a
-> white box-in-box with double shadow. The card IS the glass surface — place the header, text,
-> and button directly as children with no inner background container.
+Animated Remotion template — spring fly-in entrance, settle-and-snap, typing cursor. Based on
+Figma node 64:320.
 
 ```tsx
 import { useCurrentFrame, spring, interpolate } from 'remotion';

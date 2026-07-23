@@ -35,8 +35,9 @@ Layer order:
    gives how tall the subject is within the cutout, for scaling the figure to the hero region.
 4. **Optional highlight** — if the contract supplies one, a floating prompt bubble at the
    TOP z-index, popping out beyond the frame edge (partially outside the interface), stating
-   the highlight text. Chrome follows the Floating Highlight Card template (borderless glass,
-   plain neutral shadow — no AI glow on the chrome itself).
+   the highlight text. Chrome follows the Floating Highlight Card template (see
+   `shared/floating-card.md`): borderless glass, plain neutral shadow — no AI glow on the
+   chrome itself.
 5. **AI styling (when this is an AI feature)** — the brand AI gradient on the CTA/Publish
    action and the prompt bubble, a soft AI glow on the highlight only, and a filled-sparkles
    icon. Not an AI feature → standard brand blue/sky, no AI gradient or glow anywhere.
