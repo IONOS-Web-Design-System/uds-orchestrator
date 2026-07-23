@@ -45,18 +45,6 @@ export default function MyIllustration() {
 
 The device frame chrome (dark grey bezel), glass cards, and floating elements are all semi-transparent by design — they adapt to their host background naturally.
 
-**HTML preview:** add a checkerboard CSS background to `body` to demonstrate the transparency:
-```css
-body {
-  background:
-    repeating-conic-gradient(#2a2a2e 0% 25%, #1e1e22 0% 50%)
-    0 0 / 24px 24px;
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-}
-```
-
 ---
 
 ## Illustration Size

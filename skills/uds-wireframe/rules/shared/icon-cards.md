@@ -6,7 +6,7 @@ decorative: true
 
 Icons are the visual focal points in decorative mode. Use `group="system"` for UI/concept icons; use the brand's own product-icon group (e.g. `group="{brand}"` — see the brand's rule for the exact value) for product icons.
 
-> **No emoji anywhere.** Neither the `.tsx` output nor the HTML preview may use emoji characters as icon substitutes. Always use `<Icon group="system" name="..." />` in the TSX, and CSS mask-image SVG data URIs in the HTML preview (see the brand's decorative rule, e.g. `ionos/decorative-mode.md` "HTML Preview" section).
+> **No emoji anywhere.** The `.tsx` output must never use emoji characters as icon substitutes — always use `<Icon group="system" name="..." />`.
 
 ## Icon color keys
 

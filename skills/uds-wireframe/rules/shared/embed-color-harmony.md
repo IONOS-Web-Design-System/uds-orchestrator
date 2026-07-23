@@ -15,7 +15,7 @@ imagery — never a brand-default background fighting the photo:
   roughly 60-80% darkness. E.g. a dominant teal mixes toward a dark teal-navy gradient; a
   warm terracotta mixes toward a dark brown-navy gradient. Keep it calm and dark enough
   that white text and glass panels read.
-- **What never changes**: panel glass stays neutral (`var(--surface-subtle)`), the brand
+- **What never changes**: panel **surface** stays neutral (`var(--surface-subtle)`), the brand
   AI gradient stays exactly what `uds-style-guide` defines (CTAs/badges only), brand
   component colors stay tokenized. Harmony lives in the ROOT background and subtle shadow
   tints — not in recolored UI, and NEVER in a scrim/overlay/darkening layer over the image.
