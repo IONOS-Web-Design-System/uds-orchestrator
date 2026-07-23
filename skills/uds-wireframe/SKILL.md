@@ -49,8 +49,10 @@ All rules are inlined below. Quick navigation:
 | `ionos/decorative-mode.md` | Decorative mode setup, device frames, Bar/BarGroup helpers, glass card system, HTML preview |
 | `ionos/micro-animations.md` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in, variant switcher |
 | `ionos/asset-integration.md` | Local file and Figma URL asset integration, pipeline catalog `role:`-driven selection & placement, staggered reveal |
-| `shared/embed-contract.md` | **Hybrid embed-contract geometry — all 6 embed styles, every brand** (feature-pointer with connector line, full-bleed, interface-asset, floating-card, product-pop-out, device-mockup); color harmony; animation hooks. Read when brief contains `[HYBRID EMBED CONTRACT]` |
-| `ionos/image-backdrop.md` | IONOS-specific embed-contract notes only — the geometry itself lives in `shared/embed-contract.md` |
+| `shared/embed-preamble.md` | **Hybrid embed-contract preamble — every brand.** Read first when brief contains `[HYBRID EMBED CONTRACT]`; then the per-style file below matching the brief's `Style:` line |
+| `shared/embed-<style>.md` | Per-style embed geometry — one file per embed style (`product-pop-out`, `device-mockup`, `background-pointer`, `background-full`, `interface-asset`, `floating-card`); the loader inlines only the style this render uses |
+| `shared/embed-color-harmony.md` | Color-harmony rule for the four opaque embed styles |
+| `ionos/image-backdrop.md` | IONOS-specific embed-contract notes only — the geometry itself lives in `shared/embed-preamble.md` + the per-style `shared/embed-<style>.md` files |
 | `ionos/small-format.md` | **Small-format illustrations** (< ~512px both axes) — icon-story grammar, cropped-product-frame pattern, icon sizing, loop motion rules, hybrid-in-small-format embed styles |
 
 ## Pattern → Rule routing
@@ -61,12 +63,15 @@ When the brief names a `Composition pattern:` (set by the moderator), load the c
 |---|---|
 | `product-frame-full`, `product-frame-bottom-bleed`, `product-frame-zoom-cutout`, `product-frame-square` | `ionos/product-frame.md` (already in index — confirm loaded) |
 | `product-frame-connector-line` | `ionos/product-frame.md` — read the "Connector Line" section |
-| `image-backdrop-feature-pointer`, `image-backdrop-full-bleed`, `interface-asset`, `floating-card` | `shared/embed-contract.md` |
+| `image-backdrop-feature-pointer` | `shared/embed-preamble.md` + `shared/embed-image-backdrop-pointer.md` |
+| `image-backdrop-full-bleed` | `shared/embed-preamble.md` + `shared/embed-image-backdrop-full.md` |
+| `interface-asset` | `shared/embed-preamble.md` + `shared/embed-interface-asset.md` |
+| `floating-card` | `shared/embed-preamble.md` + `shared/embed-floating-intersect.md` |
 | `small-icon-story`, `small-cropped-frame` | `ionos/small-format.md` |
 
 When `dimensions.w < 512 AND dimensions.h < 512` and no `Composition pattern:` is set, default to `small-cropped-frame` for product briefs and `small-icon-story` for abstract briefs.
 
-When the brief contains `[HYBRID EMBED CONTRACT]`, always load `shared/embed-contract.md` — it covers all six embed styles (the 4 legacy backdrop/asset/card styles plus the `product-pop-out` and `device-mockup` composites) for every brand. The contract's `Style:` line (or, for the two composites, the `[PRODUCT-POP-OUT COMPOSITE]` / `[DEVICE-MOCKUP COMPOSITE]` tag) names the exact section to follow.
+When the brief contains `[HYBRID EMBED CONTRACT]`, always load `shared/embed-preamble.md` first, then the single `shared/embed-<style>.md` file matching the contract's `Style:` line (or, for the two composites, the `[PRODUCT-POP-OUT COMPOSITE]` / `[DEVICE-MOCKUP COMPOSITE]` tag): `embed-image-backdrop-pointer.md`, `embed-image-backdrop-full.md`, `embed-interface-asset.md`, `embed-floating-intersect.md`, `embed-product-pop-out.md`, or `embed-device-mockup.md`. For the four opaque styles, also load `shared/embed-color-harmony.md`.
 
 ## Output Format
 
