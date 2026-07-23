@@ -11,9 +11,10 @@ model's aesthetic choice. This is a form decision the design system owns, not th
   `data-color-scheme={colorScheme}`, these resolve to the correct light/dark values
   automatically.
 - **Never hardcode a panel/root background to theme the interface.** Do NOT paint the
-  interface base with a literal color or gradient (e.g. a dark navy like `#011B43` /
-  `linear-gradient(..., #0B2A63)`) to make it look "premium" or "dark". That overrides
-  `colorScheme` and makes the theme random across runs.
+  interface base with a literal color or gradient (e.g. a hardcoded dark-navy hex, or a
+  `linear-gradient` between two hardcoded hex stops — see the brand's color rule, e.g.
+  `ionos/product-frame-color.md`, for the concrete dark-shell values) to make it look
+  "premium" or "dark". That overrides `colorScheme` and makes the theme random across runs.
 - **Light is the default.** `colorScheme` defaults to `light` → a light interface base.
   Render a **dark** interface base ONLY when `colorScheme === 'dark'`, OR when the brief
   explicitly asks for a dark / decorative / cinematic look (decorative mode — see

@@ -65,16 +65,15 @@ Layer order (document order, no z-index games):
    border + 4 square corner handles, sized to comfortably wrap that region. **This
    in-scene selection affordance is the ONLY place a dashed border is allowed** — it
    depicts content selection (design-tool language), not panel chrome. Panels, bubbles,
-   and badges never use dashed outlines (retired style — see `ionos-ai-features`):
+   and badges never use dashed outlines (retired style — see `ionos-ai-features`).
+
+   `ACCENT` below is the brand's AI-generating accent purple — the same accent used for
+   the text-selection marquee inside the client-app zone (solid stroke only, never the AI
+   CTA gradient itself). There is no dedicated CSS token for this accent; resolve the
+   concrete value from the brand's color rule (e.g. `ionos/product-frame-color.md` "AI
+   selection target inside client app") — never hardcode a brand hex in this shared file.
 
    ```tsx
-   // ACCENT: the brand's AI-generating accent purple (uds-style-guide — for IONOS this is
-   // the ai-features "generating" purple-600 / product-frame marquee accent). Solid stroke
-   // only — never the AI CTA gradient itself.
-   // AI 'generating'-text accent — no dedicated CSS token exists for this specific accent;
-   // resolve the concrete value from the brand rule (IONOS: #8212C2, see
-   // ionos/image-backdrop.md / uds-style-guide ionos-ai-features).
-   const ACCENT = '#8212C2';
    <div style={{
      position: 'absolute', inset: -14, // wraps the selected negative-space region
      border: `2px dashed ${ACCENT}`, pointerEvents: 'none',
