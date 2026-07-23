@@ -1,5 +1,46 @@
 # Changelog
 
+## [2.14.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.13.2...v2.14.0) (2026-07-23)
+
+
+### Features
+
+* **skills:** forbid marketing heading/subheading in generated assets (host renders it) ([c92387e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c92387e7ca91f891f124312e3f2ba2b2d2441105))
+* **uds-wireframe:** add shared screen-content bare-interface render rule (Phase 2b) ([321944f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/321944f7b3bcd125533a466691d5c571b3cbf7ef))
+* **uds-wireframe:** bind embedded interface base theme to colorScheme (Phase 2c) ([fc1e660](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/fc1e66033f41d37daa3213753fbe7d6c168581cb))
+* **uds-wireframe:** scope tags — decorative-mode + animation rules excluded from still composites (Phase 2a) ([f74e7b5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f74e7b56c39d871067fdd123b792c87265dde6e2))
+
+
+### Bug Fixes
+
+* **rules:** highlight-card opaque token (C4) + AI base-surface defers to colorScheme (Phase 1) ([b28cc7c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/b28cc7c51db383f4600f873f4ef23112df4e4c01))
+* **rules:** purge 'render a headline' instructions; message region = negative space (C2, Phase 1) ([4126307](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/4126307111f4674d9082d9a5c808a00ebfe5e9bd))
+* **style-guide:** correct brand-font table + surface authoritative brand-overview (Phase 1) ([31f8a9e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/31f8a9e340ae3eb1fff0db6babf252498f16be07))
+* **uds-wireframe:** drop card backdropFilter from embed code sample to match opaque canonical (Phase 3b W2 review) ([c984d37](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c984d37a4cf630c8434df4b2c1276bff2d20183b))
+* **uds-wireframe:** hardcode AI-gradient hex in ai-animations Remotion template with token-name comment (Phase 3b W1 review) ([d94e1f8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d94e1f8532d6ece952234937eddd7b4c455e9801))
+* **uds-wireframe:** panel glass→surface wording in embed-color-harmony (Phase 3c / 3b Minor) ([33e56c8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/33e56c8bc07ac50067c400e2fcaab1a8da3059c5))
+* **uds-wireframe:** reconcile embed-file card chrome to canonical opaque-not-glass rule (Phase 3b W2 review) ([7e29fa3](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/7e29fa3962946e0798ec75f9c2941270993f8f4a))
+* **uds-wireframe:** remove IONOS brand values from shared frame geometry (Phase 3a review) ([1cf5e91](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1cf5e91eebfb751ee38030c34e205435b37551b7))
+* **uds-wireframe:** remove IONOS font-name from shared decorative primitive (Phase 3b W4) ([9d6f44e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9d6f44e9b2047606ae2e053c45f78b00ffe8ce1a))
+* **uds-wireframe:** remove literal brand-string leak from shared decorative primitives (Phase 3a review) ([b58430d](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/b58430d2d9d5f9f1f64597eebf607422dec10aef))
+* **uds-wireframe:** tokenize residual IONOS hex in shared embed geometry (Phase 3a) ([a166675](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a1666751dd7f507952bc94c8a6875b609f14e828))
+* **wireframe:** product-frame shell derives from colorScheme; dark navy gated, not default (C1, Phase 1) ([d17e8a6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d17e8a659351c52ddc2a95b4f52fac88c63cdee2))
+* **wireframe:** replace broken Figma /-path CSS tokens with valid tokens/hex (C3, Phase 1) ([3e91c2f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3e91c2fc2e13a1010a89914465ac33cd4a17ad6b))
+* **wireframe:** reword composition placeholder-content examples — functional labels, not marketing headline (C2 follow-up) ([817480f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/817480fbe7adadbdebdb14df6454f46985a26342))
+* **wireframe:** reword floating-card/background-full card slots — no marketing headline (C2 follow-up) ([17f44ac](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/17f44ac0ead711d4b0dcb2c9f639996bc0ff9212))
+
+
+### Code Refactoring
+
+* **uds-wireframe:** AI-gradient/palette hex → tokens + SoT pointers in ionos rules (Phase 3b W1) ([ee093b4](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ee093b4a923eb929f6bb90733e377a7709c928b9))
+* **uds-wireframe:** dedup floating-card chrome to shared/floating-card.md + fix shared→ionos pointer (Phase 3b W2) ([5288c8f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/5288c8f29b6325e8f56ea3ab3971cdedfd0b8ac9))
+* **uds-wireframe:** dedup text-stability prose to remotion shared-motion-text.md (Phase 3b W3) ([4978042](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/497804276462276b3bbbd639b53b653bc3482fbb))
+* **uds-wireframe:** migrate rules to rules/shared + rules/ionos folders (Phase 2b) ([43a9489](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/43a948955f1bf23a550393bb5c4b2ef03d9f297a))
+* **uds-wireframe:** prune codegen-dead HTML-preview/variant-switcher/localhost content (Phase 3c) ([390867e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/390867e99b383ac5e445981f2f283a07a19dcdb1))
+* **uds-wireframe:** split decorative-mode primitives into shared/ (Phase 3a) ([3c9668d](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3c9668d19ed941ec7586e39b6122a05742aa9a2d))
+* **uds-wireframe:** split embed-contract into per-style scope-tagged files (Phase 3a) ([69e9bce](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/69e9bcee993692c8f87b0d43a1f50535f862dde0))
+* **uds-wireframe:** split product-frame into ionos color values + shared frame geometry (Phase 3a IONOS-lock) ([237b5a7](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/237b5a70e01e26ba41a899f7953b56d14f1459e0))
+
 ## [2.13.2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.13.1...v2.13.2) (2026-07-21)
 
 
