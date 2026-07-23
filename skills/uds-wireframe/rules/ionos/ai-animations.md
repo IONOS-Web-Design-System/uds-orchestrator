@@ -22,9 +22,9 @@ import { svgData as chatAiSvg }      from '@ionos-web-design-system/icon/system/
 import { svgData as envelopeAiSvg }  from '@ionos-web-design-system/icon/system/filled-envelope-ai';
 // ✗ star / filled-star are NOT AI icons   ✗ filled-ai-phone not yet in package
 
-const AI_GRADIENT    = 'linear-gradient(45deg, #095BB1, #D746F5)'; // CTA — static 45°, NEVER rotate
-const AI_PRIMARY_END = '#D746F5';  // text/image bars
-const AI_LABEL_COLOR = '#8212C2';  // purple-600 — AI "generating" text colour (transient; revert to var(--text-base)/var(--text-subtle) once generation completes)
+const AI_GRADIENT    = 'linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end))'; // CTA — static 45°, NEVER rotate. Tokens: see uds-style-guide/rules/ionos-ai-features.md
+const AI_PRIMARY_END = 'var(--color-ai-primary-end)';  // text/image bars
+const AI_LABEL_COLOR = '#8212C2';  // purple-600 — AI "generating" text colour; see uds-style-guide/rules/ionos-ai-features.md (transient; revert to var(--text-base)/var(--text-subtle) once generation completes)
 
 // Gradient-filled AI icon — background:gradient + maskImage
 function aiIconStyle(svgData: string, size: number): React.CSSProperties {
@@ -169,7 +169,7 @@ export const AIFloatingHighlight: React.FC<{
           {text}
         </div>
         <div style={{ position: 'absolute', inset: 0,
-                      font: '600 18px/1.35 "Overpass", sans-serif', color: '#001B41',
+                      font: '600 18px/1.35 "Overpass", sans-serif', color: '#001B41', // Dark Midnight — see ionos/product-frame-color.md
                       whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflow: 'hidden' }}>
           {text}
           <span style={{ opacity: cursorOn }}>&#x258C;</span>
@@ -238,7 +238,7 @@ export const AITextGenerationArea: React.FC<{
           {generatedText}
         </div>
         <div style={{ position: 'absolute', inset: 0,
-                      font: '600 20px/1.35 "Overpass", sans-serif', color: '#001B41',
+                      font: '600 20px/1.35 "Overpass", sans-serif', color: '#001B41', // Dark Midnight — see ionos/product-frame-color.md
                       whiteSpace: 'pre-wrap', wordBreak: 'break-word', overflow: 'hidden' }}>
           {typedText}
           <span style={{ opacity: cursorOpacity }}>&#x258C;</span>
@@ -290,7 +290,7 @@ export const AIImageGenerationArea: React.FC<{
         <div style={{ display: 'flex', gap: 8 }}>
           <div style={{ height: 48, borderRadius: 6, background: AI_PRIMARY_END, opacity: 0.35, flex: 2,
                         transform: `scaleX(${barScale(0.25)})`, transformOrigin: 'left' }} />
-          <div style={{ height: 48, borderRadius: 6, background: '#095BB1', opacity: 0.25, flex: 1,
+          <div style={{ height: 48, borderRadius: 6, background: 'var(--color-ai-primary-start)', opacity: 0.25, flex: 1,
                         transform: `scaleX(${barScale(0.40)})`, transformOrigin: 'left' }} />
         </div>
         <div style={{ height: 14, borderRadius: 6, background: AI_PRIMARY_END, opacity: 0.25, width: '60%',
@@ -310,7 +310,7 @@ import { AbsoluteFill } from 'remotion';
 import { type VariantProps } from './schema';
 
 export const MyComposition: React.FC<VariantProps> = ({ fps = 30, headline }) => (
-  <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', background: '#F4F7FA' }}>
+  <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', background: 'var(--surface-subtle)' }}>
     <div style={{ width: 560, display: 'flex', flexDirection: 'column', gap: 20, padding: 32 }}>
       <AITextGenerationArea startFrame={15} endFrame={65}
         productLabel="AI Website-Generator" generatedText={headline} />

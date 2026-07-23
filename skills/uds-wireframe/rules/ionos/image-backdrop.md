@@ -14,7 +14,7 @@ references semantically:
 
 - Brand gradient root (`var(--color-gradient-start) → var(--color-gradient-end)`): IONOS
   Blue → Dark Midnight — see `uds-style-guide`.
-- Brand AI gradient (`var(--color-ai-primary-start) → var(--color-ai-primary-end)`):
-  `#095BB1 → #D746F5` (blue → magenta) — see `uds-style-guide/rules/ionos-ai-features.md`.
-- AI-generating accent purple used for the selection marquee only (never the AI CTA
-  gradient): `#8212C2` (purple-600) — see `ionos/product-frame-color.md`.
+- Brand AI gradient (`var(--color-ai-primary-start) → var(--color-ai-primary-end)`, blue →
+  magenta) — see `uds-style-guide/rules/ionos-ai-features.md` for the resolved hex.
+- AI-generating accent purple (purple-600) used for the selection marquee only (never the
+  AI CTA gradient) — see `ionos/product-frame-color.md`.

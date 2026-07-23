@@ -40,6 +40,11 @@ brand-specific color values — there is no `--brand-*` CSS custom property (see
 `uds-style-guide/ionos-color-palette` "Using these colours in code"), so the concrete hex must
 be resolved from here, not hardcoded in the brand-agnostic shared files.
 
+The values below are the same rows carried in `uds-style-guide/rules/ionos-color-palette.md`
+(Blue Black, Dark Blue, Sky) — resolved once here, in literal-hex form, for direct use in
+decorative-mode code, since no CSS token exists for these brand-scale colors. That palette
+file is the single source of truth for the value; do not re-derive it elsewhere.
+
 | Symbolic name | Concrete IONOS value | Used for |
 |---|---|---|
 | `DECORATIVE_BG_START` | `#02102B` (Blue Black) | Dark gradient / solid background start; `var(--surface-base-invert)` Remotion fallback |
@@ -70,7 +75,7 @@ Always include the IONOS logo (or the relevant brand's logo) in the nav bar plac
 
 **Naming rule (confirmed by SVG fill inspection):**
 - `ionos-dark` — all white fills (`#fff`) → readable on **dark** backgrounds → use in decorative (dark scene nav bars)
-- `ionos-light` — has blue `#003d8f` fills → readable on **light** backgrounds → use inside white/light inverted panels
+- `ionos-light` — has blue `#003d8f` fills (IONOS Blue — see `uds-style-guide/rules/ionos-color-palette.md`) → readable on **light** backgrounds → use inside white/light inverted panels
 
 **Import and embed pattern (dark background — default for decorative):**
 ```tsx
@@ -87,7 +92,7 @@ The `svgData` export is a `data:image/svg+xml;base64,...` string — use it dire
 | Import name | Fills | Dimensions | Use in |
 |-------------|-------|------------|--------|
 | `ionos-dark` | White only (`#fff`) | 151 × 44px | Nav bar on **dark** screen (default for decorative) |
-| `ionos-light` | Blue (#003d8f) + white | 151 × 44px | Nav bar on **light** surface / inverted white panel |
+| `ionos-light` | Blue (#003d8f — IONOS Blue, see `ionos-color-palette.md`) + white | 151 × 44px | Nav bar on **light** surface / inverted white panel |
 | `ionos-mono-dark` | White mono | 151 × 44px | Minimal / monochrome nav on dark backgrounds |
 | `ionos-cloud-dark` | White "IONOS Cloud" | varies | Cloud product illustrations on dark backgrounds |
 | `ionos-cloud-vertical-dark` | Stacked white variant | varies | Tall logo slots on dark backgrounds |
