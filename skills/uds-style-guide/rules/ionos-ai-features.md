@@ -90,6 +90,25 @@ background: linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai
 color: #fff;
 ```
 
+## AI badges / pills — gradient required, never flat purple
+
+AI badges and pills (e.g. a "KI-VORSCHLAG" / "AI suggestion" label) MUST render the same
+blue→magenta **gradient** as the CTA — a solid/flat purple fill is WRONG. Two valid renderings:
+
+- **Full gradient background** — `linear-gradient(45deg, #095BB1, #D746F5)` with white/light text, OR
+- **Gradient text on a neutral surface** — gradient-clipped text (`#095BB1 → #D746F5`) on
+  `var(--surface-base)` / `var(--surface-subtle)`, matching the `ai` Button's `secondary`/`tertiary`
+  text-gradient treatment described below.
+
+A **solid / flat purple fill is WRONG** for a badge — this includes the retired `#B410E7`
+(permanently retired, see above) and includes collapsing the two-stop gradient into a single
+flat midpoint purple. If a badge renders as one flat purple colour instead of a two-stop
+blue→magenta gradient, that is a bug, not a style choice.
+
+`ai-subtle` (`#FAE7FE → #FFFFFF`) is NOT a badge or panel fill — it remains reserved for the
+'thinking' indicator ONLY (see "Subtle AI surfaces" immediately below); never use it as a
+static badge background.
+
 ## Subtle AI surfaces — the 'thinking' indicator ONLY
 
 `ai-subtle` is a **scheme-aware token** — `--color-ai-subtle-start/end` carry BOTH light and dark
