@@ -135,7 +135,7 @@ export const AIFloatingHighlight: React.FC<{
   return (
     <div style={{
       borderRadius: 40,
-      background: 'var(--surface-subtle)',   // opaque surface token — the card is solid, not glass
+      background: 'var(--surface-subtle, #FFFFFF)',   // opaque surface token with hex fallback — the card is solid, not glass
       padding: '28px 24px 20px',
       boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
       transform: `translateX(${slideX}px) scale(${scale})`,

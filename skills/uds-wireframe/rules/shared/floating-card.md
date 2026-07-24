@@ -28,7 +28,7 @@ treatment.
 <div style={{
   position: 'absolute',
   borderRadius: 40,                          // large pill — NOT 16
-  background: 'var(--surface-subtle)',  /* opaque surface token; the 0.88 + backdrop-blur glass is ONLY for the AI generation area */
+  background: 'var(--surface-subtle, #FFFFFF)',  /* opaque surface token with hex fallback; the 0.88 + backdrop-blur glass is ONLY for the AI generation area */
   padding: '28px 24px 20px',
   boxShadow: '0 16px 48px rgba(0,0,0,0.35)', // plain neutral drop shadow — no AI glow on the card
   zIndex: 100,
@@ -59,7 +59,7 @@ treatment.
   {/* 2 — floating highlight element (sibling, NOT child) — default anchor: bottom-left, intersecting the frame edge, popping outside to the left. NOT on top of the frame's center. */}
   <div style={{ position: 'absolute', left: 80, bottom: 100, zIndex: 100,
                 borderRadius: 40,
-                background: 'var(--surface-subtle)',
+                background: 'var(--surface-subtle, #FFFFFF)',
                 boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
                 transform: `translateX(${highlightX}px) scale(${highlightScale})` }}>
     {/* AI content + CTA — or a prompt bar / stat callout / suggestion chip / generating indicator */}
@@ -105,7 +105,8 @@ bubbles, mini-toolbars, stat chips, and the Floating Highlight element's wrapper
 borderless. This style was retired; applying it to panels is wrong.
 
 **Surface vs. glass — HARD RULE.** The highlight element's background is the **opaque
-surface token** (`var(--surface-subtle)`) — the element is solid, not glass; there is no
+surface token with a hex fallback** (`var(--surface-subtle, #FFFFFF)`) — the element is
+solid, not glass; there is no
 `backdropFilter` on the element itself. The translucent glass + `backdropFilter` treatment
 belongs to a separate composition element (the AI generation area used in
 text/image-generation moments), never to this highlight element.
