@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.15.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.14.1...v2.15.0) (2026-07-24)
+
+
+### Features
+
+* **wireframe:** flexible highlight element anchored bottom-left, off the frame ([1a095c1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1a095c17f15dcbf529e9f5472dbd951fc284088b))
+* **wireframe:** product-pop-out character grounded + lower body behind cards (hide cutout), face-safe kept ([edbe9e2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/edbe9e2d0be2443d8572ca90a4b4d3f84e12d7ea))
+* **wireframe:** product-pop-out consumes fixed scaffold; character in front + face-safe ([717e9b5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/717e9b55bfd015653353f11c18a6ab5b42974446))
+
+
+### Bug Fixes
+
+* **ai-features:** AI badges must use the gradient, never a flat purple fill ([40c3f13](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/40c3f13b29fbd08c2c2e50a8f8913c40a9f77272))
+* **wireframe:** correct occlusion direction (character tucks behind cards) + align card wording ([253d9ca](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/253d9cafc246ea3506ebb1ace19b3662dc184ef4))
+* **wireframe:** highlight entrance flies in from the left to match bottom-left placement ([07fd35e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/07fd35e5ae868947fcd054260b791ae56b80300b))
+* **wireframe:** keep brand hex out of shared frame-anatomy; reference brand color rule for the dark fallback ([c863ca4](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c863ca44783508ed0b1176d4c9c1a49567dcc121))
+* **wireframe:** mandate opaque interface base plate for transparent-root composites ([a95e962](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a95e9627a9bef866d9a8d16bae5f34c8b2c8b7f2))
+* **wireframe:** opaque hex-fallback on the highlight surface + name outer-plate scheme hex ([0736ae6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/0736ae6bf6f7f55ebe3536a0591f7735a82f0e8c))
+
 ## [2.14.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.14.0...v2.14.1) (2026-07-23)
 
 
