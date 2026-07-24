@@ -31,25 +31,31 @@ Layer order:
    rule — the outer container gets a hardcoded opaque fill, `var(--surface-base, #FFFFFF)` with
    a hardcoded hex fallback; this is a transparent-root composite, so the frame itself must
    never resolve to transparent). Lay all functional content — nav, headings, controls, cards —
-   AROUND the character hero region: `layout.character`'s zone and the `layout.faceSafe` box are
-   off-limits to interface content. Nothing from the interface encroaches there.
+   AROUND the character hero region: the `layout.faceSafe` box (upper body + face) is
+   off-limits to interface content — nothing from the interface encroaches there. BELOW the
+   face-safe box, `layout.character`'s lower zone is NOT off-limits: product-view cards MAY
+   extend into and overlap the character's lower body there, tucking behind it to hide the
+   cutout's bottom edge (see the Character hero layer, next).
 3. **Character hero** — the supplied cutout as `staticFile('<slug>.<format>')`, a SINGLE
    INTACT portrait figure placed at `layout.character` (e.g. `{x:0.46,y:0.02,w:0.25,h:0.78}`).
 
-   This layer is **z-order IN FRONT of the interface** — this REVERSES the previous stacking
-   order, where the character sat beneath the interface's card stack and UI elements were
-   allowed to cross its lower body. Cards and interface chrome NEVER overlap the character now,
-   at any height. The head pops out above the interface's top edge (above `layout.interface`'s
-   y). The `layout.faceSafe` box (e.g.
-   `{x:0.46,y:0.02,w:0.25,h:0.34}` — upper body + face) is NEVER occluded by any element, at any
-   frame. The character is hero MEDIA, not a full-canvas standalone, and is never detached or
-   floating apart from the interface.
+   The character is GROUNDED: its bottom sits ON the product frame's BOTTOM edge, and it is
+   scaled LARGE so the head clears the interface's TOP edge (above `layout.interface`'s y) — a
+   tall, dominant hero figure, NOT a small floating waist-up figure. Use the supplied cutout
+   metrics to size and place it within the `layout.character` zone: `cutout.headTopFrac` gives
+   the fraction down the cutout where the head begins — the character must be sized/positioned
+   so the head clears the interface's top edge at that fraction; `cutout.subjectHeightFrac` gives
+   how tall the subject is within the cutout, for scaling the figure to fill the zone
+   top-to-bottom, grounded at the bottom edge.
 
-   Use the supplied cutout metrics to size and place it within the `layout.character` zone:
-   `cutout.headTopFrac` gives the fraction down the cutout where the head begins — the character
-   must be sized/positioned so the head clears the interface's top edge at that fraction;
-   `cutout.subjectHeightFrac` gives how tall the subject is within the cutout, for scaling the
-   figure to fill the zone.
+   This layer's head/upper body is **z-order IN FRONT of the interface**: the `layout.faceSafe`
+   box (e.g. `{x:0.46,y:0.02,w:0.25,h:0.34}` — upper body + face) is NEVER occluded by any
+   element, at any frame — no card, no chrome, ever crosses it. BELOW the face-safe box, though,
+   the character's LOWER torso tucks BEHIND the interface's card stack: product-view cards and
+   interface chrome MAY — and SHOULD — overlap the character's lower body there, so the cutout's
+   bottom edge is HIDDEN behind interface content rather than showing a hard crop line (matching
+   Figma 269:527). The character is hero MEDIA, not a full-canvas standalone, and is never
+   detached or floating apart from the interface.
 4. **Optional highlight** — if the contract supplies highlight text, a floating prompt bubble at
    `layout.highlight` (e.g. `{x:0.0,y:0.62,w:0.42,h:0.16}`, `side:'bottom-left'`,
    `popOutside:'left'`): anchored bottom-left, popping outside the interface's LEFT edge —
@@ -65,7 +71,9 @@ the same composition as the interface, never a separate collage layer. Everythin
 interface and character stays transparent.
 
 **Still gate**: frame 0 shows the interface fully laid out as the opaque base (never
-transparent), the character already IN FRONT of the interface with its head clear of the
-interface's top edge and the `layout.faceSafe` region fully unoccluded, and (if present) the
-highlight bubble already settled bottom-left, outside the interface's left edge.
+transparent), the character already GROUNDED at the interface's bottom edge and scaled as the
+large dominant hero — its head clear of the interface's top edge, its lower body already tucked
+behind the interface's cards (cutout bottom edge hidden, no hard crop line) — and the
+`layout.faceSafe` region fully unoccluded, and (if present) the highlight bubble already settled
+bottom-left, outside the interface's left edge.
 
