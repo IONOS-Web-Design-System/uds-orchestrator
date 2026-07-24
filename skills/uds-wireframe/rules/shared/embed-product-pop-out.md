@@ -33,9 +33,9 @@ Layer order:
    never resolve to transparent). Lay all functional content — nav, headings, controls, cards —
    AROUND the character hero region: the `layout.faceSafe` box (upper body + face) is
    off-limits to interface content — nothing from the interface encroaches there. BELOW the
-   face-safe box, `layout.character`'s lower zone is NOT off-limits: product-view cards MAY
-   extend into and overlap the character's lower body there, tucking behind it to hide the
-   cutout's bottom edge (see the Character hero layer, next).
+   face-safe box, `layout.character`'s lower zone is NOT off-limits: cards and interface
+   chrome MAY extend over the character's lower body there — the character's lower body tucks BEHIND
+   those cards, hiding the cutout's bottom edge (see the Character hero layer, next).
 3. **Character hero** — the supplied cutout as `staticFile('<slug>.<format>')`, a SINGLE
    INTACT portrait figure placed at `layout.character` (e.g. `{x:0.46,y:0.02,w:0.25,h:0.78}`).
 
