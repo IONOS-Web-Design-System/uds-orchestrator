@@ -77,6 +77,20 @@ brand-specific asset name in this shared file.
 - Never use the sky accent color in the product shell — that is a CTA colour; use `DARK_SHELL_ACCENT` for shell decorative elements (concrete value in the brand's color rule, e.g. `ionos/product-frame-color.md`)
 - AI feature affordances: see `uds-style-guide/ionos-ai-features` for gradient button, generating surface, and animation rules
 
+## Opaque base plate (transparent-root composite styles)
+
+For `product-pop-out` / `device-mockup` the composition root is TRANSPARENT, so any interface
+container without an opaque fill shows straight through. Two hard rules:
+
+- The product frame's OUTER container MUST carry an explicit opaque base fill — the outermost
+  `<div>` wrapping the interface gets a hardcoded opaque background beneath everything: use the
+  colorScheme-appropriate opaque hex from the brand color rule (e.g. `ionos/product-frame-color.md`
+  "Opaque base-plate fallback hex") — never hardcode a brand hex in this shared file.
+- Interface surfaces MUST use the token WITH a hardcoded hex fallback, never a bare token:
+  `backgroundColor: 'var(--surface-base, #FFFFFF)'` (light) — because CSS custom properties may
+  not resolve in a Remotion render, and a bare `var(--surface-base)` then collapses to transparent.
+  Use the colorScheme-appropriate fallback hex (see `ionos/product-frame-color.md`).
+
 ## Product Frame — Animated Overflow
 
 The main product frame itself can be animated and **partially moved outside the video canvas** to create a more dynamic, cinematic feel. The `AbsoluteFill` clips at the canvas boundary, so anything translated beyond 0/width/0/height is cropped — use this intentionally.

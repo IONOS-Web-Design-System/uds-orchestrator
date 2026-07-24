@@ -67,6 +67,22 @@ sidebar's role here.
 - Analytics / stat indicators: `#9DC2D9` for values and bars
 - All placeholder bars in the shell: `rgba(157,194,217,0.5)` — the steel-blue family, NOT white, NOT sky `#11C7E6`
 
+### Opaque base-plate fallback hex (transparent-root composite styles)
+
+Per `shared/frame-anatomy.md` "Opaque base plate," `product-pop-out` / `device-mockup` interface
+surfaces must use `var(--surface-base, <hex>)` — token plus a hardcoded same-scheme fallback,
+never a bare token — because the composition root there is transparent and an unresolved token
+collapses to see-through. The fallback only fires if the token itself fails to resolve, and it
+always matches the current `colorScheme`, so it does not conflict with the "do NOT hardcode a
+dark panel on a light render" rule above — the light fallback applies exactly when the light
+branch already applies, and the dark fallback applies exactly when the dark branch already
+applies:
+
+- **Light default** (`colorScheme !== 'dark'`, non-decorative): `var(--surface-base, #FFFFFF)`
+- **Dark variant** (`colorScheme === 'dark'`, or explicit decorative): `var(--surface-base, #001B41)`
+  — Dark Midnight, the same hex this file's own dark-shell gradients (outer frame, sidebar, panel
+  above) already start from
+
 ### Client-app zone (the website being edited)
 
 This is a completely separate inner panel — a real website preview, not tool chrome — so it

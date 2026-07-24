@@ -120,13 +120,13 @@ export const AIFloatingHighlight: React.FC<{
 }> = ({ fps, enterFrame = 20, text = '', productLabel, ctaLabel = 'Improve with AI' }) => {
   const frame = useCurrentFrame();
 
-  // Fly in from right with spring overshoot.
+  // Fly in from left edge with spring overshoot.
   // Snap to 1 once visually settled — springs asymptote and never reach their rest
   // value; an unsettled spring keeps the card's text re-rasterizing every frame
   // (sub-pixel scale/translate changes), which reads as typography shimmer.
   const rawEnter = spring({ frame: frame - enterFrame, fps, config: { damping: 18, stiffness: 120 } });
   const enter  = rawEnter > 0.995 ? 1 : rawEnter;
-  const slideX = interpolate(enter, [0, 1], [120, 0]);
+  const slideX = interpolate(enter, [0, 1], [-120, 0]);
   const scale  = interpolate(enter, [0, 0.6, 1], [0.88, 1.04, 1]);
   const opacity = interpolate(frame, [enterFrame, enterFrame + 8], [0, 1], { extrapolateRight: 'clamp' });
 
@@ -135,7 +135,7 @@ export const AIFloatingHighlight: React.FC<{
   return (
     <div style={{
       borderRadius: 40,
-      background: 'var(--surface-subtle)',   // opaque surface token — the card is solid, not glass
+      background: 'var(--surface-subtle, #FFFFFF)',   // opaque surface token with hex fallback — the card is solid, not glass
       padding: '28px 24px 20px',
       boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
       transform: `translateX(${slideX}px) scale(${scale})`,
