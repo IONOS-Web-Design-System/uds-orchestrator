@@ -18,7 +18,10 @@ contract.
 
 Layer order:
 
-1. **Root** — `<AbsoluteFill>` background: **TRANSPARENT** (no opaque fill). If the contract
+1. **Root** — `<AbsoluteFill>` background: **TRANSPARENT** (no opaque fill). **Never set
+   `overflow:'hidden'` on this root or any ancestor** — unlike `frame-anatomy.md`'s clipping
+   example, the character (layer 3) extends past the root's edges by design, and the HARD
+   character-img gate rejects any clipping ancestor. If the contract
    carries a `SAFE AREA:` line, reserve that transparent blank margin on the right/bottom and
    keep all elements inside the remaining content box; anything popping past an edge extends
    past the TOP edge only, never the reserved right/bottom margin. ONE EXCEPTION: the

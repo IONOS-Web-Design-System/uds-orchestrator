@@ -72,8 +72,9 @@ Grammar (mirrors the reference assets):
 - **Anchor & bleed.** Pin the frame to the **top-left** (or top corner): give it a fixed
   large size (its natural ~700–900px width) positioned so its left/top sit at a small inset
   and its right/bottom extend **past the canvas**. Set `overflow: 'hidden'` on the root
-  `AbsoluteFill` so the bleed clips to a clean edge. Only the sidebar + a few rows + the
-  highlighted feature stay in view; the far edge is cut off.
+  `AbsoluteFill` so the bleed clips to a clean edge — UNLESS this is a `product-pop-out`
+  composite, where the root must stay unclipped (see `product-pop-out/composition.md`). Only
+  the sidebar + a few rows + the highlighted feature stay in view; the far edge is cut off.
 - **Show the navigational anchor.** Keep the brand's dark navy **sidebar/nav rail** (with the
   IONOS wordmark and 3–4 large nav icons) in frame on the left — it's what reads as "a real
   product". Then a few content rows / list items / a chart in the main pane.
