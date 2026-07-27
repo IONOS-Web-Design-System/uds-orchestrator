@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.15.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.15.0...v2.15.1) (2026-07-27)
+
+
+### Bug Fixes
+
+* **uds-wireframe:** scope small-format/screen-content rules so they stop leaking into every bundle ([8089d29](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/8089d295f4ece9e84ea26e7bbc2d9a7935c7b81e))
+
+
+### Documentation
+
+* **uds-wireframe:** repoint two connector-line references that no longer resolve ([99f9a0a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/99f9a0af020b9a92f60f8f685d947dbc89df62bc))
+* **uds-wireframe:** split the pop-out rule into a folder; character renders at native aspect ([aa15332](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/aa153325b0223083f3955a60e11e9aa39ed6e215))
+* **uds-wireframe:** stop teaching a root overflow:hidden for the pop-out character ([4fe6059](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/4fe605978f5761992eb5a0b7490c9415a330822a))
+* **uds-wireframe:** teach the literal staticFile slug so the character gate can see it ([caf4d0c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/caf4d0ca7fa3faf0732d0a5d1808a0bf8e853449))
+
 ## [2.15.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.14.1...v2.15.0) (2026-07-24)
 
 
