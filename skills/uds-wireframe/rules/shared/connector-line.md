@@ -11,7 +11,7 @@ connector line links the card's edge to the feature point inside the frame.
 
 **This pattern is for pure illustration only.** It does NOT require a generated background
 image. For the hybrid equivalent (connector from a floating panel to a headline in a photo),
-see `ionos/image-backdrop.md` "Style: image-backdrop with feature pointer."
+see `shared/embed-image-backdrop-pointer.md` "Style: image-backdrop with feature pointer."
 
 ## DOM structure
 
