@@ -1,3 +1,7 @@
+---
+styles: [background-pointer, background-full]
+---
+
 # Image-backdrop hybrid compositions — IONOS notes
 
 The full embed-contract geometry (all 6 styles — `background-full`, `background-pointer`,

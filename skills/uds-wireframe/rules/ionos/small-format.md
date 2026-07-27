@@ -1,3 +1,7 @@
+---
+small: true
+---
+
 # Small-format illustrations
 
 **When this applies:** the brief's dimensions are small — **under ~512px on both axes**

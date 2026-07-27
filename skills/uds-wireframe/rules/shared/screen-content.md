@@ -1,3 +1,7 @@
+---
+styles: [bare-interface]
+---
+
 # Screen-content interface (illustration-first)
 
 Applies when the brief is a **bare on-screen interface** destined to be placed onto a device's

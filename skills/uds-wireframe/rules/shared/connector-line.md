@@ -1,3 +1,7 @@
+---
+styles: [plain, reconstruct]
+---
+
 # Pattern 7 — Connector Line (pure illustration)
 
 **When:** `Composition pattern: product-frame-connector-line` — the brief asks to "point
