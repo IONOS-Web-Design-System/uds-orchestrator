@@ -23,7 +23,7 @@ styling) are in `product-pop-out/highlight-and-ai.md`.
 
    ```tsx
    <Img
-     src={staticFile(`${characterSlug}.png`)}
+     src={staticFile('<slug>.<format>')}
      style={{
        position: 'absolute',
        left: `${L.character.x * 100}%`,
@@ -38,8 +38,10 @@ styling) are in `product-pop-out/highlight-and-ai.md`.
    NEVER `objectFit:'cover'` (it amputates the shoulders and hands at the box edge), NEVER
    `objectFit:'fill'` or both width and height without `objectFit:'contain'` (either stretches
    the person — circular glasses become vertical ovals), and NEVER `overflow:'hidden'` on the
-   character's wrapper. `cutout.headTopFrac` and `cutout.subjectHeightFrac` are supplied for
-   context only; the rect is already computed from them, so no further scaling is needed.
+   character's wrapper or any ancestor of it. Tailwind equivalents (object-cover, object-fill,
+   overflow-hidden/-x/-y, h-*+non-w-auto w-*) banned. `cutout.headTopFrac` and
+   `cutout.subjectHeightFrac` are supplied for context only; the rect is already computed from
+   them, so no further scaling is needed.
 
    This layer's head/upper body is **z-order IN FRONT of the interface**: the `layout.faceSafe`
    box (e.g. `{x:0.46,y:0.02,w:0.25,h:0.34}` — upper body + face) is NEVER occluded by any
