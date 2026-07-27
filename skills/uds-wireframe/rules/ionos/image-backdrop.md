@@ -1,12 +1,18 @@
+---
+styles: [background-pointer, background-full]
+---
+
 # Image-backdrop hybrid compositions — IONOS notes
 
 The full embed-contract geometry (all 6 styles — `background-full`, `background-pointer`,
 `interface-asset`, `floating-card`, `product-pop-out`, `device-mockup` — plus the shared
 color-harmony rule) has moved to `shared/embed-preamble.md` plus one `shared/embed-<style>.md`
 file per style (`embed-image-backdrop-pointer.md`, `embed-image-backdrop-full.md`,
-`embed-interface-asset.md`, `embed-floating-intersect.md`, `embed-product-pop-out.md`,
-`embed-device-mockup.md`, and `embed-color-harmony.md` for the four opaque styles), which
-apply to every brand. Load the preamble plus the matching style file when the brief contains
+`embed-interface-asset.md`, `embed-floating-intersect.md`, `embed-device-mockup.md`, and
+`embed-color-harmony.md` for the four opaque styles), which apply to every brand.
+`product-pop-out` is the one exception — its geometry is a sub-folder,
+`shared/product-pop-out/{composition,character,highlight-and-ai}.md`, split by concern rather
+than a single file. Load the preamble plus the matching style file(s) when the brief contains
 `[HYBRID EMBED CONTRACT]`.
 
 This file now holds only IONOS-specific color values for the parts the shared file

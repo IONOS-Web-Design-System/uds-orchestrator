@@ -47,7 +47,7 @@ The description may start with a type prefix in brackets: `[photo]`, `[website]`
 
 | Type prefix (or inferred) | What it is | How to place it |
 |---|---|---|
-| `[photo]` | Standalone photo — person, product, scene | Fill an **image placeholder** only (`objectFit:'cover'`). Never the whole client interface. |
+| `[photo]` | Standalone photo — person, product, scene | Fill an **image placeholder** only (`objectFit:'cover'`). Never the whole client interface. Applies to CATALOG photos only — a supplied character cutout is NOT a catalog photo and is never `cover` (see `shared/product-pop-out/character.md`). |
 | `[website]` | Full website or app UI screenshot | Use **as the website being edited** inside the product frame's light client-app zone (`var(--surface-subtle)`). Never also shrink into a thumbnail. |
 | `[mockup]` | Transparent device frame with a blank screen | Place the mockup PNG **ABOVE** your UI (higher `zIndex`). Put the wireframe in a container sized to the **mockup's own aspect ratio**, absolutely positioned at the **exact `screen=x%,y%,w%,h%` slot** given in the `# Available assets` entry. The transparent screen reveals the UI; the opaque bezel frames and rounds it. Do NOT guess the inset — use the provided `screen=` numbers. |
 | `[icon]` | Small brand/product icon | Inline in generated UI (integrations row, login button). 16–32px, `objectFit:'contain'`, never a hero. |
