@@ -42,12 +42,21 @@ Layers 1-2 (root, interface) are in `product-pop-out/composition.md`; layer 3 (c
    - fill `var(--utility-yellow-300, #FFAA00)` — a token WITH the hex fallback, because a bare
      token collapses to transparent under this style's transparent root;
    - corner radius **4.4% of the badge's own height**;
-   - drop shadow `0 0 13.7% rgba(0, 0, 0, 0.5)` (a 50px blur on the 365px design height) — a
-     plain neutral shadow, never an AI glow;
-   - text `var(--text-primary, #000000)` — a brand-neutral fallback (this file lives under
-     `shared/` and is inlined for every brand's product-pop-out render; each brand resolves its
-     own on-brand ink color through the token at render time — do not hardcode a specific
-     brand's text color here), Open Sans **Bold**, centred both ways;
+   - drop shadow: blur = **0.137 × the badge's rendered height in px**, COMPUTED INTO A PIXEL
+     VALUE at render time (e.g. 50px on a 365px-tall badge) — spread 0, offset 0, colour
+     `rgba(0, 0, 0, 0.5)`. A percentage is NOT a valid `box-shadow` blur radius — unlike
+     `border-radius` above, which does accept percentages, `box-shadow`'s blur-radius component
+     accepts only a `<length>`. Writing it as `0 0 13.7% rgba(0, 0, 0, 0.5)` makes the whole
+     declaration invalid CSS, which the browser silently drops — the shadow this rule exists to
+     specify would simply never render. Compute the blur in code instead, e.g.
+     `boxShadow: \`0 0 ${(B.h * 0.137).toFixed(1)}px rgba(0, 0, 0, 0.5)\`` — never a percentage
+     literal. Plain neutral shadow, never an AI glow;
+   - text hardcoded **`#001B41`** — the ink colour measured from the Figma component. This is
+     hardcoded rather than tokenized: the sales plate is amber in BOTH color schemes, so its
+     text must stay dark in both, and this codebase's scheme-reactive tokens for this role
+     (`--text-base` / `--text-base-invert`) would flip to light-on-amber in dark mode and become
+     illegible. (There is no `--text-primary` token in this codebase — do not reintroduce it.)
+     Open Sans **Bold**, centred both ways;
    - line-height 1.1× each block's own font-size.
 
    Lay the blocks out along the contract's `axis`: `column` = stacked; `row` = the runs side by

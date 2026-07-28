@@ -6,7 +6,7 @@ styles: [product-pop-out]
 
 Layer 3 (the character hero) is in `product-pop-out/character.md`; layers 4-5 (optional
 highlight, AI styling) are in `product-pop-out/highlight-and-ai.md`; layer 6 (the brand
-badges) is in `product-pop-out/badges.md`.
+badges, IONOS-only — spec D8) is in `ionos/product-pop-out/badges.md`.
 
 Story: the product feature IS the builder/editor interface, and a character's hero portrait
 pops out above it — the composite is meant to sit over any host background (marketing page,
@@ -28,9 +28,9 @@ Layer order:
    past the TOP edge only, never the reserved right/bottom margin. TWO EXCEPTIONS: the
    character cutout (layer 3, see `product-pop-out/character.md`) is sized by its own native
    aspect and MAY extend past the reserved right/bottom margin — never shrink, squeeze or clip
-   it to fit the margin; and the sales badge (layer 6, see
-   `product-pop-out/badges.md`) straddles the frame's bottom-right corner by design and may
-   cross the same margin when the contract marks it so.
+   it to fit the margin; and the sales badge (layer 6, IONOS-only, see
+   `ionos/product-pop-out/badges.md`) straddles the frame's bottom-right corner by design and
+   may cross the same margin when the contract marks it so.
 2. **Interface** — a UDS-component wireframe of the brand's builder/editor: a top bar (e.g.
    a Publish action), a left checklist, and a website canvas. Build it per the standard
    wireframe composition rules (`ionos/composition.md`, `ionos/product-frame-color.md`,
