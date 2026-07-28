@@ -13,11 +13,19 @@ Layers 1-2 (root, interface) are in `product-pop-out/composition.md`; layer 3 (c
    contract did not supply.
 
    Both badges are FIXED-SIZE brand artifacts. Their rects are computed upstream from the
-   Figma component's own aspect ratio: fill each rect exactly as given and read every number
-   from the contract — a hardcoded width, height, left or top is a gate failure. Each badge's
-   root element carries `data-badge="<id>"`.
+   Figma component's own aspect ratio. There is NO `layout` prop at runtime to read them
+   from — the generated component's `VariantSchema` (`template/remotion-starter/src/
+   schema.ts`) has no `layout` field, and that file is PROTECTED (never overwritten), so one
+   can never be added. `layout.badges[...]` / `L.badges[...]` is not merely a bad idiom, it is
+   a bug: it renders as `NaN%`. TRANSCRIBE the contract's four numbers for each badge as
+   literal inline percentages instead — this is the ONLY idiom that can work, and the
+   badge-img gate verifies each one numerically against the contract rect. Each badge's root
+   element carries `data-badge="<id>"`.
 
-   **`unlimited`** — the supplied PNG, at its rect, in front of the interface:
+   **`unlimited`** — the supplied PNG, at its rect, in front of the interface. The contract
+   gives the exact numbers for THIS render; transcribe them literally (below, `32.8%`,
+   `-8.35%`, `88.35%` are illustrative placeholders for whatever numbers the contract actually
+   supplies — do not copy them verbatim):
 
    ```tsx
    <Img
@@ -25,10 +33,10 @@ Layers 1-2 (root, interface) are in `product-pop-out/composition.md`; layer 3 (c
      src={staticFile('unlimited-badge.png')}
      style={{
        position: 'absolute',
-       left: `${B.x * 100}%`,
-       top: `${B.y * 100}%`,
-       height: `${B.h * 100}%`,
-       width: 'auto',          // NOT both dimensions — CSS would default to objectFit:'fill'
+       left: '32.8%',           // the contract's x × 100, as a literal — NOT `${B.x * 100}%`
+       top: '-8.35%',           // the contract's y × 100, as a literal
+       height: '88.35%',        // the contract's h × 100, as a literal
+       width: 'auto',           // NOT both dimensions — CSS would default to objectFit:'fill'
        zIndex: 40,
      }}
    />
@@ -42,15 +50,6 @@ Layers 1-2 (root, interface) are in `product-pop-out/composition.md`; layer 3 (c
    - fill `var(--utility-yellow-300, #FFAA00)` — a token WITH the hex fallback, because a bare
      token collapses to transparent under this style's transparent root;
    - corner radius **4.4% of the badge's own height**;
-   - drop shadow: blur = **0.137 × the badge's rendered height in px**, COMPUTED INTO A PIXEL
-     VALUE at render time (e.g. 50px on a 365px-tall badge) — spread 0, offset 0, colour
-     `rgba(0, 0, 0, 0.5)`. A percentage is NOT a valid `box-shadow` blur radius — unlike
-     `border-radius` above, which does accept percentages, `box-shadow`'s blur-radius component
-     accepts only a `<length>`. Writing it as `0 0 13.7% rgba(0, 0, 0, 0.5)` makes the whole
-     declaration invalid CSS, which the browser silently drops — the shadow this rule exists to
-     specify would simply never render. Compute the blur in code instead, e.g.
-     `boxShadow: \`0 0 ${(B.h * 0.137).toFixed(1)}px rgba(0, 0, 0, 0.5)\`` — never a percentage
-     literal. Plain neutral shadow, never an AI glow;
    - text hardcoded **`#001B41`** — the ink colour measured from the Figma component. This is
      hardcoded rather than tokenized: the sales plate is amber in BOTH color schemes, so its
      text must stay dark in both, and this codebase's scheme-reactive tokens for this role
@@ -59,9 +58,20 @@ Layers 1-2 (root, interface) are in `product-pop-out/composition.md`; layer 3 (c
      Open Sans **Bold**, centred both ways;
    - line-height 1.1× each block's own font-size.
 
+   There is no drop shadow on either badge — the Figma components export at exactly their
+   layout box with zero bleed. The sales plate is flat.
+
    Lay the blocks out along the contract's `axis`: `column` = stacked; `row` = the runs side by
    side on ONE line (the price treatment, e.g. "ab **9 €** mtl."). Each block's font-size is
-   its `scale` × the badge's own height, so the badge reads identically at every canvas size.
+   its `scale` × the badge's own RENDERED HEIGHT IN PIXELS — COMPUTE this into a pixel value,
+   never write it as a CSS percentage. `fontSize:'20.6%'` is valid CSS, so nothing errors, but
+   it resolves against the INHERITED font-size (the parent's), not the badge's own height —
+   the text silently renders microscopic. Compute it the same way as the geometry above: the
+   badge's rendered height in px is its contract height-fraction × the canvas's pixel height
+   (from `useVideoConfig()`), then multiply by the block's `scale`. Worked example: a badge
+   17.88% of a 960px-tall canvas is 171.8px tall; a block with `scale:0.38` is
+   `0.38 × 171.8 ≈ 65.3px` → `fontSize:'65.3px'`. The contract states the exact pixel number
+   for THIS render — transcribe that number, do not re-derive it from a different canvas size.
    Do not force letter-casing — the copy arrives with the casing its author chose.
 
    Every visible string comes from `props.texts.<slot>` using the slot names the contract
