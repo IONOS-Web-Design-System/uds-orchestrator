@@ -93,6 +93,23 @@ Layers 1-2 (root, interface) are in `product-pop-out/composition.md`; layer 3 (c
      `alignItems:'center'`) so they read as a single phrase (e.g. "ab **9 €** mtl."), never as
      three independently positioned blocks sitting at different heights.
 
+   **NUMERAL ↔ CURRENCY GAP.** Inside a price block, the space between the numeral and its
+   currency symbol must render as a THIN gap — target **0.20em**. Figma sets these as ADJACENT
+   runs (`ab` · `9€` · `mtl.` on the `L + XL price` component) and lets tracking do the spacing,
+   so a literal word space at the price size — the largest type on the plate — renders a visibly
+   wide hole between the number and the `€`. Open Sans Bold's space glyph measures **0.2598em**
+   and `wordSpacing` ADDS to that advance, so `wordSpacing:'-0.06em'` lands the visible gap on
+   0.20em. Em-relative, so it survives any shrink-to-fit.
+
+   - Apply it ONLY to a block whose ONLY space is the numeral↔currency one: `9 €`, `9,99 €`,
+     `100.000 €`, and symbol-first forms like `€ 9,99`. `wordSpacing` narrows EVERY space in the
+     element, so a block carrying a SECOND space (`ab 9 €`, `Jetzt ab 9 € testen`) must NOT get
+     it — there the currency gap already matches the surrounding word spaces, which is correct.
+     The contract names the exact slot(s) to apply it to; if it names none, do not add it.
+   - NEVER edit the string to close the gap: the copy is author-supplied and is checked
+     verbatim against the text pack. Removing the space (`9€`) or swapping in a different
+     space character is a copy change, not a typographic one, and it will fail that check.
+
    **SHADOW** — both badges get a plain neutral shadow so they read as a layer above the
    interface, added in CODE ONLY. It must NEVER be exported back into the Figma asset: the
    Figma components export at exactly their layout box with zero bleed, which is what makes
