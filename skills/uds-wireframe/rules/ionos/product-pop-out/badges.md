@@ -59,15 +59,39 @@ Layers 1-2 (root, interface) are in `product-pop-out/composition.md`; layer 3 (c
      Open Sans **Bold**, centred both ways;
    - line-height 1.1× each block's own font-size.
 
-   **INNER SAFE AREA** — pad the plate **8% of the badge's own width** on each side and **12%
+   **INNER SAFE AREA** — pad the plate **3% of the badge's own width** on each side and **12%
    of the badge's own height** top and bottom; every text block MUST sit fully inside that
-   padded box, never touching the plate's outer edge. The `scale` the contract supplies per
-   block is a MAXIMUM, not a fixed size to render as-is: if the copy does not fit inside the
-   padded box at that size (a long author-supplied string, a market whose translation runs
-   longer), reduce the font size until it does — shrink every block by the SAME factor, so
-   the relative proportion between blocks (e.g. the price treatment's big middle run vs. its
-   two small flanking runs) is preserved rather than only the overflowing block shrinking
-   alone.
+   padded box, never touching the plate's outer edge. 3% (not 8%) is deliberate: Figma has
+   effectively NO horizontal inset on this component — the S+L+S text nodes span the badge's
+   full 580px width and are centre-aligned, and the apparent margin there is just short copy —
+   while the 12% vertical figure IS faithful to Figma (its own vertical insets measure ~13%
+   top and ~16% bottom). An 8% side inset was measured to remove 16% of the usable width
+   between the two sides combined, which is enough to force a wrap on real copy (see NOWRAP
+   below) even though the "shrink to fit" rule already existed — the padding itself was the
+   defect, not a missing instruction.
+
+   **NEVER WRAP — SHRINK INSTEAD.** This is a hard requirement, not a preference:
+
+   - every text block is `whiteSpace:'nowrap'` — a block must NEVER break onto a second line.
+     `9 €` and `100.000 €` are each ONE block and must render on one line; there is no such
+     thing as a "block" that wraps, only one that has been sized wrong.
+   - the `scale` the contract supplies per block is a MAXIMUM, not a fixed size to render
+     as-is: if a block does not fit the padded WIDTH at that size (a long author-supplied
+     string, a market whose translation runs longer), reduce THAT block's own font size until
+     it does, keeping the relative proportion between blocks — shrink every block by the SAME
+     factor (e.g. the price treatment's big middle run vs. its two small flanking runs), never
+     the overflowing block alone.
+   - the WHOLE STACK — every block plus its line box, together — MUST fit inside the padded
+     HEIGHT. Nothing may render outside the amber plate: a block escaping the plate (as
+     happened with `Bis zu`, pushed above the badge onto the plain background in dark text) is
+     a DEFECT, full stop — never an acceptable side effect of "the copy was long". If the
+     stack does not fit, shrink further, same MAXIMUM rule as above. Clipping is NOT the
+     remedy: `overflow:'hidden'` on a badge (or any ancestor of one) is REJECTED by the
+     badge-img gate outright, so there is no fallback but to size the type to fit.
+   - for the `row` axis specifically: the runs sit on ONE line, sharing a common vertical
+     centre — lay them out as a flex row (`display:'flex'`, `flexDirection:'row'`,
+     `alignItems:'center'`) so they read as a single phrase (e.g. "ab **9 €** mtl."), never as
+     three independently positioned blocks sitting at different heights.
 
    **SHADOW** — both badges get a plain neutral shadow so they read as a layer above the
    interface, added in CODE ONLY. It must NEVER be exported back into the Figma asset: the
