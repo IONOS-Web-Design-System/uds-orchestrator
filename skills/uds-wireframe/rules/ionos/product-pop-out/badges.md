@@ -38,6 +38,7 @@ Layers 1-2 (root, interface) are in `product-pop-out/composition.md`; layer 3 (c
        height: '88.35%',        // the contract's h × 100, as a literal
        width: 'auto',           // NOT both dimensions — CSS would default to objectFit:'fill'
        zIndex: 40,
+       filter: 'drop-shadow(0 5.8px 11.5px rgba(0, 0, 0, 0.28))', // see SHADOW below — illustrative px
      }}
    />
    ```
@@ -58,8 +59,32 @@ Layers 1-2 (root, interface) are in `product-pop-out/composition.md`; layer 3 (c
      Open Sans **Bold**, centred both ways;
    - line-height 1.1× each block's own font-size.
 
-   There is no drop shadow on either badge — the Figma components export at exactly their
-   layout box with zero bleed. The sales plate is flat.
+   **INNER SAFE AREA** — pad the plate **8% of the badge's own width** on each side and **12%
+   of the badge's own height** top and bottom; every text block MUST sit fully inside that
+   padded box, never touching the plate's outer edge. The `scale` the contract supplies per
+   block is a MAXIMUM, not a fixed size to render as-is: if the copy does not fit inside the
+   padded box at that size (a long author-supplied string, a market whose translation runs
+   longer), reduce the font size until it does — shrink every block by the SAME factor, so
+   the relative proportion between blocks (e.g. the price treatment's big middle run vs. its
+   two small flanking runs) is preserved rather than only the overflowing block shrinking
+   alone.
+
+   **SHADOW** — both badges get a plain neutral shadow so they read as a layer above the
+   interface, added in CODE ONLY. It must NEVER be exported back into the Figma asset: the
+   Figma components export at exactly their layout box with zero bleed, which is what makes
+   the geometry above predictable — baking a shadow into the PNG would grow its bounding box
+   and desync it from the contract rect again. Compute the shadow from the badge's own
+   rendered height in PIXELS, the same arithmetic as the font-size below (a percentage is not
+   a valid `box-shadow`/`filter` length): offset-y `0.03 × h`, blur `0.06 × h`,
+   `rgba(0, 0, 0, 0.28)`.
+   - `sales` (a `<div>`): `boxShadow: '0 {0.03×h}px {0.06×h}px rgba(0, 0, 0, 0.28)'`.
+   - `unlimited` (an `<Img>` with alpha): MUST use
+     `filter: 'drop-shadow(0 {0.03×h}px {0.06×h}px rgba(0, 0, 0, 0.28))'`, NEVER `boxShadow`.
+     `box-shadow` on an image draws the shadow around its rectangular bounding box — this PNG
+     has transparent margins around the badge shape, so a box-shadow would render a visible
+     rectangle instead of a shadow; `drop-shadow` follows the alpha channel and traces the
+     badge's actual silhouette.
+   - Never an AI glow on either badge, regardless of this style's AI-styling setting.
 
    Lay the blocks out along the contract's `axis`: `column` = stacked; `row` = the runs side by
    side on ONE line (the price treatment, e.g. "ab **9 €** mtl."). Each block's font-size is
@@ -68,11 +93,13 @@ Layers 1-2 (root, interface) are in `product-pop-out/composition.md`; layer 3 (c
    it resolves against the INHERITED font-size (the parent's), not the badge's own height —
    the text silently renders microscopic. Compute it the same way as the geometry above: the
    badge's rendered height in px is its contract height-fraction × the canvas's pixel height
-   (from `useVideoConfig()`), then multiply by the block's `scale`. Worked example: a badge
-   17.88% of a 960px-tall canvas is 171.8px tall; a block with `scale:0.38` is
-   `0.38 × 171.8 ≈ 65.3px` → `fontSize:'65.3px'`. The contract states the exact pixel number
-   for THIS render — transcribe that number, do not re-derive it from a different canvas size.
-   Do not force letter-casing — the copy arrives with the casing its author chose.
+   (from `useVideoConfig()`), then multiply by the block's `scale` — and remember `scale` is a
+   MAXIMUM (see INNER SAFE AREA above): shrink FROM this size if the copy overflows the padded
+   box, do not render it as-is regardless of fit. Worked example: a badge 17.88% of a 960px-tall
+   canvas is 171.8px tall; a block with `scale:0.38` is `0.38 × 171.8 ≈ 65.3px` →
+   `fontSize:'65.3px'`. The contract states the exact pixel number for THIS render — transcribe
+   that number, do not re-derive it from a different canvas size. Do not force letter-casing —
+   the copy arrives with the casing its author chose.
 
    Every visible string comes from `props.texts.<slot>` using the slot names the contract
    supplies — never a hardcoded display string, and never reworded, extended or translated in
