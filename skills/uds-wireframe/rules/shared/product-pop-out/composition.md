@@ -5,7 +5,8 @@ styles: [product-pop-out]
 ## Style: product-pop-out — layers 1-2, the root and interface (plus the closing rule and Still gate)
 
 Layer 3 (the character hero) is in `product-pop-out/character.md`; layers 4-5 (optional
-highlight, AI styling) are in `product-pop-out/highlight-and-ai.md`.
+highlight, AI styling) are in `product-pop-out/highlight-and-ai.md`; layer 6 (the brand
+badges, IONOS-only — spec D8) is in `ionos/product-pop-out/badges.md`.
 
 Story: the product feature IS the builder/editor interface, and a character's hero portrait
 pops out above it — the composite is meant to sit over any host background (marketing page,
@@ -24,10 +25,12 @@ Layer order:
    character-img gate rejects any clipping ancestor. If the contract
    carries a `SAFE AREA:` line, reserve that transparent blank margin on the right/bottom and
    keep all elements inside the remaining content box; anything popping past an edge extends
-   past the TOP edge only, never the reserved right/bottom margin. ONE EXCEPTION: the
+   past the TOP edge only, never the reserved right/bottom margin. TWO EXCEPTIONS: the
    character cutout (layer 3, see `product-pop-out/character.md`) is sized by its own native
    aspect and MAY extend past the reserved right/bottom margin — never shrink, squeeze or clip
-   it to fit the margin.
+   it to fit the margin; and the sales badge (layer 6, IONOS-only, see
+   `ionos/product-pop-out/badges.md`) straddles the frame's bottom-right corner by design and
+   may cross the same margin when the contract marks it so.
 2. **Interface** — a UDS-component wireframe of the brand's builder/editor: a top bar (e.g.
    a Publish action), a left checklist, and a website canvas. Build it per the standard
    wireframe composition rules (`ionos/composition.md`, `ionos/product-frame-color.md`,
