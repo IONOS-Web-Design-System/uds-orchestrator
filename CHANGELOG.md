@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.16.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.15.1...v2.16.0) (2026-07-30)
+
+
+### Features
+
+* **highlight:** teach all three contract states, not one archetype ([3695dbf](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3695dbfd0c5d93224d38d5a73cc70266b4dcb464))
+
+
+### Bug Fixes
+
+* **badges rule:** inner safe area + scale-as-maximum, code-drawn shadow (never in the asset) ([d03ff06](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d03ff06ff5e63cfd2cc0150d3d3fa1ad757fb871))
+* **badges rule:** transcribe literal percentages, drop shadow, compute fontSize in px ([103334a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/103334aa54978d924287be619d30ad2510fc0a02))
+* **badges:** render the numeral-currency gap as a thin 0.20em gap ([12e4973](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/12e497336583be37f9eacedd5095bc0c2b8d8eb2))
+* **badges:** sales plate side padding 8%-&gt;3%, add nowrap-and-shrink contract ([172962a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/172962a3c8225ebb404d4b299bdc67e0a922a730))
+* **uds-wireframe:** move badge rule to ionos/ scope; fix invalid CSS + fake token (Findings 1b/2/3) ([732c48d](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/732c48d3d95216a97e7e8e74dcaa7892dc8765f3))
+
+
+### Documentation
+
+* **uds-wireframe:** product-pop-out badge layer; sales badge joins the margin exception ([3e75cf5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3e75cf596e28ca9f0c203260221a60ed28c86dce))
+
 ## [2.15.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.15.0...v2.15.1) (2026-07-27)
 
 
