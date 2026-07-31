@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.17.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.16.0...v2.17.0) (2026-07-31)
+
+
+### Features
+
+* **wireframe:** make the canvas background showroom-category conditional ([ed3b5f4](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ed3b5f462aaf28907126c2a41b67922aceb56b54))
+* **wireframe:** require explicit frame separation from the canvas ([aff7453](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/aff7453de9cf92a9e9824872c692f2fea6cbf42d))
+* **wireframe:** retier interface chrome and adopt semantic tokens ([a01744c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a01744c4695df3188fa3dec405f777c1490c162c))
+
+
+### Bug Fixes
+
+* **wireframe:** correct the frame-separation cross-reference name and direction ([323b753](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/323b753ef6ae19e70605122b51a3a77c79878b2d))
+* **wireframe:** make the right panel a shell rail and spell out badge-text tokens ([87886d5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/87886d55954552850e4c8e45126fdaf5ec5ea572))
+* **wireframe:** scope the canvas-gradient exception and de-orphan the surface-theme bullets ([60e6db7](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/60e6db733deb6585f83005ff59a178c27c74beb4))
+* **wireframe:** tokenize the shared canvas gradient (shared files stay brand-hex-free) ([bfad505](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/bfad505801e6d0f1d880284f212385107974bab5))
+
 ## [2.16.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.15.1...v2.16.0) (2026-07-30)
 
 
