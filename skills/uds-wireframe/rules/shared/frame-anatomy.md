@@ -57,7 +57,7 @@ themes.
 - Client-app text bars: `#BCC8D4` (fixed — the client-app's own light theme)
 - Floating pop-out / glass elements: `var(--surface-subtle)` (see `shared/floating-card.md`)
  (floating elements sit on the CANVAS, so they need the same border/shadow separation as the
- frame — see "The frame MUST be separated from the canvas" above)
+ frame — see "Separating same-tier surfaces" below)
 
 **Dark shell variant (`colorScheme === 'dark'` or decorative — NOT the default):** here, and only
 here, the product shell is dark while the client-app zone stays light. Never mix their palettes:
