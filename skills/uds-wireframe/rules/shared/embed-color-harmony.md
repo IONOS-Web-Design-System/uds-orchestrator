@@ -10,6 +10,11 @@ The contract's `Color harmony:` line carries the backdrop imagery's **measured**
 backdrop imagery to harmonize against. The composition must feel of-a-piece with the
 imagery — never a brand-default background fighting the photo:
 
+> **AI showrooms override this.** When this render's non-negotiables carry a `CANVAS BACKGROUND:`
+> line, use that gradient as the root and skip the palette-derived derivation below. The harmony
+> rules still govern every OTHER layer (card fills, chips, text) so the imagery and the UI stay
+> tonally related.
+
 - **Root background gradient**: derive it from the dominant tone's hue family, darkened —
   mix the dominant hue toward the brand's deepest dark tone (for IONOS, Dark Midnight) at
   roughly 60-80% darkness. E.g. a dominant teal mixes toward a dark teal-navy gradient; a

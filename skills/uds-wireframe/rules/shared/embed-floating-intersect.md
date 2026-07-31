@@ -5,7 +5,8 @@ styles: [floating-card]
 ## Style: floating image card with intersecting highlights
 
 The generated image is the hero, presented as a single dominant rounded card (~60–80% of the
-canvas) on a `var(--surface-subtlest)` root — NOT a full-bleed backdrop. The product feature is
+canvas) on a `var(--surface-subtlest, #DBEDF8)` root (or the CANVAS BACKGROUND gradient when this
+render's non-negotiables name one) — NOT a full-bleed backdrop. The product feature is
 conveyed by **2–3 small elements that FLOAT and INTERSECT** the card:
 
 - they overlap the card's **edges/corners** AND/OR rest **ON the image** over its quiet regions —
