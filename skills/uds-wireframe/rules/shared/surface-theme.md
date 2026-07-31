@@ -7,7 +7,7 @@ model's aesthetic choice. This is a form decision the design system owns, not th
 - **Bind base surfaces to `colorScheme` tokens.** The root, panels, cards, rows, and text
   MUST use the UDS surface/text tokens that the composition's `data-color-scheme` wrapper
   resolves — `var(--surface-base)`, `var(--surface-subtle)`,
-  `var(--surface-subtlest)` (canvas only — see below),
+  `var(--surface-subtlest)` (canvas only — see "Canvas vs interface base" below),
   `var(--text-base)`, `var(--text-subtle)`, etc. Because the wrapper carries
   `data-color-scheme={colorScheme}`, these resolve to the correct light/dark values
   automatically.
@@ -21,6 +21,13 @@ model's aesthetic choice. This is a form decision the design system owns, not th
   explicitly asks for a dark / decorative / cinematic look (decorative mode — see
   `ionos/decorative-mode.md`). A generic "hero"/"premium"/AI brief is NOT a dark
   request.
+- **AI accents are independent of the base theme.** The brand AI gradient on AI CTAs /
+  badges / prompt bubbles, the sparkle mark, and the `ai-subtle` 'thinking' surface still apply for a genuine
+  AI affordance per `ionos-ai-features`, on light OR dark bases. The `colorScheme`-binding
+  rules at the top of this file govern the *interface chrome*, not these AI accents.
+- **Match the brandmark to the scheme.** Use the light-scheme brandmark on a light base and
+  the dark-scheme brandmark (e.g. `ionos-dark`) only on a dark base — pick it from
+  `colorScheme`, not a fixed choice.
 
 ## Canvas vs interface base — two different surfaces
 
@@ -32,17 +39,12 @@ rule:
 - When this render's non-negotiables carry a `CANVAS BACKGROUND:` line, that line wins for the
   canvas — and ONLY for the canvas. An AI-showroom render uses the brand gradient
   `linear-gradient(180deg, var(--color-gradient-start, #02102B), var(--color-gradient-end, #003D8F))`
-  there. This is the one sanctioned exception to "never paint a root with a gradient", and it
-  does NOT license a gradient on any panel, card or frame fill.
+  there. This is the one sanctioned gradient for the **canvas layer**; the interface's own
+  dark-shell gradient (`ionos/product-frame-color.md`, dark variant) is a separate
+  chrome-layer treatment. Neither licenses a gradient on a light-scheme panel, card or frame
+  fill.
 - The AI-showroom canvas is exempt from "light is the default" — it renders on light AND dark
   `colorScheme`. The interface chrome inside it still follows `colorScheme` exactly as above.
-- `surface-subtlest` is **canvas-exclusive**: it must not appear as an interface chrome surface.
-  See `ionos/product-frame-color.md` for the chrome tiers.
-
-- **AI accents are independent of the base theme.** The brand AI gradient on AI CTAs /
-  badges / prompt bubbles, the sparkle mark, and the `ai-subtle` 'thinking' surface still apply for a genuine
-  AI affordance per `ionos-ai-features`, on light OR dark bases. The base surface theme rule
-  above governs the *interface chrome*, not these AI accents.
-- **Match the brandmark to the scheme.** Use the light-scheme brandmark on a light base and
-  the dark-scheme brandmark (e.g. `ionos-dark`) only on a dark base — pick it from
-  `colorScheme`, not a fixed choice.
+- **Reserve `surface-subtlest` for the canvas.** It must NOT be used as an interface chrome
+  surface (frame, sidebar, panel, card, row) — the chrome tiers live in
+  `ionos/product-frame-color.md`.
