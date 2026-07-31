@@ -33,15 +33,18 @@ itself, a dark request.
 | Outer frame / app shell | `var(--surface-subtle, #F4F7FA)` | — |
 | Left tool sidebar (part of the shell) | `var(--surface-subtle, #F4F7FA)` | `var(--text-base)`, 0.8 opacity idle / 1.0 active |
 | Main content area | `var(--surface-base, #FFFFFF)` | `var(--text-base)` |
-| Right properties panel | `var(--surface-base, #FFFFFF)` | `var(--text-subtle)` for bars/data, `var(--text-base)` for labels |
+| Right properties panel (shell rail) | `var(--surface-subtle, #F4F7FA)` | `var(--text-subtle)` for bars/data, `var(--text-base)` for labels |
 | Active sidebar item | `var(--surface-base, #FFFFFF)` | `var(--text-base)` |
 | Header action: "Publish" | `#1A91DE` (sky blue fill) — brand CTA, unaffected by scheme | white |
 | Header action: "Preview" | transparent + `border: 1px solid var(--border-subtle)` | `var(--text-base)` |
 
-**Two tiers only.** The shell (outer frame + left sidebar) is `surface-subtle`; everything
-inside it (content area, panels, cards, the active sidebar pill) is `surface-base`. The frame
-and sidebar deliberately share a tier — the sidebar *is* the shell. No two ADJACENT surfaces
-share a tier.
+**Two fill tiers.** The shell and its rails — outer frame, left tool sidebar, and right
+properties panel — are `surface-subtle`; the working content area and the elements that must
+lift off it (active sidebar pill, panel rows, cards) are `surface-base`. The frame and its two
+rails deliberately share a tier — the rails *are* the shell. A rail always differs from the
+content it borders. Where two `surface-base` elements do sit directly on each other (a card or
+row on the content plane), separate them with a border or a soft elevation — never a third fill
+tier, and never `surface-subtlest` — per the frame-separation rule in `shared/frame-anatomy.md`.
 
 **`surface-subtlest` is never a chrome surface.** It belongs to the asset canvas outside the
 interface (see `shared/surface-theme.md`). Using it on a panel makes that panel dissolve into
@@ -228,7 +231,7 @@ matching `--text-semantic-*`:
 | Danger / offline | `var(--surface-semantic-danger)` | `var(--text-semantic-danger)` |
 | Neutral | `var(--surface-semantic-neutral)` | `var(--text-semantic-neutral)` |
 | Promo | `var(--surface-semantic-promo)` | `var(--text-semantic-promo)` |
-| Price / promo / neutral badges | `var(--surface-semantic-badge-price\|-promo\|-neutral)` | `var(--text-semantic-badge-*)` |
+| Price / promo / neutral badges | `var(--surface-semantic-badge-price\|-promo\|-neutral)` | `var(--text-semantic-badge-price\|-promo\|-neutral)` |
 | Skeleton / placeholder fills | — | `var(--text-semantic-skeleton)` |
 
 This supersedes the hand-rolled status-badge hexes in `ionos/composition.md`.
