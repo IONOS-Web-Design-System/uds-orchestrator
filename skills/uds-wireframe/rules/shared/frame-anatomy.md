@@ -26,7 +26,10 @@ Always include these realistic anchors (scale with frame size):
 Diagram below illustrates the dark shell **variant** (token names shown for orientation — see
 the brand's color rule, e.g. `ionos/product-frame-color.md`, for the concrete hex values); the
 light **default** renders the identical structure with the colorScheme-resolved tokens
-(`var(--surface-base)` frame, `var(--surface-subtle)` sidebar, `var(--surface-subtlest)` panel).
+(`var(--surface-subtle, #F4F7FA)` shell + both side rails — the left sidebar and the right
+properties panel; `var(--surface-base, #FFFFFF)` content area and the cards/rows on it — see
+`ionos/product-frame-color.md`; `surface-subtlest` is the canvas OUTSIDE the frame and must not
+appear on chrome).
 `DARK_SHELL_ACCENT` below is the brand's dark-shell-complementing accent for decorative
 bars/data in the dark variant — resolve the concrete value from the brand's color rule (e.g.
 `ionos/product-frame-color.md` "Product shell — dark variant") — never hardcode a brand hex
@@ -53,6 +56,8 @@ themes.
 - Shell decorative bars: `var(--text-subtle)`
 - Client-app text bars: `#BCC8D4` (fixed — the client-app's own light theme)
 - Floating pop-out / glass elements: `var(--surface-subtle)` (see `shared/floating-card.md`)
+ (floating elements sit on the CANVAS, so they need the same border/shadow separation as the
+ frame — see "Separating same-tier surfaces" below)
 
 **Dark shell variant (`colorScheme === 'dark'` or decorative — NOT the default):** here, and only
 here, the product shell is dark while the client-app zone stays light. Never mix their palettes:
@@ -132,3 +137,23 @@ const frameDrift = interpolate(frame, [60, 90], [0, -60], { extrapolateLeft: 'cl
   or use `Easing.bezier(0.34, 1.56, 0.64, 1)` with clamp which terminates exactly. Sequence the beats:
   card entrance completes → THEN the typing beat begins. See remotion-best-practices
   "Text rendering stability" for the full rule.
+
+## Separating same-tier surfaces (frame-on-canvas, and chrome-on-chrome)
+
+Adjacent light surfaces do not separate themselves. With only two chrome fill tiers
+(`surface-subtle`, `surface-base`) some adjacencies unavoidably share a tier, and the
+frame-on-canvas seam is the worst: the shell on the canvas is ~1.117 contrast, and on `dark`
+colorScheme `--surface-base` is byte-identical to `--color-gradient-start`, so an unbordered
+frame is literally invisible against an AI-showroom dark canvas.
+
+The rule (the "frame-separation rule" referenced from `ionos/product-frame-color.md`): wherever
+two surfaces of the same or near-same tier meet — the product frame on the canvas, OR a
+`surface-base` card/row sitting on the `surface-base` content plane — separate them with ONE of:
+
+- a 1px border in `var(--border-subtle)`, or
+- a soft elevation shadow (e.g. `boxShadow: '0 2px 12px rgba(0,0,0,0.10)'`), or
+- both.
+
+Never reach for a third fill tier (and never `surface-subtlest`) to force the separation. This
+is a hard requirement for the product frame specifically: a frame distinguished only by its fill
+is a defect on every colorScheme.

@@ -22,24 +22,29 @@ Either way: **the fix for "UI too small to read" is to CROP, not to SHRINK** —
 elements at a legible size rather than the whole UI in miniature. Icons are **large and
 prominent** at this scale (see "Icon sizing").
 
-## Background — always `surface-subtlest`
+## Background — `surface-subtlest`, or the AI-showroom gradient
 
-Small illustrations sit on the brand's subtlest surface so they drop cleanly into any host
-surface. Set it on the themed wrapper (it resolves per `data-brand` / `data-color-scheme`):
+The canvas is `var(--surface-subtlest, #DBEDF8)` unless this render's non-negotiables carry a
+`CANVAS BACKGROUND:` line — an AI-showroom render carries the brand gradient there instead.
+Follow that line when present; otherwise use `surface-subtlest`. Never hardcode a different
+colour of your own choosing. Set it on the themed wrapper (it resolves per `data-brand` /
+`data-color-scheme`):
 
 ```tsx
 <div data-brand={brand} data-platform={platform} data-color-scheme={colorScheme}
      style={{ width: '100%', height: '100%' }}>
   <ThemeProvider>
-    <AbsoluteFill style={{ backgroundColor: 'var(--surface-subtlest)' }}>
+    <AbsoluteFill style={{ backgroundColor: 'var(--surface-subtlest, #DBEDF8)' }}>
+      {/* …or the CANVAS BACKGROUND gradient when the non-negotiables name one */}
       {/* icon-story composition */}
     </AbsoluteFill>
   </ThemeProvider>
 </div>
 ```
 
-For ionos light this resolves to a pale blue; do not hardcode a hex — use the token so it
-follows the brand/scheme. (Equivalent utility class: `bg-surface-subtlest`.)
+For ionos light this default resolves to a pale blue; do not hardcode a hex — use the token so
+it follows the brand/scheme when no `CANVAS BACKGROUND:` line applies. (Equivalent utility
+class: `bg-surface-subtlest`.)
 
 ## The icon-story grammar
 
@@ -83,7 +88,8 @@ Grammar (mirrors the reference assets):
 - **Large floating highlights over the frame edge.** 1–2 prominent elements straddling the
   frame's cut edge — big **circular icon badges** on the left/bottom edge, or a **stat card**
   (e.g. an icon + "+58 %") at the top-right — per the floating-highlight-card template. The
-  pale `surface-subtlest` shows around the frame's exposed corners.
+  canvas shows around the frame's exposed corners per the Background rule above (`surface-subtlest`
+  by default, or the AI-showroom gradient when the non-negotiables name one).
 - Animate the entrance (frame eases in, highlights pop after it settles); follow the
   text-stability rule — no perpetual transform on text-bearing cards.
 
@@ -161,8 +167,10 @@ embed styles:
    the visible region — do not shrink a whole UI to fit.
 3. **Floating image card + highlight UI** (`Style: floating image card with edge highlights`,
    embed style `floating-card`) — the image is a single contained rounded card (dominant,
-   ~60–80% of canvas, soft shadow) on the `surface-subtlest` background, with 1–2 small
+   ~60–80% of canvas, soft shadow) on the canvas background (per the Background rule above —
+   `surface-subtlest` by default, or the AI-showroom gradient), with 1–2 small
    highlight chips/pills (a labelled chip and/or an icon pill) overlapping its edges; no
    connector lines, no selection marquee. Transparent cutouts also work well here.
 
-Keep the `surface-subtlest` background in usages #2 and #3; usage #1 replaces it with the image.
+Keep the canvas background (per the Background rule above) in usages #2 and #3; usage #1
+replaces it with the image.

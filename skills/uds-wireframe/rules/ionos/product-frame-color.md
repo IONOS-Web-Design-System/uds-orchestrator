@@ -30,19 +30,34 @@ itself, a dark request.
 
 | Zone | Background | Icon / text color |
 |---|---|---|
-| Outer frame | `var(--surface-base)` | — |
-| Left tool sidebar | `var(--surface-subtle)` | `var(--text-base)`, 0.8 opacity idle / 1.0 active |
-| Right properties panel | `var(--surface-subtlest)` | `var(--text-subtle)` for bars/data, `var(--text-base)` for labels |
-| Active sidebar item | next-darker surface tier (e.g. `var(--surface-subtlest)` against a `var(--surface-subtle)` sidebar) | `var(--text-base)` |
+| Outer frame / app shell | `var(--surface-subtle, #F4F7FA)` | — |
+| Left tool sidebar (part of the shell) | `var(--surface-subtle, #F4F7FA)` | `var(--text-base)`, 0.8 opacity idle / 1.0 active |
+| Main content area | `var(--surface-base, #FFFFFF)` | `var(--text-base)` |
+| Right properties panel (shell rail) | `var(--surface-subtle, #F4F7FA)` | `var(--text-subtle)` for bars/data, `var(--text-base)` for labels |
+| Active sidebar item | `var(--surface-base, #FFFFFF)` | `var(--text-base)` |
 | Header action: "Publish" | `#1A91DE` (sky blue fill) — brand CTA, unaffected by scheme | white |
 | Header action: "Preview" | transparent + `border: 1px solid var(--border-subtle)` | `var(--text-base)` |
 
+**Two fill tiers.** The shell and its rails — outer frame, left tool sidebar, and right
+properties panel — are `surface-subtle`; the working content area and the elements that must
+lift off it (active sidebar pill, panel rows, cards) are `surface-base`. The frame and its two
+rails deliberately share a tier — the rails *are* the shell. A rail always differs from the
+content it borders. Where two `surface-base` elements do sit directly on each other (a card or
+row on the content plane), separate them with a border or a soft elevation — never a third fill
+tier, and never `surface-subtlest` — per the frame-separation rule in `shared/frame-anatomy.md`.
+
+**`surface-subtlest` is never a chrome surface.** It belongs to the asset canvas outside the
+interface (see `shared/surface-theme.md`). Using it on a panel makes that panel dissolve into
+the canvas wherever the two meet.
+
 **Decorative/abstract elements inside a light shell:**
 - Icon buttons: `var(--text-base)` SVG icons, `opacity: 0.8` idle, `1.0` active
-- Property panel rows: `var(--surface-subtlest)` background, bar fill `var(--text-subtle)`
+- Property panel rows: `var(--surface-base, #FFFFFF)` background, bar fill `var(--text-subtle)`
 - Analytics / stat indicators: `var(--text-subtle)` for values and bars
-- Placeholder bars in the shell: `var(--surface-subtlest)` (neutral cool-grey) — NOT the
-  steel-blue-on-dark treatment below, NOT sky `#11C7E6`
+- Placeholder / skeleton bars in the shell: `var(--text-semantic-skeleton)` — the dedicated
+  skeleton fill token. It is scheme-aware (light `oklch(0.9092 0.0111 243.66 / 0.5)`, dark
+  `oklch(1 0 0 / 0.15)`), so it stays correct on both schemes. Do NOT use a surface tier for a
+  skeleton bar, and never the brand blue.
 
 ### Product shell — dark variant (`colorScheme === 'dark'`, or explicit decorative brief ONLY)
 
@@ -201,3 +216,22 @@ Import without `dist/` — sub-path export only. **Do not guess names — webpac
 `bell` · `bell-ring` · `filled-bell` · `bolt` · `filled-bolt` · `cloud` · `filled-cloud` · `database` · `document` · `download` · `edit-square` · `gear` · `filled-gear` · `lightbulb` · `lightbulb-shining` · `lock` · `filled-lock` · `pen` · `performance` · `plus` · `search` · `server` · `filled-server` · `upload` · `user` · `user-avatar` · `filled-user` · `arrow-right` · `chevron-right`
 
 **Rule:** If a name is not listed above, pick the closest match. Never guess.
+
+## Semantic roles use semantic tokens
+
+Do NOT hand-roll hexes for status, AI, promo or badge treatments — the design system ships
+scheme-aware semantic pairs. Surfaces take `--surface-semantic-*`, their typography takes the
+matching `--text-semantic-*`:
+
+| Role | Surface | Text |
+|---|---|---|
+| AI | `var(--surface-semantic-ai)` / `-ai-bolder` | `var(--text-semantic-ai)` / `-ai-bolder` |
+| Success / running | `var(--surface-semantic-success)` | `var(--text-semantic-success)` |
+| Caution / maintenance | `var(--surface-semantic-caution)` | `var(--text-semantic-caution)` |
+| Danger / offline | `var(--surface-semantic-danger)` | `var(--text-semantic-danger)` |
+| Neutral | `var(--surface-semantic-neutral)` | `var(--text-semantic-neutral)` |
+| Promo | `var(--surface-semantic-promo)` | `var(--text-semantic-promo)` |
+| Price / promo / neutral badges | `var(--surface-semantic-badge-price\|-promo\|-neutral)` | `var(--text-semantic-badge-price\|-promo\|-neutral)` |
+| Skeleton / placeholder fills | — | `var(--text-semantic-skeleton)` |
+
+This supersedes the hand-rolled status-badge hexes in `ionos/composition.md`.
