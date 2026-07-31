@@ -38,8 +38,9 @@ rule:
 - The canvas is `var(--surface-subtlest, #DBEDF8)` by default.
 - When this render's non-negotiables carry a `CANVAS BACKGROUND:` line, that line wins for the
   canvas — and ONLY for the canvas. An AI-showroom render uses the brand gradient
-  `linear-gradient(180deg, var(--color-gradient-start, #02102B), var(--color-gradient-end, #003D8F))`
-  there. This is the one sanctioned gradient for the **canvas layer**; the interface's own
+  `linear-gradient(180deg, var(--color-gradient-start), var(--color-gradient-end))`
+  there (the CANVAS BACKGROUND non-negotiable carries the render-ready literal with hex fallbacks).
+  This is the one sanctioned gradient for the **canvas layer**; the interface's own
   dark-shell gradient (`ionos/product-frame-color.md`, dark variant) is a separate
   chrome-layer treatment. Neither licenses a gradient on a light-scheme panel, card or frame
   fill.
