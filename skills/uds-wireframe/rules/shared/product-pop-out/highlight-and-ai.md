@@ -15,14 +15,40 @@ hero) is in `product-pop-out/character.md`.
    are the whole composition. Do NOT add one to balance the canvas; its absence is deliberate.
 
    **(b) `designed` — a measured prompt window** (AI product showrooms). Transcribe the contract's
-   four values as literals; the footprint is measured from the design source, so do not re-derive
-   it. Two variants exist and the contract names which one:
-   - `prompt-simple` — a full-bleed rounded bar holding ONE line of text, with a single circular
-     `button-ai` at the trailing end that OVERHANGS the bar's bottom edge (the send button
-     straddling the input's bottom-right corner). Text inset ~6% of width; no inner padding frame.
-   - `prompt-full` — a padded card: inner inset **4.9% of its width / 12.7% of its height**, a
-     text block of up to ~3 lines, and a row of `button-ai` controls beneath it (two grouped left,
-     one right-aligned).
+   four values as literals for the OUTER box, then build the inside from this skeleton — do not
+   compose your own and do not hand-place anything within it. Flexbox does the alignment; every
+   inner length is a ratio of the window's own box, so it stays correct at any `w`/`h`.
+
+   ```jsx
+   // OUTER: left/top/width/height are the contract's four literals. S = simple, F = full.
+   <div style={{ position:'absolute', left:X, top:Y, width:W, height:H, boxSizing:'border-box',
+     display:'flex', ...(S ? { alignItems:'center', gap:'4.4%', padding:'0 1.77% 0 5.76%',
+                               borderRadius:9999 }
+                          : { flexDirection:'column', gap:'3.71%', padding:'4.94%',
+                               borderRadius:'3.09%' }) }}>
+     <span style={{ flex:1, minWidth:0, overflow:'hidden', color:<brand on-surface text>,
+       ...(S ? { whiteSpace:'nowrap', textOverflow:'ellipsis', fontFamily:<brand UI face>,
+                 fontSize:H*0.236, lineHeight:`${H*0.306}px` }
+             : { display:'-webkit-box', WebkitLineClamp:3, WebkitBoxOrient:'vertical',
+                 fontFamily:<brand display face>, fontSize:W*0.0448, lineHeight:`${W*0.0556}px` })
+     }}>{promptText}</span>
+     {/* F only: two outlined round buttons (gradient ring, transparent centre), grouped left */}
+     {/* send button — circle, AI-gradient fill, white glyph at 44% */}
+   </div>
+   ```
+
+   `padding` is a SINGLE percentage on purpose: CSS resolves percentage padding against WIDTH on
+   every side, so one value reproduces the design's uniform inset at any aspect. Deriving separate
+   horizontal and vertical insets is what makes the card look skewed.
+
+   | | `prompt-simple` | `prompt-full` |
+   |---|---|---|
+   | shape | pill bar, one line of text | rounded card, up to 3 lines |
+   | controls | ONE send button, `height:80.6%`, `aspectRatio:1`, **fully inside the bar** (equal clearance above and below — it does NOT overhang any edge) | row `justifyContent:'space-between'`: two outlined buttons `W*0.0833` grouped left with `gap:'1.54%'`, send button `W*0.084` right |
+   | surface | opaque, subtle blur | opaque, one step off white |
+
+   The two surfaces, the text colour, the gradient and the type faces are brand values — take them
+   from the brand's own AI rule, never invent them here.
 
    **(c) `generic` — a content-shaped accent** (every non-AI showroom). The contract gives an
    anchor and a `maxBox` CEILING, not a footprint. Choose the element's own size from the content
