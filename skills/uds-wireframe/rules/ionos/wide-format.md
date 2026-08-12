@@ -1,4 +1,5 @@
 ---
+styles: [plain, reconstruct, composite, opaque-embed]
 wide: true
 ---
 
@@ -9,6 +10,13 @@ wide: true
 composition guidance. If the canvas is *also* under 512px on **both** axes, `small-format.md`
 governs instead — that rule wins, because at that size there is no width to spare for empty
 side margins.
+
+This rule does **not** apply to a `bare-interface` (screen-content) render — that leg is
+full-bleed by definition (the UI fills the entire frame before being placed onto a device
+screen), so the `styles:` scope above excludes it. Where this rule DOES apply alongside
+`embed-interface-asset.md`, the centred-band figure here **governs**: on a wide canvas the
+interface occupies the middle **50–65% of the width**, not the 70–85% that rule states for
+ordinary aspect ratios.
 
 A wide canvas is **not** an invitation to spread out. Widening a composition to reach both
 edges produces stretched panels, padded gaps, and invented filler cards. Treat the canvas as a
