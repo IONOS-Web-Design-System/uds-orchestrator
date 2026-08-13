@@ -1,14 +1,17 @@
 ---
-styles: [background-pointer, background-full, interface-asset, floating-card]
+styles: [background-pointer, background-full, interface-asset, floating-card, inline-asset]
 ---
 
-## Color harmony (the four opaque styles)
+## Color harmony (the five opaque styles)
 
-The contract's `Color harmony:` line carries the backdrop imagery's **measured** tones
-(dominant + supporting hexes, warm/cool, light/dark). This section does not apply to
-`product-pop-out` / `device-mockup` — those are transparent-root composites with no
-backdrop imagery to harmonize against. The composition must feel of-a-piece with the
-imagery — never a brand-default background fighting the photo:
+The contract's `Color harmony:` line carries the embedded imagery's **measured** tones
+(dominant + supporting hexes, warm/cool, light/dark) — a full-bleed backdrop for
+`background-pointer`/`background-full`, a contained card for `floating-card`/`interface-asset`, a
+contained media/hero asset for `inline-asset`. This section does not apply to `product-pop-out` /
+`device-mockup` — those are transparent-root composites with no embedded imagery of their own to
+harmonize against (the cutout is the subject, not a photo whose tones the root should echo). The
+composition must feel of-a-piece with the imagery — never a brand-default background fighting the
+photo:
 
 > **AI showrooms override this.** When this render's non-negotiables carry a `CANVAS BACKGROUND:`
 > line, use that gradient as the root and skip the palette-derived derivation below. The harmony
@@ -24,7 +27,7 @@ imagery — never a brand-default background fighting the photo:
   AI gradient stays exactly what `uds-style-guide` defines (CTAs/badges only), brand
   component colors stay tokenized. Harmony lives in the ROOT background and subtle shadow
   tints — not in recolored UI, and NEVER in a scrim/overlay/darkening layer over the image.
-- **Contrast supervision**: NEVER darken the backdrop image — no scrim, overlay, tint, or
+- **Contrast supervision**: NEVER darken the embedded image — no scrim, overlay, tint, or
   gradient over it; keep it at FULL brightness. Guarantee contrast for any functional UI
   text (panel captions, buttons, badges) with a text-shadow or a local solid/glass panel
   behind that text ONLY (sized to the text, not the image). Glow shadows may tint toward

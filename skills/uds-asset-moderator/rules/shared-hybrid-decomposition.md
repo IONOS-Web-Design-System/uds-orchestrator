@@ -62,6 +62,20 @@ The `compositionPlan` MUST state where the highlight chips sit relative to the c
 (e.g. "portrait card centred; labelled chip over the top-left corner, icon pill over the
 lower edge").
 
+## embedStyle: inline-asset
+
+Choose this style only when the catalog-first check (see `SKILL.md`'s plan-output rubric) found
+no fitting asset. The imageBrief MUST additionally describe a **plain rectangular photo, never a
+cut-out subject**, composed to fit the specific media/hero slot inside the interface, panel or
+card the illustration will render — not a hero backdrop, not a dominant card in its own right.
+There is no floating UI drifting into a reserved negative-space region here (unlike the
+background styles): the whole image sits inside one slot, so compose it as a normal, well-filled
+photo for that slot rather than reserving a calm side for something else to occupy.
+
+The `compositionPlan` MUST name the exact slot the image sits in (e.g. "product card's media
+thumbnail, upper third of the card") — the illustration places it there; it never becomes the
+canvas background.
+
 ## illustrationBrief — all styles
 
 The hybrid illustrationBrief MUST:
@@ -71,4 +85,5 @@ The hybrid illustrationBrief MUST:
 - assume the orchestrator handles the compositing contract (backdrop card + pointer for
   `background-pointer`, full-bleed backdrop + floating cluster for `background-full`,
   in-wireframe hero asset + floating fragments for `interface-asset`, contained image card
-  + edge highlight chips for `floating-card`).
+  + edge highlight chips for `floating-card`, contained media/hero asset inside the named slot
+  for `inline-asset`).
