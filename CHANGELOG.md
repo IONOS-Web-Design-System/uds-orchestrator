@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.18.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.17.0...v2.18.0) (2026-08-13)
+
+
+### Features
+
+* **wireframe:** add the wide-format composition rule ([c38de66](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c38de665ae5224bffca4878b017c575b8d9ddf4c))
+* **wireframe:** give codegen a measured AI prompt-window template ([07d2de5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/07d2de55deece1e83ff3a4f9e17174d6a1c73e53))
+* **wireframe:** give inline-asset its own placement rule and register it in the planner's skill ([fde24cf](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/fde24cfe22246586a4fcefdecdcc0feeea555543))
+
+
+### Bug Fixes
+
+* **wireframe:** stop the wide rule contradicting the full-bleed rules ([c2b0ed6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c2b0ed6285ad571665a922c70c0bedf2f8a6aefa))
+
 ## [2.17.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.16.0...v2.17.0) (2026-07-31)
 
 
