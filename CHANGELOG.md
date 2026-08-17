@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.19.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.18.0...v2.19.0) (2026-08-17)
+
+
+### Features
+
+* **planner:** substitute real brand product icons for invented concept geometry ([056034a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/056034af83b5b4d581416031f9e6972bba943a75))
+
+
+### Bug Fixes
+
+* **icons:** close review findings on the brand-icon-slot rules ([8c3e294](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/8c3e294b9d1326f34d51974a855a19787a994687))
+* **icons:** recipe-only icon rule — canonical import form, names come from the generated index ([06f5491](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/06f54915eb6b87f52cbde73f4116ff6e8bf2cb81))
+* **icons:** repair the camelCase confusion table and forbidden Remotion icon recipe ([2f24cfb](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/2f24cfb64d9271e11266510cacaebc50d914f6d1))
+* **icons:** replace the unbuildable .svg brandmark recipe, drop the system-icon hedge, widen the dist anti-pattern ([0ef22a1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/0ef22a156f8438563982ae785449e213f78f265d))
+* **icons:** resolve a brief-named product-icon concept; keep the request out of imageBrief ([48ea1d7](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/48ea1d70058724ecc5c0022b240612fddfcb91d3))
+* **icons:** retract the system-only icon ban; state the two-tier split inline ([8309da7](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/8309da7a4714f13904ba046133e5566c4254d7f0))
+* **planner:** scope product-icon substitution's brand claim to the four with an icon library ([aa3b872](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/aa3b872bd4a2d85080b9f1c7fe710f111e2cb8cf))
+
 ## [2.18.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.17.0...v2.18.0) (2026-08-13)
 
 
