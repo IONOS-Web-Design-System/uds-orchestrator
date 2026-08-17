@@ -30,6 +30,17 @@ The `# Icon name index` section of this prompt lists **every** name in the insta
 package, per group, with each group's file-name form. It is generated from the package
 itself, so anything listed there resolves. Nothing outside it exists.
 
+**When the brief names a brand product icon for a concept** — e.g. "the brand product icon
+for automated cloud backups" — resolve that concept to a real name in the `# Icon name
+index` and render it full-colour per the brand tier below. The brief names concepts, not
+file names, because the planner has no name list. If no name in the index genuinely matches
+the concept, compose from `system/` glyphs and shapes instead — never invent a name.
+
+**The package artwork wins over any appearance description.** If the same brief also
+describes how the icon should look (a shape, a layout, a "styled as …"), that description is
+stale — it predates resolving the concept to a real icon. Render the resolved icon exactly as
+the package ships it; do not redraw, restyle, or recompose it from the brief's wording.
+
 ## Two tiers, no overlap
 
 | Tier | Use for | Rendering |

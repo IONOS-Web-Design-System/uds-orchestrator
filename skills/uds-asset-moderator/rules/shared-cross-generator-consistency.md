@@ -15,6 +15,11 @@ verbatim, so write it so it reads identically to each:
 - **`compositionPlan`** — one sentence locating the negative space / panel side / message
   region so the image leaves room exactly where the illustration will place UI (never a
   rendered marketing headline — see `shared-brief-parsing.md` no-marketing-heading).
+- **Brand product icons** — when a graphic symbolizes a product/service concept, name the
+  concept in the `illustrationBrief` only ("the brand product icon for automated cloud
+  backups"), per `shared-product-icon-substitution.md`. NEVER name one in an `imageBrief`:
+  image-svc runs a diffusion model with no access to the icon package, so the request is
+  meaningless there and pollutes the scene description.
 
 The orchestrator owns the compositing mechanics. It appends the `[HYBRID EMBED CONTRACT]`
 (per `embedStyle`) to the illustrationBrief itself, so:

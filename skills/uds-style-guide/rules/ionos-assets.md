@@ -46,9 +46,9 @@ A nav chevron, a checkmark, a settings gear is always `system/`. A "Cloud Backup
 is the brand tier, never a grey `system/` stand-in. The boundary is **role, not size**.
 
 **Import form and available names:** see `remotion-best-practices/rules/shared-uds-icons.md`
-for the `svgData` recipe, and the `# Icon name index` section of this prompt for every name
-that exists. That index is generated from the installed package — nothing outside it exists,
-and everything in it resolves.
+for the `svgData` recipe, and the `# Icon name index` in the illustration generator's own
+prompt for every name that exists. That index is generated from the installed package —
+nothing outside it exists, and everything in it resolves.
 
 **Strictly forbidden:**
 
@@ -57,7 +57,7 @@ and everything in it resolves.
   platforms and break brand control.
 - Custom inline `<svg>` paths for icon roles. Even a single-glyph SVG for a
   check or close icon is a hard no — use the package.
-- Icon names not in the `# Icon name index`. Guessing breaks the build.
+- Icon names not in that index. Guessing breaks the build.
 - Never use `@ts-ignore` on an icon import, or any `dist/` segment in an
   icon path — both are symptoms of a wrong path; fix the path instead.
 
