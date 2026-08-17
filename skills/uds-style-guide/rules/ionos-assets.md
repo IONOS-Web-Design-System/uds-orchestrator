@@ -67,7 +67,7 @@ exist in this package; use the right-hand column instead):
 | Don't write | Use instead |
 |-------------|-------------|
 | `check` | `checkmark` |
-| `close` / `x` / `cross` | `circleX` (for filled) or look for a non-circle variant in `index.d.ts` |
+| `close` / `x` / `cross` | `circleX` (for filled), or a non-circle variant from the `# Icon name index` |
 | `edit` / `pencil` | `editSquare` |
 | `menu` / `hamburger` | `bars` |
 | `eye` / `eyeOff` | `visibility` / `visibilityOff` |

@@ -154,12 +154,18 @@ function DynamicIconExample({ iconName }: { iconName: string }) {
 }
 ```
 
-**Brandmark icons**: Do not use the `<Icon>` component. Use `<img>` in a wrapper div:
+**Brandmark icons**: do not use the `<Icon>` component — it applies fixed icon sizing that
+distorts logo proportions. Import the logo's `svgData` and use it as an `<img src>`:
 ```tsx
-<div className="w-8 h-8">
-  <img src={`/node_modules/@ionos-web-design-system/icon/brandmark/${name}.svg`} alt={name} />
+import { svgData as ionosLogo } from '@ionos-web-design-system/icon/brandmark/ionos-light';
+
+<div style={{ width: 80, height: 24 }}>
+  <img src={ionosLogo} alt="IONOS" style={{ height: '100%', width: 'auto', display: 'block' }} />
 </div>
 ```
+`svgData` is a `data:image/svg+xml;base64,…` string, so it needs no loader and no file.
+The package ships **no `.svg` files** — never reference one, and never point an `<img>` at a
+`/node_modules/…` path. Available names and the light/dark form: see the `# Icon name index`.
 
 ---
 

@@ -148,15 +148,19 @@ import { svgData as ionosLogoSvg } from '@ionos-web-design-system/icon/brandmark
 }} />
 ```
 
-**Anti-pattern — NEVER do this (webpack will fail, `@ts-ignore` does not fix it):**
+**Anti-pattern — NEVER do this. Applies to EVERY icon group** (`system`, `social`,
+`brandmark`, and the brand product groups), not just brandmark:
 ```tsx
-// ❌ dist/ path is NOT in the package exports map:
-import { svgData as ionosDarkSvg } from '@ionos-web-design-system/icon/dist/brandmark/ionos-dark';
-// ❌ @ts-ignore suppresses TypeScript errors but webpack still cannot resolve the module:
+// ❌ dist/ is NOT in the package exports map — fails the TSC gate with TS2307:
+import { svgData as a } from '@ionos-web-design-system/icon/dist/brandmark/ionos-dark';
+import { svgData as b } from '@ionos-web-design-system/icon/dist/ionos/cloud-migration-light';
+// ❌ @ts-ignore hides that error AND disables the only check that catches a
+//    misspelled icon name, so the bad name reaches the bundler instead:
 // @ts-ignore
-import { svgData as iconSvg } from '@ionos-web-design-system/icon/dist/system/star';
+import { svgData as c } from '@ionos-web-design-system/icon/dist/system/star';
 ```
-If TypeScript reports an error on an icon import, the **path is wrong** — fix the path, do not add `@ts-ignore`.
+If TypeScript reports an error on an icon import, the **path or the name is wrong** — fix it
+against the `# Icon name index`, never add `@ts-ignore`.
 
 **Available brandmark variants for IONOS:**
 
