@@ -1,9 +1,11 @@
 # Product-icon substitution (all brands)
 
-Every UDS brand ships a library of full-colour, illustrative **product icons** — one per
-product, service and feature concept (backups, domains, mail, security, CRM, analytics,
-containers, migration, …). The illustration generator has the complete, verified name list
-in its own prompt. You do NOT, and you do not need it.
+The **ionos**, **strato**, **fasthosts** and **homepl** brands each ship a library of
+full-colour, illustrative **product icons** — one per product, service and feature concept
+(backups, domains, mail, security, CRM, analytics, containers, migration, …). The
+illustration generator has the complete, verified name list in its own prompt. You do NOT,
+and you do not need it. Other brands ship no such library; for those the illustration
+generator falls back to mono system icons, so the rule below is simply a no-op.
 
 **The rule.** When you are about to describe a graphic whose job is to SYMBOLIZE a product,
 service or feature concept, name the concept and ask for its brand product icon. Do NOT
