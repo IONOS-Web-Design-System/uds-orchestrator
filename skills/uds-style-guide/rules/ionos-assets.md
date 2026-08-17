@@ -34,11 +34,21 @@ typography weight, content density, or product-screen detail — not grid lines.
 
 ## Icon usage
 
-**Only system icons from `@ionos-web-design-system/icon/system`.** No exceptions
-for icon-role glyphs (anything used as an affordance, status indicator, or
-inline UI marker). Larger illustrations and decorative SVGs are a separate
-category — see [uds-usage-best-practices](../../uds-usage-best-practices/SKILL.md)
-for that distinction; the rules here govern icons-as-affordances.
+Icons come from `@ionos-web-design-system/icon` — **two tiers, no overlap**:
+
+| Tier | Use for | Rendering |
+|---|---|---|
+| `system/` | affordances, controls, status indicators, inline UI markers | mono SVG mask, colour via `backgroundColor` |
+| `<brand>/` | the product, service or feature the asset is **about** | full-colour, no colour override |
+
+A nav chevron, a checkmark, a settings gear is always `system/`. A "Cloud Backup",
+"Domain Guard" or "AI Mail Assistant" motif — the thing the illustration is *for* —
+is the brand tier, never a grey `system/` stand-in. The boundary is **role, not size**.
+
+**Import form and available names:** see `remotion-best-practices/rules/shared-uds-icons.md`
+for the `svgData` recipe, and the `# Icon name index` section of this prompt for every name
+that exists. That index is generated from the installed package — nothing outside it exists,
+and everything in it resolves.
 
 **Strictly forbidden:**
 
@@ -47,61 +57,26 @@ for that distinction; the rules here govern icons-as-affordances.
   platforms and break brand control.
 - Custom inline `<svg>` paths for icon roles. Even a single-glyph SVG for a
   check or close icon is a hard no — use the package.
-- Icon names not present in the package. Guessing breaks the build. If a
-  needed icon is unavailable, either (a) check the full export list
-  (`icon-names.json` — see verification rule below) or (b) substitute the
-  closest semantic neighbor from the curated set below.
-
-**Import pattern:**
-
-```ts
-import { plus, arrowRight, checkmark } from '@ionos-web-design-system/icon/system';
-// Pass the function reference to a UDS Icon component, or call to get the class:
-<Icon icon={plus} />
-const cls = checkmark(); // returns "uds-system-checkmark", side-effect: injects CSS
-```
-
-**Verification rule (non-negotiable):**
-Before importing any icon name not on the curated list below, verify it
-exists in `node_modules/@ionos-web-design-system/icon/dist/system/index.d.ts`
-(grep for `export function <camelCase>(`). If it isn't there, do not invent
-it — find a verified substitute. The TSC gate WILL fail an invalid import,
-but you should not rely on the gate as a spell-checker.
-
-**Curated icon names (verified against the current package).** Use these
-freely without re-checking. They cover the majority of marketing-illustration
-needs:
-
-| Role | Available names (camelCase, import-ready) |
-|------|-------------------------------------------|
-| Actions | `plus`, `minus`, `checkmark`, `circleX`, `editSquare`, `copy`, `bin`, `download`, `upload`, `share` |
-| Navigation | `arrowDown`, `arrowTop`, `arrowLeft`, `arrowRight`, `chevronDown`, `chevronLeft`, `chevronRight`, `arrowsDiagonalExpand`, `arrowsDiagonalContract`, `arrowHorizontalExpand` |
-| Status | `info`, `warning`, `circleCheckmark`, `circleExclamation`, `shieldCheckmark` |
-| Visibility | `visibility`, `visibilityOff` |
-| Common UI | `search`, `bars` (hamburger), `gear` (settings), `bell`, `bellRing`, `phone`, `envelope` (mail), `bookmark`, `heart`, `star` |
-| Media | `play`, `pause`, `stop`, `image`, `attachement` (sic — package misspelling, use as-is) |
-| Security | `lock`, `key`, `shield` |
-| Content | `folder`, `document`, `home`, `cloud`, `clock`, `calendar`, `globe`, `link` |
-| Branding | `bolt`, `award`, `user`, `userGroup` |
-| Weight variants | Append `300` for the light variant — e.g. `plus300`, `checkmark300`. Use light weights for secondary or decorative roles. |
-
-If you need an icon outside this list (the full package has ~677 names),
-verify against `index.d.ts` first — do not assume names from other icon
-libraries (Material, Heroicons, Lucide) exist here.
+- Icon names not in the `# Icon name index`. Guessing breaks the build.
+- Never use `@ts-ignore` on an icon import, or any `dist/` segment in an
+  icon path — both are symptoms of a wrong path; fix the path instead.
 
 **Common name confusions to avoid** (these names from other libraries do NOT
-exist in this package; use the right-hand column instead):
+exist in this package; use the right-hand column instead — these are the
+actual module names, i.e. what appears in the `# Icon name index`, not the
+package's camelCase inject-function names, which do not resolve as import
+paths):
 
 | Don't write | Use instead |
 |-------------|-------------|
 | `check` | `checkmark` |
-| `close` / `x` / `cross` | `circleX` (for filled) or look for a non-circle variant in `index.d.ts` |
-| `edit` / `pencil` | `editSquare` |
+| `close` / `x` / `cross` | `circle-x` (for filled), or a non-circle variant from the `# Icon name index` |
+| `edit` / `pencil` | `edit-square` |
 | `menu` / `hamburger` | `bars` |
-| `eye` / `eyeOff` | `visibility` / `visibilityOff` |
+| `eye` / `eyeOff` | `visibility` / `visibility-off` |
 | `mail` / `email` | `envelope` |
-| `users` (plural) | `userGroup` |
-| `checkCircle` | `circleCheckmark` |
+| `users` (plural) | `user-group` |
+| `checkCircle` | `circle-checkmark` |
 | `settings` / `cog` | `gear` |
 
 If the icon you need isn't in the package at all (e.g. `filter` — confirmed
@@ -171,8 +146,8 @@ control*).
    - The typed/spoken content verbatim (the actual prompt the user wrote
      — pull from the brief when it includes example user input).
    - Up to 3 small affordance icons below or beside the content (send,
-     attach, microphone — from `@ionos-web-design-system/icon/system`;
-     see the *Icon usage* section above).
+     attach, microphone). These are affordances, so they are `system/` tier —
+     `@ionos-web-design-system/icon/system/<name>`; see *Icon usage* above.
    - No extensive chrome. The pop-out is one focused affordance, not a
      mini-screen.
 

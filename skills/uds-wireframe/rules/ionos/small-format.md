@@ -95,11 +95,16 @@ Grammar (mirrors the reference assets):
 
 ## Icons to use
 
-- IONOS **brand product icons** and **system icons**: import via the `svgData` deep-import
-  recipe and the **verified allowlist** in `remotion-best-practices` (do not guess names —
-  a non-existent name fails the render bundle; fall back to a `system/` icon when unsure).
-- **Social platform glyphs** (`dist/social/instagram`, `…/facebook`, etc.) for social-media
-  scenarios.
+- The central motif of an icon-story is normally a **brand product icon** — full-colour and
+  illustrative, sized large (see *Icon sizing* below). That is what makes a small canvas read
+  as "this specific product" rather than as generic grey UI.
+- **System icons** for the affordances around it — nav glyphs, status marks, controls.
+- **Social platform glyphs** (`icon/social/instagram`, `icon/social/facebook`, …) for
+  social-media scenarios.
+
+Every available name, per group, is in the `# Icon name index` section of this prompt. Use a
+name from it; there is no need to hedge toward `system/` — the index is complete, so a brand
+icon that fits the product is always the better central motif.
 
 ### Icon sizing — large and prominent at small format
 
