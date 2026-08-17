@@ -44,7 +44,7 @@ All rules are inlined below. Quick navigation:
 |---|---|
 | `ionos/remotion-template.md` | **Read first for Remotion jobs** — VariantProps schema, Root.tsx contract, TypeScript error triage |
 | `ionos/ai-animations.md` | **AI animation templates** — copy-ready Remotion code for button, loading state, radial bloom, sparkle pulse |
-| `ionos/product-frame-color.md` | IONOS product frame color values — color system, **verified icon allowlist** (system + brandmark), AI icon usage |
+| `ionos/product-frame-color.md` | IONOS product frame color values — color system, icon import form + anti-patterns, AI icon usage (icon **names** come from the generated `# Icon name index` prompt section, not this file) |
 | `ionos/composition.md` | Standard layout patterns, component selection, placeholder content guidelines |
 | `shared/frame-anatomy.md` | Brand-agnostic product frame structure — composition rule, content detail rules, contrast rules, frame layout rules, animated overflow |
 | `shared/constrained-viewport.md` | **Constrained viewport cropping patterns** (bottom bleed, zoom-to-highlight, square canvas, counterbalance rule) |

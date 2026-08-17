@@ -64,7 +64,10 @@ A nav chevron is never a brand icon. A "Cloud Backup" feature motif is never a g
 ```
 
 **Full-colour icons** (brand product icons, brandmark logos, social glyphs) — no colour
-override; the SVG carries its own fills:
+override; the SVG carries its own fills. Two shapes, because a logotype and a product icon
+are not the same aspect ratio:
+
+Product / service icon — roughly square, centred:
 ```tsx
 import { svgData as cloudMigrationSvg } from '@ionos-web-design-system/icon/ionos/cloud-migration-light';
 
@@ -72,6 +75,19 @@ import { svgData as cloudMigrationSvg } from '@ionos-web-design-system/icon/iono
   display: 'inline-block', width: 64, height: 64,
   backgroundImage: `url(${cloudMigrationSvg})`,
   backgroundRepeat: 'no-repeat', backgroundSize: 'contain', backgroundPosition: 'center',
+}} />
+```
+
+Brandmark logo — wide logotype, so give it a wide box and left-align it rather than
+centering (centering a wide logotype in a square box shrinks it and adds dead space on
+both sides); the exact width/height is illustrative, size to the layout:
+```tsx
+import { svgData as brandLogoSvg } from '@ionos-web-design-system/icon/brandmark/<name>-light';
+
+<div style={{
+  display: 'inline-block', width: 80, height: 24,
+  backgroundImage: `url(${brandLogoSvg})`,
+  backgroundRepeat: 'no-repeat', backgroundSize: 'contain', backgroundPosition: 'left center',
 }} />
 ```
 
