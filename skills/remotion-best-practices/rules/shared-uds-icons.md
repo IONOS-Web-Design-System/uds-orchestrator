@@ -36,6 +36,11 @@ index` and render it full-colour per the brand tier below. The brief names conce
 file names, because the planner has no name list. If no name in the index genuinely matches
 the concept, compose from `system/` glyphs and shapes instead — never invent a name.
 
+**The package artwork wins over any appearance description.** If the same brief also
+describes how the icon should look (a shape, a layout, a "styled as …"), that description is
+stale — it predates resolving the concept to a real icon. Render the resolved icon exactly as
+the package ships it; do not redraw, restyle, or recompose it from the brief's wording.
+
 ## Two tiers, no overlap
 
 | Tier | Use for | Rendering |

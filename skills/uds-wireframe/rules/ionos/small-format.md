@@ -51,8 +51,10 @@ class: `bg-surface-subtlest`.)
 Compose three roles — central motif + connected services + a connector that tells the story:
 
 1. **Central motif** — the IONOS subject. Either:
-   - a **brand/system icon** rendered large (e.g. a `shield`+`lock` for security, a
-     `cloud-migration` / `analytics` / `ai-mail-assistant` brand icon for a product), or
+   - a **brand/system icon** rendered large (e.g. a `shield`+`lock` for security, or a brand
+     product icon for a concept like cloud migration, analytics, or an AI mail assistant —
+     name the concept, per `shared-product-icon-substitution.md`, and let the illustration
+     generator resolve it), or
    - a **small abstract wireframe** — a rounded card with 2–3 IONOS-blue placeholder bars,
      or a minimal app frame (slim nav rail + a few rows). Keep it abstract at this size. (To
      show a *realistic* product frame at small size, use the cropped-frame approach below
@@ -102,9 +104,10 @@ Grammar (mirrors the reference assets):
 - **Social platform glyphs** (`icon/social/instagram`, `icon/social/facebook`, …) for
   social-media scenarios.
 
-Every available name, per group, is in the `# Icon name index` section of this prompt. Use a
-name from it; there is no need to hedge toward `system/` — the index is complete, so a brand
-icon that fits the product is always the better central motif.
+Every product concept has a match in the illustration generator's own `# Icon name index` —
+there is no need to hedge toward `system/`. Name the concept (never a slug or filename) and
+let the illustration generator resolve it against that index; a brand icon that fits the
+product is always the better central motif.
 
 ### Icon sizing — large and prominent at small format
 

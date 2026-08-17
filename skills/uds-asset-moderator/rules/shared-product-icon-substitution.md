@@ -17,14 +17,25 @@ drawn from primitives.
 
     ✗ "a small stack of three neatly layered, rounded isometric square cards symbolizing
        secure data restore points; a stylized minimal clock outline intersects them"
-    ✓ "the brand product icon for automated cloud backups as the central motif at ~40% of
-       canvas; a small scheduled-process indicator beside it"
+    ✓ "the brand product icon for automated cloud backups"
 
 **Phrase it as a CONCEPT, never a filename.** Write "the brand product icon for <concept in
 plain words>". Never write a slug, a file name, a light/dark suffix, or an import path —
 you have no name list, so a guessed name is a broken build. The illustration generator
 resolves the concept against its verified index, and falls back to composing from mono
 system icons when the library genuinely has no match.
+
+**Name it and stop — the icon IS the symbol.** Once you've asked for the brand product icon
+for a concept, do not also describe how it should look, and do not add a second invented
+graphic "styled as", "flanked by", or "symbolizing" the same concept. Both are the same
+invented-geometry mistake this rule exists to stop, just placed after the substitution
+instead of in place of it.
+
+    ✗ "the brand product icon for automated cloud backups, styled as a neat vertical stack of
+       three overlapping rounded cards"
+    ✗ "the brand product icon for automated cloud backups, flanked by a subtle stack of
+       rounded digital layers symbolizing secure restore points"
+    ✓ "the brand product icon for automated cloud backups"
 
 **This governs WHICH graphic fills a slot — never whether the composition is icon-only.**
 It does not decide composition shape. The icon may be the central motif of an icon-story or
