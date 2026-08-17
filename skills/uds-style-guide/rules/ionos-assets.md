@@ -62,18 +62,21 @@ and everything in it resolves.
   icon path — both are symptoms of a wrong path; fix the path instead.
 
 **Common name confusions to avoid** (these names from other libraries do NOT
-exist in this package; use the right-hand column instead):
+exist in this package; use the right-hand column instead — these are the
+actual module names, i.e. what appears in the `# Icon name index`, not the
+package's camelCase inject-function names, which do not resolve as import
+paths):
 
 | Don't write | Use instead |
 |-------------|-------------|
 | `check` | `checkmark` |
-| `close` / `x` / `cross` | `circleX` (for filled), or a non-circle variant from the `# Icon name index` |
-| `edit` / `pencil` | `editSquare` |
+| `close` / `x` / `cross` | `circle-x` (for filled), or a non-circle variant from the `# Icon name index` |
+| `edit` / `pencil` | `edit-square` |
 | `menu` / `hamburger` | `bars` |
-| `eye` / `eyeOff` | `visibility` / `visibilityOff` |
+| `eye` / `eyeOff` | `visibility` / `visibility-off` |
 | `mail` / `email` | `envelope` |
-| `users` (plural) | `userGroup` |
-| `checkCircle` | `circleCheckmark` |
+| `users` (plural) | `user-group` |
+| `checkCircle` | `circle-checkmark` |
 | `settings` / `cog` | `gear` |
 
 If the icon you need isn't in the package at all (e.g. `filter` — confirmed

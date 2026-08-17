@@ -134,25 +134,40 @@ import { Card } from '@ionos-web-design-system/react/card';
 
 ## Icon Usage
 
+**Do NOT use the `<Icon>` component or `useDynamicIcon`** — both are forbidden for Remotion
+by `remotion-best-practices/rules/shared-uds-icons.md`: they inject CSS at runtime
+(`document.createStyleSheet()` per frame, or a loader-mangled class name), which is
+unreliable in Remotion's headless renderer. Use the `svgData` inline approach instead —
+full recipe there; the essentials:
+
 ```tsx
-import { Icon } from '@ionos-web-design-system/react/icon';
+import { svgData as checkmarkSvg } from '@ionos-web-design-system/icon/system/checkmark';
 
-// System icons (UI elements)
-<Icon group="system" name="check" size={20} />
-
-// IONOS product icons
-<Icon group="ionos" name="hosting" size={32} />
+// System icons — mono mask, colour via backgroundColor
+<div style={{
+  display: 'inline-block', width: 20, height: 20,
+  backgroundColor: 'currentColor',
+  WebkitMaskImage: `url(${checkmarkSvg})`, maskImage: `url(${checkmarkSvg})`,
+  WebkitMaskSize: 'contain', maskSize: 'contain',
+  WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat',
+  WebkitMaskPosition: 'center', maskPosition: 'center',
+}} />
 ```
 
-For runtime-determined icon names:
 ```tsx
-import { useDynamicIcon } from '@ionos-web-design-system/react/use-dynamic-icon';
+import { svgData as cloudMigrationSvg } from '@ionos-web-design-system/icon/ionos/cloud-migration-light';
 
-function DynamicIconExample({ iconName }: { iconName: string }) {
-  const { Icon } = useDynamicIcon({ group: 'system', name: iconName });
-  return Icon ? <Icon size={20} /> : null;
-}
+// IONOS product icons — full-colour, no colour override
+<div style={{
+  display: 'inline-block', width: 32, height: 32,
+  backgroundImage: `url(${cloudMigrationSvg})`,
+  backgroundRepeat: 'no-repeat', backgroundSize: 'contain', backgroundPosition: 'center',
+}} />
 ```
+
+Icon names are chosen at codegen time from the `# Icon name index` prompt section — there is
+no runtime icon-name lookup in this one-shot pipeline, so `useDynamicIcon`'s premise (a name
+known only at render time) never applies here.
 
 **Brandmark icons**: do not use the `<Icon>` component — it applies fixed icon sizing that
 distorts logo proportions. Import the logo's `svgData` and use it as an `<img src>`:
