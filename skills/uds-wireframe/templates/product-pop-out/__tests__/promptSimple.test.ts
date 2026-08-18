@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import type { ReactElement } from 'react';
-import { PromptWindow, SIMPLE } from '../PromptWindow.js';
-import { AI_SVG, SEND_SVG } from '../promptWindow.icons.js';
+import { PromptWindow, SendButton, SIMPLE } from '../PromptWindow.js';
+import { AI_SVG, AiIcon } from '../promptWindow.icons.js';
 
 const W = 483.6;                       // the contract width at 1280x960
 const H = W / SIMPLE.aspect;           // 77.2px
@@ -19,15 +19,24 @@ const render = (over: Partial<Parameters<typeof PromptWindow>[0]> = {}) =>
     width: W, left: 0, bottom: 100, ...over,
   } as Parameters<typeof PromptWindow>[0]) as StyledEl;
 
-/** Depth-first walk of a returned element tree. */
+/** Depth-first walk of a returned element tree. Child COMPONENTS appear unexpanded — their
+ *  `props` are what the composition passed them, which is exactly what these tests assert. */
 function walk(el: unknown, out: StyledEl[] = []): StyledEl[] {
   if (!el || typeof el !== 'object') return out;
   const node = el as StyledEl;
   if (node.props) out.push(node);
-  const kids = node.props?.children;
-  if (Array.isArray(kids)) kids.forEach((k) => walk(k, out));
-  else if (kids) walk(kids, out);
+  const c = node.props?.children;
+  if (Array.isArray(c)) c.forEach((k) => walk(k, out));
+  else if (c) walk(c, out);
   return out;
+}
+
+/** The direct children of an element, flattened, non-elements dropped. */
+function kids(el: StyledEl): StyledEl[] {
+  const c = el.props?.children;
+  return (Array.isArray(c) ? c : [c]).filter(
+    (k): k is StyledEl => !!k && typeof k === 'object',
+  );
 }
 
 describe('prompt-simple geometry', () => {
@@ -58,21 +67,28 @@ describe('prompt-simple geometry', () => {
     expect(style.overflow).toBeUndefined();
   });
 
-  it('sizes the send button at 80.6% of height with EQUAL clearance', () => {
-    const send = walk(render()).find((n) => {
-      const s = n.props?.style as Record<string, unknown> | undefined;
-      return typeof s?.background === 'string' && String(s.background).includes('linear-gradient(45deg');
-    });
+  it('wires the send button at 80.6% of height and gives it no way to offset itself', () => {
+    const send = kids(render()).find((n) => 'glyph' in (n.props ?? {}));
     expect(send).toBeDefined();
-    const s = send!.props.style as Record<string, unknown>;
-    expect(s.height).toBeCloseTo(H * 0.806, 3);
-    expect(s.aspectRatio).toBe(1);
-    // Equal clearance is what `alignItems:'center'` on the row guarantees — the button must
-    // NOT carry its own vertical offset, which is how prod ended up 5px/3.5px lopsided.
-    expect(s.marginTop).toBeUndefined();
-    expect(s.marginBottom).toBeUndefined();
-    expect(s.alignSelf).toBeUndefined();
+    expect((send!.props as { size: number }).size).toBeCloseTo(H * 0.806, 3);
+    // Equal clearance is what `alignItems:'center'` on the row guarantees. The button cannot
+    // carry its own vertical offset because it receives NO style prop at all — that is how
+    // prod ended up 5px/3.5px lopsided.
+    expect((send!.props as { style?: unknown }).style).toBeUndefined();
     expect((render().props.style as Record<string, unknown>).alignItems).toBe('center');
+    expect((render().props.style as Record<string, unknown>).flexDirection).toBeUndefined();
+  });
+
+  it('renders the send circle itself as a gradient disc with a flat white glyph', () => {
+    // Invoking the sub-component directly is the TEST reaching in; the composition above
+    // still uses a `<SendButton/>` JSX tag.
+    const el = SendButton({ size: 62, brand: 'ionos', glyph: 'arrow' }) as StyledEl;
+    const s = el.props.style as Record<string, unknown>;
+    expect(s.background).toBe('linear-gradient(45deg, #095BB1, #D746F5)');
+    expect(s.aspectRatio).toBe(1);
+    expect(s.height).toBe(62);
+    expect(s.marginTop).toBeUndefined();
+    expect(s.alignSelf).toBeUndefined();
   });
 
   it('ellipsises one line of text and never wraps', () => {
@@ -88,18 +104,28 @@ describe('prompt-simple geometry', () => {
     expect(s.lineHeight).toBe(`${H * 0.306}px`);
   });
 
-  it('renders the AI marker gradient-filled and the send glyph flat white', () => {
-    const nodes = walk(render());
-    const marker = nodes.find((n) => (n.props?.style as Record<string, unknown>)?.maskImage === `url(${AI_SVG['filled-sparkles']})`);
-    expect((marker!.props.style as Record<string, unknown>).background).toContain('linear-gradient(45deg');
-    const glyph = nodes.find((n) => (n.props?.style as Record<string, unknown>)?.maskImage === `url(${SEND_SVG.arrow})`);
-    expect((glyph!.props.style as Record<string, unknown>).backgroundColor).toBe('#FFFFFF');
-    expect((glyph!.props.style as Record<string, unknown>).background).toBeUndefined();
+  it('wires the AI marker to the right glyph, as a real AiIcon element', () => {
+    // Task 2 already proves AiIcon paints with the gradient and never backgroundColor.
+    // What this task owns is the WIRING: the right svg, sized off the type ramp.
+    const marker = kids(render()).find((n) => n.type === AiIcon);
+    expect(marker).toBeDefined();
+    const props = marker!.props as { svg: string; size: number; brand?: string };
+    expect(props.svg).toBe(AI_SVG['filled-sparkles']);
+    expect(props.size).toBeCloseTo(H * 0.236 * 1.15, 3);
+    expect(props.brand).toBe('ionos');
+  });
+
+  it('honours a non-default AI marker', () => {
+    const marker = kids(render({ leadingIcon: 'filled-chat-ai' })).find((n) => n.type === AiIcon);
+    expect((marker!.props as { svg: string }).svg).toBe(AI_SVG['filled-chat-ai']);
+  });
+
+  it('wires the requested send glyph through', () => {
+    const send = kids(render({ sendGlyph: 'paper-plane' })).find((n) => 'glyph' in (n.props ?? {}));
+    expect((send!.props as { glyph: string }).glyph).toBe('paper-plane');
   });
 
   it('omits the marker when leadingIcon is none', () => {
-    const nodes = walk(render({ leadingIcon: 'none' }));
-    expect(nodes.some((n) => String((n.props?.style as Record<string, unknown>)?.maskImage ?? '')
-      .includes(AI_SVG['filled-sparkles']))).toBe(false);
+    expect(kids(render({ leadingIcon: 'none' })).some((n) => n.type === AiIcon)).toBe(false);
   });
 });

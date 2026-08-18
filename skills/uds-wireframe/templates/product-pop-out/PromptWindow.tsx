@@ -69,24 +69,21 @@ export const FULL = {
   ringPx: 1.5,
 } as const;
 
-function SendButton({ size, brand, glyph }: {
+/** Exported so a test can invoke it directly and inspect its own painted style — the same
+ *  way Task 2's tests inspect AiIcon/FlatIcon. The composition uses it as a JSX tag. */
+export function SendButton({ size, brand, glyph }: {
   size: number; brand: PromptWindowBrand; glyph: SendGlyph;
 }) {
   return (
     // The CIRCLE carries the AI gradient; the GLYPH is flat white. `alignItems:'center'` on
     // the parent row is what gives equal clearance above and below — this button must never
     // carry its own vertical offset.
-    //
-    // `FlatIcon` is invoked directly (not as a `<FlatIcon/>` JSX tag) so its returned element
-    // is embedded straight into this div's children instead of sitting behind an unexpanded
-    // component reference — identical output once a renderer runs it, but it keeps the tree
-    // walkable without one, which is how the geometry tests inspect it.
     <div style={{
       flex: 'none', height: size, aspectRatio: 1, borderRadius: 9999,
       background: aiGradient(brand),
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      {FlatIcon({ svg: SEND_SVG[glyph], size: size * SIMPLE.glyphOfSend, colour: '#FFFFFF' })}
+      <FlatIcon svg={SEND_SVG[glyph]} size={size * SIMPLE.glyphOfSend} colour="#FFFFFF" />
     </div>
   );
 }
@@ -102,28 +99,22 @@ export function PromptWindow(p: PromptWindowProps) {
       <div style={{
         position: 'absolute', left: p.left, bottom: p.bottom,
         width: p.width, height: h, boxSizing: 'border-box',
-        // `row-reverse` + the reversed child order below is a pure re-sequencing hint: the
-        // AI marker and the send circle both paint the identical `aiGradient(brand)` string,
-        // so putting the button first in DOM order (and un-reversing it visually) keeps it
-        // unambiguously first in a depth-first walk — the marker div is otherwise
-        // indistinguishable from the button by style alone. Visual layout is unchanged:
-        // icon, then text, then button, left to right.
-        display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', gap: SIMPLE.gap,
+        display: 'flex', alignItems: 'center', gap: SIMPLE.gap,
         padding: SIMPLE.padding, borderRadius: SIMPLE.radius,
         background: b.simple.surface,
         backdropFilter: `blur(${b.simple.blurPx}px)`,
         boxShadow: b.shadow,
       }}>
-        {/* `AiIcon`/`SendButton` are invoked directly, not as JSX tags — see the note on
-            `FlatIcon` above; same reasoning applies here. */}
-        {SendButton({ size: h * SIMPLE.sendOfH, brand: p.brand, glyph: sendGlyph })}
+        {marker !== 'none' && (
+          <AiIcon svg={AI_SVG[marker]} size={h * SIMPLE.fontOfH * 1.15} brand={p.brand} />
+        )}
         <span style={{
           flex: 1, minWidth: 0, overflow: 'hidden',
           whiteSpace: 'nowrap', textOverflow: 'ellipsis',
           color: b.text, fontFamily: b.simple.face, fontWeight: 400,
           fontSize: h * SIMPLE.fontOfH, lineHeight: `${h * SIMPLE.lineOfH}px`,
         }}>{p.promptText}</span>
-        {marker !== 'none' && AiIcon({ svg: AI_SVG[marker], size: h * SIMPLE.fontOfH * 1.15, brand: p.brand })}
+        <SendButton size={h * SIMPLE.sendOfH} brand={p.brand} glyph={sendGlyph} />
       </div>
     );
   }
