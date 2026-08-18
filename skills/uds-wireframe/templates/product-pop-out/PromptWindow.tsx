@@ -128,6 +128,12 @@ export function PromptWindow(p: PromptWindowProps) {
         background: b.simple.surface,
         backdropFilter: `blur(${b.simple.blurPx}px)`,
         boxShadow: b.shadow,
+        // zIndex: 100 — carried over from the retired `shared/floating-card.md` skeleton rule,
+        // which used this exact value for this exact floating element. Z-ORDER IS GEOMETRY: the
+        // component decides it here, the same way it decides padding/gaps/type ramp/radii, rather
+        // than exposing it as a prop codegen could omit or contradict (that gap is what let an
+        // un-z-indexed window lose a stacking fight to the interface panel drawn after it).
+        zIndex: 100,
       }}>
         {marker !== 'none' && (
           <AiIcon svg={AI_SVG[marker]} size={h * SIMPLE.fontOfH * 1.15} brand={p.brand} />
@@ -156,6 +162,12 @@ export function PromptWindow(p: PromptWindowProps) {
       display: 'flex', flexDirection: 'column', gap: FULL.gap,
       padding: FULL.padding, borderRadius: FULL.radius,
       background: b.full.surface, boxShadow: b.shadow,
+      // zIndex: 100 — carried over from the retired `shared/floating-card.md` skeleton rule,
+      // which used this exact value for this exact floating element. Z-ORDER IS GEOMETRY: the
+      // component decides it here, the same way it decides padding/gaps/type ramp/radii, rather
+      // than exposing it as a prop codegen could omit or contradict (that gap is what let an
+      // un-z-indexed window lose a stacking fight to the interface panel drawn after it).
+      zIndex: 100,
     }}>
       <span style={{
         display: '-webkit-box', WebkitLineClamp: FULL.maxLines,

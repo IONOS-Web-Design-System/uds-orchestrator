@@ -50,6 +50,12 @@ hero) is in `product-pop-out/character.md`.
    and the AI gradient. None of those are props, so there is nothing to tune and nothing to
    get wrong.
 
+   **Placement — a direct child of the root, never a wrapper.** Render `<PromptWindow>` as a
+   direct child of the root `AbsoluteFill`, never nested inside a positioned or `zIndex`-carrying
+   wrapper. The component sets its own stacking (it carries its own `zIndex`); a wrapper traps it
+   inside the WRAPPER's stacking context instead, where it can still lose to a higher-`zIndex`
+   sibling of that wrapper — the same occlusion this z-index exists to prevent, one level up.
+
    **FALLBACK — only when the contract does NOT name the template.** Build the window from
    the skeleton below. Transcribe the contract's four values as literals for the OUTER box;
    every inner length is a ratio of the window's own box, so it stays correct at any `w`/`h`.

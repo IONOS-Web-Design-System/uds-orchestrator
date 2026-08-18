@@ -143,4 +143,9 @@ describe('prompt-simple geometry', () => {
   it('omits the marker when leadingIcon is none', () => {
     expect(kids(render({ leadingIcon: 'none' })).some((n) => n.type === AiIcon)).toBe(false);
   });
+
+  it('sets its own zIndex — 100, carried from the retired floating-card rule for this exact element — so codegen has no way to leave it un-stacked', () => {
+    const style = render().props.style as Record<string, unknown>;
+    expect(style.zIndex).toBe(100);
+  });
 });
