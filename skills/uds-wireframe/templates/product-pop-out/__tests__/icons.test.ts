@@ -12,6 +12,10 @@ const manifest = JSON.parse(
 ) as { system: string[] };
 const SYSTEM = new Set(manifest.system);
 
+/** `ReactElement`'s P defaults to `unknown` in @types/react 19, so a bare cast makes
+ *  `.props` unreadable. These tests only ever read `style`, so name that shape. */
+type StyledEl = ReactElement<{ style?: Record<string, unknown> }>;
+
 /** Every icon name the template can ever reference — read from the module's own maps, so
  *  this list cannot drift from what the component actually imports. */
 const ALL_NAMES: string[] = [
@@ -50,7 +54,7 @@ describe('icon provenance', () => {
 
 describe('paint mode', () => {
   it('paints an AI icon with the gradient as background, never backgroundColor', () => {
-    const el = AiIcon({ svg: AI_SVG['filled-sparkles'], size: 24 }) as ReactElement;
+    const el = AiIcon({ svg: AI_SVG['filled-sparkles'], size: 24 }) as StyledEl;
     const style = el.props.style as Record<string, unknown>;
     expect(style.background).toBe('linear-gradient(45deg, #095BB1, #D746F5)');
     expect(style.backgroundColor).toBeUndefined();
@@ -61,7 +65,7 @@ describe('paint mode', () => {
   });
 
   it('paints a non-AI glyph with a flat backgroundColor, never a gradient', () => {
-    const el = FlatIcon({ svg: SEND_SVG.arrow, size: 18, colour: '#FFFFFF' }) as ReactElement;
+    const el = FlatIcon({ svg: SEND_SVG.arrow, size: 18, colour: '#FFFFFF' }) as StyledEl;
     const style = el.props.style as Record<string, unknown>;
     expect(style.backgroundColor).toBe('#FFFFFF');
     expect(style.background).toBeUndefined();
