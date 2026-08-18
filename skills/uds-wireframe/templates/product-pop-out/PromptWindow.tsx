@@ -12,11 +12,11 @@
  */
 import {
   PROMPT_WINDOW_BRANDS, aiGradient, type PromptWindowBrand,
-} from './promptWindow.brands.js';
+} from './promptWindow.brands';
 import {
   AiIcon, FlatIcon, AI_SVG, SEND_SVG, ACTION_SVG,
   type AiIconName, type PromptAction, type SendGlyph,
-} from './promptWindow.icons.js';
+} from './promptWindow.icons';
 
 export interface PromptWindowProps {
   variant: 'prompt-simple' | 'prompt-full';
@@ -70,9 +70,14 @@ export const FULL = {
 } as const;
 
 /** Exported so a test can invoke it directly and inspect its own painted style — the same
- *  way Task 2's tests inspect AiIcon/FlatIcon. The composition uses it as a JSX tag. */
-export function SendButton({ size, brand, glyph, glyphRatio = 0.44 }: {
-  size: number; brand: PromptWindowBrand; glyph: SendGlyph; glyphRatio?: number;
+ *  way Task 2's tests inspect AiIcon/FlatIcon. The composition uses it as a JSX tag.
+ *
+ *  `glyphRatio` is REQUIRED and carries no default on purpose. A default would be a THIRD
+ *  copy of the same number next to `SIMPLE.glyphOfSend` and `FULL.glyphOfSend`, and it is
+ *  what let both call sites silently stop reading the ratio tables — the same
+ *  looks-authoritative-but-read-by-nothing split as the 135°/45° gradient drift. */
+export function SendButton({ size, brand, glyph, glyphRatio }: {
+  size: number; brand: PromptWindowBrand; glyph: SendGlyph; glyphRatio: number;
 }) {
   return (
     // The CIRCLE carries the AI gradient; the GLYPH is flat white. `alignItems:'center'` on
@@ -133,7 +138,8 @@ export function PromptWindow(p: PromptWindowProps) {
           color: b.text, fontFamily: b.simple.face, fontWeight: 400,
           fontSize: h * SIMPLE.fontOfH, lineHeight: `${h * SIMPLE.lineOfH}px`,
         }}>{p.promptText}</span>
-        <SendButton size={h * SIMPLE.sendOfH} brand={p.brand} glyph={sendGlyph} />
+        <SendButton size={h * SIMPLE.sendOfH} brand={p.brand} glyph={sendGlyph}
+          glyphRatio={SIMPLE.glyphOfSend} />
       </div>
     );
   }
@@ -165,7 +171,8 @@ export function PromptWindow(p: PromptWindowProps) {
               brand={p.brand} ink={b.text} surface={b.full.surface} />
           ))}
         </span>
-        <SendButton size={p.width * FULL.sendOfW} brand={p.brand} glyph={sendGlyph} />
+        <SendButton size={p.width * FULL.sendOfW} brand={p.brand} glyph={sendGlyph}
+          glyphRatio={FULL.glyphOfSend} />
       </div>
     </div>
   );

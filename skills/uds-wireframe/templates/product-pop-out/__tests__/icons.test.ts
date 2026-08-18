@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import type { ReactElement } from 'react';
 import {
   AI_SVG, SEND_SVG, SEND_ICON, ACTION_ICON, AiIcon, FlatIcon, AI_ICON_NAMES,
-} from '../promptWindow.icons.js';
+} from '../promptWindow.icons';
 
 const require_ = createRequire(import.meta.url);
 const manifest = JSON.parse(

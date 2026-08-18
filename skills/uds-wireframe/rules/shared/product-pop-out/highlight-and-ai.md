@@ -27,7 +27,7 @@ hero) is in `product-pop-out/character.md`.
 
    <PromptWindow
      variant="prompt-full"                  // the contract's variant, verbatim
-     brand={brand}
+     brand="{brand}"                        // the contract's LITERAL, verbatim
      promptText={texts.promptText}          // ALL copy flows through `texts`
      actions={['edit', 'regenerate']}       // prompt-full only; 2 entries
      leadingIcon="filled-sparkles"          // or the contract's AI icon
@@ -39,7 +39,7 @@ hero) is in `product-pop-out/character.md`.
    | Prop | Type | Notes |
    |---|---|---|
    | `variant` | `'prompt-simple' \| 'prompt-full'` | Take the contract's value; never re-decide it |
-   | `brand` | the run's brand | |
+   | `brand` | a brand-name string literal | Pass the **literal** the contract gives you — NOT the composition's `brand` prop or variable. The component maps one brand today, so `brand={brand}` does not compile |
    | `promptText` | `string` | Put the contract's copy into `texts.promptText` and pass that — never a literal |
    | `actions` | 2 of `'edit' \| 'regenerate' \| 'attach' \| 'voice'` | `prompt-full` only |
    | `leadingIcon` | one of `filled-sparkles`, `filled-generative-write`, `filled-generative-wand`, `filled-chat-ai`, `filled-envelope-ai`, or `'none'` | Gradient-filled AI marker |

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PROMPT_WINDOW_BRANDS, AI_GRADIENT_ANGLE_DEG, aiGradient } from '../promptWindow.brands.js';
+import { PROMPT_WINDOW_BRANDS, AI_GRADIENT_ANGLE_DEG, aiGradient } from '../promptWindow.brands';
 
 describe('promptWindow.brands', () => {
   it('uses the 45deg AI gradient — never 135deg', () => {

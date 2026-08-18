@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import type { ReactElement } from 'react';
-import { PromptWindow, SendButton, SIMPLE } from '../PromptWindow.js';
-import { AI_SVG, AiIcon } from '../promptWindow.icons.js';
+import { PromptWindow, SendButton, SIMPLE } from '../PromptWindow';
+import { AI_SVG, AiIcon } from '../promptWindow.icons';
 
 const W = 483.6;                       // the contract width at 1280x960
 const H = W / SIMPLE.aspect;           // 77.2px
@@ -80,6 +80,9 @@ describe('prompt-simple geometry', () => {
     // carry its own vertical offset because it receives NO style prop at all — that is how
     // prod ended up 5px/3.5px lopsided.
     expect((send!.props as { style?: unknown }).style).toBeUndefined();
+    // The call site reads the ratio table. `glyphRatio` has NO default, so a call site that
+    // forgot it would not compile — but this pins that the value comes from SIMPLE, not FULL.
+    expect((send!.props as { glyphRatio: number }).glyphRatio).toBe(SIMPLE.glyphOfSend);
     expect((render().props.style as Record<string, unknown>).alignItems).toBe('center');
     expect((render().props.style as Record<string, unknown>).flexDirection).toBeUndefined();
   });
@@ -87,7 +90,9 @@ describe('prompt-simple geometry', () => {
   it('renders the send circle itself as a gradient disc with a flat white glyph', () => {
     // Invoking the sub-component directly is the TEST reaching in; the composition above
     // still uses a `<SendButton/>` JSX tag.
-    const el = SendButton({ size: 62, brand: 'ionos', glyph: 'arrow' }) as StyledEl;
+    const el = SendButton({
+      size: 62, brand: 'ionos', glyph: 'arrow', glyphRatio: SIMPLE.glyphOfSend,
+    }) as StyledEl;
     const s = el.props.style as Record<string, unknown>;
     expect(s.background).toBe('linear-gradient(45deg, #095BB1, #D746F5)');
     expect(s.aspectRatio).toBe(1);
@@ -96,7 +101,9 @@ describe('prompt-simple geometry', () => {
     expect(s.alignSelf).toBeUndefined();
     const glyph = el.props.children as StyledEl;
     expect((glyph.props as { colour: string }).colour).toBe('#FFFFFF');
-    expect((glyph.props as { size: number }).size).toBeCloseTo(62 * 0.44, 3);
+    // Off the ratio table, not a bare 0.44 — a literal here is what let SIMPLE.glyphOfSend
+    // become a member nothing read while the button used its own default.
+    expect((glyph.props as { size: number }).size).toBeCloseTo(62 * SIMPLE.glyphOfSend, 3);
   });
 
   it('ellipsises one line of text and never wraps', () => {

@@ -20,7 +20,7 @@ import { svgData as editSquare } from '@ionos-web-design-system/icon/system/edit
 import { svgData as refresh } from '@ionos-web-design-system/icon/system/refresh';
 import { svgData as attachement } from '@ionos-web-design-system/icon/system/attachement';
 import { svgData as mic } from '@ionos-web-design-system/icon/system/mic';
-import { aiGradient, type PromptWindowBrand } from './promptWindow.brands.js';
+import { aiGradient, type PromptWindowBrand } from './promptWindow.brands';
 
 /**
  * The AI icons that EXIST in the package. `filled-ai-phone` is documented for AI

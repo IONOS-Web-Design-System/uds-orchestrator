@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import type { ReactElement } from 'react';
-import { PromptWindow, RingButton, FULL } from '../PromptWindow.js';
-import { ACTION_SVG } from '../promptWindow.icons.js';
+import { PromptWindow, RingButton, FULL } from '../PromptWindow';
+import { ACTION_SVG } from '../promptWindow.icons';
 
 const W = 483.6;
 
@@ -90,8 +90,11 @@ describe('prompt-full geometry', () => {
     expect(row).toBeDefined();
     // The button must be inside the row — prod floated it at the card's vertical centre.
     // Its element carries a `glyph` prop, which nothing else in the tree has.
-    const inRow = walk(row).some((n) => 'glyph' in (n.props ?? {}));
-    expect(inRow).toBe(true);
+    const send = walk(row).find((n) => 'glyph' in (n.props ?? {}));
+    expect(send).toBeDefined();
+    // Sized AND glyph-scaled off FULL's ratio table — the send button must not inherit
+    // prompt-simple's numbers or a hardcoded component default.
+    expect((send!.props as { glyphRatio: number }).glyphRatio).toBe(FULL.glyphOfSend);
     expect((row!.props.style as Record<string, unknown>).alignItems).toBe('center');
     // ...and NOT a direct child of the card, which is what "centred on the card" looked like.
     expect(kids(render()).some((n) => 'glyph' in (n.props ?? {}))).toBe(false);
