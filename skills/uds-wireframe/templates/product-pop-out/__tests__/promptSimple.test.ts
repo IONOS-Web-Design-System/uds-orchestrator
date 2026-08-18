@@ -52,10 +52,15 @@ describe('prompt-simple geometry', () => {
   it('keeps the measured 3.3:1 horizontal padding — not the 10:1 prod drift', () => {
     const style = render().props.style as Record<string, unknown>;
     expect(style.padding).toBe('0 1.77% 0 5.76%');
-    // 5.76% and 1.77% of WIDTH: 27.9px and 8.6px.
-    expect(W * 0.0576).toBeCloseTo(27.9, 1);
-    expect(W * 0.0177).toBeCloseTo(8.6, 1);
-    expect(0.0576 / 0.0177).toBeCloseTo(3.25, 1);
+    // Drive the arithmetic from the component's OWN shorthand, so a changed ratio fails here
+    // rather than passing against a literal copied out of the spec.
+    const [top, right, bottom, left] = String(style.padding).split(' ');
+    expect(top).toBe('0');
+    expect(bottom).toBe('0');
+    const pct = (v: string) => parseFloat(v) / 100;
+    expect(W * pct(left)).toBeCloseTo(27.9, 1);
+    expect(W * pct(right)).toBeCloseTo(8.6, 1);
+    expect(pct(left) / pct(right)).toBeCloseTo(3.25, 1);
   });
 
   it('anchors on `bottom` and never sets a clipping overflow', () => {
@@ -89,6 +94,9 @@ describe('prompt-simple geometry', () => {
     expect(s.height).toBe(62);
     expect(s.marginTop).toBeUndefined();
     expect(s.alignSelf).toBeUndefined();
+    const glyph = el.props.children as StyledEl;
+    expect((glyph.props as { colour: string }).colour).toBe('#FFFFFF');
+    expect((glyph.props as { size: number }).size).toBeCloseTo(62 * 0.44, 3);
   });
 
   it('ellipsises one line of text and never wraps', () => {
