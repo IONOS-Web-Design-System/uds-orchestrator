@@ -1,0 +1,24 @@
+# Typecheck + test the composition templates. These files are copied into every
+# agent-svc render workspace and compiled by its tsc gate, so a broken template
+# would fail EVERY AI corporate_stage run. This is the first of the two guards;
+# the second is agent-svc's boot-time validation (it also covers a bad sync).
+name: templates
+on:
+  push:
+    paths: ['skills/uds-wireframe/templates/**']
+  pull_request:
+    paths: ['skills/uds-wireframe/templates/**']
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: skills/uds-wireframe/templates
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test

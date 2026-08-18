@@ -1,0 +1,19 @@
+{
+  "name": "uds-wireframe-templates",
+  "private": true,
+  "type": "module",
+  "description": "Composition primitives consumed by agent-svc codegen. Geometry is closed; only content is a prop.",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@ionos-web-design-system/icon": "^0.30.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^2.0.0"
+  }
+}
