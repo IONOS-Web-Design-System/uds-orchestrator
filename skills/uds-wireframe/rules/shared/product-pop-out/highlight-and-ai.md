@@ -83,6 +83,10 @@ hero) is in `product-pop-out/character.md`.
    | controls | ONE send button, `height:80.6%`, `aspectRatio:1`, **fully inside the bar** (equal clearance above and below — it does NOT overhang any edge) | row `justifyContent:'space-between'`: two outlined buttons `W*0.0833` grouped left with `gap:'1.54%'`, send button `W*0.084` right |
    | surface | opaque, subtle blur | opaque, one step off white |
 
+   For the fallback only: the two surfaces, the text colour, the gradient and the type faces are
+   brand values — take them from the brand's own AI rule (`ionos/product-pop-out/prompt-window.md`),
+   never invent them here. On the import path the component applies them for you.
+
    **(c) `generic` — a content-shaped accent** (every non-AI showroom). The contract gives an
    anchor and a `maxBox` CEILING, not a footprint. Choose the element's own size from the content
    you are rendering: it must fit inside `maxBox` and **MUST NOT fill it**. A value callout, a
