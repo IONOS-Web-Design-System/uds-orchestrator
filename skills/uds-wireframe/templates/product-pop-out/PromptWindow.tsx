@@ -14,7 +14,7 @@ import {
   PROMPT_WINDOW_BRANDS, aiGradient, type PromptWindowBrand,
 } from './promptWindow.brands.js';
 import {
-  AiIcon, FlatIcon, AI_SVG, SEND_SVG,
+  AiIcon, FlatIcon, AI_SVG, SEND_SVG, ACTION_SVG,
   type AiIconName, type PromptAction, type SendGlyph,
 } from './promptWindow.icons.js';
 
@@ -71,8 +71,8 @@ export const FULL = {
 
 /** Exported so a test can invoke it directly and inspect its own painted style — the same
  *  way Task 2's tests inspect AiIcon/FlatIcon. The composition uses it as a JSX tag. */
-export function SendButton({ size, brand, glyph }: {
-  size: number; brand: PromptWindowBrand; glyph: SendGlyph;
+export function SendButton({ size, brand, glyph, glyphRatio = 0.44 }: {
+  size: number; brand: PromptWindowBrand; glyph: SendGlyph; glyphRatio?: number;
 }) {
   return (
     // The CIRCLE carries the AI gradient; the GLYPH is flat white. `alignItems:'center'` on
@@ -83,7 +83,26 @@ export function SendButton({ size, brand, glyph }: {
       background: aiGradient(brand),
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <FlatIcon svg={SEND_SVG[glyph]} size={size * SIMPLE.glyphOfSend} colour="#FFFFFF" />
+      <FlatIcon svg={SEND_SVG[glyph]} size={size * glyphRatio} colour="#FFFFFF" />
+    </div>
+  );
+}
+
+/** Exported for the same reason as SendButton: a test invokes it directly to inspect its own
+ *  painted style. The composition uses it as a JSX tag. */
+export function RingButton({ action, size, brand, ink, surface }: {
+  action: PromptAction; size: number; brand: PromptWindowBrand; ink: string; surface: string;
+}) {
+  return (
+    // Outlined round button: transparent centre with a gradient RING. The two-layer
+    // background is what draws a gradient border without a gradient fill.
+    <div style={{
+      flex: 'none', width: size, height: size, borderRadius: 9999,
+      border: `${FULL.ringPx}px solid transparent`,
+      background: `linear-gradient(${surface},${surface}) padding-box, ${aiGradient(brand)} border-box`,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }}>
+      <FlatIcon svg={ACTION_SVG[action]} size={size * FULL.glyphOfSend} colour={ink} />
     </div>
   );
 }
@@ -119,6 +138,35 @@ export function PromptWindow(p: PromptWindowProps) {
     );
   }
 
-  // prompt-full lands in Task 4.
-  throw new Error(`PromptWindow: unsupported variant ${p.variant}`);
+  // prompt-full — NO height. The column grows from its own wrapped line count, anchored on
+  // `bottom`, so 1/2/3 lines all fit exactly: under-fill and mid-glyph clipping both become
+  // unrepresentable. Safe because the sales badge's Y_MIN derives from the constant-shaped
+  // `salesReservedBand`, not from this live rect.
+  const actions = p.actions ?? (['edit', 'regenerate'] as const);
+  return (
+    <div style={{
+      position: 'absolute', left: p.left, bottom: p.bottom,
+      width: p.width, boxSizing: 'border-box',
+      display: 'flex', flexDirection: 'column', gap: FULL.gap,
+      padding: FULL.padding, borderRadius: FULL.radius,
+      background: b.full.surface, boxShadow: b.shadow,
+    }}>
+      <span style={{
+        display: '-webkit-box', WebkitLineClamp: FULL.maxLines,
+        WebkitBoxOrient: 'vertical', overflow: 'hidden',
+        color: b.text, fontFamily: b.full.face, fontWeight: 400,
+        fontSize: p.width * FULL.fontOfW,
+        lineHeight: `${p.width * FULL.lineOfW}px`,
+      }}>{p.promptText}</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ display: 'flex', gap: FULL.actionGap }}>
+          {actions.map((a) => (
+            <RingButton key={a} action={a} size={p.width * FULL.actionOfW}
+              brand={p.brand} ink={b.text} surface={b.full.surface} />
+          ))}
+        </span>
+        <SendButton size={p.width * FULL.sendOfW} brand={p.brand} glyph={sendGlyph} />
+      </div>
+    </div>
+  );
 }
