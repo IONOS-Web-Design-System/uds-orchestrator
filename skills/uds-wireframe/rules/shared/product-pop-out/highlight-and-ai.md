@@ -84,7 +84,7 @@ hero) is in `product-pop-out/character.md`.
    | surface | opaque, subtle blur | opaque, one step off white |
 
    For the fallback only: the two surfaces, the text colour, the gradient and the type faces are
-   brand values — take them from the brand's own AI rule (`ionos/product-pop-out/prompt-window.md`),
+   brand values — take them from the brand's own AI rule (e.g. `ionos/product-pop-out/prompt-window.md` for IONOS),
    never invent them here. On the import path the component applies them for you.
 
    **(c) `generic` — a content-shaped accent** (every non-AI showroom). The contract gives an
