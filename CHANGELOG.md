@@ -1,5 +1,36 @@
 # Changelog
 
+## [2.20.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.19.0...v2.20.0) (2026-08-19)
+
+
+### Features
+
+* **templates:** make PromptWindow real glass (E6) ([5293adc](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/5293adcf0e910047e457726881c146b790997532))
+* **templates:** PromptWindow prompt-full card with content-derived height ([02a06ef](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/02a06ef700f8f4ec9536c29a3e2cb10268e8bae3))
+* **templates:** PromptWindow prompt-simple pill with closed geometry ([5522405](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/55224053894d5a3a0267d3d5ccb5a9e03a05ce72))
+* **templates:** put the floating prompt window on --surface-base (E4) ([7abdc9f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/7abdc9fdfb3dc1ae6ceec44a79ebbbe985d9ea22))
+* **templates:** scaffold templates/ toolchain + IONOS PromptWindow brand values ([bc497c5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/bc497c599fd09af4ccf406da0ef44fd85917256c))
+* **templates:** system-iconset icon layer with the AI gradient-fill rule ([2eb52a1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/2eb52a1f3e98d7451637a4f67abef72239f5db0b))
+
+
+### Bug Fixes
+
+* **gitignore:** add package-lock.json rule to prevent templates/ lockfile from shipping ([3ae21c0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3ae21c08f42b32f0d9c05d5f3e52793f31fa1be1))
+* **templates:** add @types/node so tsc resolves node:fs / node:module ([51c97c0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/51c97c09bddcaabaa26651ad398c229b9a14cf5c))
+* **templates:** drop row-reverse workaround, assert wiring not paint ([9d96c80](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9d96c804b52e99d365fc6085f0869908c3512817))
+* **templates:** give PromptWindow its own z-order (E1) ([7cb8918](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/7cb89181354c0a2dc3d5801cb2a48a1fc5a54394))
+* **templates:** make padding-ratio arithmetic real, cover the send-glyph colour ([b6668a6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/b6668a68503005de5083bb0a801f96063f1afe2a))
+* **templates:** make the prompt window bundleable by Remotion (C1, I1, minor) ([28e5c23](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/28e5c23627d5ae27bba4480724ce2a7b430122e7))
+* **templates:** resolve PromptWindow's insets in px, not CSS percentages (E3) ([68a4e5b](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/68a4e5be3117c548b550d5a70ce687ffa7dd37a5))
+* **templates:** type the paint-mode ReactElement casts instead of bare ReactElement ([42408ec](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/42408ec50803078e3916b372e09578d298308e42))
+* **wireframe:** make the fallback brand-file pointer an example, not the authority ([0ee65d9](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/0ee65d9e6eb5d19c577ccd46c590800cfc282ed5))
+* **wireframe:** restore brand-source pointer for the prompt-window fallback ([c85e2d6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c85e2d6d5d71262c96cac4937f7dc99bdbdeed15))
+
+
+### Documentation
+
+* **wireframe:** point the designed prompt window at the template ([d2a7c4e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d2a7c4e76fb12917f8c214c8d29d60fc00933030))
+
 ## [2.19.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.18.0...v2.19.0) (2026-08-17)
 
 
