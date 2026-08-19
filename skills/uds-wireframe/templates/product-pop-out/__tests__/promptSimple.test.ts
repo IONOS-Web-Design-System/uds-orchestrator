@@ -191,4 +191,17 @@ describe('prompt-simple geometry', () => {
     const style = render().props.style as Record<string, unknown>;
     expect(style.zIndex).toBe(100);
   });
+
+  it('is REAL glass — a working blur behind a translucent surface, not the opaque no-op', () => {
+    // An opaque background makes `backdropFilter` a complete no-op — that was the shipped bug.
+    // Asserting the alpha is < 1 (not merely that the background string equals a fixture) is
+    // what actually pins "the blur can take effect", since an opaque surface is exactly what
+    // breaks it.
+    const style = render().props.style as Record<string, unknown>;
+    expect(style.backdropFilter).toBe('blur(14px)');
+    const bg = String(style.background);
+    const match = bg.match(/^rgba\(\s*255,\s*255,\s*255,\s*([\d.]+)\s*\)$/);
+    expect(match).not.toBeNull();
+    expect(Number(match![1])).toBeLessThan(1);
+  });
 });

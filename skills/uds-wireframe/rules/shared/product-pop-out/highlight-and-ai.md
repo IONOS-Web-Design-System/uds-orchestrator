@@ -99,11 +99,14 @@ hero) is in `product-pop-out/character.md`.
    |---|---|---|
    | shape | pill bar, one line of text | rounded card, up to 3 lines |
    | controls | ONE send button, `height:80.6%`, `aspectRatio:1`, **fully inside the bar** (equal clearance above and below — it does NOT overhang any edge) | row `justifyContent:'space-between'`: two outlined buttons `W*0.0833` grouped left with `gap:W*0.0154`, send button `W*0.084` right |
-   | surface | opaque `--surface-base` white, subtle blur | opaque `--surface-base` white |
+   | surface | translucent glass, working blur | translucent glass, working blur |
 
-   For the fallback only: the two surfaces, the text colour, the gradient and the type faces are
-   brand values — take them from the brand's own AI rule (e.g. `ionos/product-pop-out/prompt-window.md` for IONOS),
-   never invent them here. On the import path the component applies them for you.
+   This window is glass by design — a narrow, named exception to the opaque Floating Highlight
+   surface rule in `shared/floating-card.md` (which continues to govern every hand-built
+   accent). For the fallback only: the exact alpha/blur, the text colour, the gradient and the
+   type faces are brand values — take them from the brand's own AI rule (e.g.
+   `ionos/product-pop-out/prompt-window.md` for IONOS), never invent them here. On the import
+   path the component applies them for you.
 
    **(c) `generic` — a content-shaped accent** (every non-AI showroom). The contract gives an
    anchor and a `maxBox` CEILING, not a footprint. Choose the element's own size from the content

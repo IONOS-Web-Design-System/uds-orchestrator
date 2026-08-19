@@ -172,9 +172,9 @@ describe('prompt-full geometry', () => {
     expect(props.action).toBe('edit');
     expect(props.ink).toBe('#001B41');
     // The ring's padding-box centre IS the card's surface — read from the brand table, so it can
-    // never drift from it (E4 moved that surface to `--surface-base` white).
+    // never drift from it (now translucent glass, per the designer's real-glass instruction).
     expect(props.surface).toBe(PROMPT_WINDOW_BRANDS.ionos.full.surface);
-    expect(props.surface).toBe('#FFFFFF');
+    expect(props.surface).toBe('rgba(255,255,255,0.88)');
     expect((rings[1].props as { action: string }).action).toBe('regenerate');
   });
 
@@ -202,5 +202,17 @@ describe('prompt-full geometry', () => {
   it('sets its own zIndex — 100, carried from the retired floating-card rule for this exact element — so codegen has no way to leave it un-stacked', () => {
     const style = render().props.style as Record<string, unknown>;
     expect(style.zIndex).toBe(100);
+  });
+
+  it('is REAL glass — a working blur behind a translucent surface, not the opaque no-op', () => {
+    // `prompt-full` previously had NO blur at all, behind an opaque fill. Asserting the alpha is
+    // < 1 (not merely that the background string equals a fixture) is what actually pins "the
+    // blur can take effect" — an opaque surface is exactly what made it a no-op.
+    const style = render().props.style as Record<string, unknown>;
+    expect(style.backdropFilter).toBe('blur(14px)');
+    const bg = String(style.background);
+    const match = bg.match(/^rgba\(\s*255,\s*255,\s*255,\s*([\d.]+)\s*\)$/);
+    expect(match).not.toBeNull();
+    expect(Number(match![1])).toBeLessThan(1);
   });
 });

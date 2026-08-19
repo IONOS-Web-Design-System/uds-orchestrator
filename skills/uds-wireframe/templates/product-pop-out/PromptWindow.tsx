@@ -122,7 +122,18 @@ export function SendButton({ size, brand, glyph, glyphRatio }: {
 }
 
 /** Exported for the same reason as SendButton: a test invokes it directly to inspect its own
- *  painted style. The composition uses it as a JSX tag. */
+ *  painted style. The composition uses it as a JSX tag.
+ *
+ *  `surface` is wired straight from `b.full.surface` (now translucent glass, not opaque) — the
+ *  same value the card itself paints. That was a deliberate choice, not an oversight: it keeps
+ *  the ring's centre unable to drift from the card (the invariant this component's tests pin),
+ *  and it means the ring's padding-box layer composites a TRANSLUCENT layer over the
+ *  translucent card, landing at ~0.9856 effective alpha against the card's 0.88 — a ~1.6%
+ *  mismatch, imperceptible in practice. The alternative — an opaque near-white just for the
+ *  ring's centre — was rejected: it would paint a hard-edged opaque disc against a translucent
+ *  card, which reads as a visible seam (worst over the composite's transparent root, where
+ *  nothing else near the ring is opaque either) — a materially worse defect than a ~1.6% alpha
+ *  mismatch nobody can see. */
 export function RingButton({ action, size, brand, ink, surface }: {
   action: PromptAction; size: number; brand: PromptWindowBrand; ink: string; surface: string;
 }) {
@@ -191,7 +202,9 @@ export function PromptWindow(p: PromptWindowProps) {
       width: p.width, boxSizing: 'border-box',
       display: 'flex', flexDirection: 'column', gap: p.width * FULL.gapOfW,
       padding: p.width * FULL.padOfW, borderRadius: p.width * FULL.radiusOfW,
-      background: b.full.surface, boxShadow: b.shadow,
+      background: b.full.surface,
+      backdropFilter: `blur(${b.full.blurPx}px)`,
+      boxShadow: b.shadow,
       // zIndex: 100 — carried over from the retired `shared/floating-card.md` skeleton rule,
       // which used this exact value for this exact floating element. Z-ORDER IS GEOMETRY: the
       // component decides it here, the same way it decides padding/gaps/type ramp/radii, rather

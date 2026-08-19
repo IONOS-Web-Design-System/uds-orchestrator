@@ -111,6 +111,13 @@ solid, not glass; there is no
 belongs to a separate composition element (the AI generation area used in
 text/image-generation moments), never to this highlight element.
 
+**Exception — the shipped, designed prompt window.** `PromptWindow.tsx`
+(`product-pop-out`'s `prompt-simple` / `prompt-full` variants, imported rather than hand-built)
+IS glass by design: a translucent near-white surface plus a working `backdropFilter: blur(...)`
+— see `ionos/product-pop-out/prompt-window.md` for the exact values. That carve-out is narrow and
+total: it names one shipped component, not a category. Every hand-built Floating Highlight
+element in this file, however AI-flavored its content, stays opaque per the HARD RULE above.
+
 **Never nest a generation-area container inside this element.** Nesting a glass generation-area
 container (its own background + blur) inside the Floating Highlight element produces a white
 box-in-box with a double shadow. The element IS the surface — place its header, text/content,
