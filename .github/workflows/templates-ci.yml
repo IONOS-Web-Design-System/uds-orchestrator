@@ -4,10 +4,19 @@
 # the second is agent-svc's boot-time validation (it also covers a bad sync).
 name: templates
 on:
+  # This workflow's own path is in the filter on purpose: without it, a commit that only
+  # edits the workflow does not re-run it, so a fix to the check cannot be verified until
+  # someone happens to touch the templates. `workflow_dispatch` exists for the same
+  # reason — to exercise it on demand rather than by contriving a template edit.
   push:
-    paths: ['skills/uds-wireframe/templates/**']
+    paths:
+      - 'skills/uds-wireframe/templates/**'
+      - '.github/workflows/templates-ci.yml'
   pull_request:
-    paths: ['skills/uds-wireframe/templates/**']
+    paths:
+      - 'skills/uds-wireframe/templates/**'
+      - '.github/workflows/templates-ci.yml'
+  workflow_dispatch:
 jobs:
   check:
     runs-on: ubuntu-latest
