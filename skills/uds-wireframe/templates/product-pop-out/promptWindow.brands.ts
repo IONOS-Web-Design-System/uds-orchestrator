@@ -25,7 +25,13 @@ export interface BrandValues {
 export const PROMPT_WINDOW_BRANDS = {
   ionos: {
     simple: { surface: '#FFFFFF', blurPx: 14, face: 'Open Sans' },
-    full: { surface: '#F5F5F5', face: 'Overpass' },
+    // BOTH variants' surface is `--surface-base` — the designer's instruction for the floating
+    // chat window ("white on light"), which for ionos light resolves to #FFFFFF
+    // (`rules/ionos/product-frame-color.md`, `var(--surface-base, #FFFFFF)`). `prompt-full` was
+    // #F5F5F5. The card reads off the canvas on its shadow, not on a second fill tier — and
+    // `prompt-full`'s ring buttons take their padding-box centre from THIS value, so the ring's
+    // centre follows the surface automatically.
+    full: { surface: '#FFFFFF', face: 'Overpass' },
     text: '#001B41',
     gradient: ['#095BB1', '#D746F5'],
     shadow: '0 8px 24px rgba(0,27,65,0.10)',

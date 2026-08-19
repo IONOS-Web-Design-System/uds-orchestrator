@@ -13,12 +13,22 @@ describe('promptWindow.brands', () => {
   it('carries the measured IONOS surfaces and faces per variant', () => {
     const b = PROMPT_WINDOW_BRANDS.ionos;
     expect(b.simple).toEqual({ surface: '#FFFFFF', blurPx: 14, face: 'Open Sans' });
-    expect(b.full).toEqual({ surface: '#F5F5F5', face: 'Overpass' });
+    // BOTH surfaces are `--surface-base` — "white on light", per the designer. `prompt-full` was
+    // #F5F5F5, a second fill tier the design never asked for.
+    expect(b.full).toEqual({ surface: '#FFFFFF', face: 'Overpass' });
+    expect(b.full.surface).toBe('#FFFFFF');
     expect(b.text).toBe('#001B41');
     expect(b.shadow).toBe('0 8px 24px rgba(0,27,65,0.10)');
   });
 
   it('never exposes the retired purple-500', () => {
     expect(JSON.stringify(PROMPT_WINDOW_BRANDS)).not.toContain('#B410E7');
+  });
+
+  it('no longer carries the retired off-white card surface', () => {
+    // #F5F5F5 was `prompt-full`'s surface. The floating window is `--surface-base` white now, so
+    // the off-white must not survive anywhere — including in a ring button's padding-box layer,
+    // which reads `full.surface` rather than a literal of its own.
+    expect(JSON.stringify(PROMPT_WINDOW_BRANDS)).not.toContain('#F5F5F5');
   });
 });

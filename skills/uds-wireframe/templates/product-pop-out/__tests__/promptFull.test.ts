@@ -108,7 +108,7 @@ describe('prompt-full geometry', () => {
     // for them, for the separate reasons documented on FULL, but they are not banned.
     const trees = [
       ...walk(render()),
-      ...walk(RingButton({ action: 'edit', size: 40, brand: 'ionos', ink: '#001B41', surface: '#F5F5F5' }) as StyledEl),
+      ...walk(RingButton({ action: 'edit', size: 40, brand: 'ionos', ink: '#001B41', surface: '#FFFFFF' }) as StyledEl),
     ];
     for (const node of trees) {
       const style = (node.props?.style ?? {}) as Record<string, unknown>;
@@ -172,20 +172,20 @@ describe('prompt-full geometry', () => {
     expect(props.action).toBe('edit');
     expect(props.ink).toBe('#001B41');
     // The ring's padding-box centre IS the card's surface — read from the brand table, so it can
-    // never drift from it.
+    // never drift from it (E4 moved that surface to `--surface-base` white).
     expect(props.surface).toBe(PROMPT_WINDOW_BRANDS.ionos.full.surface);
-    expect(props.surface).toBe('#F5F5F5');
+    expect(props.surface).toBe('#FFFFFF');
     expect((rings[1].props as { action: string }).action).toBe('regenerate');
   });
 
   it('paints a ring button as a gradient ring around a surface-coloured centre', () => {
     // The TEST invokes the sub-component directly; the composition uses a `<RingButton/>` tag.
     const el = RingButton({
-      action: 'edit', size: 40, brand: 'ionos', ink: '#001B41', surface: '#F5F5F5',
+      action: 'edit', size: 40, brand: 'ionos', ink: '#001B41', surface: '#FFFFFF',
     }) as StyledEl;
     const s = el.props.style as Record<string, unknown>;
     expect(s.border).toBe('1.5px solid transparent');
-    expect(String(s.background)).toContain('linear-gradient(#F5F5F5,#F5F5F5) padding-box');
+    expect(String(s.background)).toContain('linear-gradient(#FFFFFF,#FFFFFF) padding-box');
     expect(String(s.background)).toContain('linear-gradient(45deg, #095BB1, #D746F5) border-box');
     expect(s.borderRadius).toBe(9999);
     const glyph = walk(el).find((n) => (n.props as { svg?: string })?.svg === ACTION_SVG.edit);

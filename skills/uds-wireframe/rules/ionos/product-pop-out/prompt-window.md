@@ -15,10 +15,16 @@ Hardcode the hex values; CSS custom properties do not reliably resolve in a Remo
 
 | Role | `prompt-simple` | `prompt-full` |
 |---|---|---|
-| surface | `#FFFFFF`, `backdropFilter:'blur(14px)'` | `#F5F5F5` |
+| surface | `#FFFFFF`, `backdropFilter:'blur(14px)'` | `#FFFFFF` |
 | text | `Open Sans` 400 | `Overpass` 400 |
 | text colour | `#001B41` | `#001B41` |
 | shadow | `0 8px 24px rgba(0,27,65,0.10)` | same |
+
+**Both surfaces are `--surface-base`** — the floating chat window is white on light
+(`ionos/product-frame-color.md`, `var(--surface-base, #FFFFFF)`). `prompt-full` was `#F5F5F5`,
+a second fill tier the design never asked for; the card lifts off the canvas on its SHADOW, not
+on a darker fill. Hardcode the hex — but if you change it, change the ring button's
+`padding-box` layer below with it, or the ring's centre stops matching the card.
 
 **The AI gradient is `linear-gradient(45deg, #095BB1, #D746F5)`** — static, never animated
 or interpolated. This file previously said `135deg`, which contradicted
@@ -36,7 +42,7 @@ marker — see `ionos/product-frame-color.md` "AI Icon Usage Guidelines".
 
 ```jsx
 border:'1.5px solid transparent',
-background:'linear-gradient(#F5F5F5,#F5F5F5) padding-box,'
+background:'linear-gradient(#FFFFFF,#FFFFFF) padding-box,'
   + ' linear-gradient(45deg,#095BB1,#D746F5) border-box',
 ```
 
