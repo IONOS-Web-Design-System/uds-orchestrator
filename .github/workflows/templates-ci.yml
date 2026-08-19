@@ -19,6 +19,32 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      # `@ionos-web-design-system/icon` is INTERNAL: it is published to the private
+      # JFrog registry, not to npmjs, so a bare `npm install` 404s on it. The template
+      # genuinely needs it — `promptWindow.icons.tsx` imports each glyph's `svgData`,
+      # and `icons.test.ts` reads the installed package's `icon-names.json` so that an
+      # upgrade dropping a glyph fails HERE rather than as `Module not found` inside a
+      # production render bundle.
+      #
+      # Registry URL and secret name follow the sibling repo's established pattern
+      # (agent-svc/.github/workflows/build.yml, "Prepare .npmrc content"), so both
+      # repos authenticate the same way against the same feed.
+      - name: Configure the private registry
+        run: |
+          if [ -z "${{ secrets.JFROG_AUTH_TOKEN }}" ]; then
+            echo "::error::JFROG_AUTH_TOKEN is not set on this repository. @ionos-web-design-system/icon lives on the private JFrog registry (ionos.jfrog.io/artifactory/api/npm/ionos-cph-uds), not on npmjs, so npm install cannot resolve it. agent-svc already holds a secret under this exact name — add it here too, or promote it to an organisation secret so every repo shares one credential."
+            exit 1
+          fi
+          cat > .npmrc <<EOF
+          @ionos-web-design-system:registry=https://ionos.jfrog.io/artifactory/api/npm/ionos-cph-uds/
+          //ionos.jfrog.io/artifactory/api/npm/ionos-cph-uds/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}
+          EOF
+
       - run: npm install --no-audit --no-fund
       - run: npm run typecheck
       - run: npm test
+
+      # Always, including after a failure above — the file holds a live credential.
+      - name: Remove the credentials file
+        if: always()
+        run: rm -f .npmrc

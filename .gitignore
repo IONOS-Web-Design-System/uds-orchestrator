@@ -15,3 +15,6 @@ package-lock.json
 
 # Local-only brainstorming specs & implementation plans — stay on disk, never committed.
 docs/superpowers/
+
+# Written by CI to authenticate against the private JFrog feed — never commit it.
+.npmrc
