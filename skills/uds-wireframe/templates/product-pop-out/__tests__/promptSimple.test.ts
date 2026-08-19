@@ -49,18 +49,61 @@ describe('prompt-simple geometry', () => {
     expect(Math.abs((style.height as number) - 76.9)).toBeLessThan(0.5);
   });
 
-  it('keeps the measured 3.3:1 horizontal padding — not the 10:1 prod drift', () => {
+  it('RESOLVES the measured 3.3:1 horizontal padding to px — not the 10:1 prod drift', () => {
+    // The defect this replaced: `padding:'0 1.77% 0 5.76%'` resolves against the CONTAINING
+    // BLOCK's width, not the element's own. This bar is absolutely positioned under the root
+    // AbsoluteFill, so Chromium painted 73.7px left / 22.6px right off the 1280px canvas instead
+    // of 27.9 / 8.6. The old assertion read the declaration STRING and did its own arithmetic on
+    // it, so nothing observed what CSS computed. Numbers ARE the resolved px, so they can be
+    // asserted with no layout engine.
+    const style = render({ width: 484 }).props.style as Record<string, unknown>;
+    expect(style.padding).toBeUndefined();                        // no shorthand, so no '%' string
+    expect(style.paddingLeft as number).toBeCloseTo(27.9, 1);     // 0.0576 * 484
+    expect(style.paddingRight as number).toBeCloseTo(8.6, 1);     // 0.0177 * 484
+    expect(style.paddingLeft as number).toBeCloseTo(484 * SIMPLE.padLeftOfW, 6);
+    expect(style.paddingRight as number).toBeCloseTo(484 * SIMPLE.padRightOfW, 6);
+    // Vertical inset is 0 BY DESIGN — `alignItems:'center'` does the vertical work.
+    expect(style.paddingTop).toBe(0);
+    expect(style.paddingBottom).toBe(0);
+    expect((style.paddingLeft as number) / (style.paddingRight as number)).toBeCloseTo(3.25, 1);
+    // ...and it tracks `width`, so it is right in any containing block at any width.
+    const half = render({ width: 242 }).props.style as Record<string, unknown>;
+    expect(half.paddingLeft as number).toBeCloseTo(13.95, 1);
+  });
+
+  it('RESOLVES the row gap to px off the width, not against a padding-dependent content box', () => {
+    // `gap` percentages resolve against the container's own CONTENT box, so `4.4%` moved with the
+    // padding: Chromium measured 17.0px under the inflated padding and 19.7px with it corrected,
+    // against the 21.3px the ratio means. px off `width` is the only stable reading.
+    const style = render({ width: 484 }).props.style as Record<string, unknown>;
+    expect(typeof style.gap).toBe('number');
+    expect(style.gap as number).toBeCloseTo(21.3, 1);             // 0.044 * 484
+    expect(style.gap as number).toBeCloseTo(484 * SIMPLE.gapOfW, 6);
+  });
+
+  it('keeps the pill radius in px — a percentage radius would be an ellipse', () => {
+    // `borderRadius` percentages resolve horizontally against width and VERTICALLY against
+    // height, so a percentage could never express this pill. 9999px can.
     const style = render().props.style as Record<string, unknown>;
-    expect(style.padding).toBe('0 1.77% 0 5.76%');
-    // Drive the arithmetic from the component's OWN shorthand, so a changed ratio fails here
-    // rather than passing against a literal copied out of the spec.
-    const [top, right, bottom, left] = String(style.padding).split(' ');
-    expect(top).toBe('0');
-    expect(bottom).toBe('0');
-    const pct = (v: string) => parseFloat(v) / 100;
-    expect(W * pct(left)).toBeCloseTo(27.9, 1);
-    expect(W * pct(right)).toBeCloseTo(8.6, 1);
-    expect(pct(left) / pct(right)).toBeCloseTo(3.25, 1);
+    expect(style.borderRadius).toBe(9999);
+  });
+
+  it('lets NO percentage padding survive anywhere in the tree', () => {
+    // Padding is the one property whose percentage silently re-bases against the CANVAS (the
+    // containing block), so a '%' there is unrecoverable and invisible to a ratio assertion.
+    // Deliberately padding-only: `gap` and `borderRadius` percentages resolve against the
+    // element's own box and are legitimate CSS — not banned, just not used here.
+    const trees = [
+      ...walk(render()),
+      ...walk(SendButton({ size: 62, brand: 'ionos', glyph: 'arrow', glyphRatio: SIMPLE.glyphOfSend }) as StyledEl),
+    ];
+    for (const node of trees) {
+      const style = (node.props?.style ?? {}) as Record<string, unknown>;
+      for (const [key, value] of Object.entries(style)) {
+        if (!/^padding/i.test(key)) continue;
+        expect(String(value)).not.toContain('%');
+      }
+    }
   });
 
   it('anchors on `bottom` and never sets a clipping overflow', () => {

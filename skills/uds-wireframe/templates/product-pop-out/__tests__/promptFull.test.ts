@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import type { ReactElement } from 'react';
 import { PromptWindow, RingButton, FULL } from '../PromptWindow';
 import { ACTION_SVG } from '../promptWindow.icons';
+import { PROMPT_WINDOW_BRANDS } from '../promptWindow.brands';
 
 const W = 483.6;
 
@@ -47,22 +48,85 @@ describe('prompt-full geometry', () => {
     expect(style.top).toBeUndefined();
   });
 
-  it('uses ONE single-percentage padding on all four sides', () => {
-    // Percentage padding resolves against WIDTH on every side. Deriving separate
-    // horizontal and vertical insets is what makes the card look skewed.
-    const style = render().props.style as Record<string, unknown>;
-    expect(style.padding).toBe('4.94%');
-    expect(String(style.padding)).not.toContain(' ');   // one value, not four
-    expect(W * (parseFloat(String(style.padding)) / 100)).toBeCloseTo(23.9, 1);
+  it('RESOLVES padding to px off its own width — one value, all four sides', () => {
+    // The defect this replaced: `padding:'4.94%'` resolves against the CONTAINING BLOCK's
+    // width, not the element's own — and for this absolutely-positioned window that block is
+    // the root AbsoluteFill's 1280px canvas, so it painted 63.2px per side (measured in
+    // Chromium) instead of 23.9px. The old assertion read the declaration STRING and did its
+    // own arithmetic on it, so nothing in the suite observed what CSS computed. A NUMBER is
+    // what makes that observable without a browser: it is already the resolved px.
+    const style = render({ width: 484 }).props.style as Record<string, unknown>;
+    expect(typeof style.padding).toBe('number');            // px — never a '%' string
+    expect(style.padding as number).toBeCloseTo(23.9, 1);   // 0.0494 * 484, uniform
+    expect(style.padding as number).toBeCloseTo(484 * FULL.padOfW, 6);  // the ratio, not a literal
+    // ...and it tracks `width`, so it is right in any containing block at any width.
+    const half = render({ width: 242 }).props.style as Record<string, unknown>;
+    expect(half.padding as number).toBeCloseTo(11.95, 1);
+  });
+
+  it('RESOLVES the column gap to px — a percentage row-gap here resolves to ZERO', () => {
+    // `gap` percentages resolve against the container's own content box in that axis. This card
+    // is a column with `height:auto`, so the block axis is INDEFINITE and Chromium resolved
+    // `3.71%` to 0px: the card was 18px short as well as over-padded, and the two Figma bands
+    // touched. px off the width is what the ratio always meant.
+    const style = render({ width: 484 }).props.style as Record<string, unknown>;
+    expect(typeof style.gap).toBe('number');
+    expect(style.gap as number).toBeCloseTo(17.96, 1);      // 0.0371 * 484
+    expect(style.gap as number).toBeCloseTo(484 * FULL.gapOfW, 6);
+  });
+
+  it('RESOLVES the corner radius to px — a percentage radius is an ellipse, not a corner', () => {
+    // `borderRadius` percentages resolve horizontally against width but VERTICALLY against
+    // height, so `3.09%` on this 484x187 card is a 14.96 x 5.78 ELLIPSE (confirmed by
+    // hit-testing the corner in Chromium: the px box clips the corner point, the % box does
+    // not). One measured radius must therefore be one px value.
+    const style = render({ width: 484 }).props.style as Record<string, unknown>;
+    expect(typeof style.borderRadius).toBe('number');
+    expect(style.borderRadius as number).toBeCloseTo(14.96, 1);   // 0.0309 * 484
+  });
+
+  it('RESOLVES the ring-button gap to px — the percentage resolved against a shrink-to-fit row', () => {
+    // `1.54%` resolved against the action row's OWN content box, and that row shrink-wraps its
+    // two buttons (81px), so Chromium painted 1.25px — the two rings all but touching — instead
+    // of 7.45px.
+    const controls = walk(render({ width: 484 })).find(
+      (n) => (n.props?.style as Record<string, unknown> | undefined)?.justifyContent === 'space-between',
+    );
+    const group = kids(controls!).find(
+      (n) => typeof (n.props?.style as Record<string, unknown> | undefined)?.gap !== 'undefined',
+    );
+    const gap = (group!.props.style as Record<string, unknown>).gap;
+    expect(typeof gap).toBe('number');
+    expect(gap as number).toBeCloseTo(7.45, 1);            // 0.0154 * 484
+  });
+
+  it('lets NO percentage padding survive anywhere in the tree', () => {
+    // Padding is the one property whose percentage silently re-bases against the CANVAS (the
+    // containing block), so a '%' here is never recoverable by scaling and never visible in a
+    // ratio assertion. Deliberately padding-only: `gap` and `borderRadius` percentages resolve
+    // against the element's own box, so they are legitimate CSS — this component still uses px
+    // for them, for the separate reasons documented on FULL, but they are not banned.
+    const trees = [
+      ...walk(render()),
+      ...walk(RingButton({ action: 'edit', size: 40, brand: 'ionos', ink: '#001B41', surface: '#F5F5F5' }) as StyledEl),
+    ];
+    for (const node of trees) {
+      const style = (node.props?.style ?? {}) as Record<string, unknown>;
+      for (const [key, value] of Object.entries(style)) {
+        if (!/^padding/i.test(key)) continue;
+        expect(String(value)).not.toContain('%');
+      }
+    }
   });
 
   it('reproduces the Figma box at 3 lines and is SHORTER when the copy is shorter', () => {
     // The component sets NO height — the browser computes it from the wrapped line count, and
     // jsdom has no layout, so this asserts the ARITHMETIC the component's own ratio table
-    // produces. Every input is read from FULL (including the percentage strings), so a changed
-    // ratio fails here instead of passing against a literal copied out of the spec.
-    const pct = (v: string) => parseFloat(v) / 100;
-    const pad = W * pct(FULL.padding), gap = W * pct(FULL.gap), line = W * FULL.lineOfW;
+    // produces. Every input is read from FULL, so a changed ratio fails here instead of passing
+    // against a literal copied out of the spec. A Chromium measurement of these exact
+    // declarations at width 484 returns 187.08px, so the arithmetic is the real height now; with
+    // the percentages it returned 247.75px (63.2px padding per side and a collapsed 0px gap).
+    const pad = W * FULL.padOfW, gap = W * FULL.gapOfW, line = W * FULL.lineOfW;
     const controls = Math.max(W * FULL.actionOfW, W * FULL.sendOfW);
     const at = (n: number) => pad * 2 + n * line + gap + controls;
     expect(at(FULL.maxLines)).toBeCloseTo(187.0, 0);   // contract h = 0.1961 * 960 = 188.3
@@ -107,6 +171,9 @@ describe('prompt-full geometry', () => {
     expect(props.size).toBeCloseTo(W * 0.0833, 3);
     expect(props.action).toBe('edit');
     expect(props.ink).toBe('#001B41');
+    // The ring's padding-box centre IS the card's surface — read from the brand table, so it can
+    // never drift from it.
+    expect(props.surface).toBe(PROMPT_WINDOW_BRANDS.ionos.full.surface);
     expect(props.surface).toBe('#F5F5F5');
     expect((rings[1].props as { action: string }).action).toBe('regenerate');
   });

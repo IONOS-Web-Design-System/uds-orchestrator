@@ -64,10 +64,11 @@ hero) is in `product-pop-out/character.md`.
    ```jsx
    // OUTER: left/top/width/height are the contract's four literals. S = simple, F = full.
    <div style={{ position:'absolute', left:X, top:Y, width:W, height:H, boxSizing:'border-box',
-     display:'flex', ...(S ? { alignItems:'center', gap:'4.4%', padding:'0 1.77% 0 5.76%',
+     display:'flex', ...(S ? { alignItems:'center', gap:W*0.044,
+                               paddingLeft:W*0.0576, paddingRight:W*0.0177,
                                borderRadius:9999 }
-                          : { flexDirection:'column', gap:'3.71%', padding:'4.94%',
-                               borderRadius:'3.09%' }) }}>
+                          : { flexDirection:'column', gap:W*0.0371, padding:W*0.0494,
+                               borderRadius:W*0.0309 }) }}>
      <span style={{ flex:1, minWidth:0, overflow:'hidden', color:<brand on-surface text>,
        ...(S ? { whiteSpace:'nowrap', textOverflow:'ellipsis', fontFamily:<brand UI face>,
                  fontSize:H*0.236, lineHeight:`${H*0.306}px` }
@@ -79,15 +80,26 @@ hero) is in `product-pop-out/character.md`.
    </div>
    ```
 
-   `padding` is a SINGLE percentage on purpose: CSS resolves percentage padding against WIDTH on
-   every side, so one value reproduces the design's uniform inset at any aspect. Deriving separate
-   horizontal and vertical insets is what makes the card look skewed.
+   **Every inset, gap and radius above is `W * ratio` in PX — never a CSS percentage.** A CSS
+   percentage re-bases itself against a box you do not control, and this is the defect that shipped:
+
+   * percentage `padding` resolves against the **containing block's** width on all four sides (not
+     the element's own). This window is `position:absolute` under the root `AbsoluteFill`, so that
+     block is the whole canvas — `4.94%` paints ~63px per side on a 1280px canvas instead of ~24px,
+     which is the over-padded, content-as-a-centred-island card production actually delivered.
+   * percentage `gap` resolves against the element's own CONTENT box, so it drifts with the padding,
+     and in a column whose height is `auto` it collapses to 0.
+   * percentage `borderRadius` resolves horizontally against width but vertically against height,
+     turning one measured corner into an ellipse.
+
+   `prompt-full`'s inset is still ONE value on all four sides, because the design measures it
+   uniform — deriving separate horizontal and vertical insets is what makes the card look skewed.
 
    | | `prompt-simple` | `prompt-full` |
    |---|---|---|
    | shape | pill bar, one line of text | rounded card, up to 3 lines |
-   | controls | ONE send button, `height:80.6%`, `aspectRatio:1`, **fully inside the bar** (equal clearance above and below — it does NOT overhang any edge) | row `justifyContent:'space-between'`: two outlined buttons `W*0.0833` grouped left with `gap:'1.54%'`, send button `W*0.084` right |
-   | surface | opaque, subtle blur | opaque, one step off white |
+   | controls | ONE send button, `height:80.6%`, `aspectRatio:1`, **fully inside the bar** (equal clearance above and below — it does NOT overhang any edge) | row `justifyContent:'space-between'`: two outlined buttons `W*0.0833` grouped left with `gap:W*0.0154`, send button `W*0.084` right |
+   | surface | opaque `--surface-base` white, subtle blur | opaque `--surface-base` white |
 
    For the fallback only: the two surfaces, the text colour, the gradient and the type faces are
    brand values — take them from the brand's own AI rule (e.g. `ionos/product-pop-out/prompt-window.md` for IONOS),

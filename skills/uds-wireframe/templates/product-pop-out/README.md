@@ -28,15 +28,29 @@ Figma "Assets for AI" `StkUOHcGRMDXOZWT0E2nft`.
 |---|---|---|
 | measured | 451 x 72, aspect 6.2639 | 420.11 x 163.42, aspect 2.571 |
 | height | derived: `width / 6.2639` | derived: content, bottom-anchored |
-| padding | `0 1.77% 0 5.76%` | `4.94%` (one value, all sides) |
-| gap | `4.4%` | `3.71%` |
+| padding | left `W*0.0576`, right `W*0.0177`, none vertical | `W*0.0494` (one value, all four sides) |
+| gap | `W*0.044` | `W*0.0371` |
 | type | Open Sans, `H*0.236` / `H*0.306` | Overpass, `W*0.0448` / `W*0.0556`, 3-line clamp |
-| controls | send `80.6%` of H, glyph `44%` | two rings `W*0.0833` gap `1.54%`, send `W*0.084` |
-| radius | `9999` (pill) | `3.09%` |
+| controls | send `80.6%` of H, glyph `44%` | two rings `W*0.0833` gap `W*0.0154`, send `W*0.084` |
+| radius | `9999` (pill) | `W*0.0309` |
 
-Percentage padding resolves against **width** on every side — that is why one value keeps
-the inset uniform at any aspect, and why deriving separate horizontal and vertical insets
-makes the card look skewed.
+Every inset, gap and radius is a ratio of the window's own `width`, **applied in px** — never a
+CSS percentage. This README previously claimed percentage padding resolves against the
+element's width; it does not, and that claim was the feature's original production defect:
+
+* percentage **`padding`** resolves against the **containing block's** width on all four sides.
+  This window is `position:absolute` under the root `AbsoluteFill`, so that is the 1280px
+  canvas: `4.94%` painted 63.2px per side instead of 23.9px (2.6x), which is exactly the
+  "over-padded, content as a centred island" card that shipped.
+* percentage **`gap`** resolves against the element's own *content* box, so it drifts with the
+  padding — and in `prompt-full`, a column with `height:auto`, a percentage row-gap resolves
+  against an indefinite block size and collapses to **0**.
+* percentage **`borderRadius`** resolves horizontally against width but vertically against
+  height, so one measured corner becomes an ellipse (14.96 x 5.78 at 484x187).
+
+The inset is still uniform on `prompt-full` — one value, all four sides — because the design
+measures it that way. Deriving separate horizontal and vertical insets makes the card look
+skewed. The measured Figma ratios are unchanged; only the basis they multiply is px.
 
 ## Icons
 

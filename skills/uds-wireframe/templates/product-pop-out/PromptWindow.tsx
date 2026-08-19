@@ -38,34 +38,62 @@ export interface PromptWindowProps {
   bottom: number;
 }
 
+/**
+ * INSETS, GAPS AND RADII ARE RATIOS OF `p.width`, APPLIED IN PX — never CSS percentages.
+ *
+ * A CSS percentage re-bases itself against a box this component does not control, differently
+ * for each property (all three measured in Chromium against these exact declarations):
+ *   - `padding`: percentages resolve against the CONTAINING BLOCK's width — on every side,
+ *     top/bottom included. This window is `position:absolute` directly under the composition's
+ *     root `AbsoluteFill`, so that block is the 1280px CANVAS, not the ~484px window, and
+ *     `4.94%` painted 63.2px per side instead of 23.9px. That 2.6x over-pad on all four sides
+ *     IS the original production defect this template exists to remove ("over-padded, content
+ *     as a centred island") — it was never LLM drift; the prose skeleton it replaced carried
+ *     the same percentages and the same wrong explanation.
+ *   - `gap`: percentages resolve against the container's OWN CONTENT box in that axis, so a
+ *     percentage gap drifts with the padding (`4.4%` gave 17.0px under the inflated padding,
+ *     19.7px under the correct one, against 21.3px intended). Worse, `prompt-full` is a column
+ *     with `height:auto`: a percentage ROW gap against an indefinite block size resolves to
+ *     ZERO, so its 3.71% gap contributed literally nothing, and `1.54%` between the two ring
+ *     buttons resolved against their shrink-to-fit row and gave 1.25px instead of 7.45px.
+ *   - `borderRadius`: percentages resolve horizontally against width but VERTICALLY AGAINST
+ *     HEIGHT, so one measured corner becomes an ellipse — `3.09%` on 484x187 is 14.96px x
+ *     5.78px, not the uniform 14.96px corner that was measured.
+ * px off `p.width` is the only basis that reproduces the Figma measurement in any containing
+ * block at any width. Every Figma ratio below is unchanged; only the basis is.
+ */
+
 /** prompt-simple ratios. `aspect` is 451/72 from node 398:4507. */
 export const SIMPLE = {
   aspect: 6.2639,
   /**
-   * ONE shorthand, asymmetric by design. Percentage padding resolves against WIDTH on every
-   * side, which is what keeps the inset uniform at any aspect.
+   * Fractions of WIDTH, asymmetric by design (3.25:1 left-to-right). The vertical inset is
+   * deliberately absent, not forgotten: `alignItems:'center'` does all the vertical work.
    */
-  padding: '0 1.77% 0 5.76%',
-  gap: '4.4%',
+  padLeftOfW: 0.0576,
+  padRightOfW: 0.0177,
+  gapOfW: 0.044,
   fontOfH: 0.236,
   lineOfH: 0.306,
   sendOfH: 0.806,
   glyphOfSend: 0.44,
+  /** px, not a ratio — a pill is a pill at any width. */
   radius: 9999,
 } as const;
 
 /** prompt-full ratios, all against WIDTH. Node 398:4489. */
 export const FULL = {
-  padding: '4.94%',
-  gap: '3.71%',
+  /** ONE value, all four sides — the design's inset is uniform. */
+  padOfW: 0.0494,
+  gapOfW: 0.0371,
   fontOfW: 0.0448,
   lineOfW: 0.0556,
   maxLines: 3,
   actionOfW: 0.0833,
-  actionGap: '1.54%',
+  actionGapOfW: 0.0154,
   sendOfW: 0.084,
   glyphOfSend: 0.44,
-  radius: '3.09%',
+  radiusOfW: 0.0309,
   ringPx: 1.5,
 } as const;
 
@@ -123,8 +151,10 @@ export function PromptWindow(p: PromptWindowProps) {
       <div style={{
         position: 'absolute', left: p.left, bottom: p.bottom,
         width: p.width, height: h, boxSizing: 'border-box',
-        display: 'flex', alignItems: 'center', gap: SIMPLE.gap,
-        padding: SIMPLE.padding, borderRadius: SIMPLE.radius,
+        display: 'flex', alignItems: 'center', gap: p.width * SIMPLE.gapOfW,
+        paddingTop: 0, paddingRight: p.width * SIMPLE.padRightOfW,
+        paddingBottom: 0, paddingLeft: p.width * SIMPLE.padLeftOfW,
+        borderRadius: SIMPLE.radius,
         background: b.simple.surface,
         backdropFilter: `blur(${b.simple.blurPx}px)`,
         boxShadow: b.shadow,
@@ -159,8 +189,8 @@ export function PromptWindow(p: PromptWindowProps) {
     <div style={{
       position: 'absolute', left: p.left, bottom: p.bottom,
       width: p.width, boxSizing: 'border-box',
-      display: 'flex', flexDirection: 'column', gap: FULL.gap,
-      padding: FULL.padding, borderRadius: FULL.radius,
+      display: 'flex', flexDirection: 'column', gap: p.width * FULL.gapOfW,
+      padding: p.width * FULL.padOfW, borderRadius: p.width * FULL.radiusOfW,
       background: b.full.surface, boxShadow: b.shadow,
       // zIndex: 100 — carried over from the retired `shared/floating-card.md` skeleton rule,
       // which used this exact value for this exact floating element. Z-ORDER IS GEOMETRY: the
@@ -177,7 +207,7 @@ export function PromptWindow(p: PromptWindowProps) {
         lineHeight: `${p.width * FULL.lineOfW}px`,
       }}>{p.promptText}</span>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ display: 'flex', gap: FULL.actionGap }}>
+        <span style={{ display: 'flex', gap: p.width * FULL.actionGapOfW }}>
           {actions.map((a) => (
             <RingButton key={a} action={a} size={p.width * FULL.actionOfW}
               brand={p.brand} ink={b.text} surface={b.full.surface} />
