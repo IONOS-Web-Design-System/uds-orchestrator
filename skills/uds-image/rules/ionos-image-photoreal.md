@@ -44,31 +44,38 @@ explicitly requests the IONOS colour palette.
 **Object colours — aim for visual richness, not muted neutrals:**
 Objects and props should have clear, saturated colours that create visual interest
 and contrast within the scene. Avoid everything being the same beige/grey/neutral
-tone — that produces flat, low-impact images. Instead, let individual objects carry
-distinct colours that pop against the background:
-
-- A ceramic mug can be terracotta red, forest green, cobalt blue, or mustard yellow
-- Clothing can have a confident colour: a rich teal shirt, a burgundy sweater, olive jacket
-- Notebooks, folders, and stationery can be vivid: bright red, deep green, saturated orange
-- Plants, flowers, and decorative objects add natural colour contrast
-- Food and beverage items (coffee, pastries, fruit) carry their natural vivid colours
+tone — that produces flat, low-impact images. Instead, let individual objects — a
+mug, an item of clothing, a folder, a plant — carry a colour that suits what it is and
+the specific scene, rather than defaulting to the same handful of colours every time.
 
 The colour palette across the scene should feel **visually varied and alive** — 2–3
 distinct colour accents across the props, not a monochrome or all-neutral composition.
-
-Prompt phrasing examples:
-- `"a cobalt blue ceramic mug, a terracotta pot with a small plant, kraft notebook"`
-- `"wearing a rich teal shirt, a red folder on the desk, green plant in the background"`
-- `"forest green apron, a bright yellow hardhat on the shelf, orange extension cable"`
 
 **Brand colour on objects — only when explicitly requested:**
 Apply IONOS Blue (`#003D8F`) or Sky (`#11C7E6`) to props or screen content **only if**
 the brief explicitly says "use IONOS colours", "brand palette", or "blue accents".
 
-**Palette anchors for `paletteRefs`:** always include at minimum:
-- IONOS Blue `#003D8F`
-- Sky `#11C7E6`
-- one warm neutral that fits the scene (warm white `#FAF8F5`, sand `#F5EFE6`, or light wood `#D4B896`)
+## Target audience — character profile
+
+IONOS people are **more established and mature** than Strato's audience. Default age
+range is **mid-30s to early 50s** — a small business owner, an experienced freelance
+consultant, a manager making real decisions. Encode age explicitly:
+`"a white woman in her early 40s"`, `"a Black man in his late 30s"`. Read
+`shared-character-appearance` for the occupation → appearance reasoning approach, then
+apply within these IONOS-specific boundaries:
+
+- **Hair:** clean, well-kept, naturally worn — neat shoulder-length, short professional,
+  or a tidy practical style. Styled but not overdone. Never tousled, never casual bun,
+  never the expressive/uncontrolled styles that signal Strato.
+- **Accessories:** minimal and functional — a watch, simple stud earrings, reading
+  glasses on an older professional. No statement glasses frames, no headphones, no visible
+  tattoos — those belong to Strato.
+- **Clothing:** smart-casual — fitted knitwear, neat blouses, clean casual shirts, well-cut
+  trousers. Never hoodies, never oversized tees, never streetwear-adjacent. The person has
+  dressed thoughtfully but comfortably.
+- **Variants:** same rule as all brands — when `variants > 1` and brief is generic, omit
+  specific hair tokens; encode only a clothing vibe (`"smart casual knitwear"`) and let
+  the image model vary hair naturally across variants.
 
 ## Tone
 Professional, trustworthy, optimistic, modern. Real materials, realistic depth of field.

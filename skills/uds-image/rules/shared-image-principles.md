@@ -5,13 +5,10 @@
 - Never request rendered text, wordmarks, logos, UI chrome, or watermarks — image models
   garble them. Put all of these in `negativePrompt`.
 - Composition: clear focal subject, generous negative space, uncluttered background.
-- Lighting: soft, natural, even. Avoid harsh shadows and blown highlights.
-- Always include in `negativePrompt`: "text, watermark, UI chrome, distorted hands,
-  extra fingers, oversaturated, low quality, jpeg artifacts,
-  readable screen text, readable whiteboard text, legible labels,
-  Apple logo, Nike logo, brand logo, corporate logo, product logo, visible logo,
-  graphics or UI rendered on the back of a device, content on tablet back,
-  screen graphics on device lid, colourful pattern on laptop lid".
+- Lighting: see the brand's photoreal rule — it owns lighting direction and quality.
+- negativePrompt carries only true rendering artifacts (text, watermark, logo, distorted
+  hands, extra fingers, low quality). It is appended to the positive prompt by the service,
+  so keep it SHORT and never put composition, lighting or palette instructions in it.
 - **Face and body framing must be stated positively in `prompt`, not in `negativePrompt`.**
   Negative prompts are weak composition signals — the image model ignores them under its
   default centre-crop bias. Instead encode framing as a positive instruction, e.g.:
