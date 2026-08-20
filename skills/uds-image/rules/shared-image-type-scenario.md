@@ -148,7 +148,7 @@ light, slightly brighter than the ambient environment"`.
 ### Foreground context objects (essential)
 
 Objects placed close to the camera in soft focus are what make screen-moment images
-feel real rather than rendered. Choose 2–3 objects that tell the story of who owns
+feel real rather than rendered. Choose 1–2 objects that tell the story of who owns
 this device and what they are doing:
 
 | Context / setting | Foreground objects to include |

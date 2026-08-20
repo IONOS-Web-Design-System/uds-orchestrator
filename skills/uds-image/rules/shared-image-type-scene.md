@@ -192,7 +192,7 @@ visual weight, not background. Describe the grain, texture, and light falling ac
 
 ## Foreground objects — identity and depth (patterns B and C)
 
-For device-focused scenes, 2–3 foreground objects placed closest to the camera lens are
+For device-focused scenes, 1–2 foreground objects placed closest to the camera lens are
 the **identity layer** — they answer "who is this person?" at a glance. They sit at the
 very front of the desk surface and are rendered out of focus (bokeh) while the screen
 remains sharp behind them.

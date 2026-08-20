@@ -54,10 +54,9 @@ Great photography uses three planes of focus. Encode all three in the prompt usi
 **shallow depth of field** as the photography term — image models respond well to it.
 
 1. **Foreground (bokeh):** name a physical object from the trade that sits close to the
-   camera lens, occupying the bottom edge of the frame. Be concrete and specific — not
-   "some tools" but "a weathered hand plane and curled wood shavings sitting on a
-   workbench surface extremely close to the camera lens, rendered out of focus by
-   shallow depth of field".
+   camera lens, occupying the bottom edge of the frame. Be concrete and specific — a tool,
+   material, or product THIS character would genuinely have within reach — not a vague
+   "some tools", rendered softly out of focus by the shallow depth of field.
 2. **Subject (sharp):** the character, pulled into crisp focus against both planes.
 3. **Background (bokeh):** enumerate specific items densely packed — not "shelves with
    stuff" but "floor-to-ceiling industrial shelving tightly packed with rough-cut lumber
@@ -69,13 +68,11 @@ the lens and carry the most visual weight in the bokeh layer. A cobalt-blue note
 a terracotta mug, or a vivid green plant reads with far more impact than a white mug
 or beige folder. Aim for at least one visually strong colour in the foreground.
 
-**Encoding template** — use this exact structure, filling in trade-specific objects:
-
-> `"shallow depth of field, editorial photography style, [colourful foreground object A] and
-> [colourful foreground object B] lying on the surface immediately in front of the
-> camera lens, rendered as out-of-focus bokeh in the lower frame — [character
-> description, in sharp focus] — background of [dense enumeration of environment
-> objects] all softly blurred behind"`
+**Describe the foreground in your own words each generation** — name 1–2 trade-specific
+objects close to the lens, in soft focus, ahead of the character in sharp focus, with the
+enumerated background blurred behind. Vary the phrasing itself, not just the object names:
+reusing the same sentence shape run after run is what makes independent images read as
+copies of each other, even when the nouns inside it differ.
 
 The foreground blur is the single strongest signal for "this was shot in a real place".
 Without it the image looks like a render. Without specific enumeration the model defaults
@@ -155,25 +152,24 @@ Foreground is added last and only if the shot permits it.
 5. **Natural appearance** — hair, skin texture, expression
 6. **Photography style** — `"documentary editorial photography style"`
 7. **Foreground bokeh (optional — add only if shot distance allows)**
-   Gate condition: include this sentence only when the camera is at waist-up or
-   wider distance. Skip it for close/medium shots where it would compete with face.
-   → `"shallow depth of field, [specific object A] and [specific object B] lying on the
-   surface immediately in front of the camera lens, rendered as out-of-focus bokeh at
-   the bottom edge of the frame"`
+   Gate condition: only when the camera is at waist-up or wider distance. Skip it for
+   close/medium shots where it would compete with the face.
+   → Name 1–2 objects specific to this character and trade, close to the lens at the
+   bottom edge of the frame and softly out of focus — worded fresh each time, not a
+   repeated sentence shape.
 
 Example (carpenter portrait — waist-up, left placement, foreground included):
 > `"full face clearly visible from hairline to chin, waist-up shot showing complete upper
-> body. a Black man in his 40s, solid muscular build, resting one hand on the edge of a
-> finished oak dining table, wearing a well-worn leather apron with sawdust and marks over
+> body. a Black man in his 40s, solid muscular build, holding a strip of finished oak trim
+> in one hand, wearing a well-worn leather apron with sawdust and marks over
 > a faded denim shirt, standing in the left third of the frame. background of
 > floor-to-ceiling industrial metal shelving packed tightly with rough-cut lumber planks,
 > pipe clamps, half-finished cabinet doors, scattered chisels, and sawdust-covered surfaces,
 > all softly blurred. warm natural light from large side workshop windows casting long
 > gentle shadows across the floor. hair worn naturally, natural skin texture, genuine
 > confident expression. documentary editorial photography style.
-> shallow depth of field, a weathered hand plane and curled wood shavings lying on the
-> workbench surface immediately in front of the camera lens, rendered as out-of-focus bokeh
-> at the bottom edge of the frame."`
+> shallow depth of field, a chipped tin mug and a curl of wood shavings resting on the
+> workbench close to the lens, blurred softly at the bottom edge of the frame."`
 
 Example (carpenter portrait — extra-wide landscape full-body, foreground included):
 > `"full face clearly visible from hairline to chin, extra-wide establishing shot, character
@@ -185,6 +181,5 @@ Example (carpenter portrait — extra-wide landscape full-body, foreground inclu
 > all softly blurred. warm natural light from large side workshop windows casting long
 > gentle shadows across the workshop floor. hair worn naturally, natural skin texture,
 > trustworthy and competent expression. documentary editorial photography style.
-> shallow depth of field, a weathered hand plane and curled wood shavings lying at the
-> base of the frame immediately in front of the camera lens,
-> rendered as out-of-focus bokeh."`
+> shallow depth of field, a worn measuring tape and a scatter of sawdust sitting near
+> the lens at the base of the frame, gently out of focus."`

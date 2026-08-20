@@ -80,22 +80,22 @@ exposed and softly blurred. The person integrates naturally into the space; thei
 optional prop should harmonise with the background. The background tells who they are,
 the face tells who they are to you.
 
-## Lighting — do not specify, let the model decide
-Do NOT prescribe a lighting setup in the prompt or the SPEC. The model should choose
-freely from its full photographic repertoire based on the character and background:
+## Lighting — vary the setup, always directional
 
-Examples of valid choices (non-exhaustive):
-- Classic three-point softbox studio lighting
+`shared-image-principles` owns the baseline: name a light source with a clear direction
+and visible light-to-shadow separation — never flat, shadowless, or uniformly lit. Within
+that, avatars should rotate across different setups so a set doesn't repeat the same look:
+
+Examples of valid choices, matched to the character and background:
+- Classic three-point softbox studio lighting, one dominant key side
 - Chiaroscuro — strong single light source, deep shadow on one side
 - Rembrandt lighting — angled key light with the characteristic cheek triangle
-- Natural window daylight — diffuse or direct depending on time of day
+- Natural window daylight, diffuse or direct depending on time of day, from one side
 - Overcast outdoor light — diffused from an overcast sky, soft but with visible light-to-shadow contrast
 - Golden hour — warm directional backlight or sidelight
-- Practical ambient — light from the environment itself (workshop lamp, office overhead)
+- Practical ambient — light from the environment itself (workshop lamp, office overhead), still directional
 
-Instructing the model to pick lighting defeats the purpose — omitting it produces more
-authentic, varied, and photorealistic results. The prompt should describe the PERSON and
-SETTING; the model fills in the photographic craft.
+Vary the setup across a set rather than defaulting to the same one every time.
 
 ## Camera — do not specify, let the model decide
 Do NOT name a specific camera, lens, or film stock in the prompt. The model will select

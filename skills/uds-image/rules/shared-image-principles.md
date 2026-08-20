@@ -17,7 +17,7 @@
   Negative prompts are weak composition signals — the image model ignores them under its
   default centre-crop bias. Instead encode framing as a positive instruction, e.g.:
   `"full face visible from hairline to chin, waist-up shot showing complete upper body"`
-  or `"full body in frame from head to floor"`. See `image-type-portrait` for the required
+  or `"full body in frame from head to floor"`. See `shared-image-type-portrait` for the required
   phrasing per shot type.
 - Map the requested pixel dimensions to the nearest aspectRatio
   (1:1, 16:9, 4:3, 3:2, 9:16, 2:3, 3:4).
@@ -44,7 +44,7 @@ are the primary message (→ `portrait`) or whether the activity and setting are
 
 | Type | Rule file | Use when | Face guaranteed? |
 |------|-----------|----------|-----------------|
-| **avatar** | `image-type-avatar` | Face-focused square crop; face clearly visible at any angle; can show occupation context; 1:1 aspect ratio | Yes — always |
-| **scene** | `image-type-scene` | Subject mid-action in their environment; setting and action are the story; character fits in naturally | No — optional |
-| **portrait** | `image-type-portrait` | Subject faces camera; person's character, posture, and accessories are the story | Yes — always |
-| **scenario** | `image-type-scenario` | Product/interaction is focal point; people are secondary or partial | No |
+| **avatar** | `shared-image-type-avatar` | Face-focused square crop; face clearly visible at any angle; can show occupation context; 1:1 aspect ratio | Yes — always |
+| **scene** | `shared-image-type-scene` | Subject mid-action in their environment; setting and action are the story; character fits in naturally | No — optional |
+| **portrait** | `shared-image-type-portrait` | Subject faces camera; person's character, posture, and accessories are the story | Yes — always |
+| **scenario** | `shared-image-type-scenario` | Product/interaction is focal point; people are secondary or partial | No |

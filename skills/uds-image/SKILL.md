@@ -101,7 +101,7 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
   mustard sweater, a teal mug, fresh flowers, a bright product) and a **soft bokeh background** —
   bright out-of-focus light, blurred people/space behind. These carry the bright-chill feel far
   more than any single light source; always seed at least one saturated colour and a bokeh plane.
-- **Device-screen / focus-object shots.** Two cases (see `image-type-scenario`):
+- **Device-screen / focus-object shots.** Two cases (see `shared-image-type-scenario`):
   - **Screen-based product is the focus** (the laptop/tablet/phone UI is the point). Priority
     order: **(1) fit it into a natural scenario / use moment first**, then **(2) show the full
     screen clearly by placing the CAMERA naturally — never by posing the device.** Anchor a real
@@ -117,10 +117,10 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
 
 ## Image types
 Every photoreal brief falls into one of four types — detect and apply the matching rule:
-- `image-type-avatar` — face-focused; any angle where face is clearly visible; can show occupation/scenario context; face always fully in frame
-- `image-type-scene` — subject mid-action in their environment (NOT posing, NOT facing camera); face not required
-- `image-type-portrait` — subject faces camera; character-focused; varied posture; accessories and props reveal work identity; face always fully in frame
-- `image-type-scenario` — product/interaction is focal point; people are secondary or cropped
+- `shared-image-type-avatar` — face-focused; any angle where face is clearly visible; can show occupation/scenario context; face always fully in frame
+- `shared-image-type-scene` — subject mid-action in their environment (NOT posing, NOT facing camera); face not required
+- `shared-image-type-portrait` — subject faces camera; character-focused; varied posture; accessories and props reveal work identity; face always fully in frame
+- `shared-image-type-scenario` — product/interaction is focal point; people are secondary or cropped
 
 ## Market & re-rendering
 `market` (and the showroom prefix) is a **generation-time** input: it selects the persona's
@@ -137,7 +137,7 @@ regenerate with the new `market`/showroom and tell them the result will differ.
 - `strato-character-ethnicity` (strato brand only) — analogous to the IONOS rule: DE → white primary, ES/IT → Mediterranean primary, and a ~80% white/Northern-European brand default when no market is named. Fully replaces `shared-character-diversity` for strato.
 - `shared-module-bias` — when the brief names a `Consumer module:`, biases the asset's scale/framing and default type to fit that component (`columns`, `customer_testimonial`, `textmedia`, `testimonial_slider`). Fills defaults only — the brief's explicit fields win.
 - `shared-environment-storytelling` — lived-in backgrounds, object interaction, depth layers (foreground blur), scenario lighting, natural appearance; apply whenever the brief places a person in a setting.
-- `image-type-avatar` / `image-type-scene` / `image-type-portrait` / `image-type-scenario` — type-specific direction.
+- `shared-image-type-avatar` / `shared-image-type-scene` / `shared-image-type-portrait` / `shared-image-type-scenario` — type-specific direction.
 - `<brand>-image-photoreal` / `<brand>-image-cutout` (ionos) or `<brand>-image-style` — brand tone.
 - Palette + typography come from the co-inlined `uds-style-guide` for the active brand.
 
