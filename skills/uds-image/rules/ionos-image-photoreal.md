@@ -28,7 +28,7 @@ Encode lighting as the specific source present in the scene. All of these are va
 - ✅ `"cool-neutral morning light, clean and bright, casting crisp soft shadows"`
 - ✅ `"bright direct sunshine streaming through the window, high contrast and natural"`
 - ✅ `"clear midday sunlight, straight-on, sharp and confident"`
-- ✅ `"diffused natural light from an overcast sky, soft and even"`
+- ✅ `"diffused natural light from an overcast sky, soft but with visible light-to-shadow contrast"`
 - ✅ `"warm ambient pendant light with strong contrast between lit surfaces and shadow"`
 - ❌ `"warm golden afternoon light"` applied as a blanket default to every scene
 - ❌ `"flat, even, shadowless studio lighting"` — no depth or visual interest
