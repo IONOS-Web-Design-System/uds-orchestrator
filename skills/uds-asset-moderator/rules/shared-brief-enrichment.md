@@ -76,12 +76,6 @@ Per-generator hazards to OMIT:
       alone does not suppress the Apple logo.
     - Two-person scene: one person faces camera, one looks at the screen — the camera position
       between them can naturally see both face and partial screen without physical contradiction.
-  - **Landscape aspect-ratio safety — use a physical anchor, not prose headroom:** `prose headroom
-    instructions ("clear space above the head") are routinely ignored by the model.` Instead
-    seat the subject behind a desk or counter: `"subject seated behind a waist-height white desk,
-    upper body well above the desk surface, clear open space above the head"` — the desk creates a
-    structural mid-frame anchor that keeps the face centered and away from frame edges in
-    landscape formats.
   - **Screen-based product is the focus** (the UI is the point — "show the dashboard", "the app
     on the phone"). Order it: **first** a natural use moment, **then** full-screen visibility via
     camera placement. Write a real moment (tapping a phone to pay at a counter, typing at a
