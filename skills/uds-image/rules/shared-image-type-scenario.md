@@ -37,8 +37,9 @@ rather than posing them front-on, which turns the shot into `portrait`:
 - **Physical anchor at waist height.** Place the subject behind a counter, desk, or
   workbench — the barrier sits at waist level, so the hands-on action (typing, handling a
   component, tapping the reader) happens below chin height and the face stays naturally
-  above it. Encode as: `"subject standing behind a waist-height counter, upper body well
-  above the surface, clear open space above the head"`. This is the most reliable pattern
+  above it. Describe the subject as standing behind that surface with their upper body
+  clearly above it and open space over the head — word it fresh each time rather than
+  reusing one fixed phrase. This physical-anchor approach is the most reliable pattern
   for combining a visible face with visible hands-on activity.
 - **Prefer standing or upright actions over crouching or bending.** A head-down pose drives
   the model to crop in and lose the face. Reframe a low-level task as the person pausing
@@ -97,21 +98,22 @@ in `shared-image-type-scene.md`):
   Screen faces upward and is fully visible. Person enters peripherally — only hands/forearms
   at the frame edge. The desk surface (warm wood, cream, light concrete) fills 30–50% of the
   frame as a texture layer. Best for: "workspace from above", laptop or phone on a table,
-  overhead editorial feel. Encode: `"overhead shot from approximately 60 degrees above,
-  looking down at [surface] desk surface, hands and forearms entering from [left/bottom],
-  device screen facing upward clearly visible"`.
+  overhead editorial feel. Describe a camera roughly 60 degrees above the surface, hands and
+  forearms entering from one edge, and the device screen facing upward and clearly visible —
+  in your own words, not a fixed phrase reused every time.
 
 - **Behind-the-person / over-shoulder (Pattern C):** camera behind and slightly to the side,
   looking toward the screen. Back of head + shoulder as a **compositional shape at the frame
   edge** — face never appears. Screen faces the camera naturally. Best for: dashboard/app
-  on laptop, "over someone's shoulder" feel. Encode: `"over-the-shoulder shot from behind
-  and slightly above to the right, partial back of head and shoulder at the frame edge,
-  [device] with screen clearly visible and facing the viewer"`.
+  on laptop, "over someone's shoulder" feel. Describe the camera positioned behind and
+  slightly above to one side, the back of the head and a shoulder forming a shape at the
+  frame edge, and the device screen facing the viewer clearly.
 
 - **Eye-level with surface anchor (Pattern A):** camera at eye-level or slightly elevated.
   Person sits or stands naturally, keyboard/device in front of them. Best for: two people
-  at a screen, customer at a counter, team working together. Encode: `"slightly elevated
-  eye-level shot, [person] at a [surface], [device] screen visible from the side/front"`.
+  at a screen, customer at a counter, team working together. Describe a slightly elevated
+  eye-level shot with the person at their surface and the device screen visible from the
+  side or front.
 
 The screen faces the camera because the camera occupies the natural over-the-user /
 over-the-counter viewpoint — NOT because the subject aimed the device at it.

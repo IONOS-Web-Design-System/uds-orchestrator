@@ -28,13 +28,15 @@ visible. Encode as the **first sentence** of `prompt` before anything else.
 **Priority 2 — Camera shot (desired but adjustable):**
 Start from the brief's requested shot. Widen automatically if the face cannot fit:
 
-| Brief requests | Aspect ratio | Use this framing |
+| Brief requests | Aspect ratio | What the framing must achieve |
 |---|---|---|
-| waist-up | tall ratio or square (1:1, 2:3, 3:4, 9:16) | `"full face clearly visible from hairline to chin, waist-up shot showing complete upper body"` |
-| waist-up | landscape (16:9, 4:3, 3:2) | `"full face clearly visible from hairline to chin, waist-up shot with deliberate headroom — the head sits in the upper-middle of the frame with clear space above it and NEVER touches the top edge; subject seated or standing behind a waist-height surface so the body fills the lower frame"` |
-| full body / long shot | tall ratio (2:3, 3:4, 9:16) | `"full face clearly visible from hairline to chin, full body in frame from head to floor"` |
-| full body / long shot | landscape (16:9, 4:3, 3:2) | `"full face clearly visible from hairline to chin, extra-wide establishing shot, character occupying one vertical third of the frame, full body visible from head to floor"` |
-| avatar | 1:1 | `"face as the focal point, eyes and full face clearly visible, head and shoulders in frame"` |
+| waist-up | tall ratio or square (1:1, 2:3, 3:4, 9:16) | The standard waist-up crop already fits this canvas — keep the whole upper body from the waist to the top of the head inside the frame; no adjustment needed. |
+| waist-up | landscape (16:9, 4:3, 3:2) | The wide canvas hands you spare vertical room — spend it as headroom above the head rather than letting the head crowd the top edge. Anchor the lower two-thirds of the frame with a waist-height surface (desk, counter) the subject sits or stands behind, so the body reads as complete rather than cut off. |
+| full body / long shot | tall ratio (2:3, 3:4, 9:16) | The tall canvas naturally holds a head-to-floor figure — show the entire body without any part of it, face included, falling outside the frame. |
+| full body / long shot | landscape (16:9, 4:3, 3:2) | Pull back into an establishing shot: the full figure, head to floor, occupies roughly one vertical third of the wide frame's width, with the rest of the width given to the environment. |
+| avatar | 1:1 | Center the face as the focal point with both eyes reading clearly; head and shoulders fill the square frame. |
+
+Every row still answers to Priority 1 above: if the shot distance a row describes would crop any part of the face, widen the framing before anything else — no cell here overrides that.
 
 **Native aspect-ratio rendering — image-svc generates natively at the target aspect ratio; no crop occurs.** Landscape targets are natively wide, tall targets natively tall. Compose for the actual canvas using the shot-type guidance per image type — head placement and spacing no longer need to compensate for a crop. Follow the per-type framing without the legacy crop-survival tactics.
 
@@ -97,10 +99,12 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
   dark, or underexposed.** A **subtle film-like filter / colour grade** is welcome (a gentle warm
   or soft-pastel wash that ties the palette together). Let the COLOUR TEMPERATURE follow the scene
   and the brand's photoreal rules (do NOT hardcode a single default here). Vary the quality per scene, but keep the overall feel bright, natural, and inviting.
-- **Colour & mood via objects + bokeh.** Conceptualise the mood with **colourful props** (a
-  mustard sweater, a teal mug, fresh flowers, a bright product) and a **soft bokeh background** —
-  bright out-of-focus light, blurred people/space behind. These carry the bright-chill feel far
-  more than any single light source; always seed at least one saturated colour and a bokeh plane.
+- **Colour & mood via objects + bokeh.** Conceptualise the mood with **colourful props** — pick
+  one or two everyday objects native to the scene (a garment, a mug, flowers, a product) and give
+  one of them a single strong, saturated colour of your own choosing rather than a muted neutral —
+  paired with a **soft bokeh background**: bright out-of-focus light, blurred people/space behind.
+  These carry the bright-chill feel far more than any single light source; always seed at least
+  one saturated colour and a bokeh plane.
 - **Device-screen / focus-object shots.** Two cases (see `shared-image-type-scenario`):
   - **Screen-based product is the focus** (the laptop/tablet/phone UI is the point). Priority
     order: **(1) fit it into a natural scenario / use moment first**, then **(2) show the full

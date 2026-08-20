@@ -21,10 +21,9 @@ turned away, or a supporting figure in the composition. Face visibility is a bon
 not a constraint.
 
 **Exception — explicit user request only:** if the brief explicitly asks for the face
-to be visible ("facing camera", "clear face", "recognizable person"), apply the portrait
-face anchor as the **first sentence**:
-`"full face clearly visible from hairline to chin"`
-and treat framing per portrait's rules for that shot distance.
+to be visible ("facing camera", "clear face", "recognizable person"), open the prompt by
+stating plainly that the full face stays uncropped and visible, then apply portrait's
+framing rules for that shot distance.
 
 ## Camera angle patterns
 
@@ -212,9 +211,9 @@ State the objects and their placement in your own words rather than reusing a fi
 sentence shape: name 1–2 objects specific to this person's context, placed near the camera
 on the desk surface, softly out of focus while the screen stays sharp behind them.
 
-Choose objects with **distinct, saturated colors** — a terracotta plate, a cobalt
-notebook, a forest green cup. Warm mid-tones unify with the surface; a single saturated
-accent creates visual interest.
+Choose objects with **distinct, saturated colors** — pick a color for each object that
+suits what it is and this specific scene, not a muted neutral. Warm mid-tones unify with
+the surface; a single saturated accent creates visual interest.
 
 ## Screen visibility (device-focused scenes)
 

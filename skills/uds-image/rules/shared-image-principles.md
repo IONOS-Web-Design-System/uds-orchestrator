@@ -15,10 +15,11 @@
   so keep it SHORT and never put composition, lighting or palette instructions in it.
 - **Face and body framing must be stated positively in `prompt`, not in `negativePrompt`.**
   Negative prompts are weak composition signals — the image model ignores them under its
-  default centre-crop bias. Instead encode framing as a positive instruction, e.g.:
-  `"full face visible from hairline to chin, waist-up shot showing complete upper body"`
-  or `"full body in frame from head to floor"`. See `shared-image-type-portrait` for the required
-  phrasing per shot type.
+  default centre-crop bias. Instead encode framing as a positive instruction: state plainly
+  that the full face stays uncropped and describe the body's extent in frame (e.g. upper body
+  only, or the full figure head to floor). See `shared-image-type-portrait` for the reasoning
+  behind each shot type — describe it in your own words rather than reusing one fixed phrase
+  every time.
 - Map the requested pixel dimensions to the nearest aspectRatio
   (1:1, 16:9, 4:3, 3:2, 9:16, 2:3, 3:4).
 

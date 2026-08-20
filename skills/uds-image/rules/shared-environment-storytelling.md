@@ -64,9 +64,10 @@ Great photography uses three planes of focus. Encode all three in the prompt usi
    wooden boards, all rendered out of focus".
 
 Choose foreground objects with **distinct, saturated colours** — they sit closest to
-the lens and carry the most visual weight in the bokeh layer. A cobalt-blue notebook,
-a terracotta mug, or a vivid green plant reads with far more impact than a white mug
-or beige folder. Aim for at least one visually strong colour in the foreground.
+the lens and carry the most visual weight in the bokeh layer. A strongly coloured object
+reads with far more impact than a white mug or beige folder, so pick a colour that suits
+the object and this specific scene rather than reaching for a muted neutral. Aim for at
+least one visually strong colour in the foreground.
 
 **Describe the foreground in your own words each generation** — name 1–2 trade-specific
 objects close to the lens, in soft focus, ahead of the character in sharp focus, with the
@@ -159,8 +160,8 @@ Foreground is added last and only if the shot permits it.
    repeated sentence shape.
 
 Example (carpenter portrait — waist-up, left placement, foreground included):
-> `"full face clearly visible from hairline to chin, waist-up shot showing complete upper
-> body. a Black man in his 40s, solid muscular build, holding a strip of finished oak trim
+> `"his whole face fully visible and unobstructed, framed from the waist up with the
+> complete upper body in view. a Black man in his 40s, solid muscular build, holding a strip of finished oak trim
 > in one hand, wearing a well-worn leather apron with sawdust and marks over
 > a faded denim shirt, standing in the left third of the frame. background of
 > floor-to-ceiling industrial metal shelving packed tightly with rough-cut lumber planks,
@@ -172,8 +173,8 @@ Example (carpenter portrait — waist-up, left placement, foreground included):
 > workbench close to the lens, blurred softly at the bottom edge of the frame."`
 
 Example (carpenter portrait — extra-wide landscape full-body, foreground included):
-> `"full face clearly visible from hairline to chin, extra-wide establishing shot, character
-> occupying one vertical third of the frame, full body head to floor visible. a Black man
+> `"his face entirely uncropped and clearly readable, an extra-wide establishing shot with
+> the character occupying one vertical third of the frame, full body head to floor visible. a Black man
 > in his 40s, solid muscular build, arms crossed, wearing a well-worn leather apron over a
 > faded denim shirt, standing in the left third of the frame. background of
 > floor-to-ceiling industrial metal shelving packed tightly with rough-cut lumber planks,
