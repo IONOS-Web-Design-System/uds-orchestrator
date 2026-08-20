@@ -26,6 +26,26 @@ genuinely not the point.
 - Camera angles that reveal the interaction naturally: over-the-shoulder, slightly elevated
   looking down at hands + device, from-across-the-counter perspective
 
+## When an included person's face should stay visible
+
+People in a scenario shot default to secondary — cropped, blurred, or backgrounded is fine
+when the brief doesn't ask otherwise (Pattern A above already covers "a customer at a
+counter" or "team working together" this way). Some briefs still want that included person's
+face to read clearly while their hands stay on the interaction. Reach for this technique
+rather than posing them front-on, which turns the shot into `portrait`:
+
+- **Physical anchor at waist height.** Place the subject behind a counter, desk, or
+  workbench — the barrier sits at waist level, so the hands-on action (typing, handling a
+  component, tapping the reader) happens below chin height and the face stays naturally
+  above it. Encode as: `"subject standing behind a waist-height counter, upper body well
+  above the surface, clear open space above the head"`. This is the most reliable pattern
+  for combining a visible face with visible hands-on activity.
+- **Prefer standing or upright actions over crouching or bending.** A head-down pose drives
+  the model to crop in and lose the face. Reframe a low-level task as the person pausing
+  mid-task and looking up, or pick an equivalent upright action.
+- **Two or more people:** show genuine social interaction — conversation mid-flow, shared
+  laughter, a collaborative gesture — rather than people posed side by side for the camera.
+
 ## Story direction
 - The image should communicate a complete micro-story: what is happening, where, and why
 - Show the moment of engagement — card tapping terminal, fingers mid-scroll, team leaning
@@ -71,7 +91,7 @@ over a dashboard in discussion. Hands and posture are natural to the action. Enc
 **2. Then make the full screen clearly visible — by MOVING THE CAMERA, not the device.**
 
 Choose the camera angle that fits the brief. Three named patterns (detailed prompt templates
-in `image-type-scene.md`):
+in `shared-image-type-scene.md`):
 
 - **Overhead / top-down (Pattern B):** camera 50–75° above the workspace looking down.
   Screen faces upward and is fully visible. Person enters peripherally — only hands/forearms
@@ -139,10 +159,10 @@ this device and what they are doing:
 | Meeting / office | printed documents, a water glass, a laptop bag strap visible at the edge |
 | Developer / tech | mechanical keyboard, a mug with steam, sticky notes on the desk surface |
 
-Encode foreground objects using the depth-layer pattern from `shared-environment-storytelling`:
-`"[object A] and [object B] sitting on the desk surface immediately in front of the camera
-lens, rendered as soft out-of-focus bokeh in the lower foreground, screen in sharp focus
-behind them"`
+Use the depth-layer approach from `shared-environment-storytelling`: place the chosen
+objects on the desk surface near the camera, softly out of focus, while the screen stays
+sharp behind them. Describe THIS scene's objects in your own words — do not copy a fixed
+sentence shape between generations.
 
 ### Background
 
@@ -165,7 +185,8 @@ Build in this order:
 1. **Device + angle anchor:** `"[device] [angle description], screen as the focal point"`
 2. **Screen content:** `"screen displaying [plausible but indistinct interface description]"`
 3. **Human element (if any):** `"[partial human description]"`
-4. **Foreground objects:** `"[object A] and [object B] immediately in front of the camera lens, softly blurred"`
+4. **Foreground objects (optional):** 1–2 objects specific to this scene, placed near the
+   camera and softly blurred — chosen for the story, not a repeated pair
 5. **Background:** `"background of [environment] softly blurred"`
 6. **Lighting:** `"[light source] with subtle screen glow as secondary fill"`
 7. **Photography style:** `"product photography, editorial style, shallow depth of field"`
@@ -175,9 +196,9 @@ Example (laptop in café):
 > the focal point, shot from slightly above and to the right. screen displaying a soft-focus
 > business dashboard with chart elements and navigation, content indistinct but plausible.
 > a woman's hand resting on the keyboard, blurred figure in background. a latte art coffee
-> cup held in a hand and a ceramic saucer with a spoon sitting on the desk immediately in
-> front of the camera lens, rendered as out-of-focus bokeh in the lower foreground. background
-> of a warm softly blurred café interior with large windows. warm natural window light with
+> cup and a ceramic saucer with a spoon sit on the desk near the camera, softly out of
+> focus against the sharp screen behind them. background of a warm softly blurred café
+> interior with large windows. warm natural window light with
 > subtle screen glow as secondary fill on the keyboard surface. product photography,
 > editorial style, shallow depth of field."`
 
@@ -185,8 +206,8 @@ Example (phone held showing app):
 > `"smartphone held vertically in a hand, screen angled directly toward the viewer,
 > photographed at slight elevation. screen displaying a warm-toned mobile app layout
 > with product imagery, text blocks softly indistinct. partial arm and yellow sleeve
-> visible behind the phone. warm sandy surface and soft shadow immediately in front
-> of the camera lens as natural foreground. background of a warm softly blurred interior
+> visible behind the phone. a warm sandy surface with soft shadow sits just behind the
+> phone, gently out of focus. background of a warm softly blurred interior
 > with diffused natural light. warm ambient light with soft screen glow. product
 > photography, editorial style, shallow depth of field."`
 

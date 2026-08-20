@@ -64,7 +64,8 @@ Per-generator hazards to OMIT:
     natural or practical accents.
   - **Device with a person:** a phone/tablet/laptop in the shot does NOT make the device the
     subject. If a **person** is the named subject doing a task, keep their **face the anchor**
-    (person-scenario, headroom, crop-safe on landscape); the device is held/used. Only make the
+    (see `shared-image-type-scenario`'s waist-height anchor technique for headroom, crop-safe
+    on landscape); the device is held/used. Only make the
     screen the hero when the brief is explicitly about what's on screen.
   - **Device physics — the screen cannot face both the person AND the camera at the same time.**
     Never write "screen facing forward and fully visible to the lens" when a person is also

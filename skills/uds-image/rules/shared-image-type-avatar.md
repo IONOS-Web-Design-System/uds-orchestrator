@@ -89,7 +89,7 @@ Examples of valid choices (non-exhaustive):
 - Chiaroscuro — strong single light source, deep shadow on one side
 - Rembrandt lighting — angled key light with the characteristic cheek triangle
 - Natural window daylight — diffuse or direct depending on time of day
-- Overcast outdoor light — soft, even, no harsh shadows
+- Overcast outdoor light — diffused from an overcast sky, soft but with visible light-to-shadow contrast
 - Golden hour — warm directional backlight or sidelight
 - Practical ambient — light from the environment itself (workshop lamp, office overhead)
 
@@ -108,7 +108,3 @@ grain — that fit the character and background mode. Valid choices range from:
 
 As with lighting: describe the person, not the gear. Authentic photographic diversity
 comes from the model's creative judgment, not from prompting a specific camera.
-
-## Negative prompt additions (avatar-specific)
-Add to negativePrompt: "long shot, wide shot, full body, background sharply in focus
-and competing with face, multiple people, group shot".

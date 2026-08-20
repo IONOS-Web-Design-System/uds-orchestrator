@@ -88,15 +88,19 @@ and where a "looking over someone's shoulder" feel adds authenticity and depth.
 [partial back of head with natural hair, one shoulder visible in the frame edge],
 [device] on [surface] with the screen clearly facing the viewer,
 screen displaying [interface description],
-[2–3 foreground objects] on the surface immediately in front of the camera lens,
-rendered as soft out-of-focus bokeh in the lower foreground,
 [surface: warm cream / tan / light wood] visible as the mid-ground,
 bright airy natural light from the left, screen as the brightest element in the frame,
 editorial lifestyle photography style, shallow depth of field"
 ```
 
-**Reference look:** back of head as dark shape at right edge; latte + terracotta plate +
-film camera as warm foreground; cream surface; MacBook with legible dashboard as the hero.
+A foreground plane is optional here and should stay intentional, not formulaic: 1–2 objects
+softly out of focus near the camera can add depth, but pull them from what this specific
+person and setting would plausibly have close at hand — not a stock prop list reused scene
+to scene.
+
+**Reference look:** back of head as dark shape at right edge; an object native to the
+setting sits softly blurred in the near foreground; cream surface; MacBook with legible
+dashboard as the hero.
 
 ### Pattern D — Eye-level, person in the scene, gaze averted (hybrid backdrop pattern)
 
@@ -137,7 +141,8 @@ face partially visible, looking down at [laptop/phone/notebook — incidental],
 body occupying the [left/right] two-thirds of the frame,
 [large tropical plant] in soft focus behind the person's right/left shoulder,
 [warm sandy/ochre/cream wall] in soft focus on the open [right/left] side of the frame,
-warm ambient interior light, no direct sunlight — diffused and even,
+warm ambient interior light from one side, no direct sunlight — soft but with visible
+light-to-shadow contrast,
 rich saturated foreground colors (jacket/clothing), open calmer tones on the [right/left],
 documentary lifestyle photography, shallow depth of field"
 ```
@@ -203,12 +208,9 @@ Match objects to the user's professional context:
 | Café / hospitality | Latte art cup on saucer, small plate with spoon |
 | Marketing / agency | Printed pages, a highlighted document, a phone |
 
-Encode foreground objects precisely:
-```
-"a [specific object A with color] and [specific object B with color] sitting on
-the desk surface immediately in front of the camera lens, rendered as soft
-out-of-focus bokeh in the lower foreground"
-```
+State the objects and their placement in your own words rather than reusing a fixed
+sentence shape: name 1–2 objects specific to this person's context, placed near the camera
+on the desk surface, softly out of focus while the screen stays sharp behind them.
 
 Choose objects with **distinct, saturated colors** — a terracotta plate, a cobalt
 notebook, a forest green cup. Warm mid-tones unify with the surface; a single saturated
