@@ -12,7 +12,7 @@ screen-forward device hero, slightly elevated frontal angle, bright soft dayligh
 over-shoulder handheld device in hands, elevated from behind, warm ambient interior light, low contrast, heavy foreground and background blur, cosy mood
 
 ## close-frontal-cool
-close frontal screen, slightly elevated angle, cool even daylight, medium contrast, tight crop on hands at a keyboard, focused mood
+close frontal screen, slightly elevated angle, cool even daylight, medium contrast, tight crop on the hands and the screen, focused mood
 
 ## high-angle-warm-table
 high angle across a warm wooden table, morning daylight, warm amber grade, shallow depth with scattered props, relaxed domestic mood

@@ -5,14 +5,14 @@
 - Never request rendered text, wordmarks, logos, UI chrome, or watermarks — image models
   garble them. Put all of these in `negativePrompt`.
 - Composition: clear focal subject, generous negative space, uncluttered background.
-- Lighting: your brand's tone rule owns lighting direction and quality — `ionos-image-photoreal`
+- Lighting, camera and atmosphere resolve in this order: an injected `Photographic treatment:`
+  line wins outright for camera angle, framing, lens, lighting direction and quality, colour grade
+  and atmosphere — do not also emit your own choices for those axes, and do not contradict it.
+  Otherwise your brand's tone rule owns lighting direction and quality — `ionos-image-photoreal`
   for IONOS, otherwise `<brand>-image-style`. If your brand's rule states no lighting direction,
   default to abundant natural light from ONE clear direction, scene-appropriate in temperature,
   with visible light-to-shadow separation. Never flat, shadowless or uniformly lit — that is what
   produces depthless frames.
-- When a `Photographic treatment:` line is present in the prompt, it is AUTHORITATIVE for camera
-  angle, framing, lens, lighting direction and quality, colour grade and atmosphere. Do not also
-  emit your own choices for those axes, and do not contradict it.
 - negativePrompt carries only true rendering artifacts (text, watermark, logo, distorted
   hands, extra fingers, low quality). It is appended to the positive prompt by the service,
   so keep it SHORT and never put composition, lighting or palette instructions in it.
