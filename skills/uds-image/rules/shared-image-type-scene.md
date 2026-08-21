@@ -1,9 +1,11 @@
 # Image type: scene
 
 Use when the brief describes a real-world moment — a person doing something in their
-environment. The setting, action, and atmosphere are the story. The character is part of
-the scene, not its anchor: they fit naturally into the environment rather than posing for
-the camera.
+environment, or a product or service being used in context. The setting, action, and atmosphere
+are the story. The character is part of the scene, not its anchor: they fit naturally into the
+environment rather than posing for the camera.
+
+When a device or screen is the HERO rather than part of the moment, use `device-focused`.
 
 ## When to apply
 Brief signals: "working in", "using", "cooking", "at their desk", "in their shop",
@@ -172,6 +174,19 @@ compositional region to land in.
 - Framing is always off-center and asymmetric — avoid placing the device dead-center with
   symmetrical margins; the person's partial presence should create diagonal tension
 - Include environmental context: tools, equipment, objects relevant to the setting
+- People may be cropped (partial figure), blurred (shallow DOF), or in the background
+- Use depth of field to keep the key product element sharp and people/background soft
+
+## Story direction
+- The image should communicate a complete micro-story: what is happening, where, and why
+- Show the moment of engagement — card tapping terminal, fingers mid-scroll, team leaning
+  toward a shared screen — not before or after
+- Context objects (coffee cups, notebooks, plants, shop decor) reinforce setting authenticity
+- If a screen is incidental here (device-in-context, screen NOT the focus), it may show
+  abstract colour blocks or blurred content — never readable paragraphs, logos, or UI chrome.
+  (When the **screen-based product itself is the focus**, the opposite applies — full screen
+  clearly visible showing a relevant real interface; that is the `device-focused` type — see
+  `shared-image-type-device-focused.md`.)
 
 ## Surface texture as a design layer
 
@@ -241,13 +256,26 @@ image-svc generates natively at the target aspect ratio; no crop occurs. Landsca
   visible", "back of head and shoulder as a dark shape at the frame edge"
 - For pattern A: posture and body language harmonize with the environment
 
-## Lighting
+## When an included person's face should stay visible
 
-Natural or ambient practical light from the environment. For device-focused scenes:
-- Window light coming from one side creates directional shadows across the surface
-- Screen glow as a secondary fill light on the near edge of the keyboard/device
-- Overall: **bright, airy, warm** — never dark or moody
-- Surface texture reads best under angled natural light (shadows reveal the grain/texture)
+People in a scenario shot default to secondary — cropped, blurred, or backgrounded is fine
+when the brief doesn't ask otherwise (Pattern A above already covers "a customer at a
+counter" or "team working together" this way). Some briefs still want that included person's
+face to read clearly while their hands stay on the interaction. Reach for this technique
+rather than posing them front-on, which turns the shot into `portrait`:
+
+- **Physical anchor at waist height.** Place the subject behind a counter, desk, or
+  workbench — the barrier sits at waist level, so the hands-on action (typing, handling a
+  component, tapping the reader) happens below chin height and the face stays naturally
+  above it. Describe the subject as standing behind that surface with their upper body
+  clearly above it and open space over the head — word it fresh each time rather than
+  reusing one fixed phrase. This physical-anchor approach is the most reliable pattern
+  for combining a visible face with visible hands-on activity.
+- **Prefer standing or upright actions over crouching or bending.** A head-down pose drives
+  the model to crop in and lose the face. Reframe a low-level task as the person pausing
+  mid-task and looking up, or pick an equivalent upright action.
+- **Two or more people:** show genuine social interaction — conversation mid-flow, shared
+  laughter, a collaborative gesture — rather than people posed side by side for the camera.
 
 ## Avoid
 
