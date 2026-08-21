@@ -1,20 +1,27 @@
 # Image type detection
 
-Before writing the prompt, identify which image type the brief describes and apply the
-matching rule file.
+Classify the brief into exactly one of four types. Decide in this order — the first match wins.
 
-**Tie-breaker rules:**
-- Brief names a person doing something in their environment (action is the story) → `scene`
-- Brief asks for the person to face the camera with their character and identity as the story → `portrait`
-- Brief focuses on a product, device, or interaction (person is secondary) → `scenario`
-- Brief needs a face-visible square crop for profile/card use → `avatar`
+## 1. device-focused
 
-When ambiguous between `scene` and `portrait`: ask whether the person's face and identity
-are the primary message (→ `portrait`) or whether the activity and setting are (→ `scene`).
+A device, screen, app, dashboard or software product-view is the HERO. The brief centres on a
+laptop, phone, tablet or UI being used or shown. A person may appear, but only as partial
+context: a hand, a partial or over-the-shoulder presence. Never a co-equal full-frame portrait.
 
-| Type | Rule file | Use when | Face guaranteed? |
-|------|-----------|----------|-----------------|
-| **avatar** | `shared-image-type-avatar` | Face-focused square crop; face clearly visible at any angle; can show occupation context; 1:1 aspect ratio | Yes — always |
-| **scene** | `shared-image-type-scene` | Subject mid-action in their environment; setting and action are the story; character fits in naturally | No — optional |
-| **portrait** | `shared-image-type-portrait` | Subject faces camera; person's character, posture, and accessories are the story | Yes — always |
-| **scenario** | `shared-image-type-scenario` | Product/interaction is focal point; people are secondary or partial | No |
+If the device is incidental to what a person is doing, this is NOT device-focused — go to 4.
+
+## 2. avatar
+
+A single person's identity is the whole subject, cropped to head-and-shoulders or chest-up. No
+meaningful environment, no action — a profile picture, a testimonial headshot, a team member.
+
+## 3. portrait
+
+A single person is the subject and is presented to the camera — posed, addressing the lens or
+deliberately composed — with the environment as supporting context rather than the story.
+
+## 4. scene
+
+Everything else: a real-world moment, or a product or service used in context. The setting,
+action and atmosphere are the story, and any person is part of the scene rather than its anchor.
+This is the default when no other type clearly matches.

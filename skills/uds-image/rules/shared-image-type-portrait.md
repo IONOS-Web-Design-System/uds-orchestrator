@@ -72,12 +72,6 @@ explicit tone.
 
 The image should imply a story: who is this person, what do they do, why are they proud of it.
 
-## Lighting
-- Soft and directional, slightly warm — flattering and natural, with gentle light-to-shadow
-  separation across the face rather than a flat wash
-- Window light or diffused ambient light preferred over harsh directional flash
-- Background should be slightly underexposed relative to subject to keep focus clear
-
 ## Component-driven placement (override rule)
 
 When the brief names a specific UI component **and** specifies a side (left / right), the

@@ -5,14 +5,20 @@
 - Never request rendered text, wordmarks, logos, UI chrome, or watermarks — image models
   garble them. Put all of these in `negativePrompt`.
 - Composition: clear focal subject, generous negative space, uncluttered background.
-- Lighting, camera and atmosphere resolve in this order: an injected `Photographic treatment:`
-  line wins outright for camera angle, framing, lens, lighting direction and quality, colour grade
-  and atmosphere — do not also emit your own choices for those axes, and do not contradict it.
-  Otherwise your brand's tone rule owns lighting direction and quality — `ionos-image-photoreal`
-  for IONOS, otherwise `<brand>-image-style`. If your brand's rule states no lighting direction,
-  default to abundant natural light from ONE clear direction, scene-appropriate in temperature,
-  with visible light-to-shadow separation. Never flat, shadowless or uniformly lit — that is what
-  produces depthless frames.
+- Lighting, camera and atmosphere resolve in this order. An injected `Photographic camera:` line
+  wins outright for camera angle, framing, shot size, subject turn and lens — do not also emit
+  your own choices for those axes, and do not contradict it. An injected `Photographic lighting:`
+  line wins outright for lighting direction and quality, contrast, colour grade and atmosphere —
+  same rule. The two lines are independent: one may be present without the other, and each
+  governs only its own axis. Where neither line is present, your brand's tone rule owns lighting
+  direction and quality — `ionos-image-photoreal` for IONOS, otherwise `<brand>-image-style` —
+  and your image-type rule owns camera framing. If your brand's rule states no lighting
+  direction, default to abundant natural light from ONE clear direction. Never flat, shadowless
+  or uniformly lit.
+- Vary the lighting setup between images rather than settling into one look. A set of images that
+  all share the same key direction, contrast and grade reads as templated even when each image is
+  individually good. Where a `Photographic lighting:` line is present it has already made this
+  choice for you; where it is absent, choose deliberately and differently.
 - negativePrompt carries only true rendering artifacts (text, watermark, logo, distorted
   hands, extra fingers, low quality). It is appended to the positive prompt by the service,
   so keep it SHORT and never put composition, lighting or palette instructions in it.
