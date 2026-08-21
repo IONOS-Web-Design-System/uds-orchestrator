@@ -21,7 +21,7 @@ high angle across a table surface onto the device, normal lens, shallow depth wi
 near top-down onto a device held in both hands, normal lens
 
 ## over-shoulder-eye-level
-over the shoulder at eye level from directly behind, normal lens, longer depth into the room
+over the shoulder at eye level from directly behind, the screen legible past the subject, normal lens, longer depth into the room
 
 ## wide-side-on-workstation
 wider side-on workstation view, normal-wide lens, the full desk setup legible
