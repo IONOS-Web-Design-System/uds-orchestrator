@@ -42,7 +42,7 @@ Every row still answers to Priority 1 above: if the shot distance a row describe
 
 **Priority 3 — Foreground objects (nice-to-have, conditional):**
 Add foreground bokeh only when the shot distance allows it without competing for the
-face. Place it as the **last sentence** of `prompt`. See `shared-environment-storytelling`.
+face. Place it as the **last sentence** of `prompt`.
 
 ---
 
@@ -140,7 +140,6 @@ regenerate with the new `market`/showroom and tell them the result will differ.
 - `ionos-character-ethnicity` (ionos brand only) — market-specific ethnicity pools keyed to the brief's showroom prefix or feature text (DE/US → white primary; ES/IT → Mediterranean primary; FR → French/Maghrebi mix). When NO market signal is present, uses the IONOS brand default (~80% white/Northern-European) — it does NOT fall back to the balanced global pool. Fully replaces `shared-character-diversity` for ionos.
 - `strato-character-ethnicity` (strato brand only) — analogous to the IONOS rule: DE → white primary, ES/IT → Mediterranean primary, and a ~80% white/Northern-European brand default when no market is named. Fully replaces `shared-character-diversity` for strato.
 - `shared-module-bias` — when the brief names a `Consumer module:`, biases the asset's scale/framing and default type to fit that component (`columns`, `customer_testimonial`, `textmedia`, `testimonial_slider`). Fills defaults only — the brief's explicit fields win.
-- `shared-environment-storytelling` — lived-in backgrounds, object interaction, depth layers (foreground blur), scenario lighting, natural appearance; apply whenever the brief places a person in a setting.
 - `shared-image-type-avatar` / `shared-image-type-scene` / `shared-image-type-portrait` / `shared-image-type-scenario` — type-specific direction.
 - `<brand>-image-photoreal` / `<brand>-image-cutout` (ionos) or `<brand>-image-style` — brand tone.
 - Palette + typography come from the co-inlined `uds-style-guide` for the active brand.

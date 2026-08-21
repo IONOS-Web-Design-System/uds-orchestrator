@@ -105,10 +105,10 @@ this device and what they are doing:
 | Meeting / office | printed documents, a water glass, a laptop bag strap visible at the edge |
 | Developer / tech | mechanical keyboard, a mug with steam, sticky notes on the desk surface |
 
-Use the depth-layer approach from `shared-environment-storytelling`: place the chosen
-objects on the desk surface near the camera, softly out of focus, while the screen stays
-sharp behind them. Describe THIS scene's objects in your own words — do not copy a fixed
-sentence shape between generations.
+Use a depth-layer approach: place the chosen objects on the desk surface near the
+camera, softly out of focus, while the screen stays sharp behind them. Describe THIS
+scene's objects in your own words — do not copy a fixed sentence shape between
+generations.
 
 ## Background
 
