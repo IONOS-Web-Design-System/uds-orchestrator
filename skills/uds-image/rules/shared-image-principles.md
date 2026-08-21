@@ -10,6 +10,9 @@
   default to abundant natural light from ONE clear direction, scene-appropriate in temperature,
   with visible light-to-shadow separation. Never flat, shadowless or uniformly lit — that is what
   produces depthless frames.
+- When a `Photographic treatment:` line is present in the prompt, it is AUTHORITATIVE for camera
+  angle, framing, lens, lighting direction and quality, colour grade and atmosphere. Do not also
+  emit your own choices for those axes, and do not contradict it.
 - negativePrompt carries only true rendering artifacts (text, watermark, logo, distorted
   hands, extra fingers, low quality). It is appended to the positive prompt by the service,
   so keep it SHORT and never put composition, lighting or palette instructions in it.
