@@ -174,7 +174,9 @@ compositional region to land in.
 - Framing is always off-center and asymmetric — avoid placing the device dead-center with
   symmetrical margins; the person's partial presence should create diagonal tension
 - Include environmental context: tools, equipment, objects relevant to the setting
-- People may be cropped (partial figure), blurred (shallow DOF), or in the background
+- **Patterns A–C:** people may be cropped (partial figure), blurred (shallow DOF), or in the
+  background. NOT Pattern D — that pattern deliberately does the opposite, with the person
+  filling 50–65% of the frame and the face visible.
 - Use depth of field to keep the key product element sharp and people/background soft
 
 ## Story direction
