@@ -40,4 +40,11 @@ all image types. Never leave character demographics undefined.
 
 ## Image type detection
 
-See `shared-image-type-detection` for the tie-breaker rules and the type table.
+See `shared-image-type-detection`. It is an ORDERED rubric, not a lookup table: four types —
+`device-focused`, `avatar`, `portrait`, `scene` — evaluated in that order, first match wins, and
+`scene` is the default when nothing else clearly fits. There are no tie-breakers to consult,
+because the ordering IS the tie-break.
+
+You only classify when no type was pinned for you. When a `# Image type (fixed)` block is
+present, that decision is already made: the matching `shared-image-type-<type>` rule is
+inlined instead of the rubric, and you apply it without re-detecting.
