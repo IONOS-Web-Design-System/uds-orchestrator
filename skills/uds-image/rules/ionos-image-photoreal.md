@@ -78,9 +78,37 @@ apply within these IONOS-specific boundaries:
   the image model vary hair naturally across variants.
 
 ## Tone
+
+**Calm, business, positive, confident** — the four words that define an IONOS image.
 Professional, trustworthy, optimistic, modern. Real materials, realistic depth of field.
-Scenes show people confidently working with technology in warm, welcoming environments.
+Scenes show people confidently working with technology in welcoming, human environments.
 Never literal UI screenshots; use tasteful abstract colour-block representations on screens.
+
+**IONOS is the brand's centre of gravity, and the other two are positioned against it** —
+so hold this middle deliberately rather than drifting toward either edge:
+
+| | IONOS | Strato | home.pl |
+|---|---|---|---|
+| subject | mid-30s to early-50s, established | early-20s to early-30s, individual | mid-30s to 50s, established |
+| bearing | composed, settled, in control | individual, expressive | composed, at ease |
+| light | bright neutral daylight | bright but warm, sunlit | brightest and clearest, a step above IONOS |
+| grade | cool-neutral to neutral | warm, subtle film-like | neutral-white, high-key |
+
+What separates IONOS is its **grade and its energy, not its exposure.** IONOS is a bright,
+well-lit brand — `positive` requires that, and a dim frame reads as neither positive nor
+confident. Do not darken an IONOS scene to distance it from home.pl; distinguish it by
+keeping the grade cool-neutral rather than high-key white. **Do NOT distinguish it by
+freezing the subject** — the candid-moment rule in `shared-natural-moment` applies to IONOS
+exactly as it does to every other brand, and a static "stand still and smile" frame is as
+wrong here as anywhere. `confident` describes bearing, not stillness: an IONOS subject can be
+mid-gesture and still read as composed and unhurried. home.pl sits a step lighter and cleaner again; that is a difference of degree at
+the bright end, not IONOS being mid-key.
+
+**On "warm":** the environment may be materially warm — wood, textiles, plants, warm
+neutrals in the props and surfaces. The LIGHT stays cool-neutral to neutral per the Mood
+and lighting section above. Warm materials under neutral light is the IONOS combination;
+warm light is Strato's. These two statements used to read as a contradiction — they are
+not: `warm` describes what is in the frame, `neutral` describes what falls on it.
 
 - background MUST be `"opaque"`; style `"photoreal"`.
 - Avoid: cartoon/illustration styling, cold/blue-tinted overall colour grade, dark moody scenes.

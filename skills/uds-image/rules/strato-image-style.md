@@ -65,9 +65,15 @@ and omit hair and accessory entirely. The image model will vary them naturally. 
 `"curly hair + glasses + hoodie"` across all variants produces the same person 3 times.
 
 ### Tone and expression
-Warm, optimistic, making-progress. The person is having a good day on their own terms —
-absorbed in something they care about, not performing productivity for an audience.
-Genuine smile or natural concentration. Never a forced grin or blank corporate face.
+**Young, warm, positive.** The person is having a good day on their own terms: absorbed in
+something they care about, not performing productivity for an audience. Genuine smile or
+natural concentration. Never a forced grin or blank corporate face.
+
+`dynamic` is NOT listed here, deliberately. The candid-moment quality — mid-gesture, a moment
+in progress rather than a held pose — is a general photographic virtue owned by
+`shared-natural-moment` and applied to every brand. It is not a Strato differentiator, and
+framing it as one implied a frozen pose was acceptable elsewhere, which it never was. What
+distinguishes Strato from IONOS is **age, warmth and individual expression** — not energy.
 
 ---
 
@@ -82,9 +88,22 @@ indoor environments. Warm-toned walls or wood surfaces preferred. Backgrounds ar
 softly blurred but identifiable. Never an empty studio backdrop.
 
 **Lighting:** bright, diffused, natural. Generous daylight through large windows. No
-harsh directional shadows across the face. Embrace a subtle warm film-like grade.
+harsh directional shadows across the face. A subtle warm film-like grade is welcome.
 Cool/clinical light is acceptable only for data-centre or server subjects, and even then
 warmed with an amber practical accent.
+
+**Warm must not cost brightness — this is the failure mode to avoid.** Measured: Strato
+frames came out ~25 luminance points DARKER than IONOS, because "warm grade" plus
+warm-toned walls plus a saturated warm prop compound into a dim, cosy interior. Cosy is
+not the brand; young and positive are. So keep the frame **bright first and warm second**:
+the warmth belongs to the props, the wood and the skin tones, while the windows, walls and
+overall exposure stay light and open. A Strato image should read as sunlit, not lamplit —
+airy and energetic, never a dim evening room.
+
+> **Axis precedence.** An injected `Photographic lighting:` line outranks this section for
+> direction, quality, contrast and grade — see `shared-image-principles`. Keep the brightness
+> and warm-prop guidance above within whatever lighting character that line chose; do not
+> restate a lighting direction when such a line is present.
 
 ---
 

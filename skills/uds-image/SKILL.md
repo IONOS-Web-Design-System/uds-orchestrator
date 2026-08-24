@@ -87,12 +87,9 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
   symmetrical front-on). Front-on / straight-to-camera / tight close-up framing is used ONLY
   when the brief explicitly asks for it, or for an `avatar` / `portrait` headshot (where the
   face is the deliberate subject).
-- **Make characters DYNAMIC — a candid moment in motion, not a frozen pose.** Catch them
-  mid-action — walking mid-stride, laughing mid-task, turning, reaching, gesturing — so the frame
-  feels alive and documentary. Add a **slight natural camera/motion blur**: a touch of motion blur
-  on a moving hand or a passing foreground figure, soft candid focus — the look of a real photo
-  grabbed in the moment, not a static studio shot. (Keep the face itself sharp for avatar/portrait;
-  the blur lives in the motion and the surrounding figures.)
+- **Make characters DYNAMIC — a candid moment in motion, not a frozen pose.** Owned in full by
+  `shared-natural-moment`, which applies to every brand. Do not restate its detail here or in a
+  brand rule; three copies of this instruction previously drifted apart.
 - **Lighting — default BRIGHT, NATURAL, and vivid (airy, relaxed "chill").** Reach first for
   abundant, soft, natural light — a bright airy room, generous daylight, a sunny relaxed mood —
   with believable vivid colour. The image should feel **well-lit and uplifting, never moody,

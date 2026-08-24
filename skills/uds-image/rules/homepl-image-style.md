@@ -35,15 +35,24 @@ long run — the imagery must reflect that stability.
 
 ### 2. Warmth over Tech — warmth through the subject, not the light
 
-home.pl is the "Warm SMB" brand — human, approachable, not cold or corporate. But
-unlike Strato (warm orange lighting) or IONOS (vivid bright daylight), home.pl warmth
+home.pl is the "Warm SMB" brand — human, approachable, not cold or corporate. Its warmth
 lives in the **subject's expression, attire, and composition** — not in the lighting
-colour or direction.
+colour. Where Strato's warmth comes from the light itself (amber, golden, cosy), home.pl
+keeps the light neutral and lets the person carry the warmth.
 
-**Lighting must be technically flat and even:**
-- Soft, diffused, neutral-white light — no golden-hour warmth, no warm amber tones
-- Even illumination across the subject's face — no directional drama, no split lighting
-- Clean, professional lighting that does not date the image
+**home.pl is the BRIGHTEST and CLEAREST of the brands.** Against IONOS — calm, composed,
+mid-key business daylight — home.pl reads a step lighter and cleaner: more white in the
+frame, more air around the subject, less visual weight overall. Against Strato it is
+markedly cooler and brighter. If a home.pl image could be mistaken for an IONOS image,
+it is not bright enough.
+
+**Lighting — bright, clean and clear, with gentle direction:**
+- Abundant soft daylight, neutral-white — no golden-hour warmth, no amber grade
+- High-key overall: pale walls, generous white and light tones, an open airy feel
+- One clear but SOFT light direction, with gentle shadow falloff that still models the
+  face. Clean and even in character — never harsh, never dramatic, and never flat or
+  shadowless, which reads as cheap stock rather than clean
+- Professional lighting that does not date the image
 
 **Warmth is delivered by:**
 - A genuine, relaxed smile — confident and approachable, not performative
@@ -55,7 +64,14 @@ colour or direction.
 **Never use:**
 - Warm colour filters, golden/amber light grades, or "cosy cafe" orange-warm mood
 - Dramatic directional lighting, hard shadows, or moody underexposure
+- Dim, heavy or visually crowded frames — they read as Strato, not home.pl
 - Cool-toned clinical light (reserved for tech/server contexts)
+
+> **Axis precedence.** An injected `Photographic lighting:` line outranks this section for
+> direction, quality, contrast and grade — see `shared-image-principles`. This section then
+> governs only what that line leaves open: keep the result bright, high-key and clean
+> within whatever lighting character was chosen. Do not restate a lighting direction here
+> when such a line is present.
 
 ### 3. Red Accent as Brand Marker — one element, always subtle
 
