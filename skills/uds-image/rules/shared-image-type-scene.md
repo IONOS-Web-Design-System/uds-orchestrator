@@ -192,7 +192,7 @@ compositional region to land in.
 
 ## Surface texture as a design layer
 
-For patterns B and C (device-focused scenes), the **desk or table surface** is a full
+For patterns B and C (device-in-scene shots), the **desk or table surface** is a full
 compositional layer, not just a background. Specify it explicitly:
 
 | Surface | Mood | Prompt encoding |
@@ -208,7 +208,7 @@ visual weight, not background. Describe the grain, texture, and light falling ac
 
 ## Foreground objects — identity and depth (patterns B and C)
 
-For device-focused scenes, 1–2 foreground objects placed closest to the camera lens are
+For device-in-scene shots, 1–2 foreground objects placed closest to the camera lens are
 the **identity layer** — they answer "who is this person?" at a glance. They sit at the
 very front of the desk surface and are rendered out of focus (bokeh) while the screen
 remains sharp behind them.
@@ -232,7 +232,7 @@ Choose objects with **distinct, saturated colors** — pick a color for each obj
 suits what it is and this specific scene, not a muted neutral. Warm mid-tones unify with
 the surface; a single saturated accent creates visual interest.
 
-## Screen visibility (device-focused scenes)
+## Screen visibility (device-in-scene shots)
 
 When a screen is visible in a scene image, it should be the **brightest element in the
 frame** — the natural eye anchor after the person's peripheral presence:

@@ -143,7 +143,7 @@ Build the prompt in this strict order. Face and camera distance are locked first
 Foreground is added last and only if the shot permits it.
 
 1. **Face anchor + camera shot** (CRITICAL — first sentence for `portrait` and `avatar`)
-   → for `scene` and `scenario`, omit the face anchor; begin with the action or device
+   → for `scene` and `device-focused`, omit the face anchor; begin with the action or device
      description instead; only add a face anchor if the brief explicitly requests it
    → for `portrait` and `avatar`, chosen using the decision ladder in SKILL.md CRITICAL RULE #1
 2. **Character** — demographics, build, attire with wear, object in hand, frame position

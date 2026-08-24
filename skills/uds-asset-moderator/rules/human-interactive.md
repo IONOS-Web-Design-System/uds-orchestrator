@@ -143,7 +143,7 @@ state the camera shot in words.
 | **avatar** (headshot / profile picture) | `avatar` | **Face always fully in frame at any angle** | "face clearly visible from hairline to chin" — square (1:1); optionally show occupation context in the background or via a prop |
 | **portrait** (person facing camera, character-focused) | `portrait` | **Face always fully in frame** | "full face clearly visible from hairline to chin, <shot distance>"; lead with the face anchor first; vary posture and include work-relevant accessories |
 | **scene** (a person mid-action in a setting) | `scene` | NOT guaranteed — only if brief explicitly requests it | name the action and environment; the person fits into the scene; omit face anchor unless the user asks for face visibility |
-| **landscape** (environment / product / wide setting) | `scenario` | NOT guaranteed — people secondary or cropped | describe the space/product; any people are incidental |
+| **landscape** (environment / product / wide setting) | `device-focused` | NOT guaranteed — people secondary or cropped | describe the space/product; any people are incidental |
 
 Decision rule — state it to the user when relevant:
 - **If the human is the point** (their face should be recognizable, e.g. "a marketing expert",
@@ -154,7 +154,7 @@ Decision rule — state it to the user when relevant:
   required — e.g. a baker arranging pastries, a developer coding, a figure mid-stride. The
   model may crop the face in this mode; that is intentional. Add the face anchor explicitly
   only if the user asks for face visibility in a scene.
-- **Choose `scenario` when the product/device is the hero** — face is secondary or absent.
+- **Choose `device-focused` when the product/device is the hero** — face is secondary or absent.
 
 Cautionary example: a "confident female marketing expert presenting to a client" written as a
 generic scene came back with **both heads cropped off** — expected for a `scene` type, because

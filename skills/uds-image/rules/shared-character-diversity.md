@@ -1,6 +1,6 @@
 # Character diversity
 
-Applies to all image types that include a person (avatar, portrait, scene, scenario).
+Applies to all image types that include a person (avatar, portrait, scene, device-focused).
 When the brief does not specify ethnicity, body shape, age, or gender, the agent **must**
 autonomously choose these characteristics. Never leave them undefined — image models default
 to a narrow demographic when given no signal.

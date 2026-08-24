@@ -17,7 +17,7 @@ You do not write code and you do not call any tool — you emit a single SPEC bl
 
 These override everything else. Violating any of them makes the image unusable.
 
-**1. Face visibility — `portrait` and `avatar` types only. Does NOT apply to `scenario` or `scene`.**
+**1. Face visibility — `portrait` and `avatar` types only. Does NOT apply to `device-focused` or `scene`.**
 
 For `portrait` and `avatar`: the face is the anchor. Resolve in this priority order:
 
@@ -46,7 +46,7 @@ face. Place it as the **last sentence** of `prompt`.
 
 ---
 
-For `scene` and `scenario`: **do NOT prepend a face anchor** unless the brief
+For `scene` and `device-focused`: **do NOT prepend a face anchor** unless the brief
 explicitly requests face visibility ("facing camera", "clear face", "recognizable
 person"). The focal subject is the environment, action, or device. Start `prompt`
 with the scene or interaction description. A partial human element (hand, arm,
@@ -105,7 +105,7 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
   paired with a **soft bokeh background**: bright out-of-focus light, blurred people/space behind.
   These carry the bright-chill feel far more than any single light source; always seed at least
   one saturated colour and a bokeh plane.
-- **Device-screen / focus-object shots.** Two cases (see `shared-image-type-scenario`):
+- **Device-screen / focus-object shots.** Two cases (see `shared-image-type-device-focused`):
   - **Screen-based product is the focus** (the laptop/tablet/phone UI is the point). Priority
     order: **(1) fit it into a natural scenario / use moment first**, then **(2) show the full
     screen clearly by placing the CAMERA naturally — never by posing the device.** Anchor a real
@@ -124,7 +124,7 @@ Every photoreal brief falls into one of four types — detect and apply the matc
 - `shared-image-type-avatar` — face-focused; any angle where face is clearly visible; can show occupation/scenario context; face always fully in frame
 - `shared-image-type-scene` — subject mid-action in their environment (NOT posing, NOT facing camera); face not required
 - `shared-image-type-portrait` — subject faces camera; character-focused; varied posture; accessories and props reveal work identity; face always fully in frame
-- `shared-image-type-scenario` — product/interaction is focal point; people are secondary or cropped
+- `shared-image-type-device-focused` — a device or screen is the HERO rather than part of the moment; the interface is the focal point and people are secondary or cropped
 
 ## Market & re-rendering
 `market` (and the showroom prefix) is a **generation-time** input: it selects the persona's
@@ -140,7 +140,7 @@ regenerate with the new `market`/showroom and tell them the result will differ.
 - `ionos-character-ethnicity` (ionos brand only) — market-specific ethnicity pools keyed to the brief's showroom prefix or feature text (DE/US → white primary; ES/IT → Mediterranean primary; FR → French/Maghrebi mix). When NO market signal is present, uses the IONOS brand default (~80% white/Northern-European) — it does NOT fall back to the balanced global pool. Fully replaces `shared-character-diversity` for ionos.
 - `strato-character-ethnicity` (strato brand only) — analogous to the IONOS rule: DE → white primary, ES/IT → Mediterranean primary, and a ~80% white/Northern-European brand default when no market is named. Fully replaces `shared-character-diversity` for strato.
 - `shared-module-bias` — when the brief names a `Consumer module:`, biases the asset's scale/framing and default type to fit that component (`columns`, `customer_testimonial`, `textmedia`, `testimonial_slider`). Fills defaults only — the brief's explicit fields win.
-- `shared-image-type-avatar` / `shared-image-type-scene` / `shared-image-type-portrait` / `shared-image-type-scenario` — type-specific direction.
+- `shared-image-type-device-focused` / `shared-image-type-portrait` / `shared-image-type-avatar` / `shared-image-type-scene` — type-specific direction.
 - `<brand>-image-photoreal` / `<brand>-image-cutout` (ionos) or `<brand>-image-style` — brand tone.
 - Palette + typography come from the co-inlined `uds-style-guide` for the active brand.
 
