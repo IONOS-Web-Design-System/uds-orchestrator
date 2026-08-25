@@ -1,4 +1,45 @@
-# Shared environment storytelling
+<!-- SUPERSEDED — RETAINED AS SOURCE MATERIAL, NOT AS A RULE. DO NOT RE-INJECT.
+     Nothing reads this file. It is not selected by image-svc's `resolveRuleSet`
+     (src/craft/profiles.ts), is not in any craftProfile's allowlist, and is not read by name by
+     any code path; image-svc's skills.coverage.test.ts carries it as the ONE deliberately
+     unconsumed rule, asserted by name, so re-selecting it turns that suite red rather than
+     quietly doubling the prompt.
+
+     WHY IT WAS RETIRED. 13 KB, previously inlined on EVERY `full` run regardless of any axis, and
+     measured as the primary homogeniser of the whole pipeline: it hands the craft model literal
+     sentence templates, and the model copied them near-verbatim across independent runs. Its four
+     axes have since been split out and each given a narrower, keyed home:
+
+       - lived-in backgrounds, surfaces, furniture, mid-ground  -> shared-environment-workspace.md
+                                                                   shared-environment-home-office.md
+         (one preset SELECTED IN CODE per run and injected as one `Environment:` line, so the model
+         never sees the menu it would otherwise pick a favourite from)
+       - light source, direction, quality, colour grade         -> shared-lighting.md
+                                                                   shared-lighting-by-scenario.md
+       - the candid, mid-action frame                           -> shared-natural-moment.md
+       - foreground objects and their colour                    -> shared-scenario-props.md
+
+     THE PROP AXIS IS THE ONE THAT MATTERS HERE, and it is why this banner exists rather than a
+     one-line note. This file states its objects UNCONDITIONALLY — as house decor, in prose and in
+     ✅ example sentences — while shared-scenario-props.md states every object behind a `place`
+     row or a `who` row. Unconditional prop text is exactly the mechanism that put the same
+     everyday desk object into briefs with nothing to do with it, and it survives paraphrase: five
+     of the occurrences below would re-enter the prompt the moment anything selected this file.
+     image-svc's scenarioProps.test.ts asserts no INJECTED rule states a prop without a key; this
+     file is outside that scan only because nothing injects it, so re-injecting it re-creates the
+     defect in one line and the props guard will not catch it.
+
+     If you want an axis from here, LIFT IT into the keyed file that owns it above. Do not add
+     this file to a rule set. -->
+
+# Shared environment storytelling — SUPERSEDED, DO NOT RE-INJECT
+
+> **This is not a live rule.** Nothing selects it and nothing may. Its four axes were split
+> into `shared-environment-workspace` / `shared-environment-home-office` (place),
+> `shared-lighting` + `shared-lighting-by-scenario` (light), `shared-natural-moment` (the
+> candid frame) and `shared-scenario-props` (foreground objects and their colour). The text
+> below states its objects with no key, so re-injecting it puts a house prop into every brief
+> again — see the comment above this heading for the full reasoning and the CI guards.
 
 Applies to all image types that include a person in a professional or lifestyle setting.
 The environment must feel like a place where real work happens — not a staged backdrop.
