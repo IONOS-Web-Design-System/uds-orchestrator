@@ -65,12 +65,12 @@ table.
 | `place` | What the place puts within reach |
 |---|---|
 | `open-plan-office` | a lanyard set down, a stapler, a rolled-up floorplan |
-| `home-office` | an open notebook, a ballpoint pen, a tin of pencils |
+| `home-office` | unopened mail, a tin of pencils, a cork pinboard |
 | `meeting-room` | printed handouts, a water carafe, a whiteboard eraser |
 | `cafe` | a latte-art cup on a saucer, a spoon on a small plate, a folded newspaper |
 | `workshop` | wood shavings, a mallet, a chisel set down mid-job |
 | `retail` | a paper carrier bag, a price gun, a ribboned gift box |
-| `studio` | a taped-down cable, a light-stand sandbag, gaffer tape |
+| `studio` | a light-stand sandbag, a clapperboard, a fold-out stool |
 | `outdoors` | a takeaway cup, a canvas tote, a bicycle handlebar at the frame edge |
 | `other` | nothing — the place is unknown, so the person's table carries the frame alone |
 
@@ -84,7 +84,7 @@ all — take nothing from this table; do NOT fall back to the first row or to a 
 |---|---|
 | a photographer or visual creative | a loupe, a contact sheet, a spare battery |
 | a writer, blogger or other knowledge worker | a hardback notebook, a fountain pen, page proofs |
-| an online-shop owner | a fabric swatch, packing tape, flat-pack mailers |
+| an online-shop owner | a fabric swatch, a padded envelope, flat-pack mailers |
 | a developer or technical operator | a steaming mug, a rubber duck, a coiled patch cable |
 | a café, bar or restaurant operator | a service tray, a folded cloth, clean saucers |
 | a marketer or agency operator | a highlighter, a pinned mood board, a wall calendar |
@@ -100,6 +100,14 @@ all — take nothing from this table; do NOT fall back to the first row or to a 
    default is what makes every image look like the last one.
 5. Never combine two rows of the same table, and never take an object from a row the scenario did
    not select — a hospitality object in an office brief is the failure this rule exists to prevent.
+
+**Every object belongs to exactly ONE of the two tables.** The place table holds what the ROOM
+supplies and the who table holds what the PERSON carries; an object listed in both would have two
+independent ways to be selected, so it would surface roughly twice as often as everything else —
+which is a step back toward the unkeyed default this rule replaces. Measured, not assumed: the two
+objects that were briefly in both tables came out the most frequent of all in a live run, one of
+them in more than half of them. When deciding which table an object goes in, ask whether it is
+still there after the person leaves the room.
 
 **Which object, when a row offers three.** Pick the one that fits this brief's `activity` and
 `timeOfDay`, and vary the pick across a set — a row is a menu, not a sentence. Do not reuse the
