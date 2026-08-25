@@ -51,9 +51,10 @@ explicitly requests the IONOS colour palette.
 **Object colours — aim for visual richness, not muted neutrals:**
 Objects and props should have clear, saturated colours that create visual interest
 and contrast within the scene. Avoid everything being the same beige/grey/neutral
-tone — that produces flat, low-impact images. Instead, let individual objects — a
-mug, an item of clothing, a folder, a plant — carry a colour that suits what it is and
-the specific scene, rather than defaulting to the same handful of colours every time.
+tone — that produces flat, low-impact images. Instead, let the individual objects the
+scene already contains carry colours that suit what each one is, rather than defaulting to
+the same handful of colours every time. This file does not decide WHICH objects are in the
+frame — the scenario and the image-type rule do.
 
 The colour palette across the scene should feel **visually varied and alive** — 2–3
 distinct colour accents across the props, not a monochrome or all-neutral composition.
@@ -111,8 +112,8 @@ wrong here as anywhere. `confident` describes bearing, not stillness: an IONOS s
 mid-gesture and still read as composed and unhurried. home.pl sits a step lighter and cleaner again; that is a difference of degree at
 the bright end, not IONOS being mid-key.
 
-**On "warm":** the environment may be materially warm — wood, textiles, plants, warm
-neutrals in the props and surfaces. The LIGHT stays cool-neutral to neutral per the Mood
+**On "warm":** the environment may be materially warm — wood, textiles and warm
+neutrals in the surfaces and in whatever objects the scene already contains. The LIGHT stays cool-neutral to neutral per the Mood
 and lighting section above. Warm materials under neutral light is the IONOS combination;
 warm light is Strato's. These two statements used to read as a contradiction — they are
 not: `warm` describes what is in the frame, `neutral` describes what falls on it.

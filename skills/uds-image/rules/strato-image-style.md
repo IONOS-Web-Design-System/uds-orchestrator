@@ -11,8 +11,8 @@ is Strato-specific: palette, brand character, clothing, and environment tone.
 | Name | HEX | Primary use in image |
 |---|---|---|
 | Brand Orange | `#FF8800` | Hero clothing, warm props, brand accent objects |
-| Dark Orange | `#FF5C00` | Deep accent — mugs, cushions, warm shadows |
-| Light Orange | `#FFC700` | Sunny highlights — flowers, warm light spill, notebooks |
+| Dark Orange | `#FF5C00` | Deep accent — the darker end of a warm surface or textile, warm shadow |
+| Light Orange | `#FFC700` | Sunny highlights — warm light spill, the brightest warm touch in frame |
 | Soft Orange | `#FFEAD3` | Warm background tints, card backgrounds, wall colour |
 | Blue | `#272CB2` | Tech objects, device surfaces, a jacket or accessory |
 | Dark Blue | `#2F2F70` | Deep shadow accent, darker clothing layer |
@@ -81,9 +81,10 @@ distinguishes Strato from IONOS is **age, warmth and individual expression** —
 
 ## Object palette and environment
 
-**Props:** include at least one visually saturated warm accent object per scene — an
-orange or terracotta mug, a warm-yellow notebook, fresh flowers in a warm tone, an
-orange fruit bowl. These carry brand warmth far more reliably than lighting alone.
+**Warm accent:** the scenario decides WHICH objects are in the frame — see the image-type
+rules. This file asks only that one of them lean warm and saturated where a warm object
+plausibly belongs. Colour on an object the scene already contains carries brand warmth more
+reliably than the grade does; nothing here adds an object to a scene that has none.
 
 **Environment:** real lived-in spaces — home offices, coworking spaces, cafés, bright
 indoor environments. Warm-toned walls or wood surfaces preferred. Backgrounds are

@@ -27,9 +27,9 @@ long run — the imagery must reflect that stability.
   or UI that resembles a current-era operating system. A laptop is a laptop — a clean
   generic form, not an identifiable make. A phone is a phone — not the latest bezelle
   model of any specific year.
-- **Decor and props:** classic, simple, neutral. A ceramic mug, a notebook, a plant, a
-  wooden desk surface. No trendy neon lighting, no maximalist desk accessories, no
-  fast-fashion styling. Clean, enduring, unpretentious.
+- **Decor and props:** classic, simple, neutral in character — whatever objects the scenario
+  puts in the frame, chosen for durability rather than fashion. No trendy neon lighting, no
+  maximalist desk accessories, no fast-fashion styling. Clean, enduring, unpretentious.
 - **Hairstyles:** natural, well-groomed, classic styles. No overly specific trend-cuts
   (fades, mullets, extreme asymmetrical). A look that reads the same in 2024 and 2027.
 
@@ -62,8 +62,8 @@ injected `Photographic lighting:` line leaves open, not conditions on it:**
 - A genuine, relaxed smile — confident and approachable, not performative
 - Attire in warm neutral tones (cream, soft white, warm beige, classic navy, warm grey)
 - Open body language — a person who is at ease and proud of what they do
-- An environment that feels lived-in and human — a real desk, a real plant, natural
-  textures — not a sterile, empty studio
+- An environment that feels lived-in and human — real surfaces and natural textures on
+  whatever the scenario put in the room — not a sterile, empty studio
 
 **Lean away from — each of these is a matter of degree, and an injected
 `Photographic lighting:` line may legitimately call for it:**
@@ -90,8 +90,8 @@ block, but a single conscious brand marker.
 **How to use the red accent:**
 - A small detail in the subject's attire: a red scarf, a red collar or neckline detail,
   a red watch strap, a subtle red pocket detail — **one element only**
-- A brand-coloured prop: a red notebook cover, a red coffee cup, a red folder — only if
-  it fits the scene naturally
+- A brand-coloured object: a small red detail on something the scene already contains —
+  only if it sits there naturally
 - The accent should be small relative to the frame — it catches the eye without dominating
 
 **Rules:**
