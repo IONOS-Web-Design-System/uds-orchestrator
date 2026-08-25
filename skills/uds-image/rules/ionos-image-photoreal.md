@@ -113,10 +113,12 @@ mid-gesture and still read as composed and unhurried. home.pl sits a step lighte
 the bright end, not IONOS being mid-key.
 
 **On "warm":** the environment may be materially warm — wood, textiles and warm
-neutrals in the surfaces and in whatever objects the scene already contains. The LIGHT stays cool-neutral to neutral per the Mood
-and lighting section above. Warm materials under neutral light is the IONOS combination;
-warm light is Strato's. These two statements used to read as a contradiction — they are
-not: `warm` describes what is in the frame, `neutral` describes what falls on it.
+neutrals in the surfaces and in whatever objects the scene already contains. The LIGHT
+DEFAULTS to cool-neutral to neutral per the Mood and lighting section above — a default,
+not a fixed value, and an injected `Photographic lighting:` line resets it. Warm materials
+under neutral light is the IONOS combination; warm light is Strato's. These two statements
+used to read as a contradiction — they are not: `warm` describes what is in the frame,
+`neutral` describes what falls on it.
 
 - background MUST be `"opaque"`; style `"photoreal"`.
 - Avoid: cartoon/illustration styling.
