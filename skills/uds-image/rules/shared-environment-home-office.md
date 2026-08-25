@@ -6,6 +6,10 @@
      shared-lighting.md; shot size, height, angle, lens and depth of field belong to the
      shared-camera-*.md files; the character belongs to the persona and the brief. A preset must
      never say whether people are present — that is the brief's decision, not the room's.
+     A room's own light FIXTURES are place content, not lighting content: named as a physical
+     object wherever one is visually dominant in its reference (an articulated desk lamp, a floor
+     lamp), and named in none otherwise — the same rule `shared-environment-workspace.md` applies,
+     kept identical across both catalogs. Of these three, only home-office-01 has one.
      Authored from the published reference components on the `asset/reference` canvas of Figma
      file StkUOHcGRMDXOZWT0E2nft, one preset per reference in this order:
        home-office-01 = 498:31   home-office-02 = 498:36   home-office-03 = 498:33

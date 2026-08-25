@@ -6,17 +6,28 @@
      shared-lighting.md; shot size, height, angle, lens and depth of field belong to the
      shared-camera-*.md files; the character belongs to the persona and the brief. A preset must
      never say whether people are present — that is the brief's decision, not the room's.
+     A room's own light FIXTURES are place content, not lighting content: named as a physical
+     object wherever one is visually dominant in its reference (pendant fittings, an anglepoise
+     lamp, a floor lamp, a wall-mounted drum shade), and named in none otherwise. Applied
+     consistently across all six presets below — do not add or drop a fixture mention without
+     checking the reference actually has one dominating it.
      Authored from the published reference components on the `asset/reference` canvas of Figma
      file StkUOHcGRMDXOZWT0E2nft, one preset per reference in this order:
        workspace-01 = 498:35   workspace-02 = 498:32   workspace-03 = 498:29
        workspace-04 = 498:30   workspace-05 = 498:34   workspace-06 = 498:37
      Cite the component NAME, never only the node id: re-publishing a component changes its id
-     (these were 486:11..486:19 before a re-publish, and those ids are now invalid nodes), and the
-     ids do NOT run in name order — do not infer one from a neighbour's.
-     These are six genuinely DIFFERENT buildings, which is the whole point: before this catalog
-     existed every generated image resolved to the same default bright modern office with
-     shelving and plants. Do not flatten a preset toward that default, and do not add a seventh
-     that repeats a room already here. -->
+     (workspace-01..06 were 486:11, 486:12, 486:13, 486:14, 486:15, 486:19 before a re-publish —
+     NOT a contiguous range, and NOT the same as the now-invalid ids on the home-office file's
+     components — and those ids are now invalid nodes), and the ids do NOT run in name order: do
+     not infer one from a neighbour's.
+     These are FIVE distinct buildings across six rooms, not six: workspace-01
+     (converted-vaulted-hall) and workspace-06 (open-plan-deskscape) are the same building — same
+     pale ashlar stone-block coursing, same blond plank floor, same light-timber trestle desks —
+     photographed at nave-overhead distance versus desk-surface distance, which is the CAMERA
+     axis and out of scope for this text. Both presets stay: nave-level and desk-level read as
+     distinct rooms even within one building, and dropping either would cost real coverage. Do
+     not flatten a preset toward the old default bright modern office with shelving and plants,
+     and do not add a seventh preset that repeats a room already here. -->
 
 # Environment presets — workspace
 
@@ -30,10 +41,10 @@ an industrial conversion coworking floor, rough concrete-block piers and exposed
 a small meeting booth walled off behind an internal glass partition that layers reflections of the room over it, a plain pale board wall behind a bare timber table, dark joinery and a low counter along one side
 
 ## warehouse-glazing-lounge
-a converted warehouse breakout lounge with a whole wall of white-painted multi-pane steel glazing onto a red-brick facade a few metres away, column radiators along the sills, white walls and a white floor, a pale modular sofa, upholstered easy chairs and a round birch table on a green rug
+a converted warehouse breakout lounge with a whole wall of white-painted multi-pane steel glazing onto a red-brick facade a few metres away, column radiators along the sills, white walls and a white floor, a pale modular sofa, upholstered easy chairs and a round birch table on a green rug, a dark arched floor lamp standing beside the seating
 
 ## brick-and-plaster-loft
-a loft startup room of pale exposed brick scarred by a patch of stripped grey plaster, a black steel post, a white-framed internal partition and an arched timber door to one side, blue fabric sofas around a black glass table, a sticky-note-covered whiteboard on castors
+a loft startup room of pale exposed brick scarred by a patch of stripped grey plaster, a black steel post, a white-framed internal partition and an arched timber door to one side, blue fabric sofas around a black glass table, a sticky-note-covered whiteboard on castors, a white drum-shade lamp mounted on a wall arm
 
 ## open-plan-deskscape
 an open-plan bench floor of pale ashlar stone-block walls and blond plank flooring, rows of light birch trestle desks back to back carrying monitors and anglepoise lamps, black mesh chairs, dark lockers and a partition volume behind, desks cluttered with succulents, bottles and small trinkets
