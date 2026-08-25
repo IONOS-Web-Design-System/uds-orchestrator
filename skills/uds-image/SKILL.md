@@ -96,12 +96,13 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
   dark, or underexposed.** A **subtle film-like filter / colour grade** is welcome (a gentle warm
   or soft-pastel wash that ties the palette together). Let the COLOUR TEMPERATURE follow the scene
   and the brand's photoreal rules (do NOT hardcode a single default here). Vary the quality per scene, but keep the overall feel bright, natural, and inviting.
-- **Colour & mood via objects + bokeh.** Conceptualise the mood with **colourful props** — pick
-  one or two everyday objects native to the scene (a garment, a mug, flowers, a product) and give
-  one of them a single strong, saturated colour of your own choosing rather than a muted neutral —
-  paired with a **soft bokeh background**: bright out-of-focus light, blurred people/space behind.
-  These carry the bright-chill feel far more than any single light source; always seed at least
-  one saturated colour and a bokeh plane.
+- **Colour & mood via objects + bokeh.** Props are owned in full by `shared-scenario-props`,
+  which keys them on the scenario's place and person and states how they are coloured. Do not
+  name a prop here or in a brand rule; five copies of this instruction previously drifted apart
+  and one of them had no key at all, so it fired on every brief. What stays here is the OTHER
+  half: pair the props with a **soft bokeh background** — bright out-of-focus light, blurred
+  people/space behind. Together they carry the bright-chill feel far more than any single light
+  source; always seed a bokeh plane.
 - **Device-screen / focus-object shots.** Two cases (see `shared-image-type-device-focused`):
   - **Screen-based product is the focus** (the laptop/tablet/phone UI is the point). Priority
     order: **(1) fit it into a natural scenario / use moment first**, then **(2) show the full
@@ -138,6 +139,8 @@ regenerate with the new `market`/showroom and tell them the result will differ.
 - `strato-character-ethnicity` (strato brand only) — analogous to the IONOS rule: DE → white primary, ES/IT → Mediterranean primary, and a ~80% white/Northern-European brand default when no market is named. Fully replaces `shared-character-diversity` for strato.
 - `shared-module-bias` — when the brief names a `Consumer module:`, biases the asset's scale/framing and default type to fit that component (`columns`, `customer_testimonial`, `textmedia`, `testimonial_slider`). Fills defaults only — the brief's explicit fields win.
 - `shared-image-type-device-focused` / `shared-image-type-portrait` / `shared-image-type-avatar` / `shared-image-type-scene` — type-specific direction.
+- `shared-scenario-props` — the ONLY place a prop object is named: one lookup on the scenario's `place` (a closed enum, matched exactly) and one on its `who` (free prose, matched semantically), props taken from the intersection. Applies to every brand and every type.
+- `shared-natural-moment` — the candid-moment rule: a frame caught mid-action rather than a held pose. Applies to every brand.
 - `<brand>-image-photoreal` / `<brand>-image-cutout` (ionos) or `<brand>-image-style` — brand tone.
 - Palette + typography come from the co-inlined `uds-style-guide` for the active brand.
 
