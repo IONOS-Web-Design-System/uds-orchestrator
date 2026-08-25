@@ -12,10 +12,16 @@ that line names a dusk, evening or otherwise low-key setup, follow it rather tha
 it back: `calm` and `confident` are carried by the subject's bearing and by the grade, not by
 the exposure, so IONOS after dark is a composed, unhurried room rather than a bright one.
 
-- **Natural, scene-appropriate light:** choose the light source that actually belongs
-  in the environment. Morning office → cool-neutral diffused daylight. Café midday →
-  bright neutral window light. Workshop → soft neutral industrial light. Do not
-  default to warm golden hour in every scene; vary the time of day and light quality.
+- **Natural, scene-appropriate light:** choose the light source that actually belongs in the
+  environment. Which setup suits which scenario is NOT decided here — `shared-lighting-by-scenario.md`
+  owns the `(place, timeOfDay)` → eligible-preset mapping, and an injected `Photographic lighting:`
+  line is that mapping's answer. This bullet previously restated three of those cells inline
+  ("Morning office → …", "Café midday → …", "Workshop → …"), which put two mappings in
+  competition for the same decision; the scenario table is the single authority.
+  Where NO lighting line is injected, vary the hour and the light quality across a set rather than
+  settling into one habitual look — that is a caution against REPETITION, not a ban on any
+  particular hour. Golden hour, dusk and hard sun are all available to IONOS when the scenario
+  chooses them.
 - **Neutral to slightly warm range:** a natural daylight temperature (5000–6500 K,
   cool-neutral to neutral) is the default. Warmer light is fine when the scene
   genuinely calls for it (candle-lit restaurant, cosy evening workspace) but should
@@ -125,3 +131,38 @@ used to read as a contradiction — they are not: `warm` describes what is in th
 - Lean away from, without refusing: a grade pushed all the way into cold blue, and a heavy
   unlit scene chosen for its own sake. Both are matters of degree, and a scenario may ask for
   either legitimately — an injected `Photographic lighting:` line decides, not this line.
+
+---
+
+<!-- ADDED after a live measurement (Task 7b, 36 real runs): IONOS was the ONLY brand with no
+     negative-prompt baseline, and 10 of its 20 runs shipped a model-invented negativePrompt that
+     contradicted the injected `Photographic lighting:` line — 7 of them a hard `grade: warm`
+     clash. strato and homepl, which DO supply a baseline, had ZERO such clashes across 16 runs.
+     Root cause: with nothing to reproduce, the craft model writes its own list and lifts the
+     nearest-looking prohibition out of the prose above — it was taking "do not default to warm
+     golden hour", an ANTI-REPETITION caution, and flattening it into an unconditional veto in the
+     harder channel. That is the Task 5b defect class (tonal vetoes in a negative prompt) recreated
+     one hop downstream: Task 5b cleaned the baselines that EXIST; nothing constrained the baseline
+     a model invents when a brand supplies none. The fix is to supply one. Do not delete this
+     section to "let the model decide" — that is the measured failure mode. -->
+
+## Negative prompt baseline (always append for IONOS)
+
+**No tonal term belongs in this list.** Colour grade, key, contrast, shadow quality, light
+direction and mood are owned by the injected `Photographic lighting:` line — see
+`shared-image-principles`, which already says a negative prompt must carry "only true
+rendering artifacts" and "never … lighting or palette instructions". Before adding an entry,
+check `shared-lighting.md`: if ANY preset asserts that attribute, it is the line's to decide,
+not this list's. In particular do NOT add `warm golden hour`, `golden hour`, `warm lighting`,
+`moody`, `dark`, `harsh shadows` or `dramatic lighting`: five presets assert a warm grade and
+four assert a low key or defined shadow edges, so every one of those entries would fight a
+preset the scenario is entitled to pick.
+
+`"text, watermark, logo, UI chrome, distorted hands, extra fingers, low quality,
+cartoon or illustration styling, crossed arms, closed body language, pure side profile,
+corporate stiff pose, forced grin, blank neutral expression,
+tousled or casual-bun hair, hoodies, oversized tees, streetwear,
+literal UI screenshots, readable interface text,
+person presenting device to lens, lone idle device with no person,
+graphics or UI rendered on the back of a device, content on tablet back,
+screen graphics on device lid, colourful pattern on laptop lid"`
