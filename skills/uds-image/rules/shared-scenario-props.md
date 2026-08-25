@@ -77,8 +77,21 @@ table.
 ## Props by who — a SEMANTIC match on the scenario's `who`
 
 `who` is free prose, so **read it and judge which row it resembles.** The labels are exemplars,
-not an exhaustive list of trades. If the prose resembles no row — or the brief names no `who` at
-all — take nothing from this table; do NOT fall back to the first row or to a favourite.
+not an exhaustive list of trades.
+
+<!-- NO-MATCH IS NOT HONOURED BY THE MODEL. Measured 2026-08-25, craftProfile=full, `who` both
+     ABSENT and set to an unrecognisable string: the model took the same who-row anyway in 4 of 4
+     runs each time, reproducing that row's object verbatim. Rewording the instruction below from a
+     prohibition into a positive "bring nothing" did NOT change it — still 4 of 4. So this is the
+     third place in this pipeline where prose instruction fails to bind (see the environment line at
+     ~5% retention, and a brand with no negative baseline getting one invented). The fix has to be
+     STRUCTURAL, not editorial: the strongest candidate is to stop inlining this table at all when
+     `who` is absent, since a table that is not in the prompt cannot be copied from. Do not "fix"
+     this by strengthening the wording again — that has been tried and measured. -->
+
+**When the prose resembles no row, or the brief names no `who` at all: the person brings NOTHING.**
+The place table above has already furnished the surface, and in that case its objects are the whole
+frame. A surface carrying only the place's own objects is the right answer, not an incomplete one.
 
 | If `who` reads as… | What the person brings |
 |---|---|
