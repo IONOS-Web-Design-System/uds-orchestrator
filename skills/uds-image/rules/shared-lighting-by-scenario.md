@@ -7,6 +7,17 @@
      the floor cannot lose one slug for one commit while a replacement is considered, so pinning
      every cell to exactly 3 turns ordinary curation into forced atomic edits. Do not pad a cell
      just to clear the floor — a badly-fitting fourth option is worse than the churn it avoids.
+     A cell must also stay RESOLVABLE for a room that receives no daylight at all. Stage 2 drops
+     every preset whose `Daylight:` requirement the selected environment preset cannot provide, so
+     an all-daylight cell leaves a sealed room — today only `poster-wall-desk-nook` in
+     shared-environment-home-office.md — nothing to draw, and it falls to image-svc's fallback
+     ladder on ordinary input. Falling back is correct behaviour but a poor default. Every
+     home-office DAY cell therefore carries at least TWO `Daylight: none` presets from
+     warm-ambient-interior / soft-studio-frontal / directional-warm-falloff. TWO, because one
+     would pin that room to a single preset for the whole cell, which is the fixed treatment this
+     axis exists to remove; and only two, so the padding stays defensible rather than exhaustive.
+     These read as hour-agnostic on purpose: a domestic room carried by its own fittings looks the
+     same at 10am as at 4pm, which is precisely what the desk-nook reference shows.
      A slug whose `Daylight:` requirement NO room of a catalogued place can provide is a DEAD
      entry: image-svc's stage 2 drops it for every room, so it counts toward the three-slug floor
      while contributing nothing and the cell is effectively shorter than it looks.
@@ -31,9 +42,9 @@
 - night: directional-warm-falloff, warm-ambient-interior, high-key-diffused
 
 ## home-office
-- morning: bright-window-side, rain-diffused-window, overcast-broad-key, high-key-diffused
-- midday: bright-window-side, high-key-diffused, blinds-shaft-light
-- afternoon: golden-hour-raking, blinds-shaft-light, warm-ambient-interior, bright-window-side
+- morning: bright-window-side, rain-diffused-window, overcast-broad-key, high-key-diffused, warm-ambient-interior, soft-studio-frontal
+- midday: bright-window-side, high-key-diffused, blinds-shaft-light, warm-ambient-interior, soft-studio-frontal
+- afternoon: golden-hour-raking, blinds-shaft-light, warm-ambient-interior, bright-window-side, directional-warm-falloff
 - evening: blue-hour-practicals, warm-ambient-interior, directional-warm-falloff
 - night: warm-ambient-interior, directional-warm-falloff, hazy-backlit-bloom
 
