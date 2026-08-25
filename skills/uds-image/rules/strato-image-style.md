@@ -121,12 +121,39 @@ the person in it is.
 
 ---
 
+<!-- NEGATIVE BASELINE, TONAL ENTRIES REMOVED (Task 5b). A negative term is a HARDER veto than
+     prose, so while Task 5 turned this file's absolute tonal bans into scenario-scoped biases,
+     the tonal entries still in this list kept vetoing the lighting catalog at the model level.
+     Removed: the harsh-directional-shadow entry (it cancelled hard-sun-defined-shadows' "crisp
+     defined shadow edges" and blinds-shaft-light's "high contrast") and the dark-moody-lighting
+     entry (it cancelled blue-hour-practicals and hazy-backlit-bloom's "lifted blacks"). Narrowed:
+     the cold-sterile entry lost "cold" (four presets grade cool) and the all-grey-muted entry lost
+     "muted" (rain-diffused-window asserts "soft muted grade" verbatim).
+     The removed phrases are deliberately NOT restated in the prose below: this whole file is
+     inlined into the craft prompt, and a banned phrase quoted as an example is a phrase the craft
+     model can copy straight back into negativePrompt.
+     Guarded by image-svc/src/craft/__tests__/negativeBaseline.test.ts, which derives BOTH sides
+     from these files, so a newly-authored preset or a newly-added negative term is caught. -->
+
 ## Negative prompt baseline (always append for Strato)
+
+**No tonal term belongs in this list.** Colour grade, key, contrast, shadow quality, light
+direction and mood are owned by the injected `Photographic lighting:` line — see
+`shared-image-principles`, which already says a negative prompt must carry "only true
+rendering artifacts" and "never … lighting or palette instructions". Before adding an entry,
+check `shared-lighting.md`: if ANY preset asserts that attribute, it is the line's to decide,
+not this list's. Two entries pass that check and are kept deliberately:
+
+- `sterile lighting` — "sterile" is a fluorescent, institutional, lab-lit LOOK, not a colour
+  temperature. No preset asks for it; `soft-studio-frontal` comes closest and says "clean
+  friendly feel". It is a distinct failure mode, not a grade ban.
+- `all-grey palette` — greyness is PALETTE, not tone, and the palette section above still
+  keeps the orange family present in every frame.
 
 `"text, watermark, logo, UI chrome, distorted hands, extra fingers, low quality,
 crossed arms, closed body language, pure side profile, busy small-patterned clothing,
-harsh directional shadows, dark moody lighting, all-grey muted palette, cold sterile
-lighting, corporate stiff pose, forced grin, blank neutral expression,
-person presenting device to lens, lone idle device with no person,
+all-grey palette, sterile lighting, corporate stiff pose, forced grin,
+blank neutral expression, person presenting device to lens,
+lone idle device with no person,
 graphics or UI rendered on the back of a device, content on tablet back,
 screen graphics on device lid, colourful pattern on laptop lid"`

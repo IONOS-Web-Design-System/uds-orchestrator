@@ -147,12 +147,44 @@ warm cream). **No** exposed brick, no neon signs, no highly specific interior de
 
 ---
 
+<!-- NEGATIVE BASELINE, TONAL ENTRIES REMOVED (Task 5b). A negative term is a HARDER veto than
+     prose, so while Task 5 turned this file's absolute tonal bans into scenario-scoped biases,
+     the tonal entries still in this list kept vetoing the lighting catalog at the model level.
+     Removed four: the two warm-grade entries (they cancelled golden-hour-raking's "amber grade",
+     warm-ambient-interior's "warm grade" and directional-warm-falloff's "warm grey tones"), the
+     moody-dramatic entry (it cancelled blinds-shaft-light's "high contrast … deliberate cinematic
+     feel") and the harsh-directional-shadow entry (it cancelled hard-sun-defined-shadows' "crisp
+     defined shadow edges"). Narrowed: the cold-clinical entry lost "cold" (four presets grade
+     cool) and the all-grey-muted entry lost "muted" (rain-diffused-window asserts "soft muted
+     grade" verbatim).
+     The removed phrases are deliberately NOT restated in the prose below: this whole file is
+     inlined into the craft prompt, and a banned phrase quoted as an example is a phrase the craft
+     model can copy straight back into negativePrompt.
+     Guarded by image-svc/src/craft/__tests__/negativeBaseline.test.ts, which derives BOTH sides
+     from these files, so a newly-authored preset or a newly-added negative term is caught. -->
+
 ## Negative prompt baseline (always append for home.pl)
+
+**No tonal term belongs in this list.** Colour grade, key, contrast, shadow quality, light
+direction and mood are owned by the injected `Photographic lighting:` line — see
+`shared-image-principles`, which already says a negative prompt must carry "only true
+rendering artifacts" and "never … lighting or palette instructions". Before adding an entry,
+check `shared-lighting.md`: if ANY preset asserts that attribute, it is the line's to decide,
+not this list's. Three entries pass that check and are kept deliberately:
+
+- `neon lighting` — no preset produces neon. The nearest, `blue-hour-practicals`, asks for
+  "warm interior practicals", i.e. domestic lamps; nothing in the catalog names a coloured
+  gel, a sign or a saturated artificial source. It also matches the Environment section
+  above, which already excludes neon signs — an environment veto, not a tonal one.
+- `clinical light` — "clinical" is a fluorescent, institutional, lab-lit LOOK, not a colour
+  temperature. No preset asks for it; `high-key-diffused`'s "near-white surround" comes
+  closest and says "light energetic feel". A distinct failure mode, not a grade ban.
+- `all-grey palette` — greyness is PALETTE, not tone, and the red-accent rule above still
+  keeps one warm accent in every frame.
 
 `"text, watermark, logo, UI chrome, distorted hands, extra fingers, low quality,
 trendy streetwear, hoodies, athleisure, logo-branded clothing, highly specific device
-models, neon lighting, warm amber colour grade, golden-hour mood, moody dramatic
-lighting, harsh directional shadows, cold clinical light, multiple red elements,
+models, neon lighting, clinical light, multiple red elements,
 red background, red full garment, corporate stiff pose, forced grin,
 graphics or UI rendered on the back of a device, content on tablet back,
-all-grey muted palette, dated interior design, cluttered busy background"`
+all-grey palette, dated interior design, cluttered busy background"`
