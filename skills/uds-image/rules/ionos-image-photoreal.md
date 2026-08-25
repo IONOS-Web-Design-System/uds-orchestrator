@@ -2,9 +2,15 @@
 
 ## Mood and lighting
 
-IONOS photography feels approachable, calm, and well-lit — not dark, moody, or
-dramatically directional. The lighting should feel natural and varied, harmonised
-with the specific setting rather than defaulting to the same "golden afternoon" look.
+IONOS photography feels approachable, calm, and well-lit. The lighting should feel natural
+and varied, harmonised with the specific setting rather than defaulting to the same
+"golden afternoon" look.
+
+Where the scenario leaves the choice open, prefer a well-lit frame on a cool-neutral grade.
+An injected `Photographic lighting:` line outranks this — see `shared-image-principles`. When
+that line names a dusk, evening or otherwise low-key setup, follow it rather than brightening
+it back: `calm` and `confident` are carried by the subject's bearing and by the grade, not by
+the exposure, so IONOS after dark is a composed, unhurried room rather than a bright one.
 
 - **Natural, scene-appropriate light:** choose the light source that actually belongs
   in the environment. Morning office → cool-neutral diffused daylight. Café midday →
@@ -23,7 +29,8 @@ with the specific setting rather than defaulting to the same "golden afternoon" 
   depth and separates the subject from the background. Pure frontal/flat lighting
   is acceptable for screen-focused shots but generally avoid it for people.
 
-Encode lighting as the specific source present in the scene. All of these are valid:
+Where no `Photographic lighting:` line is present, encode lighting as the specific source
+present in the scene. All of these are valid:
 - ✅ `"soft neutral daylight from large windows with visible light-to-shadow contrast"`
 - ✅ `"cool-neutral morning light, clean and bright, casting crisp soft shadows"`
 - ✅ `"bright direct sunshine streaming through the window, high contrast and natural"`
@@ -32,7 +39,7 @@ Encode lighting as the specific source present in the scene. All of these are va
 - ✅ `"warm ambient pendant light with strong contrast between lit surfaces and shadow"`
 - ❌ `"warm golden afternoon light"` applied as a blanket default to every scene
 - ❌ `"flat, even, shadowless studio lighting"` — no depth or visual interest
-- ❌ `"dramatic moody dark shadows"` — too dark and corporate
+- ❌ `"dramatic moody dark shadows"` written in as a default when nothing in the scene asks for it
 
 ## Color palette
 
@@ -95,8 +102,8 @@ so hold this middle deliberately rather than drifting toward either edge:
 | grade | cool-neutral to neutral | warm, subtle film-like | neutral-white, high-key |
 
 What separates IONOS is its **grade and its energy, not its exposure.** IONOS is a bright,
-well-lit brand — `positive` requires that, and a dim frame reads as neither positive nor
-confident. Do not darken an IONOS scene to distance it from home.pl; distinguish it by
+well-lit brand wherever the scenario leaves that open — `positive` reads best that way — so
+do not darken an IONOS scene to distance it from home.pl; distinguish it by
 keeping the grade cool-neutral rather than high-key white. **Do NOT distinguish it by
 freezing the subject** — the candid-moment rule in `shared-natural-moment` applies to IONOS
 exactly as it does to every other brand, and a static "stand still and smile" frame is as
@@ -111,4 +118,7 @@ warm light is Strato's. These two statements used to read as a contradiction —
 not: `warm` describes what is in the frame, `neutral` describes what falls on it.
 
 - background MUST be `"opaque"`; style `"photoreal"`.
-- Avoid: cartoon/illustration styling, cold/blue-tinted overall colour grade, dark moody scenes.
+- Avoid: cartoon/illustration styling.
+- Lean away from, without refusing: a grade pushed all the way into cold blue, and a heavy
+  unlit scene chosen for its own sake. Both are matters of degree, and a scenario may ask for
+  either legitimately — an injected `Photographic lighting:` line decides, not this line.

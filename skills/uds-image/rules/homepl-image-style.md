@@ -33,25 +33,29 @@ long run — the imagery must reflect that stability.
 - **Hairstyles:** natural, well-groomed, classic styles. No overly specific trend-cuts
   (fades, mullets, extreme asymmetrical). A look that reads the same in 2024 and 2027.
 
-### 2. Warmth over Tech — warmth through the subject, not the light
+### 2. Warmth over Tech — warmth through the subject first
 
 home.pl is the "Warm SMB" brand — human, approachable, not cold or corporate. Its warmth
-lives in the **subject's expression, attire, and composition** — not in the lighting
-colour. Where Strato's warmth comes from the light itself (amber, golden, cosy), home.pl
-keeps the light neutral and lets the person carry the warmth.
+lives FIRST in the **subject's expression, attire, and composition** rather than in the
+colour of the light: where Strato reaches for the light itself, home.pl reaches for the
+person. That is how the two differ even when the scenario hands them the same lamp.
 
-**home.pl is the BRIGHTEST and CLEAREST of the brands.** Against IONOS — calm, composed,
-mid-key business daylight — home.pl reads a step lighter and cleaner: more white in the
-frame, more air around the subject, less visual weight overall. Against Strato it is
-markedly cooler and brighter. If a home.pl image could be mistaken for an IONOS image,
-it is not bright enough.
+**Calm, positive, confident — the IONOS register, read brighter and clearer.** Against
+IONOS's cool-neutral mid-key daylight, home.pl sits a step lighter: more white in the frame,
+more air around the subject, less visual weight overall. Against Strato it is cooler. Where
+the scenario leaves the choice open, prefer the high-key end — the brightest, clearest,
+airiest reading the scene will bear. That preference is what separates home.pl from IONOS,
+and it IS a preference: an evening or lamplit scenario is still home.pl, carried by the
+subject's ease and by the neutral-white grade rather than by the exposure.
 
-**Lighting — bright, clean and clear, with gentle direction:**
-- Abundant soft daylight, neutral-white — no golden-hour warmth, no amber grade
-- High-key overall: pale walls, generous white and light tones, an open airy feel
-- One clear but SOFT light direction, with gentle shadow falloff that still models the
-  face. Clean and even in character — never harsh, never dramatic, and never flat or
-  shadowless, which reads as cheap stock rather than clean
+**Lighting — bright, clean and clear, with gentle direction. Preferences over whatever an
+injected `Photographic lighting:` line leaves open, not conditions on it:**
+- Abundant soft daylight on a neutral-white grade; golden-hour warmth and an amber grade are
+  the weaker reading here, not a forbidden one
+- Pale walls, generous white and light tones, an open airy feel
+- One clear but SOFT light direction, with gentle shadow falloff that still models the face.
+  Harsh and dramatic sit at the far end of that preference. Flat and shadowless are excluded
+  outright — but by `shared-image-principles`, which excludes them for every brand
 - Professional lighting that does not date the image
 
 **Warmth is delivered by:**
@@ -61,17 +65,21 @@ it is not bright enough.
 - An environment that feels lived-in and human — a real desk, a real plant, natural
   textures — not a sterile, empty studio
 
-**Never use:**
-- Warm colour filters, golden/amber light grades, or "cosy cafe" orange-warm mood
-- Dramatic directional lighting, hard shadows, or moody underexposure
-- Dim, heavy or visually crowded frames — they read as Strato, not home.pl
-- Cool-toned clinical light (reserved for tech/server contexts)
+**Lean away from — each of these is a matter of degree, and an injected
+`Photographic lighting:` line may legitimately call for it:**
+- A warm filter, a golden/amber grade or a "cosy cafe" orange-warm mood as the DEFAULT reading
+  of a scene that did not ask for one
+- Drama for its own sake: hard shadow chosen as a look rather than because the hour has it
+- Visual crowding and heaviness that come from a busy frame — this one is NOT about exposure,
+  so it stays firm: a crowded frame reads as Strato rather than home.pl at any brightness
+- Cool-toned clinical light outside tech/server contexts
 
 > **Axis precedence.** An injected `Photographic lighting:` line outranks this section for
 > direction, quality, contrast and grade — see `shared-image-principles`. This section then
-> governs only what that line leaves open: keep the result bright, high-key and clean
-> within whatever lighting character was chosen. Do not restate a lighting direction here
-> when such a line is present.
+> governs only what that line leaves open. Where the line and these preferences disagree — a
+> dusk or practicals key against an airy high-key frame — the LINE wins and the brightness
+> preference stands down: do not brighten the scene back, and do not restate a lighting
+> direction of your own.
 
 ### 3. Red Accent as Brand Marker — one element, always subtle
 
@@ -133,7 +141,7 @@ warm cream). **No** exposed brick, no neon signs, no highly specific interior de
 
 ## Photoreal / cutout switch
 
-- **Photoreal:** opaque background, realistic materials, neutral-warm even lighting.
+- **Photoreal:** opaque background, realistic materials, genuine depth of field.
 - **Cutout:** single clear subject on a neutral pale background (soft grey or off-white).
   No scene context, matte-clean silhouette.
 

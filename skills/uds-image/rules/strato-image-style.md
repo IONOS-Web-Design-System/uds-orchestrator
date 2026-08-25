@@ -21,8 +21,10 @@ is Strato-specific: palette, brand character, clothing, and environment tone.
 
 **Palette usage rule:** seed at least **two** of these hex anchors visibly in every scene —
 one warm (orange family) and one neutral/cool (blue family or white). The orange family
-is always present; its weight determines brand warmth. Never use all-grey or all-neutral
-scenes — they read corporate and cold, the opposite of Strato's personality.
+is always present; its weight determines brand warmth. The palette is a FLAVOUR, not the
+brand identity: it says which colours may appear, never which objects carry them. An
+all-grey, all-neutral scene reads corporate and cold and is the weaker choice for Strato —
+but that is a preference on the palette axis, never a veto over the light the scenario chose.
 
 ---
 
@@ -87,23 +89,26 @@ orange fruit bowl. These carry brand warmth far more reliably than lighting alon
 indoor environments. Warm-toned walls or wood surfaces preferred. Backgrounds are
 softly blurred but identifiable. Never an empty studio backdrop.
 
-**Lighting:** bright, diffused, natural. Generous daylight through large windows. No
-harsh directional shadows across the face. A subtle warm film-like grade is welcome.
-Cool/clinical light is acceptable only for data-centre or server subjects, and even then
-warmed with an amber practical accent.
+**Lighting:** Where the scenario leaves the choice open, prefer a bright, diffused, sunlit
+frame — generous daylight, a subtle warm film-like grade, and a face kept readable rather
+than cut across by shadow. Cool/clinical light is the weaker choice for Strato outside
+data-centre and server subjects, where it belongs and is usually worth an amber practical.
 
-**Warm must not cost brightness — this is the failure mode to avoid.** Measured: Strato
-frames came out ~25 luminance points DARKER than IONOS, because "warm grade" plus
-warm-toned walls plus a saturated warm prop compound into a dim, cosy interior. Cosy is
-not the brand; young and positive are. So keep the frame **bright first and warm second**:
-the warmth belongs to the props, the wood and the skin tones, while the windows, walls and
-overall exposure stay light and open. A Strato image should read as sunlit, not lamplit —
-airy and energetic, never a dim evening room.
+**Warm COMPOUNDS, so watch it.** Measured: Strato frames came out ~25 luminance points
+DARKER than IONOS, because a warm grade plus warm-toned walls plus a saturated warm object
+compound into a dim, cosy interior nobody actually chose. Cosy is not the brand; young and
+positive are. So where the brightness is yours to set, spend the warmth on the objects, the
+wood and the skin tones, and let the windows, walls and overall exposure stay light and open.
+
+That is a bias against the compounding, NOT a floor under the exposure. An evening or dusk
+scenario is a legitimate Strato scene: `young` and `positive` live in the person, the palette
+and the energy of the moment, not in the luminance — a lamplit 9pm desk is Strato as long as
+the person in it is.
 
 > **Axis precedence.** An injected `Photographic lighting:` line outranks this section for
-> direction, quality, contrast and grade — see `shared-image-principles`. Keep the brightness
-> and warm-prop guidance above within whatever lighting character that line chose; do not
-> restate a lighting direction when such a line is present.
+> direction, quality, contrast and grade — see `shared-image-principles`. When that line names
+> a darker or warmer setup than this section would have chosen, the LINE wins: do not brighten
+> it back, and do not restate a lighting direction of your own.
 
 ---
 
