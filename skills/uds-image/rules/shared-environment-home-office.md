@@ -10,6 +10,15 @@
      object wherever one is visually dominant in its reference (an articulated desk lamp, a floor
      lamp), and named in none otherwise — the same rule `shared-environment-workspace.md` applies,
      kept identical across both catalogs. Of these three, only home-office-01 has one.
+     A light fixture is the ONLY small object a preset may name, and the boundary is deliberate.
+     home-office-01 also named a hand prop, which is a different axis: `shared-scenario-props.md`
+     owns the objects within reach of the subject, keyed on `place` x `who`, so a room naming one
+     put that object into EVERY brief this room was drawn for regardless of who was in it or what
+     they were doing — the unkeyed-prop defect, arriving by way of the environment axis, and
+     invisible to the props guard because that guard scans the INJECTED rules and these catalogs
+     are read in code. It was also a measurement confounder: any distribution over generated prop
+     nouns would have been skewed by whichever runs happened to draw this room. Removed. Plants,
+     shelving and furniture STAY — those populate the mid-ground, which is this axis's job.
 
      DAYLIGHT-DIRECTION TAG. Each preset also declares, on the line beneath its text, the set of
      daylight DIRECTIONS its stated architecture PROVIDES — any of `side`, `behind`, `above`, or
@@ -44,7 +53,7 @@
 # Environment presets — home office
 
 ## poster-wall-desk-nook
-a small domestic desk pushed up against a plain dark grey-green wall with a large framed travel poster hung immediately behind it, a pale timber desktop carrying a slim monitor, an articulated desk lamp, a potted flowering plant and a ceramic mug, the wall so close that the room has almost no depth
+a small domestic desk pushed up against a plain dark grey-green wall with a large framed travel poster hung immediately behind it, a pale timber desktop carrying a slim monitor, an articulated desk lamp and a potted flowering plant, the wall so close that the room has almost no depth
 Daylight: none
 
 ## sofa-corner-lapwork
