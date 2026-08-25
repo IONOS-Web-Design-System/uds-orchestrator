@@ -94,21 +94,17 @@ light, slightly brighter than the ambient environment"`.
 ## Foreground context objects (essential)
 
 Objects placed close to the camera in soft focus are what make screen-moment images
-feel real rather than rendered. Choose 1–2 objects that tell the story of who owns
-this device and what they are doing:
+feel real rather than rendered. Choose 1–2 of them.
 
-| Context / setting | Foreground objects to include |
-|---|---|
-| Café / casual work | latte art coffee cup (held or on saucer), ceramic plate, a film camera, a small plant |
-| Home office | open notebook with handwritten notes, a pen, reading glasses set down beside the device |
-| E-commerce / creative | a product sample (candle, fabric swatch, ceramic piece), packaging material |
-| Meeting / office | printed documents, a water glass, a laptop bag strap visible at the edge |
-| Developer / tech | mechanical keyboard, a mug with steam, sticky notes on the desk surface |
+**Which objects: `shared-scenario-props`.** That rule is the only place prop objects are
+named, keyed on the scenario's `place` and on who the person is. The table that stood here mixed
+those two axes in ONE key column — three of its five keys were places and two were trades — so a
+brief that matched on trade could pull the objects of a place it was never set in. Do not
+restate its objects here.
 
-Use a depth-layer approach: place the chosen objects on the desk surface near the
-camera, softly out of focus, while the screen stays sharp behind them. Describe THIS
-scene's objects in your own words — do not copy a fixed sentence shape between
-generations.
+What belongs to THIS rule is the depth layer: place the chosen objects on the desk surface near
+the camera, softly out of focus, while the screen stays sharp behind them. Describe THIS scene's
+objects in your own words — do not copy a fixed sentence shape between generations.
 
 ## Background
 
@@ -141,8 +137,9 @@ Example (laptop in café):
 > `"open MacBook-style laptop on a café desk, lid at 105 degrees facing the camera, screen as
 > the focal point, shot from slightly above and to the right. screen displaying a soft-focus
 > business dashboard with chart elements and navigation, content indistinct but plausible.
-> a woman's hand resting on the keyboard, blurred figure in background. a latte art coffee
-> cup and a ceramic saucer with a spoon sit on the desk near the camera, softly out of
+> a woman's hand resting on the keyboard, blurred figure in background. [one object from this
+> scenario's place row and one from its person row, per `shared-scenario-props`] sit on the desk
+> near the camera, softly out of
 > focus against the sharp screen behind them. background of a warm softly blurred café
 > interior with large windows. warm natural window light with
 > subtle screen glow as secondary fill on the keyboard surface. product photography,

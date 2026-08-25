@@ -138,7 +138,7 @@ textured wall, lifestyle atmosphere.
 ```
 "eye-level shot from slightly to the [left/right], [person description] sitting on a
 [teal/warm grey/navy] sofa / standing at a home desk, wearing a [warm-colored garment],
-face partially visible, looking down at [laptop/phone/notebook — incidental],
+face partially visible, looking down at [laptop/phone — incidental],
 body occupying the [left/right] two-thirds of the frame,
 [large tropical plant] in soft focus behind the person's right/left shoulder,
 [warm sandy/ochre/cream wall] in soft focus on the open [right/left] side of the frame,
@@ -183,7 +183,8 @@ compositional region to land in.
 - The image should communicate a complete micro-story: what is happening, where, and why
 - Show the moment of engagement — card tapping terminal, fingers mid-scroll, team leaning
   toward a shared screen — not before or after
-- Context objects (coffee cups, notebooks, plants, shop decor) reinforce setting authenticity
+- Context objects reinforce setting authenticity — take them from `shared-scenario-props`,
+  which keys them on the scenario's place and person; never from a house default
 - If a screen is incidental here (device-in-context, screen NOT the focus), it may show
   abstract colour blocks or blurred content — never readable paragraphs, logos, or UI chrome.
   (When the **screen-based product itself is the focus**, the opposite applies — full screen
@@ -213,24 +214,15 @@ the **identity layer** — they answer "who is this person?" at a glance. They s
 very front of the desk surface and are rendered out of focus (bokeh) while the screen
 remains sharp behind them.
 
-Match objects to the user's professional context:
+**Which objects: `shared-scenario-props`.** That rule is the only place prop objects are
+named. It keys them on the scenario's `place` and on who the person is, and states how the two
+combine, which object to vary, and how to colour it. This table used to be keyed on trade alone
+— no place at all — so a hospitality object could reach an office brief and a house favourite
+could reach anything. Do not restate its objects here.
 
-| Profile | Foreground objects |
-|---|---|
-| Creative / photographer | Film camera with leather strap, coffee in ceramic cup |
-| Knowledge worker / blogger | Open notebook with handwritten notes, a pen |
-| E-commerce owner | Product samples (small candle, ceramic piece, fabric swatch), packaging |
-| Developer / tech | Mechanical keyboard, mug with steam, sticky notes |
-| Café / hospitality | Latte art cup on saucer, small plate with spoon |
-| Marketing / agency | Printed pages, a highlighted document, a phone |
-
-State the objects and their placement in your own words rather than reusing a fixed
-sentence shape: name 1–2 objects specific to this person's context, placed near the camera
-on the desk surface, softly out of focus while the screen stays sharp behind them.
-
-Choose objects with **distinct, saturated colors** — pick a color for each object that
-suits what it is and this specific scene, not a muted neutral. Warm mid-tones unify with
-the surface; a single saturated accent creates visual interest.
+What belongs to THIS rule is where they sit: at the very front of the desk surface, closest to
+the lens, softly out of focus while the screen stays sharp behind them. State the objects and
+their placement in your own words rather than reusing a fixed sentence shape.
 
 ## Screen visibility (device-in-scene shots)
 

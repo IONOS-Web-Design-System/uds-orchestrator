@@ -7,7 +7,7 @@ angle, background, and occupation context vary to create natural diversity acros
 An avatar can — and often should — relate to the character's occupation or scenario.
 The occupation context makes the avatar feel like a real person with a story, not a
 neutral headshot. A carpenter's avatar may show a workshop background; a developer's
-avatar may have a monitor behind them; a baker might hold a cup.
+avatar may have a monitor behind them; a baker might hold something from their trade.
 
 ## When to apply
 Brief signals: "avatar", "profile photo", "team photo", "headshot for card", "square
@@ -45,8 +45,9 @@ Do not default to the same distance every time. Rotate across distances to creat
 | Medium close-up | Head, neck, chest, shoulder | Approachable, personal |
 | Medium shot | Head to waist, hands may be visible | Contextual, grounded |
 
-At medium shot distance the person may hold a relevant prop (tool, notebook, coffee cup,
-device) to convey occupation — this adds story without losing face focus.
+At medium shot distance the person may hold one prop to convey occupation — this adds story
+without losing face focus. **Which object: `shared-scenario-props`**, whose person row is the
+one to prefer for a held prop. Do not name a prop here.
 
 ## Camera angle — vary per generation
 

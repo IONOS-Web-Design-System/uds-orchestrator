@@ -46,12 +46,10 @@ generation:
 - Mid-movement — turning toward camera, caught mid-step, hand just lifting an object
 
 **Accessories and props — make them work-specific and story-telling.** The prop should
-answer "what does this person do?" immediately:
-- A barista: espresso cup held in both hands, slight steam visible
-- A carpenter: holding a hand plane or chisel, or one hand loosely in pocket
-- A designer: holding a tablet or pen, sketchbook visible
-- A developer: mug of coffee in hand, or pen in hand
-- An entrepreneur: phone or notebook in hand, or weight shifted with arm at side
+answer "what does this person do?" immediately. **Which object: `shared-scenario-props`** — for
+this type prefer its person row, because a portrait prop is HELD (see the next paragraph) and a
+held object is the one that reads as identity. The trade-keyed list that stood here was a third
+copy of that rule and had drifted from the other two; do not restate its objects.
 
 **Critical — held, never rested.** For portrait type, always encode props as `"holding X"`
 or `"hand in pocket"` — NEVER `"resting one hand on [surface]"` or `"hand on workbench"`.
