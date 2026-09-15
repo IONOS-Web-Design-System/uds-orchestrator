@@ -12,20 +12,26 @@ that line names a dusk, evening or otherwise low-key setup, follow it rather tha
 it back: `calm` and `confident` are carried by the subject's bearing and by the grade, not by
 the exposure, so IONOS after dark is a composed, unhurried room rather than a bright one.
 
+<!-- Task 3a, two removals from the bullets below; author-facing, no instruction. (1) The first
+     bullet restated three cells of the per-scenario lighting mapping, quoting them — two mappings
+     competing for one decision. shared-lighting-by-scenario.md is the single authority. (2) The
+     permission sentence named three specific hours. Keep the PERMISSION: Task 7b measured the
+     caution above it collapsing into an unconditional tonal veto in the invented negativePrompt.
+     The naming was the redundant half — the Negative prompt baseline below still names the exact
+     terms, in the channel where that defect was measured. -->
+
 - **Natural, scene-appropriate light:** choose the light source that actually belongs in the
   environment. Which setup suits which scenario is NOT decided here — `shared-lighting-by-scenario.md`
   owns the `(place, timeOfDay)` → eligible-preset mapping, and an injected `Photographic lighting:`
-  line is that mapping's answer. This bullet previously restated three of those cells inline
-  ("Morning office → …", "Café midday → …", "Workshop → …"), which put two mappings in
-  competition for the same decision; the scenario table is the single authority.
+  line is that mapping's answer.
   Where NO lighting line is injected, vary the hour and the light quality across a set rather than
   settling into one habitual look — that is a caution against REPETITION, not a ban on any
-  particular hour. Golden hour, dusk and hard sun are all available to IONOS when the scenario
-  chooses them.
-- **Neutral to slightly warm range:** a natural daylight temperature (5000–6500 K,
-  cool-neutral to neutral) is the default. Warmer light is fine when the scene
-  genuinely calls for it (candle-lit restaurant, cosy evening workspace) but should
-  not be applied universally.
+  particular hour, colour temperature or key level. Every one of them is available to IONOS when
+  the scenario chooses it.
+- **Neutral to slightly warm range:** where NO `Photographic lighting:` line is injected, default
+  to a natural daylight temperature (5000–6500 K, cool-neutral to neutral). Warmer light is fine
+  when the scene genuinely calls for it, but is never the universal default. Where a line IS
+  injected it sets the temperature, and this default does not apply.
 - **Contrast for visual impact:** scenes should have clear tonal contrast between the
   subject and the background. Flat, uniformly grey or muted images lack punch —
   use the light source to create a visible difference between lit and shadow areas,
@@ -35,17 +41,14 @@ the exposure, so IONOS after dark is a composed, unhurried room rather than a br
   depth and separates the subject from the background. Pure frontal/flat lighting
   is acceptable for screen-focused shots but generally avoid it for people.
 
-Where no `Photographic lighting:` line is present, encode lighting as the specific source
-present in the scene. All of these are valid:
-- ✅ `"soft neutral daylight from large windows with visible light-to-shadow contrast"`
-- ✅ `"cool-neutral morning light, clean and bright, casting crisp soft shadows"`
-- ✅ `"bright direct sunshine streaming through the window, high contrast and natural"`
-- ✅ `"clear midday sunlight, straight-on, sharp and confident"`
-- ✅ `"diffused natural light from an overcast sky, soft but with visible light-to-shadow contrast"`
-- ✅ `"warm ambient pendant light with strong contrast between lit surfaces and shadow"`
-- ❌ `"warm golden afternoon light"` applied as a blanket default to every scene
-- ❌ `"flat, even, shadowless studio lighting"` — no depth or visual interest
-- ❌ `"dramatic moody dark shadows"` written in as a default when nothing in the scene asks for it
+<!-- Task 3a: the nine worked lighting examples that sat here are DELETED. The craft model read
+     them as vocabulary and reused the phrases — measured: a tonal term lifted from one of them
+     reached 5 of 12 runs whose injected lighting line said the opposite. The sentence below
+     carries the same instruction with no phrase to copy; check-minimal-conflict.mjs guards it. -->
+
+Where no `Photographic lighting:` line is present, encode lighting as the specific source that is
+actually in the scene, and say what light-to-shadow relationship that source produces. Two things
+to avoid: a look generic enough to fit any scene, and a flat one with no shadow at all.
 
 ## Color palette
 
@@ -94,7 +97,10 @@ apply within these IONOS-specific boundaries:
 ## Tone
 
 **Calm, business, positive, confident** — the four words that define an IONOS image.
-Professional, trustworthy, optimistic, modern. Real materials, realistic depth of field.
+Professional, trustworthy, optimistic, modern. Real materials, real surfaces, nothing rendered
+or synthetic-looking.<!-- Task 3a: a focus/subject-separation claim was deleted from the end of
+     this sentence. The injected `Photographic camera:` line owns that decision, and the phrase is
+     not restated here — quoting it would put it back in the prompt. -->
 Scenes show people confidently working with technology in welcoming, human environments.
 Never literal UI screenshots; use tasteful abstract colour-block representations on screens.
 
