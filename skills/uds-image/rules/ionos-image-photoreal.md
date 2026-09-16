@@ -6,11 +6,12 @@ IONOS photography feels approachable, calm, and well-lit. The lighting should fe
 and varied, harmonised with the specific setting rather than defaulting to the same
 "golden afternoon" look.
 
-Where the scenario leaves the choice open, prefer a well-lit frame on a cool-neutral grade.
-An injected `Photographic lighting:` line outranks this — see `shared-image-principles`. When
-that line names a dusk, evening or otherwise low-key setup, follow it rather than brightening
-it back: `calm` and `confident` are carried by the subject's bearing and by the grade, not by
-the exposure, so IONOS after dark is a composed, unhurried room rather than a bright one.
+Where NO `Photographic lighting:` line is injected, prefer a well-lit frame on a cool-neutral
+grade. Where a line IS injected it outranks this preference and sets the grade, and the
+preference does not apply — see `shared-image-principles`. When that line names a dusk, evening
+or otherwise low-key setup, follow it rather than brightening it back, and do not restate a
+grade of your own: `calm` and `confident` are carried by the subject's bearing, not by the
+exposure, so IONOS after dark is a composed, unhurried room rather than a bright one.
 
 <!-- Task 3a, two removals from the bullets below; author-facing, no instruction. (1) The first
      bullet restated three cells of the per-scenario lighting mapping, quoting them — two mappings

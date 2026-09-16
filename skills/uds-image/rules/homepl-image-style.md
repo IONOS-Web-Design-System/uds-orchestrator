@@ -42,11 +42,12 @@ person. That is how the two differ even when the scenario hands them the same la
 
 **Calm, positive, confident — the IONOS register, read brighter and clearer.** Against
 IONOS's cool-neutral mid-key daylight, home.pl sits a step lighter: more white in the frame,
-more air around the subject, less visual weight overall. Against Strato it is cooler. Where
-the scenario leaves the choice open, prefer the high-key end — the brightest, clearest,
-airiest reading the scene will bear. That preference is what separates home.pl from IONOS,
-and it IS a preference: an evening or lamplit scenario is still home.pl, carried by the
-subject's ease and by the neutral-white grade rather than by the exposure.
+more air around the subject, less visual weight overall. Against Strato it is cooler. Where NO
+`Photographic lighting:` line is injected, prefer the high-key end — the brightest, clearest,
+airiest reading the scene will bear; that preference is what separates home.pl from IONOS.
+Where a line IS injected it sets the brightness and the grade and this preference does not
+apply: an evening or lamplit scenario is still home.pl, carried by the subject's ease rather
+than by the exposure.
 
 **Lighting — bright, clean and clear, with gentle direction. Preferences over whatever an
 injected `Photographic lighting:` line leaves open, not conditions on it:**

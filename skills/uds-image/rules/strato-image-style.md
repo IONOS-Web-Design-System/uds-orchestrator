@@ -90,10 +90,12 @@ reliably than the grade does; nothing here adds an object to a scene that has no
 indoor environments. Warm-toned walls or wood surfaces preferred. Backgrounds are
 softly blurred but identifiable. Never an empty studio backdrop.
 
-**Lighting:** Where the scenario leaves the choice open, prefer a bright, diffused, sunlit
-frame — generous daylight, a subtle warm film-like grade, and a face kept readable rather
-than cut across by shadow. Cool/clinical light is the weaker choice for Strato outside
+**Lighting:** Where NO `Photographic lighting:` line is injected, prefer a bright, diffused,
+sunlit frame — generous daylight, a subtle warm film-like grade, and a face kept readable
+rather than cut across by shadow; cool/clinical light is the weaker choice there, outside
 data-centre and server subjects, where it belongs and is usually worth an amber practical.
+Where a line IS injected it sets the direction, quality, contrast and grade, this preference
+does not apply, and no lighting direction of your own is restated.
 
 **Warm COMPOUNDS, so watch it.** Measured: Strato frames came out ~25 luminance points
 DARKER than IONOS, because a warm grade plus warm-toned walls plus a saturated warm object

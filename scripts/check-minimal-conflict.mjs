@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /**
  * Guard — the rule files the `minimal` craft profile inlines must not carry the photographic
- * CONFLICT: no ✅/❌ photographic example list, and no per-scenario lighting mapping.
+ * CONFLICT: no ✅/❌ photographic example list, and no per-scenario lighting mapping. And each
+ * authored brand rule's grade/key bias must be GATED — its preference stated inside a
+ * "no injected `Photographic lighting:` line" condition, with the converse stated (CHECK D).
  *
  * WHY THIS SHAPE AND NOT "ZERO CAMERA/LIGHTING MARKERS". An earlier draft of the design spec asked
  * for zero markers. It was withdrawn before implementation after all 19 markers in
@@ -267,10 +269,11 @@ function checkB(name, body) {
 // brand rules have their own shape.
 // ─────────────────────────────────────────────────────────────────────────────
 const MUST_SURVIVE = [
-  { what: 'the brand bias sentence (grade + key, scenario-open)',
-    test: (b) => /Where the scenario leaves the choice open, prefer a well-lit frame on a cool-neutral grade\./.test(norm(b)) },
-  { what: 'the precedence instruction — an injected lighting line outranks the bias',
-    test: (b) => /An injected `Photographic lighting:` line outranks this/.test(norm(b)) },
+  // The brand bias sentence and its precedence instruction used to be asserted here, as two
+  // separate presence tests. CHECK D owns both now — it asserts the preference is still stated
+  // AND that it is stated inside its condition with the converse spelled out, which a presence
+  // test cannot distinguish from the ungated form. Two homes for one assertion is how a marker
+  // survived a deletion in this workstream; there is one home.
   { what: 'the anti-veto permission — the repetition caution is not a ban',
     test: (b) => /not a ban on any particular hour/.test(norm(b)) },
   { what: 'the audience section heading',
@@ -289,6 +292,104 @@ const MUST_SURVIVE = [
       && /No tonal term belongs in this list\./.test(norm(b))
       && /text, watermark, logo/.test(norm(b)) },
 ];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CHECK D — the brand bias sentence must be GATED, not merely present.
+//
+// THE FAULT IT NAMES. Each authored brand rule states one grade/key preference of the shape
+// "prefer <the brand's grade>". Stated UNCONDITIONALLY with a precedence caveat AFTER it, the
+// craft model reads the preference first and the caveat second, and the brand's own term reaches
+// the final prompt while the injected `Photographic lighting:` line says the opposite — measured
+// 4/24 and 2/24 over runs drawing a warm or low-key preset, and 1/11 a task earlier. Deleting the
+// vocabulary MENU (the ✅/❌ list, CHECK A) did not remove the TERM, and the caveat was already
+// in the sentence. So the assertion is STRUCTURAL: the preference must sit inside its condition.
+//
+// The gated shape is the one the daylight-default bullet in `ionos-image-photoreal.md` already
+// uses and which this check pins for all three authored brand files:
+//   1. an antecedent — "where NO `Photographic lighting:` line is injected" — in the SAME
+//      sentence and immediately BEFORE the "prefer …" clause, not in a later one;
+//   2. the CONVERSE stated explicitly — a line IS injected ⇒ it sets the axis and the
+//      preference does not apply — in the same paragraph, AFTER the preference.
+// Presence of the preference is asserted too, so this is also the R1 assertion: a green here
+// means the brand grade identity survived AND is scoped. It cannot be satisfied by deletion.
+//
+// MATCHED AGAINST THE DELIVERED BODY. `minimal` strips HTML comments at the loader, so an author
+// comment that happens to contain the gated wording must not satisfy this check — a rule's own
+// explanatory comment has satisfied an assertion about the rule in this workstream before.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** The body `minimal` actually delivers: HTML comments removed, fenced blocks opaque.
+ *  image-svc's `stripHtmlComments` is the authority; this is the narrow equivalent for files with
+ *  no fenced blocks, and a fence in a checked file returns 2 rather than risk reading it wrong. */
+function delivered(name, raw) {
+  if (/^\s*```/m.test(raw)) {
+    undetermined(`${name} contains a fenced code block — this guard's comment strip is only exact for fence-free files; port image-svc's stripHtmlComments before checking it`);
+  }
+  const out = raw.replace(/<!--[\s\S]*?-->/g, '');
+  if (/<!--|-->/.test(out)) undetermined(`${name} has an UNBALANCED HTML comment marker after stripping — the delivered body cannot be determined`);
+  return out;
+}
+
+/** Blank-line-delimited blocks of a body, whitespace-normalised. Anchoring to the paragraph (not
+ *  the document) is what stops an unrelated gated sentence elsewhere in the file from passing. */
+const blocks = (body) => body.split(/\n\s*\n/).map(norm).filter((t) => t.length > 0);
+
+/** "where NO `Photographic lighting:` line is injected" and its wording variants. */
+const GATE_ANTECEDENT = /where\s+no\s+`Photographic lighting:`\s+line\s+is\s+(?:injected|present)/gi;
+/** the converse: a line IS injected, and the preference stands down. BOTH halves required — "the
+ *  line wins" without "the preference does not apply" is the caveat shape this check rejects. */
+const CONVERSE_LINE = /where\s+(?:a|an|the)\s+(?:injected\s+)?line\s+is\s+injected/i;
+const CONVERSE_STANDS_DOWN = /(?:this|the)\s+(?:preference|default)\s+does\s+not\s+apply/i;
+
+/** One entry per AUTHORED brand rule. `prefer` is the brand's own grade identity — R1 material,
+ *  so it is asserted present, never asserted absent. */
+const GATED_BIAS = [
+  { file: 'ionos-image-photoreal.md', term: 'cool-neutral',
+    prefer: /prefer a well-lit frame on a cool-neutral grade/i },
+  { file: 'strato-image-style.md', term: 'sunlit',
+    prefer: /prefer a bright, diffused,? sunlit frame/i },
+  { file: 'homepl-image-style.md', term: 'high-key',
+    prefer: /prefer the high-key end/i },
+];
+
+/** How far before the "prefer …" clause the antecedent may sit, in normalised chars. The authored
+ *  antecedent is ~52 chars; 160 leaves room for a rewording without letting a condition from the
+ *  far end of the paragraph count as one. */
+const GATE_WINDOW = 160;
+
+function checkD(spec, raw) {
+  const v = [];
+  const body = delivered(spec.file, raw);
+  const para = blocks(body).find((t) => spec.prefer.test(t));
+  if (!para) {
+    // Distinguish "the preference was deleted" (an R1 violation) from "it moved into a comment"
+    // (also a violation, and a different one worth naming).
+    const inRaw = spec.prefer.test(norm(raw));
+    v.push(`${spec.file}: R1 — the '${spec.term}' bias PREFERENCE is GONE from the delivered body` +
+      (inRaw ? ' — it is present in the RAW file but only inside an HTML comment, which `minimal` strips' : ''));
+    return v;
+  }
+  const p = para.search(spec.prefer);
+
+  // 1. the antecedent, in the same sentence, immediately before the preference
+  let gated = false;
+  for (const m of para.matchAll(GATE_ANTECEDENT)) {
+    const end = m.index + m[0].length;
+    if (end > p) continue;                                   // after the preference: not a gate on it
+    if (p - end > GATE_WINDOW) continue;                     // too far to be this clause's condition
+    if (/\.\s/.test(para.slice(end, p))) continue;           // a sentence boundary in between
+    gated = true; break;
+  }
+  if (!gated) {
+    v.push(`${spec.file}: the '${spec.term}' bias preference is NOT GATED — no "where NO \`Photographic lighting:\` line is injected" antecedent in the same sentence before it :: …${para.slice(Math.max(0, p - 90), p + 60)}…`);
+  }
+  // 2. the converse, stated after it, in the same paragraph
+  const after = para.slice(p);
+  if (!CONVERSE_LINE.test(after) || !CONVERSE_STANDS_DOWN.test(after)) {
+    v.push(`${spec.file}: the '${spec.term}' bias preference states no CONVERSE after it — the paragraph must say a line IS injected ⇒ it sets the axis and the preference does not apply (line ${CONVERSE_LINE.test(after) ? 'ok' : 'MISSING'}, stands-down ${CONVERSE_STANDS_DOWN.test(after) ? 'ok' : 'MISSING'})`);
+  }
+  return v;
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Run
@@ -332,13 +433,30 @@ for (const m of MUST_SURVIVE) {
   if (!m.test(bodies.get(brandRule))) add([`${brandRule}: R1 — ${m.what} is GONE`]);
 }
 
-console.log(`\n✅/❌ list items read: ${emojiItemsSeen}; R1 assertions: ${MUST_SURVIVE.length}`);
+// CHECK D over every AUTHORED brand rule. Each must be among the files `minimal` inlines for its
+// own brand, or the spec is checking something the profile never delivers.
+let gatesChecked = 0;
+for (const spec of GATED_BIAS) {
+  if (!files.includes(spec.file)) {
+    undetermined(`${spec.file} is not among the files derived from minimalRules — CHECK D's spec and the profile have drifted apart`);
+  }
+  const raw = bodies.get(spec.file);
+  if (raw === undefined) undetermined(`${spec.file} is derived from minimalRules but absent on disk — CHECK D cannot evaluate its gate`);
+  gatesChecked++;
+  add(checkD(spec, raw));
+}
+// Standing rule: assert the extractor found something. 0 violations over 0 specs is not a pass.
+if (gatesChecked !== GATED_BIAS.length) {
+  undetermined(`CHECK D evaluated ${gatesChecked} of ${GATED_BIAS.length} brand gates`);
+}
+
+console.log(`\n✅/❌ list items read: ${emojiItemsSeen}; R1 assertions: ${MUST_SURVIVE.length}; brand bias gates checked: ${gatesChecked}`);
 if (violations.length) {
   console.error(`\nFAIL — ${violations.length} violation(s):`);
   for (const v of violations) console.error(`  ✗ ${v}`);
   process.exit(1);
 }
-console.log('PASS — no ✅/❌ photographic example list, no per-scenario lighting mapping, all brand content present.');
+console.log('PASS — no ✅/❌ photographic example list, no per-scenario lighting mapping, all brand content present,\n       and every brand bias preference is stated inside its no-injected-line condition with the converse spelled out.');
 
 /* ────────────────────────────────────────────────────────────────────────────
  * HANDOFF — this belongs in image-svc, not here.
