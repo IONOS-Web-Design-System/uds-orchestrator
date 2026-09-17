@@ -2,54 +2,41 @@
 
 ## Mood and lighting
 
-IONOS photography feels approachable, calm, and well-lit. The lighting should feel natural
-and varied, harmonised with the specific setting rather than defaulting to the same
-"golden afternoon" look.
+IONOS photography reads as an ordinary working room that somebody is actually in:
+approachable, composed, unhurried, nothing staged. That atmosphere is carried by who is in the
+frame and how they hold themselves, and by a room that looks lived in — never by the exposure.
+`calm` and `confident` describe a subject's bearing, not a brightness.
 
-Where NO `Photographic lighting:` line is injected, prefer a well-lit frame on a cool-neutral
-grade. Where a line IS injected it outranks this preference and sets the grade, and the
-preference does not apply — see `shared-image-principles`. When that line names a dusk, evening
-or otherwise low-key setup, follow it rather than brightening it back, and do not restate a
-grade of your own: `calm` and `confident` are carried by the subject's bearing, not by the
-exposure, so IONOS after dark is a composed, unhurried room rather than a bright one.
+This file states NO light direction, NO colour temperature and NO key level, and none should be
+inferred from the words above. `shared-lighting-by-scenario.md` decides which light suits which
+scenario, `shared-time-of-day.md` owns the hour, and an injected `Photographic lighting:` line is
+their answer on the runs that have one.
 
-<!-- Task 3a, two removals from the bullets below; author-facing, no instruction. (1) The first
-     bullet restated three cells of the per-scenario lighting mapping, quoting them — two mappings
-     competing for one decision. shared-lighting-by-scenario.md is the single authority. (2) The
-     permission sentence named three specific hours. Keep the PERMISSION: Task 7b measured the
-     caution above it collapsing into an unconditional tonal veto in the invented negativePrompt.
-     The naming was the redundant half — the Negative prompt baseline below still names the exact
-     terms, in the channel where that defect was measured. -->
+<!-- The four lighting bullets that stood here are GONE, and the two below are what is left of
+     the section: a colour-temperature default, a tonal-contrast requirement, a one-clear-direction
+     requirement and a repetition caution. None of them was atmosphere and none of them was
+     IONOS-specific. The temperature default and the contrast requirement were cut outright; the
+     direction requirement and the repetition caution moved to shared-time-of-day.md, which every
+     brand gets. An earlier round had already removed this section's restatement of the scenario
+     mapping for the same reason: two mappings competing for one decision. -->
 
-- **Natural, scene-appropriate light:** choose the light source that actually belongs in the
-  environment. Which setup suits which scenario is NOT decided here — `shared-lighting-by-scenario.md`
-  owns the `(place, timeOfDay)` → eligible-preset mapping, and an injected `Photographic lighting:`
-  line is that mapping's answer.
-  Where NO lighting line is injected, vary the hour and the light quality across a set rather than
-  settling into one habitual look — that is a caution against REPETITION, not a ban on any
-  particular hour, colour temperature or key level. Every one of them is available to IONOS when
-  the scenario chooses it.
-- **Neutral to slightly warm range:** where NO `Photographic lighting:` line is injected, default
-  to a natural daylight temperature (5000–6500 K, cool-neutral to neutral). Warmer light is fine
-  when the scene genuinely calls for it, but is never the universal default. Where a line IS
-  injected it sets the temperature, and this default does not apply.
-- **Contrast for visual impact:** scenes should have clear tonal contrast between the
-  subject and the background. Flat, uniformly grey or muted images lack punch —
-  use the light source to create a visible difference between lit and shadow areas,
-  even if shadows remain soft. A well-exposed subject against a slightly darker
-  background reads with more impact than a uniformly lit scene.
-- **Directionality:** light from one clear direction (window, sun, lamp) creates
-  depth and separates the subject from the background. Pure frontal/flat lighting
-  is acceptable for screen-focused shots but generally avoid it for people.
+- **An unstaged room.** Whatever the light turns out to be, the space around it should look
+  like somewhere work actually happens — surfaces in use, objects where a person left them.
+- **A composed subject, mid-action.** Settled bearing and a moment in progress are not in
+  tension; see `shared-natural-moment`.
 
-<!-- Task 3a: the nine worked lighting examples that sat here are DELETED. The craft model read
-     them as vocabulary and reused the phrases — measured: a tonal term lifted from one of them
-     reached 5 of 12 runs whose injected lighting line said the opposite. The sentence below
-     carries the same instruction with no phrase to copy; check-minimal-conflict.mjs guards it. -->
-
-Where no `Photographic lighting:` line is present, encode lighting as the specific source that is
-actually in the scene, and say what light-to-shadow relationship that source produces. Two things
-to avoid: a look generic enough to fit any scene, and a flat one with no shadow at all.
+<!-- Task 3a: the nine worked lighting examples that sat here were DELETED because the craft
+     model read them as vocabulary and reused the phrases — measured: a tonal term lifted from one
+     of them reached 5 of 12 runs whose injected lighting line said the opposite.
+     The replacement sentence ("encode lighting as the specific source that is actually in the
+     scene") has now MOVED, verbatim in substance, to shared-time-of-day.md, together with the
+     permission sentence and the do-not-brighten-it-back sentence. All three were brand-independent
+     and all three were being restated in strato-image-style.md and homepl-image-style.md as well.
+     This is load-bearing, not tidying: a 90-image study measured that removing these sentences
+     from this file with nowhere else to carry them made all five evening frames read as bright
+     daytime. The sentences that mattered were these, NOT the grade prescriptions that were cut
+     alongside them. shared-time-of-day.md is inlined at `minimal` and `full`, so the cover is
+     the same or better than it was here. check-brand-atmosphere.mjs asserts it is present. -->
 
 ## Color palette
 
@@ -112,32 +99,24 @@ so hold this middle deliberately rather than drifting toward either edge:
 |---|---|---|---|
 | subject | mid-30s to early-50s, established | early-20s to early-30s, individual | mid-30s to 50s, established |
 | bearing | composed, settled, in control | individual, expressive | composed, at ease |
-| light | bright neutral daylight | bright but warm, sunlit | brightest and clearest, a step above IONOS |
-| grade | cool-neutral to neutral | warm, subtle film-like | neutral-white, high-key |
+| room | lived-in and ordinary, in use | lived-in and individual | uncluttered, more air around the subject |
 
-What separates IONOS is its **grade and its energy, not its exposure.** IONOS is a bright,
-well-lit brand wherever the scenario leaves that open — `positive` reads best that way — so
-do not darken an IONOS scene to distance it from home.pl; distinguish it by
-keeping the grade cool-neutral rather than high-key white. **Do NOT distinguish it by
-freezing the subject** — the candid-moment rule in `shared-natural-moment` applies to IONOS
-exactly as it does to every other brand, and a static "stand still and smile" frame is as
-wrong here as anywhere. `confident` describes bearing, not stillness: an IONOS subject can be
-mid-gesture and still read as composed and unhurried. home.pl sits a step lighter and cleaner again; that is a difference of degree at
-the bright end, not IONOS being mid-key.
+What separates IONOS is **who is in the frame and how the room reads, not the exposure.** Do
+not reach for brightness or darkness to distance IONOS from either neighbour: the three differ
+in subject, bearing and how full the room is, and a scenario may hand all three the same light.
 
-**On "warm":** the environment may be materially warm — wood, textiles and warm
-neutrals in the surfaces and in whatever objects the scene already contains. The LIGHT
-DEFAULTS to cool-neutral to neutral per the Mood and lighting section above — a default,
-not a fixed value, and an injected `Photographic lighting:` line resets it. Warm materials
-under neutral light is the IONOS combination; warm light is Strato's. These two statements
-used to read as a contradiction — they are not: `warm` describes what is in the frame,
-`neutral` describes what falls on it.
+**Do NOT distinguish it by freezing the subject** — the candid-moment rule in
+`shared-natural-moment` applies to IONOS exactly as it does to every other brand, and a static
+"stand still and smile" frame is as wrong here as anywhere. `confident` describes bearing, not
+stillness: an IONOS subject can be mid-gesture and still read as composed and unhurried.
+
+**On "warm":** the environment may be materially warm — wood, textiles and warm neutrals in
+the surfaces and in whatever objects the scene already contains. That is a statement about what
+is IN the frame, and it makes no claim at all about what falls on it: this file sets no colour
+for the light, so warm materials are compatible with every light the scenario can choose.
 
 - background MUST be `"opaque"`; style `"photoreal"`.
 - Avoid: cartoon/illustration styling.
-- Lean away from, without refusing: a grade pushed all the way into cold blue, and a heavy
-  unlit scene chosen for its own sake. Both are matters of degree, and a scenario may ask for
-  either legitimately — an injected `Photographic lighting:` line decides, not this line.
 
 ---
 
@@ -146,9 +125,10 @@ used to read as a contradiction — they are not: `warm` describes what is in th
      contradicted the injected `Photographic lighting:` line — 7 of them a hard `grade: warm`
      clash. strato and homepl, which DO supply a baseline, had ZERO such clashes across 16 runs.
      Root cause: with nothing to reproduce, the craft model writes its own list and lifts the
-     nearest-looking prohibition out of the prose above — it was taking "do not default to warm
-     golden hour", an ANTI-REPETITION caution, and flattening it into an unconditional veto in the
-     harder channel. That is the Task 5b defect class (tonal vetoes in a negative prompt) recreated
+     nearest-looking prohibition out of the prose above — it took an ANTI-REPETITION caution about
+     one habitual hour and flattened it into an unconditional veto in the harder channel. That
+     caution now lives in shared-time-of-day.md, phrased so it cannot be read as a veto, and the
+     prose above no longer names an hour at all. That is the Task 5b defect class (tonal vetoes in a negative prompt) recreated
      one hop downstream: Task 5b cleaned the baselines that EXIST; nothing constrained the baseline
      a model invents when a brand supplies none. The fix is to supply one. Do not delete this
      section to "let the model decide" — that is the measured failure mode. -->
@@ -156,14 +136,15 @@ used to read as a contradiction — they are not: `warm` describes what is in th
 ## Negative prompt baseline (always append for IONOS)
 
 **No tonal term belongs in this list.** Colour grade, key, contrast, shadow quality, light
-direction and mood are owned by the injected `Photographic lighting:` line — see
-`shared-image-principles`, which already says a negative prompt must carry "only true
-rendering artifacts" and "never … lighting or palette instructions". Before adding an entry,
-check `shared-lighting.md`: if ANY preset asserts that attribute, it is the line's to decide,
-not this list's. In particular do NOT add `warm golden hour`, `golden hour`, `warm lighting`,
-`moody`, `dark`, `harsh shadows` or `dramatic lighting`: five presets assert a warm grade and
-four assert a low key or defined shadow edges, so every one of those entries would fight a
-preset the scenario is entitled to pick.
+direction and time of day are decided by `shared-lighting-by-scenario.md`, by
+`shared-time-of-day.md` and by an injected `Photographic lighting:` line, never here. A negative
+prompt must carry only true rendering artifacts. Before adding an entry, read
+`shared-lighting.md`: if any preset asserts that attribute, or if it names an hour, it is not
+this list's to veto — six of the ten presets there assert a hard-edged or deeply-shadowed light
+and two name a dark hour, and a tonal entry here would fight whichever of them the scenario is
+entitled to pick. The entries below are named without any of that vocabulary on purpose: this
+whole file is inlined into the craft prompt, so an example of a phrase to avoid is a phrase the
+model can copy straight into the field.
 
 `"text, watermark, logo, UI chrome, distorted hands, extra fingers, low quality,
 cartoon or illustration styling, crossed arms, closed body language, pure side profile,

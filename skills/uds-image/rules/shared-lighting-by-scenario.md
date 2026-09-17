@@ -1,99 +1,168 @@
-<!-- Scenario -> eligible lighting presets. Parsed by image-svc (craft/sceneLighting.ts), which
-     narrows shared-lighting.md's 14 presets to the subset that suits the scenario and then rotates
-     WITHIN that subset. Scenario narrows the range; it never fixes a single answer.
-     EVERY cell must list at least THREE slugs — a shorter cell trades hash-sameness for
-     lookup-sameness, which defeats the purpose. Slugs must exist in shared-lighting.md.
-     Cells with a genuinely fitting fourth option carry one, on purpose: a cell sitting exactly at
-     the floor cannot lose one slug for one commit while a replacement is considered, so pinning
-     every cell to exactly 3 turns ordinary curation into forced atomic edits. Do not pad a cell
-     just to clear the floor — a badly-fitting fourth option is worse than the churn it avoids.
-     A cell must also stay RESOLVABLE for a room that receives no daylight at all. Stage 2 drops
-     every preset whose `Daylight:` requirement the selected environment preset cannot provide, so
-     an all-daylight cell leaves a sealed room — today only `close-wall-desk-nook` in
-     shared-environment-home-office.md — nothing to draw, and it falls to image-svc's fallback
-     ladder on ordinary input. Falling back is correct behaviour but a poor default. Every
-     home-office DAY cell therefore carries at least TWO `Daylight: none` presets from
-     warm-ambient-interior / soft-studio-frontal / directional-warm-falloff. TWO, because one
-     would pin that room to a single preset for the whole cell, which is the fixed treatment this
-     axis exists to remove; and only two, so the padding stays defensible rather than exhaustive.
-     BOTH of that pair must ALSO be presets the sealed room's BRIGHTNESS tag admits, which is a
-     second and tighter condition than the daylight one. soft-studio-frontal asks for a "neutral
-     pale backdrop" and therefore carries `Brightness: mid, bright`, while the sealed room is
-     `dim`: a morning cell padded with warm-ambient-interior AND soft-studio-frontal delivered
-     that room exactly ONE preset. Measured on the live grid — 2 of 100 triples pinned, both of
-     them this room — and the reason directional-warm-falloff (which makes no surround claim,
-     hence `Brightness: any`) is now in the morning and midday rows as well as the afternoon one.
-     Count the pair against BOTH tags, never `Daylight:` alone.
-     These read as hour-agnostic on purpose: a domestic room carried by its own fittings looks the
-     same at 10am as at 4pm, which is precisely what the desk-nook reference shows.
-     A slug whose `Daylight:` requirement NO room of a catalogued place can provide is a DEAD
-     entry: image-svc's stage 2 drops it for every room, so it counts toward the three-slug floor
-     while contributing nothing and the cell is effectively shorter than it looks.
-     `overhead-skylight` requires `above`, and no authored room provides `above` (see
-     shared-environment-workspace.md's header — both ceilings the references show are opaque), so
-     it is listed only for the places with NO environment catalog: workshop, retail, studio. It is
-     gone from the midday cells of open-plan-office, meeting-room and home-office, where it had
-     left home-office/midday with an EFFECTIVE size of 2 against its own floor of 3.
-     evening and night intentionally hold the SAME 3 slugs for meeting-room, workshop and studio —
-     for those, nothing about the light actually changes between "after hours" and "the middle of
-     the night" (a controlled studio setup and a windowless-feeling interior mid-shift both read
-     the same at 9pm and 1am). Every other place differentiates the two on purpose — see the
-     evening vs. night rows below. -->
+<!-- Scenario -> lighting eligibility. Parsed by image-svc (craft/sceneLighting.ts). This file
+     answers TWO questions per cell, not one:
+       1. IS the lighting axis open here at all, and
+       2. if it is, WHICH presets suit the hour.
+     Question 1 is the change. The axis is OPTIONAL now: on a cell that is not marked
+     `expressive`, no `Photographic lighting:` line is injected unless the brief NAMES a preset,
+     and a cell marked `none` refuses even that. See shared-lighting.md's header for the 90-image
+     measurement this is built on -- always injecting scored 16/30 on naturalness against 27/30
+     for injecting nothing, and bought zero variety doing it.
+
+     ROW GRAMMAR, three forms, and nothing else:
+       - <time>: expressive | slugA, slugB, slugC   the axis is OPEN here. The salted rotation
+                                                    draws from this set with no explicit ask.
+       - <time>: slugA, slugB, slugC                the axis is CLOSED to the rotation. Nothing
+                                                    is injected unless the brief names a preset,
+                                                    and a named preset is validated against
+                                                    exactly this set.
+       - <time>: none                               the axis is CLOSED OUTRIGHT. Nothing is
+                                                    injected and a named preset is rejected.
+     `|` and the word `none` cannot occur in a slug (`[a-z0-9-]+`), so neither marker can be
+     mistaken for one. A row whose prefix before `|` is anything other than `expressive` is
+     REPORTED, never silently read as a slug list -- the wrong-cell failure class this parser
+     was already hardened against.
+     `none` is a real value, distinct from an ABSENT row. An absent row means "no scenario
+     opinion", which resolves to the whole catalog; `none` means "nothing in this catalog belongs
+     here". Before `none` existed there was no way to say the second thing: an empty row fell
+     through to null and then to the entire catalog, which is how an interior preset reaches a
+     place it has no business in. Never express "nothing fits" by deleting a row.
+
+     WHICH CELLS ARE MARKED, and why exactly these. A cell is `expressive` when the light at that
+     hour in that place is determined by the HOUR AND PLACE rather than by whatever fittings the
+     room happens to contain -- i.e. when a photograph taken there would show that light whatever
+     the furniture is.
+       midday, afternoon     direct sun is simply what those hours look like. On arm A's 30 runs
+                             the day-sun presets that survive the prune drew 3 times at midday and
+                             failed 0 times.
+       evening               dusk is a real, short, distinctive event, and the one preset that
+                             NAMES the hour drew twice at evening and passed twice. Evening is
+                             also where fidelity is most at risk, so stating the light helps.
+       outdoors, all hours   there is no room to contradict the sky, and no environment catalog
+                             for outdoors at all, so every contradiction class that bit the old
+                             catalog was a room fault that cannot arise here.
+     And why the rest are NOT:
+       morning               nothing about a morning interior is hour-determined. Arms B and C
+                             show morning interiors coming out right with no line at all, and
+                             every morning failure in arm A came from an injected preset.
+       night                 the only honest night presets are the two lamp-carried ones, and
+                             NEITHER names the hour -- measured, the non-hour-naming interior
+                             presets failed 5 of 6 evening draws. They add nothing the shared
+                             time-of-day rule does not already carry, so the axis stays shut and
+                             the hour is carried by shared-time-of-day.md, which is inlined on
+                             every run. That is a measurable claim: if night or evening comes back
+                             bright, the time-of-day rule is what failed, not this table.
+       studio, all hours     `none`. The studio's whole catalog was soft-studio-frontal plus
+                             high-key-diffused plus overhead-skylight, all three deleted, and
+                             there is NO studio reference in the Figma roster. Cannot tell means
+                             not yet: a studio brief's light comes from its own prose until a
+                             reference exists. Do not pad this with an interior preset -- a studio
+                             is a set, not a room with fittings.
+       outdoors/night        `none`. Outdoors after dark is streetlight and shopfront, which no
+                             reference shows and no preset here describes.
+     22 of 40 cells are marked, 12 are closed to the rotation, 6 are `none`. 22/40 is a DELIBERATE
+     value, not a leftover: it is every cell where the hour or the place fixes the light.
+
+     THE FLOOR CHANGED, AND IT IS NOT THE OLD ONE. The old floor was "every cell lists at least
+     THREE slugs", justified as hash-sameness versus lookup-sameness. With an optional axis the
+     real invariant is narrower and stated per outcome:
+       - where the axis IS injected, the set surviving BOTH narrowing stages must never be a
+         single pinned preset. TWO is the floor, not three. A pinned triple is a fixed treatment,
+         the homogeniser this axis exists to remove.
+       - where it is NOT injected, nothing is injected, and a cell with no eligible expressive
+         preset is a correct outcome rather than a gap. Zero is fine; one is not.
+       - an empty restriction must NEVER resolve to "the whole catalog". An empty array is TRUTHY
+         at resolveAxis, and a naive filter-and-return once did exactly that, putting back every
+         preset the restriction existed to exclude.
+     Correcting the record while we are here: the claim that "no (place,timeOfDay) cell drops
+     below 3 effective presets, all 54 pass" was wrong on all three counts. The old file had 125
+     effective (place, timeOfDay, room) triples, 100 of them with a room catalog, 20 already below
+     3, minimum 2. The three-slug figure was only ever a stage-1 property of this 40-cell table.
+     lightOpenings.test.ts pins the >=2 floor on the real files.
+
+     THE INTERIOR-KEY PAD, and where it must NOT go. home-office is the only place with a room
+     that receives NO daylight (close-wall-desk-nook). Its DAY cells therefore carry
+     lamplit-interior AND one-lamp-close so that room has two honest options instead of falling to
+     the fallback ladder. TWO, because one would pin that room for the whole cell; and counted
+     against BOTH tags, never `Daylight:` alone -- the previous pad used soft-studio-frontal,
+     which asks for a pale backdrop a `dim` room cannot supply, so a cell padded with two presets
+     delivered that room exactly ONE.
+     This pad is SAFE only because the daylight filter now runs two ways: a `Daylight: none`
+     preset is refused whenever the room provides daylight AND the hour is a day hour, so these
+     two cannot reach a sunlit room at midday. That is the fault the pad would otherwise create --
+     21 of 100 room-bearing triples in the old data.
+     DO NOT pad the day cells of cafe, workshop or retail the same way. Those places have no
+     environment catalog, so stage 2 is a pass-through and the two-way filter has no room to test
+     against: an interior-key preset there would be injected into a daylit lunchtime cafe with
+     nothing able to refuse it. open-plan-office and meeting-room need no pad either -- every room
+     in the workspace catalog is daylit, and if one ever is not, the fallback ladder yields exactly
+     these two presets, which is the right answer arrived at honestly.
+
+     Slugs must exist in shared-lighting.md, and every preset there must appear in at least one
+     cell: a preset with no consumer is dead weight that reads as coverage. STRONGER THAN THAT,
+     and caught by treatment.axes.test.ts rather than reasoned about: every preset must be
+     reachable by the ROTATION somewhere on the grid, not merely listed. daylight-and-lit-lamps was
+     listed only in the morning rows, which are not marked, so the rotation could never draw it and
+     only an explicitly named slug could reach it -- a preset in the catalog that no scenario can
+     choose. It is now in the afternoon rows as well, which is faithful to its references
+     (workspace-01 and workspace-05 are both plainly daytime interiors with the lamps switched on).
+     `overhead-skylight` is gone, so the note about a dead entry requiring a direction no room can
+     provide no longer applies to any row -- but the rule stands and check-lighting-axis.mjs
+     enforces it. -->
 
 # Lighting by scenario
 
 ## open-plan-office
-- morning: bright-window-side, overcast-broad-key, rain-diffused-window, high-key-diffused
-- midday: hard-sun-defined-shadows, high-key-diffused, blinds-shaft-light, bright-window-side
-- afternoon: bright-window-side, blinds-shaft-light, hazy-backlit-bloom, overcast-broad-key
-- evening: warm-ambient-interior, blue-hour-practicals, directional-warm-falloff
-- night: directional-warm-falloff, warm-ambient-interior, high-key-diffused
-
-## home-office
-- morning: bright-window-side, rain-diffused-window, overcast-broad-key, high-key-diffused, warm-ambient-interior, soft-studio-frontal, directional-warm-falloff
-- midday: bright-window-side, high-key-diffused, blinds-shaft-light, warm-ambient-interior, soft-studio-frontal, directional-warm-falloff
-- afternoon: golden-hour-raking, blinds-shaft-light, warm-ambient-interior, bright-window-side, directional-warm-falloff
-- evening: blue-hour-practicals, warm-ambient-interior, directional-warm-falloff
-- night: warm-ambient-interior, directional-warm-falloff, hazy-backlit-bloom
+- morning: window-side-daylight, overcast-flat-daylight, daylight-and-lit-lamps
+- midday: expressive | hard-sun-defined-shadows, sun-shadows-on-a-pale-wall, window-side-daylight, sun-patch-crossing-the-subject
+- afternoon: expressive | low-sun-raking, hard-sun-defined-shadows, window-side-daylight, sun-patch-crossing-the-subject, daylight-and-lit-lamps
+- evening: expressive | dusk-outside-lamps-inside, lamplit-interior, one-lamp-close
+- night: lamplit-interior, one-lamp-close
 
 ## meeting-room
-- morning: overcast-broad-key, bright-window-side, high-key-diffused, blinds-shaft-light
-- midday: high-key-diffused, hard-sun-defined-shadows, blinds-shaft-light, bright-window-side
-- afternoon: bright-window-side, blinds-shaft-light, overcast-broad-key, high-key-diffused
-- evening: warm-ambient-interior, directional-warm-falloff, blue-hour-practicals
-- night: warm-ambient-interior, directional-warm-falloff, blue-hour-practicals
+- morning: window-side-daylight, overcast-flat-daylight, daylight-and-lit-lamps
+- midday: expressive | hard-sun-defined-shadows, sun-shadows-on-a-pale-wall, window-side-daylight, sun-patch-crossing-the-subject
+- afternoon: expressive | low-sun-raking, hard-sun-defined-shadows, window-side-daylight, sun-patch-crossing-the-subject, daylight-and-lit-lamps
+- evening: expressive | dusk-outside-lamps-inside, lamplit-interior, one-lamp-close
+- night: lamplit-interior, one-lamp-close
+
+## home-office
+- morning: window-side-daylight, overcast-flat-daylight, daylight-and-lit-lamps, lamplit-interior, one-lamp-close
+- midday: expressive | hard-sun-defined-shadows, sun-shadows-on-a-pale-wall, window-side-daylight, sun-patch-crossing-the-subject, lamplit-interior, one-lamp-close
+- afternoon: expressive | low-sun-raking, hard-sun-defined-shadows, window-side-daylight, sun-patch-crossing-the-subject, daylight-and-lit-lamps, lamplit-interior, one-lamp-close
+- evening: expressive | dusk-outside-lamps-inside, lamplit-interior, one-lamp-close
+- night: lamplit-interior, one-lamp-close
 
 ## cafe
-- morning: bright-window-side, backlit-window-rim, rain-diffused-window, overcast-broad-key
-- midday: hazy-backlit-bloom, bright-window-side, high-key-diffused, backlit-window-rim
-- afternoon: golden-hour-raking, hazy-backlit-bloom, warm-ambient-interior, bright-window-side
-- evening: warm-ambient-interior, blue-hour-practicals, directional-warm-falloff
-- night: warm-ambient-interior, directional-warm-falloff, backlit-window-rim
+- morning: window-side-daylight, overcast-flat-daylight, daylight-and-lit-lamps
+- midday: expressive | hard-sun-defined-shadows, sun-shadows-on-a-pale-wall, window-side-daylight, sun-patch-crossing-the-subject
+- afternoon: expressive | low-sun-raking, hard-sun-defined-shadows, window-side-daylight, sun-patch-crossing-the-subject, daylight-and-lit-lamps
+- evening: expressive | dusk-outside-lamps-inside, lamplit-interior, one-lamp-close
+- night: lamplit-interior, one-lamp-close
 
 ## workshop
-- morning: bright-window-side, overcast-broad-key, overhead-skylight, rain-diffused-window
-- midday: overhead-skylight, hard-sun-defined-shadows, blinds-shaft-light, high-key-diffused
-- afternoon: golden-hour-raking, blinds-shaft-light, bright-window-side, hard-sun-defined-shadows
-- evening: directional-warm-falloff, warm-ambient-interior, blue-hour-practicals
-- night: directional-warm-falloff, warm-ambient-interior, blue-hour-practicals
+- morning: window-side-daylight, overcast-flat-daylight, daylight-and-lit-lamps
+- midday: expressive | hard-sun-defined-shadows, sun-shadows-on-a-pale-wall, window-side-daylight, sun-patch-crossing-the-subject
+- afternoon: expressive | low-sun-raking, hard-sun-defined-shadows, window-side-daylight, sun-patch-crossing-the-subject, daylight-and-lit-lamps
+- evening: expressive | dusk-outside-lamps-inside, lamplit-interior, one-lamp-close
+- night: lamplit-interior, one-lamp-close
 
 ## retail
-- morning: bright-window-side, high-key-diffused, overcast-broad-key, rain-diffused-window
-- midday: high-key-diffused, overhead-skylight, hazy-backlit-bloom, bright-window-side
-- afternoon: golden-hour-raking, bright-window-side, hazy-backlit-bloom, high-key-diffused
-- evening: warm-ambient-interior, directional-warm-falloff, blue-hour-practicals
-- night: directional-warm-falloff, warm-ambient-interior, backlit-window-rim
+- morning: window-side-daylight, overcast-flat-daylight, daylight-and-lit-lamps
+- midday: expressive | hard-sun-defined-shadows, sun-shadows-on-a-pale-wall, window-side-daylight, sun-patch-crossing-the-subject
+- afternoon: expressive | low-sun-raking, hard-sun-defined-shadows, window-side-daylight, sun-patch-crossing-the-subject, daylight-and-lit-lamps
+- evening: expressive | dusk-outside-lamps-inside, lamplit-interior, one-lamp-close
+- night: lamplit-interior, one-lamp-close
 
 ## studio
-- morning: soft-studio-frontal, high-key-diffused, bright-window-side
-- midday: soft-studio-frontal, high-key-diffused, overhead-skylight, bright-window-side
-- afternoon: soft-studio-frontal, directional-warm-falloff, bright-window-side
-- evening: soft-studio-frontal, directional-warm-falloff, warm-ambient-interior
-- night: soft-studio-frontal, directional-warm-falloff, warm-ambient-interior
+- morning: none
+- midday: none
+- afternoon: none
+- evening: none
+- night: none
 
 ## outdoors
-- morning: hazy-backlit-bloom, overcast-broad-key, bright-window-side, golden-hour-raking
-- midday: hard-sun-defined-shadows, high-key-diffused, hazy-backlit-bloom, overcast-broad-key
-- afternoon: golden-hour-raking, hard-sun-defined-shadows, hazy-backlit-bloom, overcast-broad-key
-- evening: golden-hour-raking, blue-hour-practicals, hazy-backlit-bloom
-- night: blue-hour-practicals, directional-warm-falloff, warm-ambient-interior
+- morning: expressive | hard-sun-defined-shadows, overcast-flat-daylight, low-sun-raking
+- midday: expressive | hard-sun-defined-shadows, overcast-flat-daylight
+- afternoon: expressive | low-sun-raking, hard-sun-defined-shadows, overcast-flat-daylight
+- evening: expressive | low-sun-raking, overcast-flat-daylight
+- night: none

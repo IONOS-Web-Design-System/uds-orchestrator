@@ -40,24 +40,19 @@ lives FIRST in the **subject's expression, attire, and composition** rather than
 colour of the light: where Strato reaches for the light itself, home.pl reaches for the
 person. That is how the two differ even when the scenario hands them the same lamp.
 
-**Calm, positive, confident — the IONOS register, read brighter and clearer.** Against
-IONOS's cool-neutral mid-key daylight, home.pl sits a step lighter: more white in the frame,
-more air around the subject, less visual weight overall. Against Strato it is cooler. Where NO
-`Photographic lighting:` line is injected, prefer the high-key end — the brightest, clearest,
-airiest reading the scene will bear; that preference is what separates home.pl from IONOS.
-Where a line IS injected it sets the brightness and the grade and this preference does not
-apply: an evening or lamplit scenario is still home.pl, carried by the subject's ease rather
-than by the exposure.
+**Calm, positive, confident — the IONOS register, read cleaner and less crowded.** What
+separates home.pl from IONOS is how FULL the frame is, not how bright it is: fewer things in
+shot, more space around the subject, less visual weight overall. Against Strato it is plainer
+and less individually styled. Those are facts about the room and the composition, and every one
+of them holds at any hour and under any light.
 
-**Lighting — bright, clean and clear, with gentle direction. Preferences over whatever an
-injected `Photographic lighting:` line leaves open, not conditions on it:**
-- Abundant soft daylight on a neutral-white grade; golden-hour warmth and an amber grade are
-  the weaker reading here, not a forbidden one
-- Pale walls, generous white and light tones, an open airy feel
-- One clear but SOFT light direction, with gentle shadow falloff that still models the face.
-  Harsh and dramatic sit at the far end of that preference. Flat and shadowless are excluded
-  outright — but by `shared-image-principles`, which excludes them for every brand
-- Professional lighting that does not date the image
+**Lighting — not decided here.** This file sets no light direction, no colour temperature and no
+key level. `shared-lighting-by-scenario.md` decides which light suits which scenario,
+`shared-time-of-day.md` owns the hour, and an injected `Photographic lighting:` line is their
+answer on the runs that have one. Two things this file does ask of the light, and neither is a
+grade:
+- the face stays readable and modelled rather than cut across
+- nothing that dates the image — no period or novelty fixture used as an effect
 
 **Warmth is delivered by:**
 - A genuine, relaxed smile — confident and approachable, not performative
@@ -66,21 +61,16 @@ injected `Photographic lighting:` line leaves open, not conditions on it:**
 - An environment that feels lived-in and human — real surfaces and natural textures on
   whatever the scenario put in the room — not a sterile, empty studio
 
-**Lean away from — each of these is a matter of degree, and an injected
-`Photographic lighting:` line may legitimately call for it:**
-- A warm filter, a golden/amber grade or a "cosy cafe" orange-warm mood as the DEFAULT reading
-  of a scene that did not ask for one
-- Drama for its own sake: hard shadow chosen as a look rather than because the hour has it
-- Visual crowding and heaviness that come from a busy frame — this one is NOT about exposure,
-  so it stays firm: a crowded frame reads as Strato rather than home.pl at any brightness
-- Cool-toned clinical light outside tech/server contexts
+**Lean away from:**
+- Visual crowding and heaviness that come from a busy frame — a crowded frame reads as Strato
+  rather than home.pl at any brightness. This is home.pl's one firm lighting-adjacent rule and
+  it is about how much is in shot, not about exposure.
+- Styling an effect for its own sake: a light chosen as a look rather than because the room and
+  the hour have it.
 
-> **Axis precedence.** An injected `Photographic lighting:` line outranks this section for
-> direction, quality, contrast and grade — see `shared-image-principles`. This section then
-> governs only what that line leaves open. Where the line and these preferences disagree — a
-> dusk or practicals key against an airy high-key frame — the LINE wins and the brightness
-> preference stands down: do not brighten the scene back, and do not restate a lighting
-> direction of your own.
+> **Axis precedence.** This section makes no claim on the light, so there is nothing here for a
+> `Photographic lighting:` line to outrank. The hour and the do-not-brighten-it-back rule are in
+> `shared-time-of-day.md`, which applies to every brand.
 
 ### 3. Red Accent as Brand Marker — one element, always subtle
 
@@ -151,13 +141,12 @@ warm cream). **No** exposed brick, no neon signs, no highly specific interior de
 <!-- NEGATIVE BASELINE, TONAL ENTRIES REMOVED (Task 5b). A negative term is a HARDER veto than
      prose, so while Task 5 turned this file's absolute tonal bans into scenario-scoped biases,
      the tonal entries still in this list kept vetoing the lighting catalog at the model level.
-     Removed four: the two warm-grade entries (they cancelled golden-hour-raking's "amber grade",
-     warm-ambient-interior's "warm grade" and directional-warm-falloff's "warm grey tones"), the
-     moody-dramatic entry (it cancelled blinds-shaft-light's "high contrast … deliberate cinematic
-     feel") and the harsh-directional-shadow entry (it cancelled hard-sun-defined-shadows' "crisp
-     defined shadow edges"). Narrowed: the cold-clinical entry lost "cold" (four presets grade
-     cool) and the all-grey-muted entry lost "muted" (rain-diffused-window asserts "soft muted
-     grade" verbatim).
+     Four entries were removed because they cancelled presets the scenario is entitled to pick:
+     two warm-light vetoes (against the low-sun and lamp-carried presets), a dark-key veto and a
+     hard-shadow veto (against the direct-sun presets). Two more were narrowed, losing a
+     colour-temperature word and a saturation word for the same reason. Several of the presets
+     those vetoes hit have since been deleted, but the reasoning is unchanged and the replacements
+     are stronger: six of the ten presets now assert a hard-edged or deeply-shadowed light.
      The removed phrases are deliberately NOT restated in the prose below: this whole file is
      inlined into the craft prompt, and a banned phrase quoted as an example is a phrase the craft
      model can copy straight back into negativePrompt.
@@ -167,19 +156,19 @@ warm cream). **No** exposed brick, no neon signs, no highly specific interior de
 ## Negative prompt baseline (always append for home.pl)
 
 **No tonal term belongs in this list.** Colour grade, key, contrast, shadow quality, light
-direction and mood are owned by the injected `Photographic lighting:` line — see
-`shared-image-principles`, which already says a negative prompt must carry "only true
-rendering artifacts" and "never … lighting or palette instructions". Before adding an entry,
-check `shared-lighting.md`: if ANY preset asserts that attribute, it is the line's to decide,
-not this list's. Three entries pass that check and are kept deliberately:
+direction and time of day are decided by `shared-lighting-by-scenario.md`, by
+`shared-time-of-day.md` and by an injected `Photographic lighting:` line, never here. A negative
+prompt must carry only true rendering artifacts. Before adding an entry, read
+`shared-lighting.md`: if any preset asserts that attribute, or if it names an hour, it is not
+this list's to veto. Three entries pass that check and are kept deliberately:
 
-- `neon lighting` — no preset produces neon. The nearest, `blue-hour-practicals`, asks for
-  "warm interior practicals", i.e. domestic lamps; nothing in the catalog names a coloured
-  gel, a sign or a saturated artificial source. It also matches the Environment section
-  above, which already excludes neon signs — an environment veto, not a tonal one.
+- `neon lighting` — no preset produces neon. Every artificial source in the catalog is a
+  domestic lamp; nothing there names a coloured gel, a sign or a saturated artificial source. It
+  also matches the Environment section above, which already excludes neon signs — an environment
+  veto, not a tonal one.
 - `clinical light` — "clinical" is a fluorescent, institutional, lab-lit LOOK, not a colour
-  temperature. No preset asks for it; `high-key-diffused`'s "near-white surround" comes
-  closest and says "light energetic feel". A distinct failure mode, not a grade ban.
+  temperature. No preset asks for it: every one of them names a window, the sun or a lamp. A
+  distinct failure mode, not a grade ban.
 - `all-grey palette` — greyness is PALETTE, not tone, and the red-accent rule above still
   keeps one warm accent in every frame.
 

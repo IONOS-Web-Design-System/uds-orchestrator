@@ -108,7 +108,15 @@ const MARKERS = {
     /\bwindow light\b/i, /\bpractical(?:s)? light/i, /\bairy\b/i,
   ],
 };
-const hit = (axis, text) => MARKERS[axis].filter((p) => p.test(text)).map((p) => p.source);
+/**
+ * HYPHENS ARE FOLDED TO SPACES before matching, and that is a fix rather than a tidy: every
+ * `[- ]` marker already accepts either, but `/\bgolden hour\b/` accepted only the space — so
+ * `golden-hour`, the hyphenated form that actually appears in prose, walked past the net. Found by
+ * red-proving this check with a hyphenated lighting example, which came back GREEN. Widening only:
+ * no marker matches less than it did.
+ */
+const foldDashes = (text) => text.replace(/[‐-―-]/g, ' ');
+const hit = (axis, text) => MARKERS[axis].filter((p) => p.test(foldDashes(text))).map((p) => p.source);
 
 /** The NOISY axis measure, also from sceneMetrics.ts: the content words of the real preset TEXTS.
  *  Used only as a density test inside an emoji list item (checkA condition c), never as a verdict
@@ -118,7 +126,32 @@ const STOP = new Set(
    'is are be been being as by but not no than then there here which who whom whose what when where ' +
    'while very more most much some any all both each few other such own same so only just also').split(' '),
 );
-const contentWords = (text) => new Set((text.toLowerCase().match(/[a-z][a-z-]{4,}/g) ?? []).filter((w) => !STOP.has(w)));
+/**
+ * Words the LIGHTING catalog uses that are not about light.
+ *
+ * The density net (checkA condition c) derives its vocabulary from the preset TEXTS, so any
+ * ordinary English word a preset happens to use becomes "lighting vocabulary". The re-authored
+ * catalog states shadow character and what the light lands ON, which brought `subject`,
+ * `crossing`, `sharp`, `surface`, `space`, `edges` and friends into the set — and immediately
+ * flagged `shared-natural-moment.md`'s pose example "a blurred passer-by crossing the foreground,
+ * the subject sharp and in-the-moment", which is about MOTION and is exactly the legitimate list
+ * the net's threshold was swept to spare. So the net was reporting a conflict created by its own
+ * vocabulary.
+ *
+ * Each word below names a SUBJECT, a FRAME or an ACTION rather than a light, a source, a direction
+ * or a shadow, which is the test applied to add one. Keep the list to that test: widening it to
+ * "words that also appear in a healthy list" would make the net unfalsifiable.
+ */
+const NOT_ABOUT_LIGHT = new Set([
+  'subject', 'subjects',      // who is in the frame
+  'crossing', 'reaching',     // what the light is doing, in verbs a pose list also uses
+  'sharp', 'precise',         // legibility, not light
+  'surface', 'surfaces',      // what it lands on
+  'space', 'frame', 'floor', 'wall', 'walls', 'metal', 'timber',
+  'nearest', 'entire', 'single', 'strongly', 'plainly', 'clearly', 'already',
+  'colour', 'color',          // the noun alone; the GRADE markers cover "colour grade"
+]);
+const contentWords = (text) => new Set((text.toLowerCase().match(/[a-z][a-z-]{4,}/g) ?? []).filter((w) => !STOP.has(w) && !NOT_ABOUT_LIGHT.has(w)));
 function presetTexts(body) {
   const out = [];
   let slug = false;
@@ -274,17 +307,27 @@ const MUST_SURVIVE = [
   // AND that it is stated inside its condition with the converse spelled out, which a presence
   // test cannot distinguish from the ungated form. Two homes for one assertion is how a marker
   // survived a deletion in this workstream; there is one home.
-  { what: 'the anti-veto permission — the repetition caution is not a ban',
-    test: (b) => /not a ban on any particular hour/.test(norm(b)) },
+  // The anti-veto permission MOVED. It used to live in this file as "not a ban on any particular
+  // hour, colour temperature or key level", gated on no lighting line being injected — and it was
+  // one of the two sentences a 90-image study measured as load-bearing for time-of-day fidelity
+  // (removing them with nowhere else to carry them made all five evening frames read as bright
+  // daytime). It is now in `shared-time-of-day.md`, brand-free, because all three authored brand
+  // files were each restating it. Asserted THERE, below, against the delivered body of a file
+  // `minimal` inlines — not deleted, relocated, and the assertion followed it.
+  { what: 'the three-brand comparison table (header + the room row)',
+    test: (b) => tableRows(b).some((r) => /IONOS/.test(r.text) && /Strato/.test(r.text) && /home\.pl/.test(r.text))
+      && tableRows(b).some((r) => /^\|\s*room\s*\|/.test(r.text)) },
   { what: 'the audience section heading',
     test: (b) => /^## Target audience — character profile$/m.test(b) },
   { what: 'the audience age range',
     test: (b) => /mid-30s to early 50s/.test(norm(b)) },
   { what: 'the wardrobe bullets (hair, accessories, clothing)',
     test: (b) => ['Hair:', 'Accessories:', 'Clothing:'].every((k) => norm(b).includes(`**${k}**`)) },
-  { what: 'the three-brand comparison table (header + the grade row)',
-    test: (b) => tableRows(b).some((r) => /IONOS/.test(r.text) && /Strato/.test(r.text) && /home\.pl/.test(r.text))
-      && tableRows(b).some((r) => /^\|\s*grade\s*\|/.test(r.text)) },
+  // The `grade` and `light` ROWS of that table are deliberately GONE: they were the single most
+  // load-bearing grade prescription in the three files, ungated, and they assigned a grade to the
+  // other two brands from inside the IONOS file. The table survives on the axes the brands now
+  // differ on — subject, bearing and how full the room is — and the `room` row above is what this
+  // assertion follows. check-lighting-axis.mjs asserts the grade rows have NOT come back.
   { what: 'the palette anchors (IONOS Blue and Sky hex)',
     test: (b) => norm(b).includes('#003D8F') && norm(b).includes('#11C7E6') },
   { what: 'the negative-prompt baseline, with its own guard text',
@@ -334,59 +377,66 @@ function delivered(name, raw) {
  *  the document) is what stops an unrelated gated sentence elsewhere in the file from passing. */
 const blocks = (body) => body.split(/\n\s*\n/).map(norm).filter((t) => t.length > 0);
 
-/** "where NO `Photographic lighting:` line is injected" and its wording variants. */
-const GATE_ANTECEDENT = /where\s+no\s+`Photographic lighting:`\s+line\s+is\s+(?:injected|present)/gi;
-/** the converse: a line IS injected, and the preference stands down. BOTH halves required — "the
- *  line wins" without "the preference does not apply" is the caveat shape this check rejects. */
-const CONVERSE_LINE = /where\s+(?:a|an|the)\s+(?:injected\s+)?line\s+is\s+injected/i;
-const CONVERSE_STANDS_DOWN = /(?:this|the)\s+(?:preference|default)\s+does\s+not\s+apply/i;
-
-/** One entry per AUTHORED brand rule. `prefer` is the brand's own grade identity — R1 material,
- *  so it is asserted present, never asserted absent. */
-const GATED_BIAS = [
-  { file: 'ionos-image-photoreal.md', term: 'cool-neutral',
-    prefer: /prefer a well-lit frame on a cool-neutral grade/i },
-  { file: 'strato-image-style.md', term: 'sunlit',
-    prefer: /prefer a bright, diffused,? sunlit frame/i },
-  { file: 'homepl-image-style.md', term: 'high-key',
-    prefer: /prefer the high-key end/i },
+// GATE_ANTECEDENT, CONVERSE_LINE, CONVERSE_STANDS_DOWN and GATE_WINDOW are DELETED with the gated
+// grade bias they measured. Left behind they would be four unreferenced constants that read as
+// live machinery — and the specific hazard is worse than tidiness: `GATE_ANTECEDENT` matched the
+// exact sentence shape that must now be ABSENT, so a future reader could wire it back up as a
+// presence test and reinstate the prescription it once guarded. check-lighting-axis.mjs asserts
+// that shape is gone.
+/**
+ * REPLACED. This used to be three gated GRADE biases — "prefer a well-lit frame on a cool-neutral
+ * grade", "prefer a bright, diffused sunlit frame", "prefer the high-key end" — each asserted
+ * PRESENT (R1: the brand's grade identity must survive the diet) and GATED (stated inside its
+ * no-injected-line condition).
+ *
+ * All three are gone, deliberately and on a user decision, and the R1 reasoning did not survive
+ * contact with the measurement: the grade biases were NOT what carried the brands. A 4-arm,
+ * 90-image study removed the IONOS paragraph and evening collapsed — but the sentences that
+ * mattered were the PERMISSION ("not a ban on any particular hour") and the DERIVATION ("encode
+ * lighting as the specific source that is actually in the scene"), both brand-independent, both
+ * now in `shared-time-of-day.md`. The grade prescriptions were cut alongside them and are not
+ * missed.
+ *
+ * So what R1 protects here is now the brand's ATMOSPHERE signature: a claim about who is in the
+ * frame, how they hold themselves and how full the room is, which holds at any hour and under any
+ * light — the thing a grade prescription could not do. Asserted PRESENT in the delivered body,
+ * and asserted MUTUALLY DISTINCT, which is what keeps "brand is a modifier" from collapsing into
+ * three files saying the same thing. The PROHIBITION half (no grade, no temperature, no key level,
+ * no gated light preference) lives in check-lighting-axis.mjs — one subject per script.
+ */
+const ATMOSPHERE = [
+  { file: 'ionos-image-photoreal.md', term: 'ordinary working room',
+    prefer: /reads as an ordinary working room/i },
+  { file: 'strato-image-style.md', term: 'individual expression',
+    prefer: /age, warmth and \*\*individual expression\*\*|individual expression/i },
+  { file: 'homepl-image-style.md', term: 'cleaner and less crowded',
+    prefer: /cleaner and less crowded/i },
 ];
-
-/** How far before the "prefer …" clause the antecedent may sit, in normalised chars. The authored
- *  antecedent is ~52 chars; 160 leaves room for a rewording without letting a condition from the
- *  far end of the paragraph count as one. */
-const GATE_WINDOW = 160;
 
 function checkD(spec, raw) {
   const v = [];
   const body = delivered(spec.file, raw);
-  const para = blocks(body).find((t) => spec.prefer.test(t));
-  if (!para) {
-    // Distinguish "the preference was deleted" (an R1 violation) from "it moved into a comment"
-    // (also a violation, and a different one worth naming).
+  if (!spec.prefer.test(norm(body))) {
+    // Distinguish "the signature was deleted" (an R1 violation) from "it moved into a comment"
+    // (also a violation, and a different one worth naming) — `minimal` strips comments.
     const inRaw = spec.prefer.test(norm(raw));
-    v.push(`${spec.file}: R1 — the '${spec.term}' bias PREFERENCE is GONE from the delivered body` +
+    v.push(`${spec.file}: R1 — the '${spec.term}' ATMOSPHERE signature is GONE from the delivered body` +
       (inRaw ? ' — it is present in the RAW file but only inside an HTML comment, which `minimal` strips' : ''));
-    return v;
   }
-  const p = para.search(spec.prefer);
+  return v;
+}
 
-  // 1. the antecedent, in the same sentence, immediately before the preference
-  let gated = false;
-  for (const m of para.matchAll(GATE_ANTECEDENT)) {
-    const end = m.index + m[0].length;
-    if (end > p) continue;                                   // after the preference: not a gate on it
-    if (p - end > GATE_WINDOW) continue;                     // too far to be this clause's condition
-    if (/\.\s/.test(para.slice(end, p))) continue;           // a sentence boundary in between
-    gated = true; break;
-  }
-  if (!gated) {
-    v.push(`${spec.file}: the '${spec.term}' bias preference is NOT GATED — no "where NO \`Photographic lighting:\` line is injected" antecedent in the same sentence before it :: …${para.slice(Math.max(0, p - 90), p + 60)}…`);
-  }
-  // 2. the converse, stated after it, in the same paragraph
-  const after = para.slice(p);
-  if (!CONVERSE_LINE.test(after) || !CONVERSE_STANDS_DOWN.test(after)) {
-    v.push(`${spec.file}: the '${spec.term}' bias preference states no CONVERSE after it — the paragraph must say a line IS injected ⇒ it sets the axis and the preference does not apply (line ${CONVERSE_LINE.test(after) ? 'ok' : 'MISSING'}, stands-down ${CONVERSE_STANDS_DOWN.test(after) ? 'ok' : 'MISSING'})`);
+/** No brand may borrow another's atmosphere signature. Without this, three files stating the same
+ *  thing satisfies every per-file presence test above. */
+function checkDistinct(bodies) {
+  const v = [];
+  for (const a of ATMOSPHERE) {
+    const body = bodies.get(a.file);
+    if (body === undefined) continue;   // reported by the coverage check at the call site
+    for (const b of ATMOSPHERE) {
+      if (a.file === b.file) continue;
+      if (b.prefer.test(norm(body))) v.push(`${a.file} carries ${b.file}'s '${b.term}' atmosphere signature — the three brands must stay mutually distinct`);
+    }
   }
   return v;
 }
@@ -436,27 +486,48 @@ for (const m of MUST_SURVIVE) {
 // CHECK D over every AUTHORED brand rule. Each must be among the files `minimal` inlines for its
 // own brand, or the spec is checking something the profile never delivers.
 let gatesChecked = 0;
-for (const spec of GATED_BIAS) {
+for (const spec of ATMOSPHERE) {
   if (!files.includes(spec.file)) {
     undetermined(`${spec.file} is not among the files derived from minimalRules — CHECK D's spec and the profile have drifted apart`);
   }
   const raw = bodies.get(spec.file);
-  if (raw === undefined) undetermined(`${spec.file} is derived from minimalRules but absent on disk — CHECK D cannot evaluate its gate`);
+  if (raw === undefined) undetermined(`${spec.file} is derived from minimalRules but absent on disk — CHECK D cannot evaluate its signature`);
   gatesChecked++;
   add(checkD(spec, raw));
 }
+add(checkDistinct(bodies));
 // Standing rule: assert the extractor found something. 0 violations over 0 specs is not a pass.
-if (gatesChecked !== GATED_BIAS.length) {
-  undetermined(`CHECK D evaluated ${gatesChecked} of ${GATED_BIAS.length} brand gates`);
+if (gatesChecked !== ATMOSPHERE.length) {
+  undetermined(`CHECK D evaluated ${gatesChecked} of ${ATMOSPHERE.length} brand atmosphere signatures`);
 }
 
-console.log(`\n✅/❌ list items read: ${emojiItemsSeen}; R1 assertions: ${MUST_SURVIVE.length}; brand bias gates checked: ${gatesChecked}`);
+// THE RELOCATED SENTENCES. The permission and the derivation moved out of the brand files into
+// `shared-time-of-day.md`, and the assertion followed them rather than being deleted — see the
+// note in MUST_SURVIVE. Asserted against the DELIVERED body of a file `minimal` actually inlines,
+// derived from minimalRules, so writing them into a file `minimal` does not inline (which is what
+// `shared-image-principles.md` is) cannot satisfy this.
+const HOUR_RULE = 'shared-time-of-day.md';
+if (!files.includes(HOUR_RULE)) {
+  add([`${HOUR_RULE} is NOT among the files derived from minimalRules, so the time-of-day sentences the brand files gave up are not delivered to the profile that needs them. Measured: with the brand paragraph removed and nothing carrying them, all five evening frames came back as bright daytime.`]);
+} else {
+  const hourBody = delivered(HOUR_RULE, bodies.get(HOUR_RULE) ?? '');
+  const RELOCATED = [
+    { what: 'the anti-veto permission — every hour is available', test: /every hour is available/i },
+    { what: 'the derivation — encode the light as the source actually there', test: /source that is actually there/i },
+    { what: 'the do-not-brighten-a-dark-hour instruction', test: /dark hour stays dark|do not raise the exposure back/i },
+  ];
+  for (const r of RELOCATED) {
+    if (!r.test.test(norm(hourBody))) add([`${HOUR_RULE}: ${r.what} is GONE from the delivered body`]);
+  }
+}
+
+console.log(`\n✅/❌ list items read: ${emojiItemsSeen}; R1 assertions: ${MUST_SURVIVE.length}; brand atmosphere signatures checked: ${gatesChecked}`);
 if (violations.length) {
   console.error(`\nFAIL — ${violations.length} violation(s):`);
   for (const v of violations) console.error(`  ✗ ${v}`);
   process.exit(1);
 }
-console.log('PASS — no ✅/❌ photographic example list, no per-scenario lighting mapping, all brand content present,\n       and every brand bias preference is stated inside its no-injected-line condition with the converse spelled out.');
+console.log('PASS — no ✅/❌ photographic example list, no per-scenario lighting mapping, all brand content present,\n       every brand states its own distinct ATMOSPHERE signature in its delivered body, and the\n       time-of-day sentences the brand files gave up are delivered by shared-time-of-day.md.');
 
 /* ────────────────────────────────────────────────────────────────────────────
  * HANDOFF — this belongs in image-svc, not here.

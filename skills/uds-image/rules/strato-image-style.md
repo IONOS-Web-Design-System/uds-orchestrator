@@ -90,28 +90,23 @@ reliably than the grade does; nothing here adds an object to a scene that has no
 indoor environments. Warm-toned walls or wood surfaces preferred. Backgrounds are
 softly blurred but identifiable. Never an empty studio backdrop.
 
-**Lighting:** Where NO `Photographic lighting:` line is injected, prefer a bright, diffused,
-sunlit frame — generous daylight, a subtle warm film-like grade, and a face kept readable
-rather than cut across by shadow; cool/clinical light is the weaker choice there, outside
-data-centre and server subjects, where it belongs and is usually worth an amber practical.
-Where a line IS injected it sets the direction, quality, contrast and grade, this preference
-does not apply, and no lighting direction of your own is restated.
+**Lighting:** not decided here. This file sets no light direction, no colour temperature and
+no key level. `shared-lighting-by-scenario.md` decides which light suits which scenario,
+`shared-time-of-day.md` owns the hour, and an injected `Photographic lighting:` line is their
+answer on the runs that have one. The one thing this file does ask of the light is that it leave
+the face readable rather than cut across by shadow, which is a subject requirement, not a grade.
 
-**Warm COMPOUNDS, so watch it.** Measured: Strato frames came out ~25 luminance points
-DARKER than IONOS, because a warm grade plus warm-toned walls plus a saturated warm object
-compound into a dim, cosy interior nobody actually chose. Cosy is not the brand; young and
-positive are. So where the brightness is yours to set, spend the warmth on the objects, the
-wood and the skin tones, and let the windows, walls and overall exposure stay light and open.
+**Warm COMPOUNDS, so watch it.** Measured: Strato frames came out ~25 luminance points DARKER
+than IONOS, because a warm light plus warm-toned walls plus a saturated warm object compound into
+a dim, cosy interior nobody actually chose. Cosy is not the brand; young and positive are. So
+spend the warmth on the OBJECTS — the wood, the textiles, the props, the skin tones — and do not
+add it to the light as well. That is a rule about where warmth is placed, not about how bright
+the frame is: `young` and `positive` live in the person, the palette and the energy of the
+moment, never in the luminance, so a lamplit 9pm desk is Strato as long as the person in it is.
 
-That is a bias against the compounding, NOT a floor under the exposure. An evening or dusk
-scenario is a legitimate Strato scene: `young` and `positive` live in the person, the palette
-and the energy of the moment, not in the luminance — a lamplit 9pm desk is Strato as long as
-the person in it is.
-
-> **Axis precedence.** An injected `Photographic lighting:` line outranks this section for
-> direction, quality, contrast and grade — see `shared-image-principles`. When that line names
-> a darker or warmer setup than this section would have chosen, the LINE wins: do not brighten
-> it back, and do not restate a lighting direction of your own.
+> **Axis precedence.** This section makes no claim on the light, so there is nothing here for a
+> `Photographic lighting:` line to outrank. The hour and the do-not-brighten-it-back rule are in
+> `shared-time-of-day.md`, which applies to every brand.
 
 ---
 
@@ -126,11 +121,12 @@ the person in it is.
 <!-- NEGATIVE BASELINE, TONAL ENTRIES REMOVED (Task 5b). A negative term is a HARDER veto than
      prose, so while Task 5 turned this file's absolute tonal bans into scenario-scoped biases,
      the tonal entries still in this list kept vetoing the lighting catalog at the model level.
-     Removed: the harsh-directional-shadow entry (it cancelled hard-sun-defined-shadows' "crisp
-     defined shadow edges" and blinds-shaft-light's "high contrast") and the dark-moody-lighting
-     entry (it cancelled blue-hour-practicals and hazy-backlit-bloom's "lifted blacks"). Narrowed:
-     the cold-sterile entry lost "cold" (four presets grade cool) and the all-grey-muted entry lost
-     "muted" (rain-diffused-window asserts "soft muted grade" verbatim).
+     Two entries were removed because they cancelled presets the scenario is entitled to pick: a
+     hard-shadow veto (against the direct-sun presets) and a dark-key veto (against the dusk and
+     lamp-carried presets). Two more were narrowed, losing a colour-temperature word and a
+     saturation word for the same reason. Three of the four presets those vetoes hit have since
+     been deleted from the catalog, but the reasoning is unchanged and the replacements are
+     stronger: six of the ten presets now assert a hard-edged or deeply-shadowed light.
      The removed phrases are deliberately NOT restated in the prose below: this whole file is
      inlined into the craft prompt, and a banned phrase quoted as an example is a phrase the craft
      model can copy straight back into negativePrompt.
@@ -140,15 +136,15 @@ the person in it is.
 ## Negative prompt baseline (always append for Strato)
 
 **No tonal term belongs in this list.** Colour grade, key, contrast, shadow quality, light
-direction and mood are owned by the injected `Photographic lighting:` line — see
-`shared-image-principles`, which already says a negative prompt must carry "only true
-rendering artifacts" and "never … lighting or palette instructions". Before adding an entry,
-check `shared-lighting.md`: if ANY preset asserts that attribute, it is the line's to decide,
-not this list's. Two entries pass that check and are kept deliberately:
+direction and time of day are decided by `shared-lighting-by-scenario.md`, by
+`shared-time-of-day.md` and by an injected `Photographic lighting:` line, never here. A negative
+prompt must carry only true rendering artifacts. Before adding an entry, read
+`shared-lighting.md`: if any preset asserts that attribute, or if it names an hour, it is not
+this list's to veto. Two entries pass that check and are kept deliberately:
 
 - `sterile lighting` — "sterile" is a fluorescent, institutional, lab-lit LOOK, not a colour
-  temperature. No preset asks for it; `soft-studio-frontal` comes closest and says "clean
-  friendly feel". It is a distinct failure mode, not a grade ban.
+  temperature. No preset in the catalog asks for it: every one of them names a window, the sun or
+  a domestic lamp. It is a distinct failure mode, not a grade ban.
 - `all-grey palette` — greyness is PALETTE, not tone, and the palette section above still
   keeps the orange family present in every frame.
 

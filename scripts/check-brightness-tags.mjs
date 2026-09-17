@@ -254,23 +254,53 @@ if (tagsRead === 0) undetermined(`the \`Brightness:\` extractor read ZERO tags a
 // cannot supply a near-white surround either. Anchored to the INJECTED line (the text the model
 // actually receives), not the document, so a phrase in a neighbouring preset cannot satisfy it.
 // ─────────────────────────────────────────────────────────────────────────────
-const SURROUND_CLAIM = /\b(high[- ]key|near[- ]white)\b/i;
+// TWO TIERS, not one, because the catalog now makes only the weaker claim.
+//
+// This check was written against `high[- ]key|near[- ]white`, the two phrases the 14-preset
+// catalog used. Both were deleted with the presets that carried them — `high-key-diffused`'s
+// "near-white surround, low contrast" and `soft-studio-frontal`'s "neutral pale backdrop" were
+// two of the three presets that contradicted the lighting file's OWN governing rule. So the
+// single-tier check read ZERO claiming presets and correctly refused to report a pass (exit 2),
+// which is exactly what a cannot-determine is for.
+//
+// The generalisation is not a weakening. A NEAR-WHITE claim and a PALE claim are different facts
+// about the room and have different satisfiable tag sets:
+//   near-white  a blown, bleached or high-key surround. Only a `bright` room supplies it, so the
+//               requirement must be `bright` ALONE — `mid` in the set is the mis-tag this check
+//               was created to catch.
+//   pale        a light-toned surround. A `mid` room supplies it, so `mid, bright` is correct and
+//               `any` is not: `any` asks the architecture for nothing while the text asks for a
+//               pale wall, which is the same mis-tag one tier down.
+// At least one tier must have members, or the extractor read nothing and this is undetermined.
+const NEAR_WHITE_CLAIM = /\b(high[- ]key|near[- ]white|blown[- ]out|bleached)\b/i;
+const PALE_CLAIM = /\b(pale|light[- ]toned|off[- ]white)\b/i;
 {
   const raw = readFileSync(join(RULES_DIR, LIGHTING_FILE), 'utf8');
   const { presets } = parsePresets(LIGHTING_FILE, delivered(LIGHTING_FILE, raw));
-  const claiming = presets.filter((p) => p.injected && !p.injected.isTag && SURROUND_CLAIM.test(p.injected.text));
+  const injected = presets.filter((p) => p.injected && !p.injected.isTag);
+  if (injected.length === 0) {
+    undetermined(`no preset in ${LIGHTING_FILE} yielded an injected line at all — the extractor is not reading the catalog`);
+  }
+  const nearWhite = injected.filter((p) => NEAR_WHITE_CLAIM.test(p.injected.text));
+  const pale = injected.filter((p) => !NEAR_WHITE_CLAIM.test(p.injected.text) && PALE_CLAIM.test(p.injected.text));
   // Assert the extractor found something: 0 flagged out of 0 claiming presets is not a pass, and
   // this is the check most easily satisfied by a reworded catalog.
-  if (claiming.length === 0) {
-    undetermined(`no preset in ${LIGHTING_FILE} makes a near-white surround claim in its injected text, so this check read nothing — either the catalog was reworded, or the extractor is not reading the injected lines`);
+  if (nearWhite.length + pale.length === 0) {
+    undetermined(`no preset in ${LIGHTING_FILE} makes a near-white OR a pale surround claim in its injected text, so this check read nothing — either the catalog was reworded away from both vocabularies, or the extractor is not reading the injected lines`);
   }
-  for (const p of claiming) {
+  for (const p of nearWhite) {
     const vals = (p.tags['Brightness'] ?? [[]])[0];
     if (vals.includes('any') || vals.includes('mid') || !vals.includes('bright')) {
-      violations.push(`${LIGHTING_FILE}:${p.line} ${p.slug}: its injected text asserts a near-white surround ("${p.injected.text.slice(0, 70)}…") but its requirement is \`Brightness: ${vals.join(', ') || '(none)'}\` — a surround claim the architecture is never asked to supply is how a near-white line reached a green-black room`);
+      violations.push(`${LIGHTING_FILE}:${p.line} ${p.slug}: its injected text asserts a NEAR-WHITE surround ("${p.injected.text.slice(0, 70)}…") but its requirement is \`Brightness: ${vals.join(', ') || '(none)'}\` — only a bright room supplies that, and a surround claim the architecture is never asked to supply is how a near-white line reached a green-black room`);
     }
   }
-  console.log(`\nsurround-claiming lighting presets checked against their tags: ${claiming.length} (${claiming.map((p) => p.slug).join(', ')})`);
+  for (const p of pale) {
+    const vals = (p.tags['Brightness'] ?? [[]])[0];
+    if (vals.includes('any') || !(vals.includes('mid') || vals.includes('bright'))) {
+      violations.push(`${LIGHTING_FILE}:${p.line} ${p.slug}: its injected text asserts a PALE surround ("${p.injected.text.slice(0, 70)}…") but its requirement is \`Brightness: ${vals.join(', ') || '(none)'}\` — a pale wall needs a mid or bright room, and \`any\` asks the architecture for nothing`);
+    }
+  }
+  console.log(`\nsurround-claiming lighting presets checked against their tags: ${nearWhite.length} near-white (${nearWhite.map((p) => p.slug).join(', ') || '-'}), ${pale.length} pale (${pale.map((p) => p.slug).join(', ') || '-'})`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
