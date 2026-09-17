@@ -19,7 +19,19 @@
      LEADING SPACE IS SUPPLIED BY THE CALL SITE, not here — a trailing or leading space in a
      markdown file does not survive an editor that tidies whitespace, and loadCraftContext trims.
 
+     >>> 2026-09-17: THE PROHIBITION LEFT THIS FILE; ONLY THE OFFER REMAINS <<<
+     This clause used to end "Move the camera, never the device." That sentence was doing work the
+     CONDITION then threw away: the clause is emitted only when nothing has fixed the shot, so on
+     `minimal` under a drawn camera preset -- nearly every run -- the prohibition was never sent,
+     and the pixels show the model resolving the surviving content demand by rotating the device to
+     the lens (6 of the 36 frames in image-output-fullaudit). The sentence now sits UNCONDITIONALLY
+     in craft-plausibility.md's first paragraph, where it contradicts nothing below it, and this
+     file keeps only the part that genuinely must stay conditional: an instruction to re-aim a
+     camera the craft model does not own. Keeping a copy here as well would send it twice whenever
+     the clause does fire, so it is not duplicated -- contextLocation.test.ts property E asserts it
+     appears exactly once in the delivered body.
+
      DELIVERED VERBATIM: this comment is stripped before delivery on every profile — author-only,
      never instruction. -->
 
-Put the camera past their shoulder if you want the interface described: the screen's own face is then toward the lens. Move the camera, never the device.
+Put the camera past their shoulder if you want the interface described: the screen's own face is then toward the lens.

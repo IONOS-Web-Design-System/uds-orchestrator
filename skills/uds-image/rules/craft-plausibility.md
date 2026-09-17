@@ -56,14 +56,63 @@
      Three paragraphs is the budget — the two-people-one-viewpoint and held-object-also-resting
      cases were considered and left out rather than spent.
 
+     >>> 2026-09-17, RE-AUDIT OF THE 36-FRAME SET: THE ANTECEDENT DID NOT REACH A DESK <<<
+     Measured on the 36 delivered image prompts of image-output-fullaudit (craftProfile=minimal,
+     gemini-3.1-flash-lite): 16 of 36 carry a positive screen-content assertion, and all 16 are in
+     the DESK form -- "the laptop screen displays a clean email application interface", "her laptop
+     screen, which displays ...", "a premium laptop is open, displaying a business homepage". Not
+     one is the held form paragraph 2's antecedent named, so the sentence could not bind to any of
+     them. The 20 prompts with no assertion produced no defect in frame; every defective frame came
+     from the 11 assertions drawn under a camera the operator's screen cannot face. Widening the
+     antecedent to a display RESTING ON A DESK moves it: unresolved assertions 13/57 -> 5/58 on a
+     paired A/B whose 23 paired cells drew identical (camera, lighting, environment) triples,
+     Fisher p=0.043.
+
+     >>> AND A CORRECTION TO THE ACCOUNT THIS FIX WAS FIRST WRITTEN WITH <<<
+     The prompt-level headline "impossible screen claims 48 % -> 0" was NOT measured on this set,
+     and the reason it read 0 is not a property of the detector's phrasings. Re-running
+     image-output-plausibility/scripts/plausibility-ab.ts's own PATTERNS and score() over these
+     very 36 prompts gives demandsContent 12/36 and unresolvedDemand 10/36 -- and it flags two of
+     the three back-surface frames (fa-scenario-homepl v1, fa-scenario-strato v2) that the pixel
+     audit called clean. The 0 came from a different population (the 15-rep b2-homepl probe) and
+     was carried into this set's narrative without being re-run here. Its one true blind spot is
+     narrower than it looks: the noun list is `interface|ui|dashboard|folder|directory|document|
+     app|grid`, so "business homepage with minimalist geometric layouts" -- fa-complex-homepl v3,
+     the frame with a whole web page printed on an outer lid -- is the ONE hit it cannot see.
+     Its deviceTwisted counter reads 0/36 while the pixels show four twists, because the model
+     performs the twist without ever writing it; a twist is only measurable in frame.
+
+     >>> WHY THE TWIST PROHIBITION MOVED UP HERE, OUT OF THE CONDITIONAL CLAUSE <<<
+     "move the camera, never the device" was the reframe clause's last sentence, and the clause is
+     suppressed whenever the shot is already fixed -- which on `minimal` is every run that draws a
+     camera preset, i.e. nearly all of them. The prohibition therefore never reached the runs that
+     needed it, and in the pixels the model satisfied the surviving content demand by ROTATING THE
+     DEVICE toward the lens: 6 of 36 frames put the display's face at the camera with its operator
+     behind it (fa-scenario-ionos v1/v2/v3, fa-scenario-strato v3, and marginally
+     fa-complex-strato-b v1/v2). The OFFER to reframe stays conditional, for the reason recorded in
+     the clause's own file; the PROHIBITION is unconditional, because it contradicts nothing below
+     it -- it forbids moving an object, and no axis asks for an object to be moved.
+
+     >>> AND WHY THE OTHER SIDE IS NOW DIRECTED POSITIVELY <<<
+     On `minimal` this block worked only by making the craft model STOP asserting visible content.
+     That removes the contradiction without telling the renderer what the unseen face looks like,
+     and the vacuum is what got filled: a full webpage printed edge-to-edge on an outer lid with no
+     bezel (fa-complex-homepl v3), a gold fruit logo on a lid (fa-scenario-homepl v1), a lid drawn
+     twice over its own display (fa-scenario-strato v2). All three occurred with the four negative
+     forms -- graphics or UI on a device's far face, content on a tablet's, screen graphics and a
+     colourful pattern on a lid -- present in the brand baseline's negativePrompt on 36 of 36 runs.
+     A negative prompt is therefore DISPROVEN as sufficient at n=36 and nothing was added there.
+     The last clause of paragraph 2 states the correct appearance instead, as a property and not as
+     an example of what to avoid, so property D still holds.
+
      DELIVERED VERBATIM by loadCraftContext (image-svc/src/craft/skills.ts): the LINE BREAKS ARE
      SEMANTIC, and this comment is stripped before delivery on every profile — author-only, never
      instruction. -->
 
 # Physical plausibility — the situation outranks the content
 
-Where the Brief asks for something the situation cannot turn toward the camera, the situation stays and that content goes. Do not move it onto a surface the camera can see.
+Where the Brief asks for something the situation cannot turn toward the camera, the situation stays and that content goes. Do not move it onto a surface the camera can see, and do not turn the object toward the lens: move the camera, never the device.
 
-Someone holding a tablet and looking at it has the screen turned to themselves, so do not write that its interface is visible, displayed or legible.{{reframeClause}} Otherwise the screen sits blank, dim or washed by glare, and you say nothing about what is on it.
+A display faces whoever is working it, held or resting on a desk alike, so do not write that its interface is visible, displayed or legible.{{reframeClause}} Otherwise it sits blank, dim or washed by glare, you say nothing about what is on it, and its other side is unmarked casing in one flat colour.
 
 Everything else in the frame takes the same test: name an object only from a viewpoint that can actually see it, and keep every shadow and highlight going the way the window or fixture you named would throw it.
