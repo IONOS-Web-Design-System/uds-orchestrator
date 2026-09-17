@@ -75,12 +75,14 @@ apply within these IONOS-specific boundaries:
 - **Accessories:** minimal and functional — a watch, simple stud earrings, reading
   glasses on an older professional. No statement glasses frames, no headphones, no visible
   tattoos — those belong to Strato.
-- **Clothing:** smart-casual — fitted knitwear, neat blouses, clean casual shirts, well-cut
-  trousers. Never hoodies, never oversized tees, never streetwear-adjacent. The person has
-  dressed thoughtfully but comfortably.
-- **Variants:** same rule as all brands — when `variants > 1` and brief is generic, omit
-  specific hair tokens; encode only a clothing vibe (`"smart casual knitwear"`) and let
-  the image model vary hair naturally across variants.
+- **Clothing:** the smart-casual register — fitted, neat, well-cut, and chosen with some
+  thought. Not tailored corporate, and not hoodies, oversized tees or anything
+  streetwear-adjacent. Name ONE garment, reasoned for this particular person from
+  `shared-character-appearance`, and make it a different one next time: do not carry a garment
+  noun over from image to image, which is how a whole set ends up in the same top.
+- **Variants:** same rule as all brands — when `variants > 1` and the brief is generic, omit
+  specific hair tokens and keep the clothing to the register above, so the image model varies
+  hair naturally across variants.
 
 ## Tone
 
@@ -109,6 +111,11 @@ in subject, bearing and how full the room is, and a scenario may hand all three 
 `shared-natural-moment` applies to IONOS exactly as it does to every other brand, and a static
 "stand still and smile" frame is as wrong here as anywhere. `confident` describes bearing, not
 stillness: an IONOS subject can be mid-gesture and still read as composed and unhurried.
+
+`positive` here is a property of the SITUATION, not a direction for the face, and it is not this
+file's to decide: which moment gets photographed and what that leaves on the face are
+`shared-character-presence`'s, for every brand equally. IONOS's share of it is the bearing —
+composed, in control — which is compatible with every register that rule allows.
 
 **On "warm":** the environment may be materially warm — wood, textiles and warm neutrals in
 the surfaces and in whatever objects the scene already contains. That is a statement about what
@@ -151,6 +158,6 @@ cartoon or illustration styling, crossed arms, closed body language, pure side p
 corporate stiff pose, forced grin, blank neutral expression,
 tousled or casual-bun hair, hoodies, oversized tees, streetwear,
 literal UI screenshots, readable interface text,
-person presenting device to lens, lone idle device with no person,
+person presenting device to lens, idle unused device as the sole subject,
 graphics or UI rendered on the back of a device, content on tablet back,
 screen graphics on device lid, colourful pattern on laptop lid"`

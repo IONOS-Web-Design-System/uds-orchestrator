@@ -56,20 +56,26 @@ designer might have statement glasses. A barista has an apron edge. Many Strato 
 wear no special accessory at all — that is also correct. Do not add an accessory just to
 signal "brand". Let it come from the occupation reasoning.
 
-**Clothing — casual-creative range.** Hoodie, plain tee, soft knitwear, casual jacket
-over a tee, relaxed layers. The colour can anchor the brand palette (an orange hoodie,
-a mustard tee) but does not have to — cream, grey, and sage are equally valid. Never
-business shirts, blazers, pencil skirts, or corporate attire. Never busy small patterns.
+**Clothing — the casual-creative register.** Relaxed, soft, layered, not bought for work.
+Never business shirts, blazers, pencil skirts or corporate attire, and never busy small patterns.
+Name ONE garment, reasoned for this particular person from `shared-character-appearance`, and
+make it a different one next time — carrying a garment noun over from image to image is how a
+whole set ends up in the same top. Its colour may anchor the brand palette but does not have to;
+a warm neutral is equally valid.
 
 **Variants — omit tokens when the brief is generic.** When `variants > 1` and the brief
-does not specify appearance, encode only a clothing vibe word (e.g. `"casual knitwear"`)
-and omit hair and accessory entirely. The image model will vary them naturally. Locking in
-`"curly hair + glasses + hoodie"` across all variants produces the same person 3 times.
+does not specify appearance, keep the clothing to the register above and omit hair and accessory
+entirely. The image model will vary them naturally. Pinning one hair-plus-accessory-plus-garment
+combination across every variant produces the same person three times.
 
-### Tone and expression
+### Tone and bearing
 **Young, warm, positive.** The person is having a good day on their own terms: absorbed in
-something they care about, not performing productivity for an audience. Genuine smile or
-natural concentration. Never a forced grin or blank corporate face.
+something they care about, not performing productivity for an audience.
+
+`positive` describes their SITUATION, not their face. The face is not this file's to set:
+`shared-character-presence` owns which moment gets photographed and what register that leaves on
+the expression, for every brand equally. Strato's share is who they are and how they hold
+themselves — young, at ease, on their own terms.
 
 `dynamic` is NOT listed here, deliberately. The candid-moment quality — mid-gesture, a moment
 in progress rather than a held pose — is a general photographic virtue owned by
@@ -152,6 +158,6 @@ this list's to veto. Two entries pass that check and are kept deliberately:
 crossed arms, closed body language, pure side profile, busy small-patterned clothing,
 all-grey palette, sterile lighting, corporate stiff pose, forced grin,
 blank neutral expression, person presenting device to lens,
-lone idle device with no person,
+idle unused device as the sole subject,
 graphics or UI rendered on the back of a device, content on tablet back,
 screen graphics on device lid, colourful pattern on laptop lid"`

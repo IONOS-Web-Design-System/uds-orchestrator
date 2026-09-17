@@ -19,10 +19,11 @@ Use hex values from this list. Never invent home.pl colours.
 home.pl imagery must age gracefully. The Polish SMB audience trusts home.pl for the
 long run — the imagery must reflect that stability.
 
-- **Clothing:** classic professional looks only — a well-fitted plain shirt, a neat
-  knitwear top, a clean blazer, simple solid-colour attire. No hoodies, no athleisure,
-  no streetwear-adjacent pieces. No visible logos or brand names on clothing. No
-  statement prints or seasonal trend patterns.
+- **Clothing:** classic professional looks only, and judged by whether the garment will read
+  the same in three years: well-fitted, plain, solid-coloured, no cut or detail that dates it.
+  No hoodies, no athleisure, no streetwear-adjacent pieces. No visible logos or brand names on
+  clothing. No statement prints or seasonal trend patterns. The garment itself is chosen per
+  person under the character profile below — this rule constrains it, it does not list it.
 - **Technology:** do not show highly specific device models, brand-identifiable hardware,
   or UI that resembles a current-era operating system. A laptop is a laptop — a clean
   generic form, not an identifiable make. A phone is a phone — not the latest bezelle
@@ -55,11 +56,15 @@ grade:
 - nothing that dates the image — no period or novelty fixture used as an effect
 
 **Warmth is delivered by:**
-- A genuine, relaxed smile — confident and approachable, not performative
-- Attire in warm neutral tones (cream, soft white, warm beige, classic navy, warm grey)
+- Attire on the warm side of neutral rather than the cool side — one such tone, not a set
 - Open body language — a person who is at ease and proud of what they do
 - An environment that feels lived-in and human — real surfaces and natural textures on
   whatever the scenario put in the room — not a sterile, empty studio
+
+The EXPRESSION is not listed here, and that is deliberate rather than an omission: which moment
+gets photographed and what register it leaves on the face belong to
+`shared-character-presence`, which applies to every brand equally. home.pl's share of warmth is
+the bearing above — quiet pride, at ease, nothing performed for the camera.
 
 **Lean away from:**
 - Visual crowding and heaviness that come from a busy frame — a crowded frame reads as Strato
@@ -111,11 +116,14 @@ Apply within these home.pl-specific boundaries:
   Well-groomed without being overly styled.
 - **Accessories:** minimal and functional — a watch, simple stud earrings, a wedding ring.
   The optional red accent (scarf, detail, small prop) is the one expressive element.
-- **Clothing:** classic professional/smart-casual. Plain knitwear, neat blouses, clean
-  shirts, a simple jacket. Warm neutral tones preferred (cream, soft white, warm beige,
-  classic navy, warm grey). Never hoodies, never streetwear, never trend-specific pieces.
-- **Expression:** warm, confident, relaxed. A person who has done this for years and
-  takes quiet pride in it. Not excited for the camera — genuinely at ease.
+- **Clothing:** the classic professional / smart-casual register — plain, well-fitted,
+  solid-coloured, on the warm side of neutral rather than the cool side. Never hoodies, never
+  streetwear, never trend-specific pieces. Name ONE garment, reasoned for this particular
+  person from `shared-character-appearance`, and make it a different one next time: carrying a
+  garment noun over from image to image is how a whole set ends up in the same top.
+- **Bearing:** a person who has done this for years and takes quiet pride in it — not excited
+  for the camera, genuinely at ease. The face itself follows the situation; see
+  `shared-character-presence`.
 
 ---
 
@@ -175,6 +183,8 @@ this list's to veto. Three entries pass that check and are kept deliberately:
 `"text, watermark, logo, UI chrome, distorted hands, extra fingers, low quality,
 trendy streetwear, hoodies, athleisure, logo-branded clothing, highly specific device
 models, neon lighting, clinical light, multiple red elements,
+idle unused device as the sole subject, person presenting device to lens,
 red background, red full garment, corporate stiff pose, forced grin,
 graphics or UI rendered on the back of a device, content on tablet back,
+screen graphics on device lid, colourful pattern on laptop lid,
 all-grey palette, dated interior design, cluttered busy background"`
