@@ -26,9 +26,10 @@
  *   - the catalog LIST, the SELECTOR and the forbidden LIGHTING vocabulary are all DERIVED from
  *     image-svc and never restated here, so an imageType added or a marker added on that side
  *     cannot escape this guard;
- *   - the author-declared vocabularies (mood, legibility, props, brand marks) carry their
- *     provenance in the comment above each one, because they cannot be derived from anywhere —
- *     they come from what is physically in the reference photographs;
+ *   - the author-declared vocabularies (mood, legibility, props, brand marks, shot-size bands,
+ *     frame aspect) carry their provenance in the comment above each one, because they cannot be
+ *     derived from anywhere — they come from what is physically in the reference photographs, or
+ *     from a defect this pipeline already measured;
  *   - every extractor asserts it found something. 0 violations over 0 presets read is not a pass.
  *
  * Usage:
@@ -76,7 +77,11 @@ function cameraCatalogs() {
   // The filename template lives in resolveCamera. Read it rather than assuming it, so a rename
   // of the file family is a 2 and not a silent pass over an empty corpus.
   const treatment = readSource(join('src', 'craft', 'treatment.ts'));
-  const tpl = treatment.match(/file: `(shared-camera-)\$\{cls\}(\.md)`/);
+  // Matched as an ASSIGNMENT to any name, not as the literal `file:` property it used to be: the
+  // template moved to `const file = \`shared-camera-${cls}.md\`;` when the camera axis gained a
+  // restriction, and pinning the old spelling took this guard to exit 2 for a change inside the
+  // shape it verifies. A genuine rename still returns 2, which is the property worth keeping.
+  const tpl = treatment.match(/(?:file:|file\s*=)\s*`(shared-camera-)\$\{cls\}(\.md)`/);
   if (!tpl) undetermined('the `shared-camera-${cls}.md` template was not found in treatment.ts resolveCamera — renamed, or its shape changed');
   return { types, files: types.map((t) => `${tpl[1]}${t}${tpl[2]}`) };
 }
@@ -103,8 +108,33 @@ function selector() {
   if (muls.length !== 3) undetermined(`stableHash has ${muls.length} multiply steps in treatment.ts, not 3 — the selector cannot be reproduced`);
   const salt = src.match(/salt: '(:camera)'/);
   if (!salt) undetermined("the camera axis salt `:camera` was not found in resolveCamera — the selector cannot be reproduced");
-  const mod = src.match(/presets\[stableHash\(brief\.requestId \+ o\.salt\) % presets\.length\]/);
-  if (!mod) undetermined('the `stableHash(requestId + salt) % presets.length` index expression was not found in resolveAxis — the selection shape may have changed');
+
+  // THE INDEX EXPRESSION, read as its ARGUMENT LIST rather than as one fixed string. The previous
+  // form of this check pinned the literal `stableHash(brief.requestId + o.salt)`, and when a
+  // per-variant salt term was added in front of it the guard went to exit 2 — correct behaviour
+  // (it could no longer reproduce the selector) but it took the whole guard down for a change that
+  // is INSIDE the shape it means to verify. So: match the concatenation, then classify each term.
+  // An unrecognised term still returns 2, because a selector this script cannot reproduce cannot
+  // be used to prove reachability — that is the property worth keeping, not the literal.
+  const mod = src.match(/presets\[stableHash\(([^)]*?(?:\([^)]*\))?[^)]*?)\)\s*%\s*presets\.length\]/);
+  if (!mod) undetermined('the `stableHash(...) % presets.length` index expression was not found in resolveAxis — the selection shape may have changed');
+  const terms = mod[1].split('+').map((t) => t.trim());
+  if (!terms.includes('brief.requestId')) undetermined(`the index expression does not hash brief.requestId (terms: ${terms.join(' + ')}) — the rotation is no longer keyed on the request`);
+  if (!terms.includes('o.salt')) undetermined(`the index expression does not hash the axis salt (terms: ${terms.join(' + ')}) — the axes may no longer be decorrelated`);
+  const variantTerm = terms.find((t) => /variantSalt/.test(t));
+  const unknown = terms.filter((t) => t !== 'brief.requestId' && t !== 'o.salt' && t !== variantTerm);
+  if (unknown.length) undetermined(`the index expression hashes term(s) this guard cannot reproduce: ${unknown.join(', ')} — reachability cannot be proved against a selector it does not model`);
+
+  // The VARIANT dimension, derived the same way. `variantSalt(0)` is the empty string by contract,
+  // so a single-variant run hashes exactly what it hashed before the term existed — which is why
+  // reachability must be measured at variant 0 AND above it, not only at 0.
+  let variantSalt = () => '';
+  if (variantTerm) {
+    const vs = src.match(/export function variantSalt\(variantIndex: number\): string \{\s*return variantIndex > 0 \? `([a-z]*)\$\{variantIndex\}([^`]*)` : '';/);
+    if (!vs) undetermined('the index expression uses variantSalt() but its body could not be parsed out of treatment.ts — the per-variant dimension cannot be reproduced');
+    variantSalt = (i) => (i > 0 ? `${vs[1]}${i}${vs[2]}` : '');
+    if (variantSalt(0) !== '') undetermined('variantSalt(0) does not reproduce as the empty string — the single-variant no-op contract this guard relies on no longer holds');
+  }
 
   const hash = (input) => {
     let h = basis;
@@ -117,7 +147,13 @@ function selector() {
     h ^= h >>> shifts[2];
     return h >>> 0;
   };
-  return { hash, salt: salt[1] };
+  // The hash INPUT is assembled in the source's own term order, so a reordering of the
+  // concatenation (which changes every draw, FNV being a rolling hash) is reproduced rather than
+  // silently ignored.
+  const index = (requestId, variantIndex) => hash(terms.map((t) => (
+    t === 'brief.requestId' ? requestId : t === 'o.salt' ? salt[1] : variantSalt(variantIndex)
+  )).join(''));
+  return { hash, index, salt: salt[1], hasVariantDimension: Boolean(variantTerm) };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -253,12 +289,34 @@ function parsePresets(name, body) {
   return { presets, problems };
 }
 
-/** Comment-resident rosters. Read from the RAW file — they are author metadata by design. */
+/**
+ * Comment-resident rosters. Read from the RAW file — they are author metadata by design.
+ *
+ * GENERALISED past `device-focused-NN`: the portrait catalog cites `portrait-NN` AND one
+ * `avatar-NN` cross-set reference, so a hardcoded family prefix would silently read zero names out
+ * of it and the roster contract would go unchecked on the very catalogs this check was extended
+ * for. Names are matched as `<family>-NN`; the caller decides which families it expects.
+ *
+ * `(none)` is a FIRST-CLASS value and returns `[]`, distinct from `null` for "no such line". An
+ * empty set has to be written out, because "no line" and "nothing in this class" are different
+ * claims and only one of them is auditable.
+ */
 function roster(raw, key) {
   const m = raw.match(new RegExp(`${key}:\\s*([\\s\\S]*?)(?:\\n\\s*\\n|\\n\\s{5}[A-Z][a-z]|-->)`));
   if (!m) return null;
-  const names = [...m[1].matchAll(/device-focused-(\d{2})/g)].map((x) => x[1]);
+  if (/\(none\)/i.test(m[1])) return [];
+  const names = [...m[1].matchAll(/\b([a-z][a-z0-9]*(?:-[a-z0-9]+)*?)-(\d{2})\b/g)].map((x) => ({ family: x[1], n: x[2], name: `${x[1]}-${x[2]}` }));
   return names.length ? names : null;
+}
+
+/** Slug rosters (not reference names): the retained-without-a-reference class. Same `(none)`
+ *  contract, same reason. */
+function slugRoster(raw, key) {
+  const m = raw.match(new RegExp(`${key}:\\s*([\\s\\S]*?)(?:\\n\\s*\\n|\\n\\s{5}[A-Z][a-z]|-->)`));
+  if (!m) return null;
+  if (/\(none\)/i.test(m[1])) return [];
+  const slugs = [...m[1].matchAll(/\b[a-z][a-z0-9]*(?:-[a-z0-9]+)+\b/g)].map((x) => x[0]);
+  return slugs.length ? slugs : null;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -348,6 +406,43 @@ if (presetsRead < 20) undetermined(`only ${presetsRead} presets read across ${fi
 // here rather than assumed, across four requestId SHAPES, because a real requestId is not a
 // uniform random string.
 // ─────────────────────────────────────────────────────────────────────────────
+// THE CANDIDATE SET THIS PROVES OVER. The camera axis gained a `restrictTo` —
+// `screenVisibleCandidates`, which narrows a catalog to its `ScreenVisible: yes` presets when an
+// operator is in frame. It returns `null` (no opinion) for an UNTAGGED catalog, so whole-catalog
+// reachability is the correct model only for catalogs carrying no tag. That is asserted rather
+// than assumed: a tagged catalog measured as if it were untagged would report a preset reachable
+// that the runtime filter removes, which is the mirror of the dead-configuration fault below.
+{
+  const restricted = readSource(join('src', 'craft', 'treatment.ts')).includes('restrictTo: screenVisibleCandidates(');
+  const tagged = [...byFile].filter(([, v]) => /^ScreenVisible:/m.test(delivered('x', v.raw))).map(([f]) => f);
+  console.log(`\ncamera restrictTo present in resolveCamera: ${restricted}; catalogs carrying ScreenVisible tags: ${tagged.length ? tagged.join(', ') : 'none'}`);
+  if (restricted && tagged.length) {
+    // Prove reachability over the NARROWED set too, for the tagged catalogs, or the claim below is
+    // only about the no-operator path.
+    for (const file of tagged) {
+      const { raw, presets } = byFile.get(file);
+      const body = delivered(file, raw);
+      const yes = new Set();
+      let cur = null;
+      for (const ln of body.split('\n')) {
+        const h = /^## ([a-z0-9-]+)\s*$/.exec(ln);
+        if (h) { cur = h[1]; continue; }
+        const t = /^ScreenVisible:\s*(\S+)\s*$/.exec(ln.trim());
+        if (t && cur && t[1] === 'yes') yes.add(cur);
+      }
+      if (yes.size === 0) {
+        undetermined(`${file} carries ScreenVisible tags but none parsed to \`yes\` — the narrowed candidate set cannot be derived, so reachability under an operator cannot be proved`);
+      }
+      const narrowed = presets.filter((p) => yes.has(p.slug));
+      const hits = new Array(narrowed.length).fill(0);
+      for (let i = 0; i < 4000; i++) hits[sel.index(`run-${i}`, 0) % narrowed.length]++;
+      const dead = narrowed.filter((_, i) => hits[i] === 0).map((p) => p.slug);
+      if (dead.length) violations.push(`${file}: inside the ScreenVisible=yes candidate set (${narrowed.length} of ${presets.length}), preset(s) [${dead.join(', ')}] were never drawn — dead configuration on the operator-in-frame path`);
+      console.log(`  · ${file}: ScreenVisible=yes narrows ${presets.length} -> ${narrowed.length}; all drawable: ${dead.length === 0}`);
+    }
+  }
+}
+
 const SHAPES = [
   (i) => `run-${i}`,
   (i) => `nm2-ionos-${i}`,
@@ -355,23 +450,35 @@ const SHAPES = [
   (i) => `0193a${i.toString(16).padStart(6, '0')}-7c3e-4a1b-9f2d-${(i * 7919).toString(16)}`,
 ];
 const N_PER_SHAPE = 4000;
+// Variant indices swept, not just 0. A per-variant salt term means each variant of a set draws
+// INDEPENDENTLY, so "reachable" is a claim about every variant slot and not only the first — and
+// variant 0 is the one that reproduces the pre-variant draw exactly, so measuring it alone would
+// miss a dead preset introduced by the new dimension. `hasVariantDimension` is derived; when the
+// term is absent every index collapses onto variant 0's and the sweep is harmlessly redundant.
+const VARIANTS = sel.hasVariantDimension ? [0, 1, 2] : [0];
 for (const [file, { presets }] of byFile) {
-  const hits = new Array(presets.length).fill(0);
+  const perVariant = new Map();
   let drawn = 0;
-  for (const shape of SHAPES) {
-    for (let i = 0; i < N_PER_SHAPE; i++) {
-      hits[sel.hash(shape(i) + sel.salt) % presets.length]++;
-      drawn++;
+  for (const v of VARIANTS) {
+    const hits = new Array(presets.length).fill(0);
+    for (const shape of SHAPES) {
+      for (let i = 0; i < N_PER_SHAPE; i++) {
+        hits[sel.index(shape(i), v) % presets.length]++;
+        drawn++;
+      }
     }
+    perVariant.set(v, hits);
   }
   if (drawn === 0) undetermined('the reachability loop drew ZERO presets — it cannot have cleared any catalog');
-  const dead = presets.filter((_, i) => hits[i] === 0).map((p) => p.slug);
-  if (dead.length) {
-    violations.push(`${file}: preset(s) [${dead.join(', ')}] were drawn 0 times over ${drawn} requestIds across ${SHAPES.length} id shapes — dead configuration that reads as choice`);
-  }
-  if (VERBOSE) {
-    const pct = hits.map((h) => ((h / drawn) * 100).toFixed(1));
-    console.log(`  · ${file} draw share %: ${pct.join(' ')}`);
+  for (const [v, hits] of perVariant) {
+    const dead = presets.filter((_, i) => hits[i] === 0).map((p) => p.slug);
+    if (dead.length) {
+      violations.push(`${file}: at variantIndex ${v}, preset(s) [${dead.join(', ')}] were drawn 0 times over ${N_PER_SHAPE * SHAPES.length} requestIds across ${SHAPES.length} id shapes — dead configuration that reads as choice`);
+    }
+    if (VERBOSE) {
+      const per = N_PER_SHAPE * SHAPES.length;
+      console.log(`  · ${file} v${v} draw share %: ${hits.map((h) => ((h / per) * 100).toFixed(1)).join(' ')}`);
+    }
   }
 }
 
@@ -388,10 +495,11 @@ for (const [file, { presets }] of byFile) {
 {
   const entry = byFile.get(REFERENCE_CATALOG);
   if (!entry) undetermined(`${REFERENCE_CATALOG} is not among the derived catalogs — device-focused is no longer an imageType, or the template changed`);
-  const refs = roster(entry.raw, 'References');
-  const excluded = roster(entry.raw, 'Excluded');
-  if (!refs) undetermined(`${REFERENCE_CATALOG} carries no \`References:\` roster in its header comment — the one-preset-per-reference contract cannot be checked`);
-  if (!excluded) undetermined(`${REFERENCE_CATALOG} carries no \`Excluded:\` roster — an empty exclusion must be written out as such, because "no line" and "nothing excluded" are not the same claim`);
+  const refs = (roster(entry.raw, 'References') ?? []).map((r) => r.n);
+  const excludedRaw = roster(entry.raw, 'Excluded');
+  const excluded = (excludedRaw ?? []).map((r) => r.n);
+  if (refs.length === 0) undetermined(`${REFERENCE_CATALOG} carries no \`References:\` roster in its header comment — the one-preset-per-reference contract cannot be checked`);
+  if (excludedRaw === null) undetermined(`${REFERENCE_CATALOG} carries no \`Excluded:\` roster — an empty exclusion must be written out as such, because "no line" and "nothing excluded" are not the same claim`);
 
   const dupRefs = refs.filter((r, i) => refs.indexOf(r) !== i);
   if (dupRefs.length) violations.push(`${REFERENCE_CATALOG}: reference(s) [${[...new Set(dupRefs)].join(', ')}] listed twice in the References roster`);
@@ -490,6 +598,309 @@ const SHARED_SIDE = /\bover the shoulder\b|\bbehind and above\b|\babove and behi
     `square-to-display claims checked: ${squareChecked}`);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// The inline `ScreenVisible:` tag is the form CODE can read; the two header lists above are the
+// author-facing form. A comment is stripped by the loader, which is why the declaration needed a
+// form outside one — and why there are now two forms of the same fact. Two forms are only safe if
+// something pins them together, so that is what this does: the tag set must reproduce the lists
+// exactly, in both directions.
+//
+// The tag must also NOT be the first non-empty line under its heading. `parseTreatmentPresets`
+// takes that line as the preset's injectable TEXT, so a tag placed first would be sent to the model
+// as the camera instruction. `p.text` is that first line, so comparing against it is the check.
+// ─────────────────────────────────────────────────────────────────────────────
+const SCREEN_VISIBLE_VALUES = new Set(['yes', 'unattended-only']);
+{
+  const entry = byFile.get(REFERENCE_CATALOG);
+  const raw = entry.raw;
+  // Re-derived locally rather than reaching into the block above: the two checks must be able to
+  // fail independently, and a shared binding would make this one silently inherit that one's
+  // parse failure.
+  const headerList = (label) => {
+    const m = raw.match(new RegExp(`${label}:\\s*([\\s\\S]*?)\\.\\s*\\n`));
+    if (!m) return [];
+    return [...m[1].matchAll(/[a-z][a-z0-9]*(?:-[a-z0-9]+)+/g)].map((x) => x[0]);
+  };
+  const unattendedDeclared = headerList('Self-consistent only with NO operator');
+  if (unattendedDeclared.length === 0) {
+    undetermined(`${REFERENCE_CATALOG}: the no-operator header list parsed to zero slugs here, so the tag<->declaration pin cannot be checked`);
+  }
+  const tags = new Map();
+  let malformed = 0;
+  // Line scan, not a lookahead regex: `(?=\n## |\n*$)` under /m ends the body at the FIRST line
+  // end, so it captured the text line and stopped short of the tag — and this extractor's own
+  // anti-vacuity assertion is what caught that, by reporting zero tags read instead of passing.
+  const blocks = [];
+  for (const line of raw.split('\n')) {
+    const h = line.match(/^## (\S+)\s*$/);
+    if (h) blocks.push({ slug: h[1], body: [] });
+    else if (blocks.length) blocks[blocks.length - 1].body.push(line);
+  }
+  for (const b of blocks) {
+    const slug = b.slug;
+    const hits = b.body
+      .map((l) => l.match(/^ScreenVisible:[ \t]*(\S+)[ \t]*$/))
+      .filter(Boolean)
+      .map((x) => x[1]);
+    if (hits.length > 1) {
+      violations.push(`${REFERENCE_CATALOG}: ${slug} carries ${hits.length} \`ScreenVisible:\` lines — one fact, one line, or the parser silently takes whichever it reads first`);
+      malformed++;
+      continue;
+    }
+    if (hits.length === 1) tags.set(slug, hits[0]);
+  }
+
+  if (tags.size === 0) {
+    undetermined(`${REFERENCE_CATALOG}: read zero \`ScreenVisible:\` tags, so the tag<->declaration check read nothing — either the tags were removed or this extractor is not reading them`);
+  } else {
+    for (const pre of entry.presets) {
+      const tag = tags.get(pre.slug);
+      if (tag === undefined) {
+        violations.push(`${REFERENCE_CATALOG}:${pre.line} ${pre.slug}: no \`ScreenVisible:\` tag. The runtime candidate filter reads the tag, not the header lists, so an untagged preset is invisible to it and falls open`);
+        continue;
+      }
+      if (!SCREEN_VISIBLE_VALUES.has(tag)) {
+        violations.push(`${REFERENCE_CATALOG}:${pre.line} ${pre.slug}: \`ScreenVisible: ${tag}\` is outside the closed vocabulary [${[...SCREEN_VISIBLE_VALUES].join(', ')}] — an unknown value makes the filter fail open without saying so`);
+        continue;
+      }
+      // The tag must not have become the injectable line.
+      if (pre.text !== null && /^ScreenVisible:/.test(pre.text)) {
+        violations.push(`${REFERENCE_CATALOG}:${pre.line} ${pre.slug}: the \`ScreenVisible:\` tag is the FIRST line under the heading, so parseTreatmentPresets will take it as the camera text and ship it to the model. Put the text first and the tag below it`);
+      }
+      const declaredUnattended = unattendedDeclared.includes(pre.slug);
+      const taggedUnattended = tag === 'unattended-only';
+      if (declaredUnattended !== taggedUnattended) {
+        violations.push(`${REFERENCE_CATALOG}:${pre.line} ${pre.slug}: the header declares it ${declaredUnattended ? 'self-consistent only with NO operator' : 'screen-see-able with an operator'} but the tag says \`${tag}\` — the author-facing declaration and the machine-readable one have drifted, and code follows the tag`);
+      }
+    }
+    const ghostTags = [...tags.keys()].filter((s) => !entry.presets.some((pre) => pre.slug === s));
+    if (ghostTags.length) {
+      violations.push(`${REFERENCE_CATALOG}: \`ScreenVisible:\` tag(s) on [${ghostTags.join(', ')}], which are not presets in the body`);
+    }
+    // Count each value, never `size - other`: a subtraction reports an INVALID value as a valid
+    // one, which is the mis-tag blindness this file already guards for elsewhere.
+    const tally = new Map();
+    for (const v of tags.values()) tally.set(v, (tally.get(v) ?? 0) + 1);
+    const taggedUnattendedCount = tally.get('unattended-only') ?? 0;
+    const shown = [...tally.entries()].map(([v, n]) => `${n} ${v}`).join(', ');
+    console.log(`ScreenVisible tags read: ${tags.size} (${shown})` +
+      `${malformed ? `, ${malformed} malformed` : ''}; pinned against the header lists`);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// THE CHARACTER CATALOGS — portrait and avatar. Same discipline as the device-focused rosters,
+// with two things device-focused does not need.
+//
+//  1. A THIRD roster class. `low-angle-hero` and `profile-side-on` correspond to no reference and
+//     cannot be deleted: they are asserted as real, prompt-present slugs by five uds-moderator-ctx
+//     test files and by four image-svc files, neither of which this axis owns. So the count is
+//     `References + Cross-set + Retained`, and a preset in no class at all is the
+//     `device-focused-10` failure arriving from the other direction — a preset with no provenance
+//     rather than a reference with no preset.
+//  2. A SHOT-SIZE BAND declaration, checked BOTH WAYS against each preset's own injected text.
+//     This is the mis-declaration hole the brightness work fell into: a roster is coverage, and
+//     coverage cannot see a preset declared in the wrong band. The bands are mutually exclusive
+//     vocabulary, so the check is exact in both directions rather than a presence test.
+//
+// Which catalogs are subject to this is DERIVED from the files, not listed: any camera catalog
+// whose header declares itself authored from the Figma references must carry the rosters and the
+// band table. `shared-camera-scene.md` never claimed that and is left alone rather than being made
+// to invent a declaration — but it cannot opt out silently either, because the claim is what pulls
+// it in and the claim is printed below.
+// ─────────────────────────────────────────────────────────────────────────────
+const AUTHORED_CLAIM = /AUTHORED FROM THE FIGMA REFERENCES/i;
+
+/** Band -> the vocabulary the injected line must use to state that band. Mutually exclusive by
+ *  construction; the exclusivity is what makes the reverse direction checkable. NOT derivable from
+ *  image-svc — nothing there enumerates shot sizes; `MARKERS.camera` carries some of these words
+ *  but as a collision detector, with no mapping to a band. */
+const BANDS = {
+  'close-up': /\bclose-up\b/i,
+  'head-and-shoulders': /\bhead-and-shoulders\b/i,
+  'chest-up': /\bchest-up\b/i,
+  'waist-up': /\bwaist-up\b/i,
+  'knee-up': /\bknee-up\b/i,
+  'full-body': /\bwhole figure\b|\bfull body\b|\bhead to foot\b/i,
+};
+
+/**
+ * FRAME OCCUPANCY — the mechanism this rewrite ships, expressed as a guard.
+ *
+ * Measured: shot size barely lands from the camera line, because "close"/"tight" are relative
+ * MAGNITUDES and the image model's portrait prior is chest-to-waist whatever adjective precedes
+ * it. The wording that lands states what OCCUPIES the frame and where the edges cut. So a preset
+ * declared `close-up` must carry an occupancy clause and not rest on the adjective alone —
+ * otherwise the catalog has a close-up slug and no close-up, which is exactly the state the
+ * previous `close-shallow-offgaze` ("close waist-up") was in.
+ */
+const OCCUPANCY = /\bfill(?:s|ing)\b[^,]*\bframe\b|\bcropped by the (?:top|bottom|left|right|near|far) edge\b|\boccupying\b|\bentering the bottom corners\b|\bfilling the upper\b/i;
+
+/**
+ * FRAME ASPECT — forbidden on every camera catalog, this one derived from a recorded defect rather
+ * than from taste. `top-down-in-hands` was authored "tall crop" from a 1579x2369 reference;
+ * `brief.dimensions` is the CALLER's, the measurement brief asked 1280x720, and the clause was
+ * UNSATISFIABLE on the run that drew it — honoured 1/5 with the clause and 4/5 with it removed. A
+ * reference's own aspect describes the reference, never the output. Note the avatar reference set
+ * is uniformly square and `shared-image-type-avatar.md` says "Always 1:1", which is precisely the
+ * case where stating it would feel safe and would still be the caller's call, not this axis's.
+ */
+const FRAME_ASPECT = /\btall (?:crop|frame|format)\b|\bwide crop\b|\bportrait (?:crop|frame|format|orientation|aspect)\b|\blandscape (?:crop|frame|format|orientation|aspect)\b|\bsquare (?:crop|frame|format|aspect)\b|\bvertical frame\b|\bhorizontal frame\b|\baspect ratio\b|\b\d{1,2}:\d{1,2}\b/i;
+
+let aspectPresetsRead = 0;
+for (const [file, { presets }] of byFile) {
+  for (const p of presets) {
+    if (p.text === null) continue;
+    aspectPresetsRead++;
+    if (FRAME_ASPECT.test(p.text)) {
+      violations.push(`${file}:${p.line} ${p.slug}: asserts a FRAME ASPECT ("${p.text}") — brief.dimensions is the caller's, so an aspect clause is unsatisfiable on any request that asked for a different one; a reference's own aspect describes the reference, never the output`);
+    }
+  }
+}
+if (aspectPresetsRead === 0) undetermined('the frame-aspect check read ZERO preset lines — 0 violations over 0 lines is not a pass');
+
+const authored = [...byFile].filter(([, v]) => AUTHORED_CLAIM.test(v.raw)).map(([f]) => f);
+if (authored.length === 0) {
+  undetermined('no camera catalog claims to be authored from the Figma references — the roster and band checks read nothing, which cannot clear them');
+}
+console.log(`\ncatalogs claiming Figma-reference authorship: ${authored.join(', ')}`);
+
+let bandPresetsChecked = 0;
+let closeUpPresetsChecked = 0;
+let bandExemptCatalogs = 0;
+let bandCheckedCatalogs = 0;
+for (const file of authored) {
+  const { raw, presets } = byFile.get(file);
+  const slugs = presets.map((p) => p.slug);
+  const own = file.replace(/^shared-camera-|\.md$/g, '');
+
+  const refs = roster(raw, 'References');
+  const excluded = roster(raw, 'Excluded');
+  if (refs === null) undetermined(`${file} claims Figma-reference authorship but carries no \`References:\` roster — the provenance contract cannot be checked`);
+  if (excluded === null) undetermined(`${file} carries no \`Excluded:\` roster — an empty exclusion must be written out as such, because "no line" and "nothing excluded" are not the same claim`);
+
+  // The device-focused catalog predates the two extra classes and legitimately has neither line;
+  // treat a missing class as empty ONLY there, and require the declaration everywhere else, so a
+  // new catalog cannot skip it by omission.
+  const isLegacy = file === REFERENCE_CATALOG;
+  const cross = roster(raw, 'Cross-set references');
+  const retained = slugRoster(raw, 'Retained without a reference');
+  if (!isLegacy && cross === null) undetermined(`${file} carries no \`Cross-set references:\` roster — write \`(none)\`; "no line" and "no cross-set reference" are not the same claim`);
+  if (!isLegacy && retained === null) undetermined(`${file} carries no \`Retained without a reference:\` roster — write \`(none)\`; a preset with no provenance is the device-focused-10 failure from the other direction`);
+  const crossList = cross ?? [];
+  const retainedList = retained ?? [];
+
+  // Provenance accounts for EVERY preset exactly once.
+  const accounted = refs.length + crossList.length + retainedList.length;
+  if (accounted !== presets.length) {
+    violations.push(`${file}: ${presets.length} presets against ${refs.length} references + ${crossList.length} cross-set + ${retainedList.length} retained = ${accounted} accounted for — either a padded count or a preset with no provenance`);
+  }
+  // A retained slug must be a real preset, and a cross-set reference must not be from this
+  // catalog's own family (that would be an ordinary reference misfiled as a cross-set one).
+  for (const sl of retainedList) {
+    if (!slugs.includes(sl)) violations.push(`${file}: \`Retained without a reference\` names [${sl}], which is not a preset in the body — the roster and the catalog have drifted apart`);
+  }
+  for (const c of crossList) {
+    if (c.family === own) violations.push(`${file}: \`Cross-set references\` names [${c.name}], which is this catalog's OWN family — an own-family reference belongs in the References roster, where the contiguity check can see it`);
+  }
+  // Own-family references + exclusions must be contiguous from 01: a component that exists in
+  // Figma but appears in neither roster is the device-focused-10 failure repeating silently.
+  const ownRefs = refs.filter((r) => r.family === own).map((r) => Number(r.n));
+  const ownExcl = excluded.filter((r) => r.family === own).map((r) => Number(r.n));
+  if (ownRefs.length === 0) {
+    violations.push(`${file}: the References roster names no \`${own}-NN\` component at all — a catalog authored from the ${own} references must cite them`);
+  }
+  const both = ownRefs.filter((r) => ownExcl.includes(r));
+  if (both.length) violations.push(`${file}: reference(s) [${both.join(', ')}] are in BOTH the References and Excluded rosters`);
+  const dup = ownRefs.filter((r, i) => ownRefs.indexOf(r) !== i);
+  if (dup.length) violations.push(`${file}: reference(s) [${[...new Set(dup)].join(', ')}] listed twice in the References roster`);
+  const all = [...ownRefs, ...ownExcl].sort((a, b) => a - b);
+  for (let i = 0; i < all.length; i++) {
+    if (all[i] !== i + 1) {
+      violations.push(`${file}: References + Excluded = [${all.join(', ')}] for family ${own}, which is not contiguous from 01 — ${own}-${String(i + 1).padStart(2, '0')} is accounted for in neither roster`);
+      break;
+    }
+  }
+
+  // ── SHOT-SIZE BAND declaration <-> injected text, BICONDITIONAL ──
+  // WHICH catalogs are subject to this is derived from the bodies, not listed. A catalog whose
+  // presets state a human shot-size band must declare the bands; a catalog that declares bands
+  // must state them. `device-focused` and `scene` state none — their subject is a device and a
+  // room, and neither has a waist — so they are excluded by the data rather than by a name in this
+  // script, and an opt-out by rewording is visible as a drop in the printed count below.
+  const usesBands = presets.some((x) => x.text !== null && Object.values(BANDS).some((re) => re.test(x.text)));
+  const blk = raw.match(/SHOT-SIZE BAND, per preset\.[\s\S]*?\n((?:\s{7}[a-z-]+:[\s\S]*?)+?)\n\s*\n/);
+  if (usesBands && !blk) {
+    undetermined(`${file}: its presets state human shot-size bands but the header carries no \`SHOT-SIZE BAND, per preset.\` table — the declaration cannot be read back against the text`);
+  }
+  if (!usesBands && blk) {
+    violations.push(`${file}: the header declares a SHOT-SIZE BAND table but no preset in the body states any band — the table is a claim the prompt never makes`);
+  }
+  if (!usesBands) { console.log(`  · ${file}: ${presets.length} presets = ${refs.length} refs + ${crossList.length} cross-set + ${retainedList.length} retained; states no human shot-size band, so the band table does not apply`); bandExemptCatalogs++; continue; }
+  const declared = new Map();
+  // The terminator is END-OF-BLOCK, not end-of-line: a band whose slug list WRAPS onto a second,
+  // more-deeply-indented line had its continuation silently dropped by a `$` under /m, which
+  // reported exactly the wrapped slugs as undeclared. `(?![\s\S])` is true end of input.
+  for (const m of blk[1].matchAll(/^ {7}([a-z-]+):([\s\S]*?)(?=\n {7}[a-z-]+:|(?![\s\S]))/gm)) {
+    const band = m[1];
+    if (!(band in BANDS)) { violations.push(`${file}: the band table names \`${band}\`, which is not one of [${Object.keys(BANDS).join(', ')}] — an unknown band cannot be checked against any text`); continue; }
+    declared.set(band, [...m[2].matchAll(/\b[a-z][a-z0-9]*(?:-[a-z0-9]+)+\b/g)].map((x) => x[0]));
+  }
+  if (declared.size === 0) undetermined(`${file}: the band table parsed to ZERO bands — the extractor read nothing`);
+
+  const declaredSlugs = [...declared.values()].flat();
+  const dupDecl = declaredSlugs.filter((x, i) => declaredSlugs.indexOf(x) !== i);
+  if (dupDecl.length) violations.push(`${file}: preset(s) [${[...new Set(dupDecl)].join(', ')}] declared in more than one shot-size band`);
+  const undeclared = slugs.filter((x) => !declaredSlugs.includes(x));
+  if (undeclared.length) violations.push(`${file}: preset(s) [${undeclared.join(', ')}] appear in NO shot-size band — an undeclared preset fails open and silently, which is the failure this table exists for`);
+  const ghost = declaredSlugs.filter((x) => !slugs.includes(x));
+  if (ghost.length) violations.push(`${file}: the band table names [${ghost.join(', ')}], which is not a preset in the body — the declaration and the catalog have drifted apart`);
+
+  for (const [band, list] of declared) {
+    for (const sl of list) {
+      const pr = presets.find((x) => x.slug === sl);
+      if (!pr || pr.text === null) continue;
+      bandPresetsChecked++;
+      if (!BANDS[band].test(pr.text)) {
+        violations.push(`${file}:${pr.line} ${sl}: declared in the \`${band}\` band, but its injected text never states that band ("${pr.text}") — the declaration is a claim the prompt never makes`);
+      }
+      for (const [other, re] of Object.entries(BANDS)) {
+        if (other === band) continue;
+        if (re.test(pr.text)) {
+          violations.push(`${file}:${pr.line} ${sl}: declared \`${band}\` but its injected text also states \`${other}\` ("${pr.text}") — two shot sizes in one line is the contradiction the single-voice axis exists to remove`);
+        }
+      }
+      if (band === 'close-up') {
+        closeUpPresetsChecked++;
+        if (!OCCUPANCY.test(pr.text)) {
+          violations.push(`${file}:${pr.line} ${sl}: declared \`close-up\` but its injected text states no FRAME OCCUPANCY ("${pr.text}") — "close" and "tight" are relative magnitudes the image model drops; the line has to say what fills the frame and where the edges cut`);
+        }
+      }
+    }
+  }
+  if (!declared.has('close-up')) {
+    violations.push(`${file}: no preset is declared in the \`close-up\` band — the close-up range is the one this axis was measured to be missing, and a character catalog without it leaves shot size at the model's chest-to-waist prior`);
+  }
+  if (declared.size < 3) {
+    violations.push(`${file}: only ${declared.size} shot-size band(s) across ${presets.length} presets — a near-homogeniser on the one dimension this axis most obviously owns`);
+  }
+  bandCheckedCatalogs++;
+  console.log(`  · ${file}: ${presets.length} presets = ${refs.length} refs + ${crossList.length} cross-set + ${retainedList.length} retained; ${declared.size} shot-size bands` +
+    (ownExcl.length ? `; excluded ${ownExcl.map((n) => `${own}-${String(n).padStart(2, '0')}`).join(', ')}` : '; nothing excluded'));
+}
+// Both new extractors must have read something. `bandPresetsChecked` guards the whole table and
+// `closeUpPresetsChecked` guards the one check that is the point of this rewrite; a rewording that
+// removed every close-up would otherwise clear it by reading nothing.
+if (bandPresetsChecked === 0) undetermined('the shot-size band check read ZERO presets — 0 violations over 0 presets is not a pass');
+if (closeUpPresetsChecked === 0) undetermined('the frame-occupancy check read ZERO close-up presets — the check that carries this rewrite cannot clear itself by having no subject');
+// TWO character catalogs state shot-size bands (portrait, avatar). A floor rather than an equality
+// so a fifth imageType can arrive without editing this script — but not zero and not one, because
+// the whole band check could otherwise be evaded by rewording one catalog out of its own subject.
+if (bandCheckedCatalogs < 2) {
+  undetermined(`only ${bandCheckedCatalogs} catalog(s) were found to state a human shot-size band (${bandExemptCatalogs} exempt) — the band check has lost its subject, which is not the same as clearing it`);
+}
+console.log(`band declarations checked: ${bandPresetsChecked} presets across ${bandCheckedCatalogs} catalogs (${bandExemptCatalogs} state no band and are exempt), of which ${closeUpPresetsChecked} close-up; frame-aspect lines checked: ${aspectPresetsRead}`);
+
 if (legibilityClausesRead === 0 && VERBOSE) {
   console.log('note: no clause anywhere in the four catalogs uses legibility vocabulary — the clause-local\n' +
     '      check is currently vacuous by construction, which is the desired end state, not a fault.');
@@ -503,7 +914,11 @@ if (violations.length) {
   for (const v of violations) console.error(`  ✗ ${v}`);
   process.exit(1);
 }
-console.log('PASS — every camera preset is reachable and on its own axis (no lighting marker, mood clause,\n' +
-  '       prop noun, brand mark or screen-legibility claim); the device-focused catalog accounts for\n' +
-  '       every Figma reference exactly once; and its screen-visibility declaration agrees with the\n' +
-  '       text each preset actually injects.');
+console.log('PASS — every camera preset is reachable at every variant index and on its own axis (no\n' +
+  '       lighting marker, mood clause, prop noun, brand mark, screen-legibility claim or frame\n' +
+  '       aspect); every reference-authored catalog accounts for each of its presets exactly once as\n' +
+  '       referenced, cross-set or retained, and for each of its Figma components exactly once as\n' +
+  '       referenced or excluded; the device-focused screen-visibility declaration agrees with the\n' +
+  '       text each preset injects; and every character catalog declares a shot-size band per preset\n' +
+  '       that the preset text states, occupies the close-up band, and words its close-up as frame\n' +
+  '       occupancy rather than as a size adjective.');
