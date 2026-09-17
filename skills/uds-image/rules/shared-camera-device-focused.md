@@ -82,6 +82,11 @@
        over-shoulder-eye-level, wide-side-on-workstation, elevated-three-quarter-desk,
        table-level-gestural-candid, top-down-in-hands.
        Self-consistent only with NO operator: frontal-elevated-device-hero.
+       Each preset also carries a machine-readable `ScreenVisible: yes | unattended-only` line,
+       BELOW its text so `parseTreatmentPresets` still takes the text as the injectable line. That
+       tag is the form code can read; these two lists are the author-facing form. They are pinned
+       to each other by check-camera-axis.mjs, so they cannot drift — a comment is stripped by the
+       loader, which is why the declaration needed a form outside one.
 
      RENDERED TEXT. All twelve references are photographs of real product UI, so every screen in
      the source set is covered in legible lettering, and this axis is the one axis whose subject IS
@@ -158,33 +163,44 @@
 
 ## high-oblique-over-hands
 steep oblique from behind and above the hands onto an open laptop, normal lens, the keystoned screen filling the upper frame, depth falling away fast
+ScreenVisible: yes
 
 ## over-shoulder-handheld
 over the shoulder onto a tablet held low in both hands, longer lens, one edge blocked by a hard-blurred near mass, the room deep and soft behind
+ScreenVisible: yes
 
 ## close-frontal-screen
 close over the shoulder at screen height, the screen nearly square to the lens across the upper two-thirds, a forearm below, background soft
+ScreenVisible: yes
 
 ## high-angle-across-table
 high angle across a table onto a propped tablet at three-quarters, normal lens, near tabletop objects large and soft along the lower edge
+ScreenVisible: yes
 
 ## high-over-shoulder-desk
 steep look down from above and behind a shoulder onto a phone held in both hands at a desk, normal lens, forearms leading in diagonally
+ScreenVisible: yes
 
 ## over-shoulder-eye-level
 tight over the shoulder at head height, the handheld screen in the far upper quadrant, the near shoulder a large soft mass across the rest
+ScreenVisible: yes
 
 ## wide-side-on-workstation
 wide side-on at seated chest height and level, normal-wide lens, a monitor at one end and a laptop centre, deep focus front to back
+ScreenVisible: yes
 
 ## elevated-three-quarter-desk
 elevated three-quarter about forty-five degrees down onto a propped tablet, normal lens, desk objects layered from the near corner back to it
+ScreenVisible: yes
 
 ## frontal-elevated-device-hero
 frontal and slightly elevated onto an open laptop from the display's own side of the table, normal lens, the table behind the device empty
+ScreenVisible: unattended-only
 
 ## table-level-gestural-candid
 table-level and level across a table, long lens, the device sharp at one side with gesturing hands sharp in front of it, everything beyond soft
+ScreenVisible: yes
 
 ## top-down-in-hands
 near top-down from directly above and behind the head onto a handheld screen, normal lens, the head a soft mass at the bottom edge
+ScreenVisible: yes
