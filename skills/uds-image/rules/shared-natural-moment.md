@@ -22,7 +22,7 @@ squared-up stance:
 - a forward lean, or weight clearly on one foot
 - a half-turn toward something outside the frame
 - sleeves pushed up, a chair turned at an angle, a jacket over a chair back
-- eyeline following the action rather than meeting the lens
+- an eyeline that goes wherever the action sends it
 - a limb carried away from the body — an arm up, a hand out, a reach across — caught at
   the top of the movement rather than back at rest
 
@@ -51,7 +51,44 @@ before reading a single object. So send the attention somewhere specific:
   a single subject: it implies a second person without a second body, and it lets the torso stay
   angled one way while the head turns back the other, the most legible candid posture there is
 
-It must never rest on the lens, or on nothing.
+It must never rest on nothing.
+
+### Whether the lens is one of the places it can go
+
+<!-- ITEM 2. The line here was an unconditional veto on lens contact, and a veto cannot be right
+     for every situation: a subject whose whole purpose is to address the reader is looking at the
+     reader, and `# Scene`'s `Engagement` row says so on the runs where the planner wrote it. Two
+     independent reasons this had to become conditional rather than be strengthened:
+       - It contradicted STATED CONTENT. `Engagement` is the planner's, `feature` is content
+         authority, and this file is inlined at the TOP of the prompt while `# Scene` sits far
+         below it. An absolute rule above a contradicting statement below is settled by nothing.
+       - It could not be conditioned on the image type. `craft-image-type.md` is gated on
+         `!thinProfile` in image-svc's prompt.ts, so a `minimal` prompt NEVER STATES the type —
+         verified in an assembled prompt, not assumed. A rule keyed on `portrait` would be dead
+         text in the one profile that most needs it. The situation is the key because the
+         situation is the thing `minimal` does carry. -->
+
+The three targets above are the default and they are right for most frames, because most frames
+show somebody absorbed in their own work and a person absorbed in something is not looking at
+you. But the default is not a prohibition, and there is one situation it is wrong for: **when the
+subject's purpose in the frame is to address the reader directly.** Somebody vouching for
+something in their own words, recommending it, or speaking as themselves to whoever is reading
+is in conversation with the viewer, and meeting the lens is what that conversation looks like.
+Turning them away from it makes the frame evasive.
+
+So read it off the situation, in this order:
+
+1. **The situation states where the attention goes** — `# Scene`'s `Engagement` row, or the
+   Feature itself, says what the subject is looking at or toward. That is content and it stands.
+   Render it, including when what it names is the lens, and take nothing here as overriding it.
+2. **The subject is addressing the reader** and the situation left the attention open — the lens
+   is the right target. Hold it properly: square enough to be met, not a glance caught in
+   passing.
+3. **Anything else** — one of the three targets above, chosen for what is actually happening.
+
+Mid-action still governs in every one of those cases. Meeting the lens is not a licence to
+square up and hold still: the body stays in the middle of something, the weight stays off
+centre, and the frame is still a moment rather than a pose.
 
 **A device in the frame is not automatically what the attention is on.** When the subject has
 handed something off — a job now running without them, a message already answered — their

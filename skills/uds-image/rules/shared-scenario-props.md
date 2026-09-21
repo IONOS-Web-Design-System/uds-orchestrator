@@ -49,20 +49,38 @@
 
 # Scenario props — from the place and the person, never from a default
 
-Props are the **identity layer**: one or two everyday objects that answer "where is this and
-whose is it?" at a glance. They are chosen from the SCENARIO — never from a brand, never from a
-habit, and never carried over from a previous generation.
+A prop is the **identity layer**: an everyday object that answers "where is this and whose is
+it?" at a glance. When one is in the frame it is chosen from the SCENARIO — never from a brand,
+never from a habit, and never carried over from a previous generation.
 
-They come from the **intersection of two lookups**: what the PLACE puts within reach, and what
-the PERSON brings with them. Take **at most one object from each table, one or two objects in
-total.** A frame with three or more competing objects reads as clutter, not as identity.
+**A prop is OPTIONAL. Nothing here requires one.** The two tables below are a source of
+candidates, not a list of things to include: they say what this place and this person could
+plausibly have within reach, and whether any of it is actually in this frame is a decision you
+make for this scene. Ask it of each candidate you are considering, one at a time:
+
+- Would this object be here, in this room, during this activity, at this hour?
+- Is it where the subject's own task would have left it, or would it have to be placed for the
+  photograph?
+- Does the frame's composition have somewhere for it to sit that the action does not already
+  occupy?
+
+An object that fails any of those does not go in. **A frame with no prop at all is a correct
+answer, not an incomplete one** — the place, the work and the person carry it, and a scene whose
+action already fills the frame gains nothing from an object added beside it. Where you do include
+one, they still come from the **intersection of two lookups** — what the PLACE puts within reach
+and what the PERSON brings — and you take **at most one object from each table, one or two
+objects in total**: a frame with three or more competing objects reads as clutter, not as
+identity.
 
 ## Props by place — a hard lookup on the scenario's `place`
 
 Match the brief's `place` value EXACTLY. If the brief names no place, take nothing from this
-table.
+table. The KEY match is hard — a row that is not this brief's place is not available to it at
+all — but what a matched row gives you is a menu of candidates rather than an instruction: the
+row says what this place could put within reach, and the three questions above decide whether
+any of it is actually in this frame.
 
-| `place` | What the place puts within reach |
+| `place` | What the place COULD put within reach |
 |---|---|
 | `open-plan-office` | a lanyard set down, a stapler, a rolled-up floorplan |
 | `home-office` | unopened mail, a tin of pencils, a cork pinboard |
@@ -77,7 +95,7 @@ table.
 ## Props by who — a SEMANTIC match on the scenario's `who`
 
 `who` is free prose, so **read it and judge which row it resembles.** The labels are exemplars,
-not an exhaustive list of trades.
+not an exhaustive list of trades, and a matched row is again a menu rather than an instruction.
 
 <!-- NO-MATCH IS NOT HONOURED BY THE MODEL. Measured 2026-08-25, craftProfile=full, `who` both
      ABSENT and set to an unrecognisable string: the model took the same who-row anyway in 4 of 4
@@ -93,7 +111,7 @@ not an exhaustive list of trades.
 The place table above has already furnished the surface, and in that case its objects are the whole
 frame. A surface carrying only the place's own objects is the right answer, not an incomplete one.
 
-| If `who` reads as… | What the person brings |
+| If `who` reads as… | What the person COULD bring |
 |---|---|
 | a photographer or visual creative | a loupe, a contact sheet, a spare battery |
 | a writer, blogger or other knowledge worker | a hardback notebook, a fountain pen, page proofs |
@@ -105,14 +123,20 @@ frame. A surface carrying only the place's own objects is the right answer, not 
 
 ## Resolving the intersection
 
-1. Look up the `place` row. Look up (by reading) the `who` row.
-2. **Both resolved** — take one object from each. That pair IS the scenario: the room and the
+1. Look up the `place` row. Look up (by reading) the `who` row. Whatever they offer is the
+   candidate set, and **the candidate set is the CEILING on what may appear, never a floor.**
+2. Put each candidate you are considering through the three questions above. Keep only the ones
+   that pass, and **zero passing is an ordinary outcome** — say nothing about props and let the
+   place, the work and the person carry the frame.
+3. **At most one object from each table, one or two objects in total.** Where both tables offer
+   something that passes and you want two, take one from each: that pair is the room and the
    person, not one of them twice.
-3. **One resolved** — take one or two objects from the row that resolved.
-4. **Neither resolved** — name no prop at all. An unkeyed object is a house default, and a house
-   default is what makes every image look like the last one.
+4. **Neither table resolved** — name no prop at all. An unkeyed object is a house default, and a
+   house default is what makes every image look like the last one.
 5. Never combine two rows of the same table, and never take an object from a row the scenario did
    not select — a hospitality object in an office brief is the failure this rule exists to prevent.
+6. An object the BRIEF itself names is not a prop and none of this governs it: it is content, it
+   is in the frame, and it does not count against the two above.
 
 **Every object belongs to exactly ONE of the two tables.** The place table holds what the ROOM
 supplies and the who table holds what the PERSON carries; an object listed in both would have two
@@ -126,7 +150,12 @@ still there after the person leaves the room.
 `timeOfDay`, and vary the pick across a set — a row is a menu, not a sentence. Do not reuse the
 first entry every time.
 
-## How the prop sits in frame, per image type
+## How the prop sits in frame, per image type — where there is one
+
+These describe how to place a prop you have already decided belongs. They are not a reason to
+decide one belongs: a `scene` with nothing near the lens is composed on its depth, not on an
+object introduced to fill the near field.
+
 
 - **`scene` and `device-focused`** — the objects sit on the surface CLOSEST to the lens, rendered
   softly out of focus while the subject or the screen stays sharp behind them. This is a depth
@@ -137,8 +166,8 @@ first entry every time.
 
 ## Colour
 
-Give ONE of the chosen objects a single strong, saturated colour of your own choosing rather
-than a muted neutral — a definite colour reads with far more impact than a beige one, and it
+Where you have chosen an object, give ONE of them a single strong, saturated colour of your own
+choosing rather than a muted neutral — a definite colour reads with far more impact than a beige one, and it
 seeds the frame's accent. Choose a colour that suits what the object actually is and this
 specific scene. Warm mid-tones tie into most surfaces; the saturated one carries the interest.
 

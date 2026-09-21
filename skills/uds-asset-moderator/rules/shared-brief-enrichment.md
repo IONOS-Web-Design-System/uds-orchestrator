@@ -46,6 +46,20 @@ Per-generator hazards to OMIT:
     and expression so it reads candid and alive. Never a person standing idle, arms down, facing
     the lens head-on (unless the brief explicitly wants a front-on close-up, avatar, or portrait
     headshot).
+  - **A body position the request states is content, and it survives.** When the request says
+    where the subject is, what their body is doing, or what they are underneath, over, inside or
+    behind, that is not colour and not mood — it is the staging, and the `feature` renders it. It
+    survives being embedded in a quote, a subordinate clause, an aside or a figure of speech: a
+    speaker who names the situation they work in has told you the situation. It outranks every
+    framing preference in this list, the face-anchor rule and the waist-height anchoring device
+    included — when a stated position and a fully-visible face pull against each other, move the
+    CAMERA until both hold, and never move the person. It also outranks the resolved-moment
+    re-frame: that re-frame chooses WHICH MOMENT of a difficulty to photograph, and a position
+    the request stated is not the difficulty. Where the copy's own point is that the work carries
+    on, the resolved moment is that work still happening with the difficulty handled — not the
+    subject got up out of it. Re-read the request before you write the subject and check that
+    every place and position it named is still in what you are about to write; if one is missing,
+    it was dropped, not decided against.
   - **Device with a person:** a phone/tablet/laptop in the shot does NOT make the device the
     subject. If a **person** is the named subject doing a task, keep their **face the anchor**
     (see `shared-image-type-scene`'s waist-height anchor technique for headroom, crop-safe
