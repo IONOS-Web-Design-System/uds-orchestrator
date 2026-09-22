@@ -84,9 +84,14 @@
      is kept only because it is what the reference shows and what bounds the crop.
      The geometry wording is KEPT anyway, on two grounds that do not depend on the falsified
      hypothesis: it is what `avatar-07` actually shows, and it is the only form that states the
-     face is inside a crop that takes the crown — this type's one hard constraint is a face
-     100 % in frame, forehead to chin, so a crop that takes the CROWN has to say in the same
-     breath that the FACE is inside, and cropping hair is not cropping the face. The remedy for
+     face is inside a crop that takes the crown. That mattered more when this type still carried
+     a hard face-visibility constraint; the type no longer does — `shared-image-type-avatar.md`
+     now permits a turned, shadowed or partly occluded face, because the type is decided by its
+     square profile/card destination and not by the pose. The clause survives on the narrower
+     ground that it is a CROP fact: a crop taking the crown has to say what is still inside it,
+     and cropping hair is not cropping the face. Nothing else in this catalog depended on the
+     old constraint — every preset here is a framing, not a face guarantee, and a preset that
+     frames a visible face is still one valid choice among the permitted range. The remedy for
      the contradicted case is an ARBITER between the content demand and the framing axis, which
      is `craft-plausibility.md`'s subject and not this file's.
      MEASURED ON `portrait`, NOT ON `avatar`: the A/B/C corpus above is 40 portrait images. The

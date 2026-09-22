@@ -95,7 +95,8 @@ try to read.
 ## Slight natural motion blur — in the motion, never on the face
 
 A touch of motion blur on a moving hand, or on a passing figure in the foreground, reads as a
-real photo grabbed in the moment. Keep the hero face **sharp** — for `portrait` and `avatar`
+real photo grabbed in the moment. Keep the hero face **sharp** — for `portrait`, and for `avatar`
+whenever a face is visible at all —
 especially, where the face is the subject. The blur lives in the movement and in the
 surrounding figures, never on the face.
 

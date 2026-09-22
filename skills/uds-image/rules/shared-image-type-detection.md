@@ -12,8 +12,10 @@ If the device is incidental to what a person is doing, this is NOT device-focuse
 
 ## 2. avatar
 
-A single person's identity is the whole subject, cropped to head-and-shoulders or chest-up. No
-meaningful environment, no action — a profile picture, a testimonial headshot, a team member.
+The output's DESTINATION is a profile picture, a team or author card, or a small square
+thumbnail — one person, square, read at small size. That destination is what decides this type,
+not the pose and not how much of the face shows: the person may be mid-action, and the face may
+be turned, shadowed or partly obscured. An environment is allowed and often helps.
 
 ## 3. portrait
 

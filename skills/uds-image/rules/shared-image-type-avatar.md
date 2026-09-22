@@ -1,94 +1,76 @@
 # Image type: avatar
 
-Use when the output will be used as a profile picture, team member card, or small square
-thumbnail. The face is always clearly visible and identifiable, but the shot distance,
-angle, background, and occupation context vary to create natural diversity across a set.
-
-An avatar can — and often should — relate to the character's occupation or scenario.
-The occupation context makes the avatar feel like a real person with a story, not a
-neutral headshot. A carpenter's avatar may show a workshop background; a developer's
-avatar may have a monitor behind them; a baker might hold something from their trade.
+Chosen by where the output LANDS and how it is cropped — not by how the person is posed and
+not by how much of their face shows. Pick this type when the asset's destination is a profile
+picture, a team or author card, or a small square thumbnail: a slot whose entire job is to
+stand for one particular person.
 
 ## When to apply
 Brief signals: "avatar", "profile photo", "team photo", "headshot for card", "square
-format", any square crop intended to identify a specific person at small sizes.
+format", any square crop intended to identify a specific person at small sizes. The
+destination decides it; a brief that names no such destination is some other type.
 
 ## Aspect ratio
-Always 1:1. The face must read clearly at thumbnail scale.
+1:1. The whole rule is written for a square that will be viewed small.
 
-## Face rule (non-negotiable)
-The main character's face must be 100% visible in every avatar — full forehead to chin, no
-cropping at any angle. This is the single hard constraint; everything else is intentionally varied.
+## The two hard constraints
 
-## Occupation and scenario context — first-class signal
+**One person, and they read as the subject at thumbnail size.** Exactly one person. They
+occupy enough of the square that a viewer scanning a list of these knows instantly that a
+person is what they are looking at. Everything that competes for that — a second figure, a
+background with its own subject, a device large enough to become the hero — is out.
 
-The brief's character context (their job, setting, or story) should inform the avatar.
-Apply it through one or more of these levers:
+**Everything must survive the downscale.** Decide what the viewer is meant to recognise at
+roughly 48–64 px and keep only that. Fine detail, small props, readable text and busy
+backgrounds all disappear at that size, so they cannot be carrying the identification.
 
-- **Background (strongest signal):** use the character's real work environment, softly
-  blurred behind them (see Background mode C below). A workshop, studio, shop floor, or
-  office in the background immediately communicates who they are.
-- **Prop in hand:** at medium shot distance, the character holds a profession-relevant
-  object. This single element identifies their role at a glance.
-- **Attire:** work-appropriate clothing — an apron, a smart casual shirt, a hard hat —
-  signals context without requiring a description.
+## What is deliberately NOT constrained
 
-When the brief says nothing about occupation, default to a neutral background (mode A or B)
-but still populate the character with a plausible identity (see `shared-character-diversity`).
+**Face visibility is not a requirement.** The face may be turned away from the lens, fall
+into shadow, or be partly occluded — by a raised arm, by the object being handled, by the
+person's own hair. An avatar is identified by the whole small shape of the person: silhouette,
+head position, hair, build, wardrobe, and the single gesture they are caught in. Decide which
+of those is doing the identifying in this brief and compose around it.
 
-## Shot distance — choose one per generation
-Do not default to the same distance every time. Rotate across distances to create variety:
+A visible face is therefore a CHOICE here, and the choice belongs to the brief. Where the
+brief needs a recognisable face — a named individual, a testimonial whose credibility rests
+on eye contact — it says so, and then treat the face as it would be treated for `portrait`.
+Absent that, do not add a face-visibility demand of your own: the type does not impose one,
+and imposing one collapses every avatar in a set onto the same frontal headshot.
 
-| Distance | What's visible | Feel |
-|----------|---------------|------|
-| Close-up | Face, neck, hint of shoulder | Editorial, intimate |
-| Medium close-up | Head, neck, chest, shoulder | Approachable, personal |
-| Medium shot | Head to waist, hands may be visible | Contextual, grounded |
+**Action is allowed, and is often the better choice.** The person may be mid-task: engaged
+with something, turning, reacting, hands occupied. A candid moment cropped square reads as a
+real person far more reliably than a held pose does. Choose the action from the brief's own
+character context rather than inventing an occupation for them.
 
-At medium shot distance the person may hold one prop to convey occupation — this adds story
-without losing face focus. **Which object: `shared-scenario-props`**, whose person row is the
-one to prefer for a held prop. Do not name a prop here.
+**Posing is not required.** Addressing the lens is one valid option among several, not the
+default. An averted gaze, a three-quarter turn, a downward glance and a genuine mid-moment
+expression are all in range.
 
-## Camera angle — vary per generation
+## Decide these, once each, per generation
 
-Any angle where the face is clearly visible is valid. Do not restrict to front-facing
-only — variety across a set of avatars is valuable. Valid options include:
+Each of the following is a real choice with no house default. Repeating the same answer across
+a variant set is the failure this type is most prone to.
 
-- **Front view:** subject looks directly into the lens — warm, engaging, direct
-- **3/4 view:** body turned 30–45° while face remains readable — natural, candid
-- **Slight side:** head turned to ~60°, face clearly readable — editorial, confident
-- **Looking slightly up or down:** angled with the face still fully in frame — dynamic
-- **Candid angle:** caught mid-moment, slight turn, expression natural — authentic
-
-Any angle further than ~75° from front-on risks losing the face; avoid those.
-Avoid symmetrical dead-centre framing on every shot. Rule of thirds placement (face on
-one vertical third) reads more naturally than dead-centre.
-
-## Background — three valid modes
-Pick the mode that best fits the character's context. Vary across a variant set.
-
-**A. Studio / plain**
-Neutral grey, soft white, or warm beige seamless backdrop. Clean, minimal, no distractions.
-Works for any persona.
-
-**B. Architectural / environmental**
-Glass wall, concrete corridor, office window, or building exterior in soft focus behind the
-subject. Creates depth and a real-world professional feel without showing a specific room.
-
-**C. Real work environment (fitting-in)**
-The character's actual workspace — shop, studio, office — visible but 1–2 stops under-
-exposed and softly blurred. The person integrates naturally into the space; their attire and
-optional prop should harmonise with the background. The background tells who they are,
-the face tells who they are to you.
+- **Shot distance.** Anywhere from a face-filling close-up to a shot that includes the hands
+  and what they are doing. Further out than that and the person stops reading at thumbnail
+  size; that is the only limit.
+- **Camera angle and subject turn.** Front-on, three-quarter, in profile, glancing up or
+  down. Pick from the whole range; avoid dead-centre symmetry on every frame.
+- **Background mode.** One of: a plain seamless studio ground; an architectural or
+  environmental surround with no specific room readable; or the person's own real work
+  environment, under-exposed and softly blurred so it sets context without competing. The
+  brief's character context is the strongest signal for which — a real work environment says
+  who someone is faster than any prop can.
+- **What carries the occupation, if the brief gives one.** Background, a single held object,
+  or attire. Choose one lever, not all three; at this crop size two of them fight. **Which
+  object, if it is the held one: `shared-scenario-props`**, whose person row is the one to
+  prefer. Do not name a prop here. When the brief says nothing about occupation, still give
+  the person a plausible identity — see `shared-character-diversity` — and use a plain or
+  environmental background.
 
 ## Camera — do not specify, let the model decide
-Do NOT name a specific camera, lens, or film stock in the prompt. The model will select
-appropriate photographic qualities — sensor rendering, depth of field, colour science,
-grain — that fit the character and background mode. Valid choices range from:
-- Medium format studio camera — rich tones, sharp detail, commercial feel
-- 35mm film SLR — natural grain, classic colour rendering
-- Disposable / point-and-shoot — casual, intimate, lo-fi authenticity
-- Modern mirrorless — clean, neutral, versatile
-
-As with lighting: describe the person, not the gear. Authentic photographic diversity
-comes from the model's creative judgment, not from prompting a specific camera.
+Do NOT name a camera, lens, or film stock. The model selects the sensor rendering, depth of
+field, colour science and grain that fit the character and the background mode. Range runs
+from medium-format studio through 35mm film and modern mirrorless to a casual
+point-and-shoot look. Describe the person, not the gear.

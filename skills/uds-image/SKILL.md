@@ -17,11 +17,11 @@ You do not write code and you do not call any tool — you emit a single SPEC bl
 
 These override everything else. Violating any of them makes the image unusable.
 
-**1. Face visibility — `portrait` and `avatar` types only. Does NOT apply to `device-focused` or `scene`.**
+**1. Face visibility — `portrait` only. Does NOT apply to `device-focused`, `scene`, or `avatar`.**
 
-For `portrait` and `avatar`: the face is the anchor. Resolve in this priority order:
+For `portrait`: the face is the anchor. Resolve in this priority order:
 
-**Priority 1 — Face visibility (hard, non-negotiable for portrait/avatar):**
+**Priority 1 — Face visibility (hard, non-negotiable for portrait):**
 The subject's full face — hairline, eyes, nose, mouth, chin — must be completely
 visible. Encode as the **first sentence** of `prompt` before anything else.
 
@@ -34,7 +34,6 @@ Start from the brief's requested shot. Widen automatically if the face cannot fi
 | waist-up | landscape (16:9, 4:3, 3:2) | The wide canvas hands you spare vertical room — spend it as headroom above the head rather than letting the head crowd the top edge. Anchor the lower two-thirds of the frame with a waist-height surface (desk, counter) the subject sits or stands behind, so the body reads as complete rather than cut off. |
 | full body / long shot | tall ratio (2:3, 3:4, 9:16) | The tall canvas naturally holds a head-to-floor figure — show the entire body without any part of it, face included, falling outside the frame. |
 | full body / long shot | landscape (16:9, 4:3, 3:2) | Pull back into an establishing shot: the full figure, head to floor, occupies roughly one vertical third of the wide frame's width, with the rest of the width given to the environment. |
-| avatar | 1:1 | Center the face as the focal point with both eyes reading clearly; head and shoulders fill the square frame. |
 
 Every row still answers to Priority 1 above: if the shot distance a row describes would crop any part of the face, widen the framing before anything else — no cell here overrides that.
 
@@ -46,7 +45,7 @@ face. Place it as the **last sentence** of `prompt`.
 
 ---
 
-For `scene` and `device-focused`: **do NOT prepend a face anchor** unless the brief
+For `scene`, `device-focused` and `avatar`: **do NOT prepend a face anchor** unless the brief
 explicitly requests face visibility ("facing camera", "clear face", "recognizable
 person"). The focal subject is the environment, action, or device. Start `prompt`
 with the scene or interaction description. A partial human element (hand, arm,
@@ -85,7 +84,7 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
   posture/body language, and a fitting facial expression, shot from a **natural angle**
   (three-quarter or a slight off-axis angle, eye-level or slightly elevated — not flat
   symmetrical front-on). Front-on / straight-to-camera / tight close-up framing is used ONLY
-  when the brief explicitly asks for it, or for an `avatar` / `portrait` headshot (where the
+  when the brief explicitly asks for it, or for a `portrait` headshot (where the
   face is the deliberate subject).
 - **Make characters DYNAMIC — a candid moment in motion, not a frozen pose.** Owned in full by
   `shared-natural-moment`, which applies to every brand. Do not restate its detail here or in a
@@ -119,7 +118,7 @@ supported ratio: `1:1 | 16:9 | 4:3 | 3:2 | 9:16 | 2:3 | 3:4`.
 
 ## Image types
 Every photoreal brief falls into one of four types — detect and apply the matching rule:
-- `shared-image-type-avatar` — face-focused; any angle where face is clearly visible; can show occupation/scenario context; face always fully in frame
+- `shared-image-type-avatar` — chosen by destination (profile picture, team card, small square thumbnail), NOT by pose or face visibility; one person who reads at thumbnail size; action allowed; the face may be turned, shadowed or partly obscured
 - `shared-image-type-scene` — subject mid-action in their environment (NOT posing, NOT facing camera); face not required
 - `shared-image-type-portrait` — subject faces camera; character-focused; varied posture; accessories and props reveal work identity; face always fully in frame
 - `shared-image-type-device-focused` — a device or screen is the HERO rather than part of the moment; the interface is the focal point and people are secondary or cropped
