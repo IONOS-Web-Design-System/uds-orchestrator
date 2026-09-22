@@ -153,6 +153,35 @@
      against the DELIVERED body with comments stripped. Nothing in this comment is an instruction
      to any model: it is never inlined, and `minimal` strips comments at the loader.
 
+     >>> WHAT THIS AXIS DOES NOT COVER, AND WHY IT IS NOT AUTHORED HERE <<<
+     A DELIBERATE, MEASURED GAP, recorded because "the axis covers the type's range" is the claim
+     a reader would otherwise assume. `shared-image-type-avatar.md` permits a face that is turned,
+     shadowed or partly occluded and a subject who is mid-action, and under "Camera angle and
+     subject turn" it names front-on, three-quarter, in profile, and glancing up or down as the
+     range to pick from. Of those, only the TURN and the camera HEIGHT are camera facts, and this
+     catalog carries the near half of each and nothing beyond it:
+       covered   frontal-squared, slightly off square, three-quarter, and a three-quarter with the
+                 eyeline carried past the lens (3 of the 7 presets carry an off-lens eyeline)
+       NOT here  in profile; over-the-shoulder or turned away; any height other than eye level
+     THE REFERENCE SET CANNOT SUPPLY THEM. All seven avatar references are eye-level frames of a
+     visible face; none is a profile, a turned-away body, a low or high angle, an occluded subject
+     or a subject mid-task. Widened to all thirteen portrait+avatar references, the count is still
+     zero for height and zero for profile: the one turned-away body in the thirteen (portrait-04)
+     brings the head back over the shoulder with the whole face in frame, which is a face-forward
+     frame, not an occluded one. Authoring a profile or a low angle here would therefore be an
+     INVENTION — the exact failure this file was rewritten to undo, where seven of eighteen
+     presets across the two catalogs matched no reference and no description. So the range stays
+     short of the type's, on purpose, until references exist for it.
+     AND TWO OF THE FOUR FREEDOMS ARE NOT THIS AXIS'S TO COVER AT ALL. A shadowed face is a
+     LIGHTING fact and shared-lighting.md already carries presets whose near/far falloff puts one
+     side of a subject at near-black. A mid-action subject is a POSE fact, owned by the brief and
+     by shared-natural-moment.md -- and the A/B above proves the direction of authority there: the
+     brief outranks this axis on framing (0/8 against 6/8 once the contradicting brief clause was
+     removed), so a mid-action avatar arrives from the brief and cannot be delivered by a preset.
+     WHAT WOULD CLOSE IT: three more avatar references -- a profile, an over-the-shoulder, and one
+     below eye level -- exported and looked at, then authored the way these seven were. That is a
+     Figma task, not an authoring task, and it is not done here.
+
      SHOT-SIZE BAND, per preset. Machine-readable, and checked back against each preset's own
      injected text so a mis-declaration cannot pass as coverage.
        close-up: close-up-face-fills-frame

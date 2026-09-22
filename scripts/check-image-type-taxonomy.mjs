@@ -63,6 +63,10 @@ const SKILLS = join(ROOT, 'skills');
 const CANONICAL = ['device-focused', 'portrait', 'avatar', 'scene'];
 const RETIRED = ['scenario', 'person-scenario'];
 
+// The sibling image-svc checkout, resolved once. Section 6 re-reads the same env var for the
+// enum comparison; this copy exists because section 7's exemption check runs earlier.
+const ISVC_PRE = process.env['IMAGE_SVC_ROOT'] ?? join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'image-svc');
+
 const problems = [];
 const undetermined = [];
 const checks = [];
@@ -110,6 +114,14 @@ if (typeFiles.length === 0) {
 
 // `detection` is a rubric file, not a type. Everything else under the prefix must BE a type.
 const DETECTION = `${prefix}detection.md`;
+// The brand prefixes the loaders admit, DERIVED from disk: every `<brand>-*.md` basename whose
+// stem is not `shared` and not a type rule. Hardcoding the brand list here would go stale
+// against image-svc's BRANDS the first time a brand is added.
+const BRAND_PREFIXES = [...new Set(
+  basenames
+    .filter((f) => !f.startsWith('shared-') && !f.startsWith('craft-') && !f.startsWith(prefix))
+    .map((f) => f.split('-')[0]),
+)].sort();
 const typeSlugs = typeFiles.filter((f) => f !== DETECTION).map((f) => f.slice(prefix.length, -3));
 
 note(
@@ -135,9 +147,18 @@ for (const f of typeFiles) {
 const SCAN_ROOTS = ['skills', 'commands', 'docs', 'internal']
   .map((d) => join(ROOT, d))
   .filter((d) => existsSync(d));
-const allFiles = SCAN_ROOTS.flatMap((d) => walk(d)).filter((p) => /\.(md|tsx?|json)$/.test(p));
-note(allFiles.length > 50, 'corpus scan found files',
-  `${allFiles.length} files under ${SCAN_ROOTS.map((d) => relative(ROOT, d) + '/').join(' ')}`);
+// PLUS the model-readable files at the repo ROOT, which no directory root covers. `CLAUDE.md` is
+// read by an agent working in this repo and `README.md` by anyone extending the corpus; both are
+// exactly the kind of file `commands/imagine.md` turned out to be — outside the corpus, read
+// directly, and invisible to a guard scoped to directories. Clean today; that is the point of
+// checking before it is not.
+const ROOT_FILES = ['CLAUDE.md', 'README.md', 'version.txt']
+  .map((f) => join(ROOT, f))
+  .filter((f) => existsSync(f));
+const allFiles = [...SCAN_ROOTS.flatMap((d) => walk(d)), ...ROOT_FILES]
+  .filter((p) => /\.(md|tsx?|json|txt)$/.test(p));
+note(allFiles.length > 50 && ROOT_FILES.length > 0, 'corpus scan found files',
+  `${allFiles.length} files under ${SCAN_ROOTS.map((d) => relative(ROOT, d) + '/').join(' ')} plus ${ROOT_FILES.length} repo-root file(s)`);
 
 for (const r of RETIRED) {
   const fname = `${prefix}${r}.md`;
@@ -177,19 +198,27 @@ note(deduped.length === 0, 'no retired type token anywhere in the repo',
   deduped.length ? deduped.join(' | ') : `${RETIRED.length} retired names checked against ${allFiles.length} files`);
 
 // ---------------------------------------------------------------------------
-// 3. EVERY TYPE NAMED IN SKILL.md HAS A RULE FILE — and the reachability verdict is RECORDED.
+// 3. EVERY TYPE NAMED IN SKILL.md HAS A RULE FILE, AND EVERY RULE FILE IS A NAMED TYPE.
+//    THE MATCH IS ON THE TYPE NAME, NOT ON THE RULE BASENAME. It used to be on the basename,
+//    and that is exactly what made this check go red the moment the dangling `image-type-*`
+//    POINTERS were removed from SKILL.md (see section 7): the four types were still named, as
+//    the bare type names they are, and a guard keyed to the basename read that as "no type is
+//    named". The taxonomy is a set of TYPE NAMES; which file carries each one is section 1's
+//    business and the loaders'.
 // ---------------------------------------------------------------------------
 const SKILL = join(SKILLS, 'uds-image', 'SKILL.md');
 if (!existsSync(SKILL)) {
   undetermined.push('uds-image/SKILL.md missing — cannot check named types');
 } else {
   const skill = flat(readFileSync(SKILL, 'utf8'));
-  // Types SKILL.md points at by rule name. Both spellings, so this check survives a rename.
+  // Either spelling of a rule reference, AND the bare backticked type name. Both count as
+  // "SKILL.md names this type", so this survives the pointer removal and a future rename alike.
   const named = new Set(
     [...skill.matchAll(/(?:shared-)?image-type-([a-z-]+?)(?=[`\s.,/)]|$)/g)].map((m) => m[1]),
   );
+  for (const t of CANONICAL) if (skill.includes('`' + t + '`')) named.add(t);
   named.delete('detection');
-  note(named.size > 0, 'SKILL.md names image-type rules', `${named.size} distinct: [${[...named].sort().join(', ')}]`);
+  note(named.size > 0, 'SKILL.md names the image types', `${named.size} distinct: [${[...named].sort().join(', ')}]`);
   const orphans = [...named].filter((t) => !typeSlugs.includes(t));
   note(orphans.length === 0, 'every type SKILL.md names has a rule file on disk',
     orphans.length ? `no rule for: ${orphans.join(', ')}` : `all ${named.size} resolve`);
@@ -201,7 +230,6 @@ if (!existsSync(SKILL)) {
   // Whichever line this corpus is on, the verdict must be STATED, because "unreachable" is a
   // deliberate choice here and an undocumented one is indistinguishable from a bug.
   const reachable = prefix.startsWith('shared-');
-  const VERDICT = join(RULES, `${prefix}detection.md`);
   if (reachable) {
     note(true, 'type rules are REACHABLE by the prefix loaders', `basenames begin with "shared-"`);
   } else {
@@ -214,7 +242,6 @@ if (!existsSync(SKILL)) {
     note(true, 'type rules are NOT reachable by the prefix loaders (deliberate)',
       `basenames begin with "${prefix}", which neither appendInlinedRules nor collectRuleFiles admits`);
   }
-  void VERDICT;
 }
 
 // ---------------------------------------------------------------------------
@@ -363,6 +390,195 @@ else {
     const same = isvc.vals.length === modDecl.vals.length && isvc.vals.every((v, i) => v === modDecl.vals[i]);
     note(same, 'the two IMAGE_TYPES declarations agree (membership AND order)',
       same ? `both [${isvc.vals.join(', ')}]` : `image-svc [${isvc.vals.join(', ')}] vs moderator ${modWhere} [${modDecl.vals.join(', ')}]`);
+  }
+}
+
+
+// ---------------------------------------------------------------------------
+// 7. NO UNRESOLVABLE TYPE-RULE REFERENCE IN ANY DELIVERABLE FILE.
+//
+//    WHY THIS IS A NAME-FREE RULE AND NOT A PER-RUN SIMULATION. A craft prompt delivers AT MOST
+//    ONE type rule body, and which one depends on the run's `imageType` (image-svc
+//    `resolveRuleSet`: `if (imageType) img('shared-image-type-<type>.md') else img(detection)`).
+//    On the other naming line it delivers NONE, because `image-type-*` fails both loaders'
+//    prefix test. So a `(shared-)?image-type-<slug>` token written into any DELIVERABLE file is
+//    unresolvable on at least three runs in four, and on every run on the other line. There is
+//    no run-dependent exemption to compute: the token simply must not be there.
+//    MEASURED, not reasoned. Over the real assembled craft prompt (image-svc `buildCraftPrompt`,
+//    72 cells = 2 brands x 3 profiles x 3 modules x 4 types on the feature line, 24 on the main
+//    line) the counts before this check existed were 16 per ionos prompt and 18 per strato prompt
+//    on the main line with ZERO type-rule bodies delivered, and 11-15 per prompt on the feature
+//    line's `full` profile with exactly one body delivered. Production agrees: 15.14 mean over
+//    1502 recorded craft prompts, 15 or 16 in every single one, 0 bodies ever delivered.
+//
+//    WHAT A DELIVERABLE FILE IS. SKILL.md, plus any rule whose basename the prefix loaders admit
+//    (`shared-*`, `<brand>*`), plus `craft-*` — the feature line's `minimal` profile names those
+//    explicitly. The camera/lighting/environment catalogs are deliverable by basename but are
+//    read line-at-a-time in code and never inlined, so a reference in their HEADER cannot reach a
+//    model; their bodies are still checked.
+//
+//    COMMENTS ARE NOT EXEMPT, and that is the point. `loadSkillRules` strips HTML comments ONLY
+//    when the caller passes `stripComments`, which only the `minimal` profile does. Measured on
+//    the assembled `full` prompt: 16,162 chars of author comments reach the model on ionos
+//    (19.9% of the prompt) and 14,237 on strato. A forensics note that names a rule file is
+//    therefore a dangling pointer in the delivered bytes, not an aside to a human.
+// ---------------------------------------------------------------------------
+// Files whose HTML COMMENTS provably cannot reach a model, so only their BODY is swept.
+//   shared-camera-* / shared-lighting* / shared-environment-* — read line-at-a-time in code
+//     (image-svc `resolveAxis`/`resolveCamera`/`resolveEnvironment`) and listed in
+//     `skills.coverage.test.ts`'s INTENTIONALLY_UNSELECTED, so the file is never inlined at all.
+//   craft-* — delivered ONLY through `buildCraftPrompt`'s thin-profile branch, which passes
+//     `stripComments: brief.craftProfile === 'minimal'`; `profileRules` returns [] for `none`, so
+//     `minimal` is the only profile that delivers a craft-* file and it strips the comments.
+// THE EXEMPTION IS ITSELF GUARDED below (`comment-strip exemption still holds`) — an exemption
+// whose premise has gone stale is worse than no exemption, because it reads as a pass.
+const COMMENTS_NEVER_DELIVERED = /^(shared-(camera|lighting|environment)|craft-)/;
+const deliverable = (f) =>
+  f.startsWith('shared-') || f.startsWith('craft-') || BRAND_PREFIXES.some((b) => f.startsWith(b));
+const stripComments = (s) => s.replace(/<!--[\s\S]*?-->/g, '');
+const REF_RE = new RegExp(`(?:shared-)?image-type-([a-z][a-z-]*)`, 'g');
+const badRefs = [];
+let refFilesRead = 0;
+{
+  // SKILL.md first, then every deliverable rule file.
+  const targets = [['uds-image/SKILL.md', readFileSync(SKILL, 'utf8')]];
+  for (const f of basenames.filter(deliverable)) {
+    let body = readFileSync(join(RULES, f), 'utf8');
+    // A catalog's header comment is never delivered (read line-at-a-time in code); its BODY is
+    // still subject to the rule, so only the comments are dropped for those files.
+    if (COMMENTS_NEVER_DELIVERED.test(f)) body = stripComments(body);
+    targets.push([`uds-image/rules/${f}`, body]);
+  }
+  for (const [rel, body] of targets) {
+    refFilesRead++;
+    const self = rel.split('/').pop().replace(/\.md$/, '');           // a type rule may name itself
+    const hay = flat(body);
+    for (const m of hay.matchAll(REF_RE)) {
+      const slug = m[1];
+      const tok = m[0];
+      if (rel.endsWith(`${prefix}${slug}.md`)) continue;              // self-reference inside its own file
+      if (self === tok) continue;
+      badRefs.push(`${rel}: \`${tok}\``);
+    }
+  }
+}
+note(refFilesRead > 5, 'reference sweep read the deliverable corpus', `${refFilesRead} deliverable files`);
+{
+  // The craft-* half of the exemption above, checked against the code that implements it.
+  // Sibling checkout OPTIONAL: absent it is reported, never silently treated as holding.
+  const promptTs = join(ISVC_PRE, 'src/craft/prompt.ts');
+  const profilesTs = join(ISVC_PRE, 'src/craft/profiles.ts');
+  // Only checked when the exemption is actually EXERCISED. The main naming line ships no
+  // `craft-*` file and its image-svc has no `profiles.ts` at all, so demanding the premise there
+  // is a cannot-determine for an exemption nothing uses — and a guard that reports UNDETERMINED
+  // on a corpus it has nothing to say about is the same defect as one that is red on arrival.
+  const usesCraftRules = basenames.some((f) => f.startsWith('craft-'));
+  if (!usesCraftRules) {
+    note(true, 'comment-strip exemption not exercised on this line', 'no craft-* rule files on disk');
+  } else if (!existsSync(promptTs) || !existsSync(profilesTs)) {
+    undetermined.push(`comment-strip exemption unverifiable: no image-svc at ${ISVC_PRE} (set IMAGE_SVC_ROOT)`);
+  } else {
+    const pt = flat(readFileSync(promptTs, 'utf8'));
+    const gate = /stripComments\s*=\s*brief\.craftProfile\s*===\s*'minimal'/.test(pt);
+    const passed = /loadSkillRules\(pluginDir, slug, rules, \{ stripComments \}\)/.test(pt);
+    note(gate && passed, 'comment-strip exemption still holds (craft-* comments cannot reach a model)',
+      gate && passed
+        ? "prompt.ts gates stripComments on craftProfile === 'minimal' and passes it to the craft-* loader"
+        : `prompt.ts no longer does: gate=${gate} passedToLoader=${passed} — craft-* comments may now be delivered, so re-scan them`);
+  }
+}
+note(badRefs.length === 0, 'no unresolvable type-rule reference in any deliverable file',
+  badRefs.length ? `${badRefs.length}: ${badRefs.slice(0, 8).join(' | ')}${badRefs.length > 8 ? ' …' : ''}`
+                 : `${refFilesRead} files carry none`);
+
+// ---------------------------------------------------------------------------
+// 8. EVERY TYPE HAS A CAMERA CATALOG, AND THE AVATAR CATALOG DECLARES ITS GAP.
+//
+//    A camera catalog is OPTIONAL on the main naming line (it has none) — absence is reported,
+//    never counted as coverage. Where the catalogs DO exist, the one property a script can check
+//    is that the roster is complete and that the one catalog whose type permits a range the
+//    references cannot represent SAYS SO. `shared-image-type-avatar.md` permits a face that is
+//    turned, shadowed or occluded and names "in profile" and "glancing up or down" among the
+//    turns to pick from; all seven `avatar-*` references — and all thirteen portrait+avatar
+//    references — are eye-level frames of a visible face, so profile, over-the-shoulder and any
+//    non-eye-level height are NOT authorable from the reference set. That gap is legitimate and
+//    is the reason this is a DOCUMENTATION check: the failure mode is a future author quietly
+//    inventing the missing presets (seven of eighteen presets across two catalogs were once
+//    exactly that), or quietly claiming the axis covers the type. Either way the header stops
+//    saying what it says below.
+// ---------------------------------------------------------------------------
+{
+  const cams = CANONICAL.map((t) => [t, join(RULES, `shared-camera-${t}.md`)]);
+  const present = cams.filter(([, p]) => existsSync(p));
+  if (present.length === 0) {
+    note(true, 'no camera catalogs on this naming line (reported, not counted as coverage)',
+      `none of shared-camera-{${CANONICAL.join(',')}}.md exists`);
+  } else {
+    const missing = cams.filter(([, p]) => !existsSync(p)).map(([t]) => t);
+    note(missing.length === 0, 'every canonical type has a camera catalog',
+      missing.length ? `missing: ${missing.join(', ')}` : `all ${CANONICAL.length} present`);
+    const av = join(RULES, 'shared-camera-avatar.md');
+    if (!existsSync(av)) {
+      undetermined.push('shared-camera-avatar.md missing — cannot check the declared gap');
+    } else {
+      const head = flat(readFileSync(av, 'utf8'));
+      // The gap must be declared, and declared as the three things the references cannot supply.
+      const declares = /WHAT THIS AXIS DOES NOT COVER/i.test(head);
+      note(declares, 'the avatar camera catalog DECLARES its coverage gap',
+        declares ? 'header states what the axis does not cover' : 'header claims or implies full coverage of the type range');
+      for (const needle of ['in profile', 'eye level']) {
+        note(head.toLowerCase().includes(needle),
+          `the declared gap names "${needle}"`, head.toLowerCase().includes(needle) ? 'found' : 'absent');
+      }
+      // And the presets must not have grown the gap shut by invention: a preset asserting a
+      // camera height other than eye level, or a strict profile, has no reference behind it.
+      const body = stripComments(readFileSync(av, 'utf8'));
+      const presets = [...body.matchAll(/^## (\S+)\n(.+)$/gm)].map((m) => [m[1], m[2]]);
+      note(presets.length > 0, 'avatar camera presets parsed', `${presets.length} presets`);
+      const invented = presets.filter(([, text]) =>
+        /\b(low angle|high angle|below the subject|above the subject|strict side-on|full profile|from behind)\b/i.test(text));
+      note(invented.length === 0, 'no avatar camera preset asserts a framing the references cannot supply',
+        invented.length ? `invented: ${invented.map(([s]) => s).join(', ')}` : `${presets.length} presets checked`);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 9. THE MODULE-BIAS MAPPING AGREES WITH THE TYPE DEFINITIONS.
+//
+//    `shared-module-bias.md` maps a downstream component to a default image type, and it is
+//    DELIVERED to the craft prompt on every run that carries a module (`resolveRuleSet`:
+//    `if (module) img('shared-module-bias.md')`). Two ways it can disagree with the taxonomy:
+//    it can name a type that does not exist, and it can re-impose on a type a requirement that
+//    type's own rule withdrew. The second is the one that actually happened: the
+//    `testimonial_slider -> avatar` row used to delegate framing to the avatar rule by NAME,
+//    which (a) dangles, and (b) is the place a face requirement would be reinstated.
+//    Measured, so the row is known to matter: `testimonial_slider` is 194 of 1902 production
+//    runs, every one of them 512x512 and mode=image — which is the avatar destination exactly.
+// ---------------------------------------------------------------------------
+{
+  const mb = join(RULES, 'shared-module-bias.md');
+  if (!existsSync(mb)) {
+    undetermined.push('shared-module-bias.md missing — cannot check the module mapping');
+  } else {
+    const raw = readFileSync(mb, 'utf8');
+    const body = flat(stripComments(raw));
+    // Types the file names as a DEFAULT for some module: `image-type **<name>**` or a bolded
+    // type in the type column. Matched on the type vocabulary, not on a basename.
+    const claimed = CANONICAL.filter((t) => new RegExp(`image type to \\*\\*${t}\\*\\*|image-type \\*\\*${t}\\*\\*`, 'i').test(body));
+    note(claimed.length > 0, 'module-bias names at least one image type as a module default',
+      `[${claimed.join(', ')}]`);
+    // Any type token it names must be canonical — a retired or invented one is a mapping to
+    // nowhere. Section 2 already forbids the retired names; this catches an invented one.
+    const tokens = [...body.matchAll(/image[- ]type(?: to)? \*\*([a-z-]+)\*\*/gi)].map((m) => m[1].toLowerCase());
+    const unknown = [...new Set(tokens)].filter((t) => !CANONICAL.includes(t));
+    note(unknown.length === 0, 'every image type module-bias names is canonical',
+      unknown.length ? `not a type: ${unknown.join(', ')}` : `${tokens.length} mentions, all canonical`);
+    // It must not re-impose a face requirement on avatar, whose own rule withdrew it.
+    const reimposes = /avatar[^|]{0,400}?(visible face|face (?:must|should) be|face is (?:always|required))/i.test(body)
+      && !/no face-visibility requirement|does NOT require a visible face/i.test(body);
+    note(!reimposes, 'module-bias does not re-impose a face requirement on avatar',
+      reimposes ? 'an avatar row demands a visible face' : 'no face demand added by the module');
   }
 }
 

@@ -26,9 +26,9 @@
   Negative prompts are weak composition signals — the image model ignores them under its
   default centre-crop bias. Instead encode framing as a positive instruction: state plainly
   that the full face stays uncropped and describe the body's extent in frame (e.g. upper body
-  only, or the full figure head to floor). See `shared-image-type-portrait` for the reasoning
-  behind each shot type — describe it in your own words rather than reusing one fixed phrase
-  every time.
+  only, or the full figure head to floor). The decided type's own rule states the
+  reasoning behind its shot types — describe it in your own words rather than reusing one fixed
+  phrase every time.
 - Map the requested pixel dimensions to the nearest aspectRatio
   (1:1, 16:9, 4:3, 3:2, 9:16, 2:3, 3:4).
 
@@ -40,11 +40,12 @@ all image types. Never leave character demographics undefined.
 
 ## Image type detection
 
-See `shared-image-type-detection`. It is an ORDERED rubric, not a lookup table: four types —
+The ordered detection rubric is inlined below whenever you have to classify. It is an ORDERED
+rubric, not a lookup table: four types —
 `device-focused`, `avatar`, `portrait`, `scene` — evaluated in that order, first match wins, and
 `scene` is the default when nothing else clearly fits. There are no tie-breakers to consult,
 because the ordering IS the tie-break.
 
 You only classify when no type was pinned for you. When a `# Image type (fixed)` block is
-present, that decision is already made: the matching `shared-image-type-<type>` rule is
+present, that decision is already made: that type's own rule is
 inlined instead of the rubric, and you apply it without re-detecting.

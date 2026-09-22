@@ -35,7 +35,7 @@
  *                   from (default ../image-svc)
  *   RULES_DIR       override the rules directory — for red-proving against a mutated copy
  */
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -136,6 +136,79 @@ function parseCatalog(body) {
 }
 const presets = parseCatalog(catalogBody);
 if (presets.length === 0) undetermined(`${LIGHTING_FILE} yielded no presets — the file or the format changed shape`);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// THE `Reference:` PROVENANCE KEY. Unparsed at runtime BY DESIGN and wired HERE instead.
+//
+// `parseCatalog` already reads it (it is a tag line like the two it shares the format with), and
+// nothing in image-svc does: `resolveAxis` injects only the first non-empty line under a
+// `## slug` heading, so the key is neither delivered to a model nor read by any selector. It was
+// therefore a third key in a format documenting two, with zero consumers — and the choice was
+// wire it or retire it.
+//
+// WIRED, because it is the check that would have caught the failure this catalog was rebuilt to
+// undo. Across the two camera catalogs, SEVEN of eighteen presets matched no reference and no
+// description at all: they were authored to fill a count, and one of them asserted a fixture
+// ("blinds") that no reference shows and that failed on every draw it got. A preset that cannot
+// name the frame it came from IS that failure, and it is invisible until something asks.
+// Retiring the key instead would have thrown away the only per-preset record of provenance this
+// catalog has — the other three catalogs put theirs in a header `References:` line because their
+// presets come from one family each, while this one draws from three.
+//
+// WHAT IS AND IS NOT ASSERTED. Existence and shape are asserted, and so is the FAMILY: a cited
+// family must be a reference family some rule file on disk actually declares, which catches a
+// typo or a family invented to look sourced. The individual id is checked against the declaring
+// file's own roster WHERE that file declares one; a family whose declaring file lists no ids
+// yields a NOTE, never a violation, because "I could not read the roster" must not read as
+// "the citation is good".
+// ─────────────────────────────────────────────────────────────────────────────
+{
+  const REF_ID = /^([a-z][a-z-]*?)-(\d{2})$/;
+  // Reference ids declared anywhere in the rules dir, keyed by family. Read from the corpus, so a
+  // new reference family needs no edit here.
+  const declared = new Map();     // family -> Set(id)
+  const declarers = new Map();    // family -> Set(file)
+  let rosterFilesRead = 0;
+  for (const f of readdirSync(RULES_DIR).filter((x) => x.endsWith('.md') && x !== LIGHTING_FILE)) {
+    const body = readFileSync(join(RULES_DIR, f), 'utf8');
+    let found = false;
+    for (const m of body.matchAll(/\b([a-z][a-z-]*?)-(\d{2})\b/g)) {
+      const fam = m[1];
+      if (!/^(avatar|portrait|device-focused|scene|home-office|workspace)$/.test(fam)) continue;
+      if (!declared.has(fam)) { declared.set(fam, new Set()); declarers.set(fam, new Set()); }
+      declared.get(fam).add(m[0]);
+      declarers.get(fam).add(f);
+      found = true;
+    }
+    if (found) rosterFilesRead++;
+  }
+  if (rosterFilesRead === 0) {
+    undetermined('no rule file declares any reference id — cannot check lighting provenance');
+  } else {
+    const missing = presets.filter((p) => !(p.tags.Reference?.length > 0)).map((p) => p.slug);
+    if (missing.length > 0) {
+      fail(`preset(s) cite no Reference: ${missing.join(', ')} — a preset that cannot name the frame it came from is the invented-preset failure, visible`);
+    }
+    let citations = 0;
+    for (const p of presets) {
+      for (const id of p.tags.Reference ?? []) {
+        citations++;
+        const m = REF_ID.exec(id);
+        if (!m) { fail(`${p.slug}: Reference "${id}" is not a <family>-NN reference id`); continue; }
+        const fam = m[1];
+        if (!declared.has(fam)) {
+          fail(`${p.slug}: Reference "${id}" names family "${fam}", which no rule file declares`);
+          continue;
+        }
+        if (!declared.get(fam).has(id)) {
+          note(`${p.slug}: Reference "${id}" is not in the roster ${[...declarers.get(fam)].join('/') } declares (${[...declared.get(fam)].sort().join(', ')}) — check the id, or the roster`);
+        }
+      }
+    }
+    if (citations === 0) undetermined('parsed 0 Reference citations — the tag line or the parser changed shape');
+    note(`Reference provenance: ${citations} citations across ${presets.length} presets, ${declared.size} families declared by ${rosterFilesRead} file(s)`);
+  }
+}
 
 const scenarioRaw = readRule(SCENARIO_FILE);
 const scenarioBody = strip(scenarioRaw);

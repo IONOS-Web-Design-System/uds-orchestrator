@@ -35,8 +35,7 @@ over a dashboard in discussion. Hands and posture are natural to the action. Enc
 
 **2. Then make the full screen clearly visible — by MOVING THE CAMERA, not the device.**
 
-Choose the camera angle that fits the brief. Three named patterns (detailed prompt templates
-in `shared-image-type-scene.md`):
+Choose the camera angle that fits the brief. Three named patterns, each stated in full below:
 
 - **Overhead / top-down (Pattern B):** camera 50–75° above the workspace looking down.
   Screen faces upward and is fully visible. Person enters peripherally — only hands/forearms

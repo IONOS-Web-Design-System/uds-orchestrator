@@ -3,10 +3,10 @@
 
      This file is the single canonical home for prop selection. The same guidance was previously
      stated in FIVE places that had drifted apart: uds-image/SKILL.md's "Colour & mood via objects"
-     bullet, a trade-keyed table in shared-image-type-scene.md, a second table in
-     shared-image-type-device-focused.md whose key column mixed places and trades in one column, a
-     trade-keyed bullet list in shared-image-type-portrait.md, and a parenthetical in
-     shared-image-type-avatar.md. Two rows were near-verbatim duplicates across the two tables. The
+     bullet, a trade-keyed table in the scene type rule, a second table in the device-focused type
+     rule whose key column mixed places and trades in one column, a trade-keyed bullet list in the
+     portrait type rule, and a parenthetical in the avatar type rule. Two rows were near-verbatim
+     duplicates across the two tables. The
      brand files stated their own objects as unconditional decor, which is why one everyday desk
      object turned up in briefs that had nothing to do with it — a rule with no key fires on every
      run. Those brand mandates were removed separately; this file replaces the rest.
@@ -133,7 +133,7 @@ first entry every time.
   layer: it is what makes the frame read as a photograph rather than a render.
 - **`portrait` and `avatar`** — the prop is **held**, so prefer the person's row: a hand-held
   object reads as identity, while surface contact drags the camera down to the hands. The
-  held-never-rested encoding is `shared-image-type-portrait.md`'s, and it still governs.
+  held-never-rested encoding belongs to the portrait type rule, and it still governs.
 
 ## Colour
 

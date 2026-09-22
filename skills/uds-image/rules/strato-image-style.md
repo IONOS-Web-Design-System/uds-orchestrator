@@ -1,8 +1,8 @@
 # STRATO — image style
 
-Camera, framing, and device-encoding rules live in `shared-brief-enrichment`,
-`shared-image-type-portrait`, and `shared-image-type-device-focused`. This file covers only what
-is Strato-specific: palette, brand character, clothing, and environment tone.
+Camera, framing and device encoding are NOT this file's subject — they are decided by the
+image type and by the shared principles. This file covers only what is Strato-specific:
+palette, brand character, clothing, and environment tone.
 
 ---
 

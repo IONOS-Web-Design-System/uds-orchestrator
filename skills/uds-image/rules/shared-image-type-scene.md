@@ -188,8 +188,8 @@ compositional region to land in.
 - If a screen is incidental here (device-in-context, screen NOT the focus), it may show
   abstract colour blocks or blurred content — never readable paragraphs, logos, or UI chrome.
   (When the **screen-based product itself is the focus**, the opposite applies — full screen
-  clearly visible showing a relevant real interface; that is the `device-focused` type — see
-  `shared-image-type-device-focused.md`.)
+  clearly visible showing a relevant real interface; that is the `device-focused` type, not
+  this one.)
 
 ## Surface texture as a design layer
 

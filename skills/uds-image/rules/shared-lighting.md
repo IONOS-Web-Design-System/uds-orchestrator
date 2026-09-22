@@ -128,6 +128,18 @@
      where a room carried by its own fittings is the truthful answer whatever the windows are.
      Do not make the brightness half symmetric to match; they are different mechanisms and
      lightOpenings.test.ts pins both.
+     REFERENCE TAG, on the line below the brightness tag: the reference frame or frames the
+     preset's wording was authored from, by NAME. It has NO PARSER and is not meant to get one —
+     verified, not assumed: nothing in image-svc reads a `Reference:` line, and `resolveAxis` takes
+     only the first non-empty line under a `## slug` heading, so it is never injected either. It is
+     kept for ONE reason and it is not decoration: the failure this catalog was rebuilt to undo was
+     presets authored from nothing, and across the camera catalogs seven of eighteen presets matched
+     no reference and no description at all. A preset that cannot name the frame it came from is
+     that failure, visible. The other three catalogs record the same provenance in their headers
+     (`References:`) because their presets are authored as a set from one reference family; this
+     catalog draws from three families, so the citation has to sit per preset. Treat an empty or
+     absent `Reference:` line as the thing to explain before the preset ships, not as a lint nit.
+
      A preset with NO usable tag line on either key is treated as compatible with everything and
      reported as a data fault, never excluded everywhere: silent and total is the worse failure.
      Tags MUST stay BELOW the preset text -- image-svc injects the first non-empty line under a
