@@ -50,6 +50,13 @@
  * Usage:
  *   node scripts/check-image-type-taxonomy.mjs            # 0 green, 1 violation, 2 cannot determine
  *   node scripts/check-image-type-taxonomy.mjs --verbose
+ *
+ * Env. EITHER spelling of each knob works. The two guards in this directory grew up with
+ * different names for the same checkout (`*_ROOT` here, `*_DIR` in check-character-semantics),
+ * and a half-set pair is how a run quietly checks FEWER properties instead of failing:
+ *   IMAGE_SVC_ROOT | IMAGE_SVC_DIR   the sibling image-svc checkout
+ *   MODERATOR_ROOT | MODERATOR_DIR   the sibling uds-moderator checkout
+ * A knob that IS set but points nowhere is a hard cannot-determine, never a narrowed run.
  */
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
@@ -63,9 +70,41 @@ const SKILLS = join(ROOT, 'skills');
 const CANONICAL = ['device-focused', 'portrait', 'avatar', 'scene'];
 const RETIRED = ['scenario', 'person-scenario'];
 
-// The sibling image-svc checkout, resolved once. Section 6 re-reads the same env var for the
-// enum comparison; this copy exists because section 7's exemption check runs earlier.
-const ISVC_PRE = process.env['IMAGE_SVC_ROOT'] ?? join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'image-svc');
+// ---------------------------------------------------------------------------
+// SIBLING ROOTS. Resolved ONCE, from EITHER spelling of each knob.
+//
+// WHY BOTH SPELLINGS. This guard read `IMAGE_SVC_ROOT`/`MODERATOR_ROOT`; its neighbour
+// `check-character-semantics.mjs` read `IMAGE_SVC_DIR`/`MODERATOR_DIR` for the same two
+// checkouts. Anyone exporting one pair and running both got a run that looked like it had
+// checked the siblings and had not: with the roots unresolved this script reported 34
+// properties where the same corpus with roots resolved reports 38, and the only floor in the
+// file (`checks.length < 15`) is nowhere near tight enough to notice a four-property hole.
+// So: accept either name, and make the hole VISIBLE (`skippedForRoots`, printed in the report
+// line) rather than inferable only by diffing two runs.
+//
+// A knob that is SET but does not resolve is a mistake, not an optional sibling: it fails
+// immediately and by name, instead of narrowing.
+// ---------------------------------------------------------------------------
+const skippedForRoots = [];
+function resolveRoot(names, fallback, label) {
+  for (const n of names) {
+    const raw = process.env[n];
+    if (!raw) continue;
+    if (!existsSync(raw)) {
+      console.error(`CANNOT DETERMINE: ${n} is set to ${raw}, which does not exist — refusing to run a narrowed ${label} check`);
+      process.exit(2);
+    }
+    return { path: raw, via: n };
+  }
+  return { path: fallback, via: `sibling default — no ${names.join('/')} set` };
+}
+
+const SIBLING_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const ISVC_R = resolveRoot(['IMAGE_SVC_ROOT', 'IMAGE_SVC_DIR'], join(SIBLING_DIR, 'image-svc'), 'image-svc');
+const MOD_R = resolveRoot(['MODERATOR_ROOT', 'MODERATOR_DIR'], join(SIBLING_DIR, 'uds-moderator'), 'uds-moderator');
+
+// Section 7's exemption check runs before section 6's enum comparison; both read this one value.
+const ISVC_PRE = ISVC_R.path;
 
 const problems = [];
 const undetermined = [];
@@ -353,9 +392,8 @@ note(true, 'detection-rubric withdrawn-claim scan',
 //    package.json and therefore no test run of its own. Sibling checkouts are OPTIONAL: absent
 //    they are reported, never silently skipped, and never counted as agreement.
 // ---------------------------------------------------------------------------
-const SIBLINGS = join(ROOT, '..');
-const ISVC = process.env['IMAGE_SVC_ROOT'] ?? join(SIBLINGS, 'image-svc');
-const MOD = process.env['MODERATOR_ROOT'] ?? join(SIBLINGS, 'uds-moderator');
+const ISVC = ISVC_R.path;
+const MOD = MOD_R.path;
 
 function readTypeList(file, patterns) {
   if (!existsSync(file)) return { err: `${file} not found` };
@@ -374,7 +412,10 @@ const isvc = readTypeList(join(ISVC, 'src/validate.ts'), [/const IMAGE_TYPES = \
 const mod = readTypeList(join(MOD, 'src/plan/planner.ts'), [/const IMAGE_TYPES = \[([^\]]*)\] as const;/]);
 const modUnion = readTypeList(join(MOD, 'src/orchestrate/payloads.ts'), [/imageType\?:\s*((?:'[a-z-]+'\s*\|?\s*)+);/]);
 
-if (isvc.err) undetermined.push(`image-svc: ${isvc.err}`);
+if (isvc.err) {
+  skippedForRoots.push('image-svc IMAGE_TYPES (+ the two-declaration agreement)');
+  undetermined.push(`image-svc: ${isvc.err} — root came from ${ISVC_R.via}; set IMAGE_SVC_ROOT or IMAGE_SVC_DIR`);
+}
 else note(isvc.vals.length === CANONICAL.length && CANONICAL.every((t) => isvc.vals.includes(t)),
   'image-svc IMAGE_TYPES is the four canonical types', `[${isvc.vals.join(', ')}]`);
 
@@ -382,7 +423,10 @@ else note(isvc.vals.length === CANONICAL.length && CANONICAL.every((t) => isvc.v
 // (feature line) or the wire union (main line). Either satisfies this; NEITHER does not.
 const modDecl = mod.err ? modUnion : mod;
 const modWhere = mod.err ? 'payloads.ts union' : 'planner.ts IMAGE_TYPES';
-if (modDecl.err) undetermined.push(`uds-moderator: ${mod.err} AND ${modUnion.err}`);
+if (modDecl.err) {
+  skippedForRoots.push('uds-moderator IMAGE_TYPES (+ the two-declaration agreement)');
+  undetermined.push(`uds-moderator: ${mod.err} AND ${modUnion.err} — root came from ${MOD_R.via}; set MODERATOR_ROOT or MODERATOR_DIR`);
+}
 else {
   note(modDecl.vals.length === CANONICAL.length && CANONICAL.every((t) => modDecl.vals.includes(t)),
     `uds-moderator ${modWhere} is the four canonical types`, `[${modDecl.vals.join(', ')}]`);
@@ -476,7 +520,8 @@ note(refFilesRead > 5, 'reference sweep read the deliverable corpus', `${refFile
   if (!usesCraftRules) {
     note(true, 'comment-strip exemption not exercised on this line', 'no craft-* rule files on disk');
   } else if (!existsSync(promptTs) || !existsSync(profilesTs)) {
-    undetermined.push(`comment-strip exemption unverifiable: no image-svc at ${ISVC_PRE} (set IMAGE_SVC_ROOT)`);
+    skippedForRoots.push('the craft-* comment-strip exemption');
+    undetermined.push(`comment-strip exemption unverifiable: no image-svc at ${ISVC_PRE} (root came from ${ISVC_R.via}; set IMAGE_SVC_ROOT or IMAGE_SVC_DIR)`);
   } else {
     const pt = flat(readFileSync(promptTs, 'utf8'));
     const gate = /stripComments\s*=\s*brief\.craftProfile\s*===\s*'minimal'/.test(pt);
@@ -589,6 +634,14 @@ if (checks.length < 15) {
 }
 if (VERBOSE) for (const c of checks) console.log(`${c.ok ? 'ok  ' : 'FAIL'} ${c.label} — ${c.detail}`);
 console.log(`checked ${checks.length} properties · naming line "${prefix}*" · ${typeSlugs.length} type rules · ${allFiles.length} files scanned across ${SCAN_ROOTS.length} roots`);
+console.log(`  image-svc root: ${ISVC_PRE} [${ISVC_R.via}]`);
+console.log(`  uds-moderator root: ${MOD} [${MOD_R.via}]`);
+// COVERAGE, STATED. A narrowed run must SAY it is narrowed on the same line as its property
+// count, or the count reads as full coverage to everyone who does not have the other run to
+// compare it against.
+if (skippedForRoots.length) {
+  console.error(`NARROWED: ${skippedForRoots.length} propert${skippedForRoots.length === 1 ? 'y' : 'ies'} NOT checked because a sibling root did not resolve: ${skippedForRoots.join('; ')}`);
+}
 for (const u of undetermined) console.error(`UNDETERMINED: ${u}`);
 if (problems.length) { for (const p of problems) console.error(`VIOLATION: ${p}`); process.exit(1); }
 if (undetermined.length) process.exit(2);

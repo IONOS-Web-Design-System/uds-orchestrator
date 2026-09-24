@@ -29,9 +29,17 @@
  *   node scripts/check-character-semantics.mjs             # 0 green, 1 violation, 2 cannot determine
  *   node scripts/check-character-semantics.mjs --verbose
  * Env:
- *   IMAGE_SVC_DIR   where to read src/craft/profiles.ts, src/validate.ts, src/craft/sceneMetrics.ts
- *   MODERATOR_DIR   where to read src/plan/planner.ts and src/plan/prompt.ts
- *   RULES_DIR       override the rules directory — for red-proving against a mutated copy
+ *   IMAGE_SVC_DIR | IMAGE_SVC_ROOT   where to read src/craft/profiles.ts, src/validate.ts,
+ *                                    src/craft/sceneMetrics.ts
+ *   MODERATOR_DIR | MODERATOR_ROOT   where to read src/plan/planner.ts and src/plan/prompt.ts
+ *   RULES_DIR                        override the rules directory — for red-proving against a
+ *                                    mutated copy
+ *   ALLOW_NO_MODERATOR=1             corpus-only run: CHECK F is skipped ON PURPOSE and the exit
+ *                                    code says so (2), never 0
+ *
+ * EITHER spelling of each root knob works. Its sibling guard `check-image-type-taxonomy.mjs`
+ * read `*_ROOT` for the same two checkouts while this one read `*_DIR`, so exporting one pair
+ * and running both produced a run that had silently dropped half its properties.
  */
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
@@ -40,12 +48,19 @@ import { fileURLToPath } from 'node:url';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, '..');
 const VERBOSE = process.argv.includes('--verbose');
-const IMAGE_SVC = process.env.IMAGE_SVC_DIR ?? resolve(REPO, '..', 'image-svc');
+const IMAGE_SVC = process.env.IMAGE_SVC_DIR ?? process.env.IMAGE_SVC_ROOT ?? resolve(REPO, '..', 'image-svc');
 const RULES_DIR = process.env.RULES_DIR ?? join(REPO, 'skills', 'uds-image', 'rules');
-const MODERATOR = process.env.MODERATOR_DIR
+const MODERATOR = process.env.MODERATOR_DIR ?? process.env.MODERATOR_ROOT
   ?? [resolve(REPO, '..', 'uds-moderator-ctx'), resolve(REPO, '..', 'uds-moderator')].find(existsSync);
+const MODERATOR_VIA = process.env.MODERATOR_DIR ? 'MODERATOR_DIR'
+  : process.env.MODERATOR_ROOT ? 'MODERATOR_ROOT'
+  : MODERATOR ? 'sibling default' : '(unresolved)';
+const IMAGE_SVC_VIA = process.env.IMAGE_SVC_DIR ? 'IMAGE_SVC_DIR'
+  : process.env.IMAGE_SVC_ROOT ? 'IMAGE_SVC_ROOT' : 'sibling default';
 
 function undetermined(msg) { console.error(`CANNOT DETERMINE: ${msg}`); process.exit(2); }
+/** Which spelling of the planner's scene gate actually matched — reported, so a rename is visible. */
+let sceneGateName = '(not reached)';
 const read = (p, what) => { if (!existsSync(p)) undetermined(`${what} not found at ${p}`); return readFileSync(p, 'utf8'); };
 
 /** Strip TRUE html comments. Approximate vs image-svc's scanner (which honours code spans), and
@@ -327,8 +342,21 @@ for (const f of AUTHORED_BRAND_FILES) {
 }
 
 // CHECK F — the planner side. The moment is chosen upstream, so the rule has to be THERE too.
+// A MISSING MODERATOR IS A CANNOT-DETERMINE, NOT A NOTE.
+//
+// This used to print a `console.log` NOTE and carry on, so `IMAGE_SVC_DIR=… node
+// check-character-semantics.mjs` (the moderator knob unset, or set under the OTHER spelling)
+// exited 0 and printed "PASS" having never opened the moderator at all — CHECK F is the whole
+// cross-repo half of this guard: CASTS drift plus five planner-prompt properties plus the
+// expression-request scan. A guard that reports PASS for a half it did not run is worse than no
+// guard. `ALLOW_NO_MODERATOR=1` keeps the corpus-only run possible, and still refuses to call it 0.
 if (!MODERATOR) {
-  console.log('NOTE: no moderator checkout found — CHECK F skipped (set MODERATOR_DIR to include it)');
+  if (process.env.ALLOW_NO_MODERATOR === '1') {
+    console.error('CANNOT DETERMINE (allowed): no moderator checkout — CHECK F not run, so this is not a PASS');
+    console.error('  set MODERATOR_DIR or MODERATOR_ROOT to include it');
+    process.exit(2);
+  }
+  undetermined('no moderator checkout found — CHECK F (CASTS drift + 5 planner-prompt properties + the expression scan) cannot run. Set MODERATOR_DIR or MODERATOR_ROOT, or ALLOW_NO_MODERATOR=1 to accept a narrowed exit-2 run');
 } else {
   const plannerSrc = read(join(MODERATOR, 'src', 'plan', 'planner.ts'), 'moderator planner.ts');
   const pm = /export const CASTS = \[([^\]]*)\] as const;/.exec(plannerSrc);
@@ -348,8 +376,18 @@ if (!MODERATOR) {
   for (const [label, re] of F) if (!re.test(promptSrc)) v(`moderator planner prompt: ${label} is absent (/${re.source}/)`);
   // The planner must NOT be asked for an expression — the literal-copy defect class applied to
   // the face. Checked as an ABSENCE inside the scene rule, where such a request would live.
-  const scene = /const sceneContextRule = wantsImageTypeRubric([\s\S]*?)\n    : '';/.exec(promptSrc);
-  if (!scene) undetermined('could not locate sceneContextRule in the moderator planner prompt');
+  // THE GATE VARIABLE IS MATCHED BY EITHER NAME, ON PURPOSE.
+  //
+  // This regex pinned `wantsImageTypeRubric`. The moderator then split that gate in two and the
+  // scene half became `wantsSceneContext` (`src/plan/prompt.ts`), at which point this check
+  // matched nothing, printed CANNOT DETERMINE and exited 2 with its whole body — the
+  // expression-request scan, the flattener probes, the both-directions clause — never executed.
+  // A rename must not be able to silence a guard, in EITHER direction, so both names are admitted
+  // and the one that matched is reported.
+  const sceneGate = /const sceneContextRule = (wantsSceneContext|wantsImageTypeRubric)([\s\S]*?)\n    : '';/.exec(promptSrc);
+  if (!sceneGate) undetermined('could not locate sceneContextRule in the moderator planner prompt (tried gates `wantsSceneContext` and `wantsImageTypeRubric` — if the gate was renamed again, add the new name here rather than letting this guard go quiet)');
+  const scene = [sceneGate[0], sceneGate[2]];
+  sceneGateName = sceneGate[1];
   // The rule's own text CONTAINS the words, in the clause forbidding them ("no expression word in
   // any field, in either direction, whether unhappy or happy"), so a bare substring test fires on
   // the fix. Sentence-scoped with the same prohibition carve-out as CHECK E.
@@ -393,8 +431,9 @@ if (VERBOSE) {
   console.log(`minimal rule files (${files.length}, brands ${brands.length}): ${files.join(', ')}`);
   console.log(`axis markers: camera ${MARKERS.camera.length} lighting ${MARKERS.lighting.length}`);
   console.log(`prop guard delegated to ${PROP_DELEGATE}; baselines ${BASELINES.size}; casts ${CASTS.join('|')}`);
-  console.log(`moderator: ${MODERATOR ?? '(none)'}`);
 }
+console.log(`roots · image-svc ${IMAGE_SVC} [${IMAGE_SVC_VIA}] · moderator ${MODERATOR ?? '(none)'} [${MODERATOR_VIA}]`);
+console.log(`CHECK F ran against the planner gate \`${sceneGateName}\``);
 console.log(`checked: ${Object.keys(REQUIRED_SECTIONS).length} owned rule files, ` +
   `${Object.values(REQUIRED_SECTIONS).flat().length} required sections, ${BASELINES.size} negative baselines, ` +
   `${AUTHORED_BRAND_FILES.length} authored brand rules, ${deferralsSeen} deferral sentences spared, ` +
