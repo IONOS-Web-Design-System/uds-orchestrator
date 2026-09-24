@@ -1,5 +1,85 @@
 # Changelog
 
+## [2.21.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.20.0...v2.21.0) (2026-09-24)
+
+
+### Features
+
+* **image:** brand vibes per spec, and one canonical candid-moment rule ([a40f1ff](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a40f1ffc8ba0252e493415efc7fa15319936bfd8))
+* **image:** camera preset catalogs per image type ([37c4ae0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/37c4ae0e1b231a9d4f41498a5f9bce512d47ac9f))
+* **image:** environment (PLACE) catalogs authored from the Figma references ([e9f6792](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/e9f67929f3f61a69cfe7b27afe0fe694cdfdf149))
+* **image:** promote scenario's screen-moment content to a device-focused type rule ([3012c5e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3012c5e34d97fafd2282f2dc3bda2eaea020e235))
+* **image:** scenario -&gt; eligible lighting presets table ([9f3d493](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9f3d493efadc45f72474e1f1fc1e1e29a467c55e))
+* **image:** shared lighting preset catalog ([7d3692e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/7d3692ed7fac3ed3355948b5f2b495428f5d9367))
+* **image:** two-axis precedence hierarchy and four-type detection rubric ([94bd009](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/94bd009d340b31714cb34bd3d4d63d3daf7963a3))
+* **uds-image:** add shared-quality-gate rule for image-svc's vision gate ([8854bd9](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/8854bd91681d483b71fa961ea8be6cda5eae584d))
+* **uds-image:** author treatment preset rule files (portrait/avatar/scenario/device-focused) ([3a8cf31](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3a8cf3192ce8686df3cdb93b9248c4df43a9bc33))
+* **uds-image:** both reference-image roles become context, not TypeScript ([c8a040e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c8a040e7bcc18c4238b9d6cd788e02a77e607def))
+* **uds-image:** daylight DIRECTION replaces the light-opening vocabulary ([c2c687f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c2c687f91465ca1660a6a2286f8e02c426f0c17e))
+* **uds-image:** eight home-office rooms and a brightness dimension ([65287d0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/65287d06ccb5847803301ba17029666e76e4e4fb))
+* **uds-image:** request-cue lexicon that gates the treatment menu ([63ec469](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/63ec469f2fd5ed46e08498bc39e407df10007efa))
+* **uds-image:** tag light openings so environment can narrow lighting ([a1b452f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a1b452fff15b9a5e4ab6a35bc7a0a4fec8106175))
+* **uds-image:** the # Task block and the shot-framing clauses become context ([4b682af](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/4b682afa140a2f5a9bde8b2ea893a68be7ba288b))
+* **uds-image:** the grounding rule becomes context, not TypeScript ([c2c6b90](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c2c6b905eb32b27ff72c3ce0b86d13e3420b97f4))
+* **uds-image:** the grounding-disabled override becomes context, not TypeScript ([667b44b](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/667b44b41111d3e20356948b5b94a85e125d7b11))
+* **uds-image:** the persona/no-persona framing becomes context, not TypeScript ([a636056](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a636056bcf9a0171e520de14e2c93ce1a33823af))
+* **uds-image:** the photographic-treatment INSTRUCTION becomes context ([2f0c3ae](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/2f0c3ae1c1db8d91e1bd7f22de5128882f08b806))
+* **uds-image:** the pinned-image-type block becomes context, not TypeScript ([6e1a796](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/6e1a796bf79e6cc2efdbe461b2be0e7b4dffec44))
+
+
+### Bug Fixes
+
+* **asset-moderator:** drop the second (physical-anchor) landscape-safety bullet ([e2326b9](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/e2326b9f414bb7f9c1827fc2397e9d89ad7b1412))
+* **asset-moderator:** planner stops authoring camera and lighting ([3dab24f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3dab24f119e1bac1244be5fdb97c0339f426e238))
+* **craft:** make persona vs feature precedence field-explicit ([e16fcee](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/e16fcee68cddde2f8573e1ad8af42a56435dc58f))
+* **evals:** re-point uds-image evals.json at shared-image-type-portrait ([e2e1004](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/e2e100444815a409bd491e6d624a1fb86ba9c5a1))
+* **guards:** accept both knob spellings, and revive the check the rename killed ([6c289b3](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/6c289b368f83a666ba16a65da72f1e022e17ed84))
+* **guards:** assert the comment-strip PROPERTY, not one spelling of it ([d24d025](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d24d02507230e1812da195a436db850c8a62ab96))
+* **image:** pad lighting-by-scenario cells for curation slack, differentiate evening/night ([0cf2dff](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/0cf2dff2bd41d86dc7db3c00a1cc4c1d3ada9c83))
+* **image:** restore device anchor dropped from over-shoulder-eye-level ([8153457](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/815345731a6d2cbd820d92841a9f90ed79e74dcb))
+* **image:** scope the cropped/blurred-person bullet to patterns A-C ([592b4da](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/592b4daf9341d36a2fc487f7fff507f2cbc12193))
+* **imagine:** repoint the stale image-type-*.md glob at shared-image-type-*.md ([04a2a13](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/04a2a134b58b09bb9f4e94183456664fcb528b6a))
+* **uds-image:** an object keyed in BOTH tables fires about twice as often ([41b14f4](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/41b14f44ac4a7a11b199a7f87ff79409870d8881))
+* **uds-image:** correct workspace catalog header claim, fixture rule, dead-id scope ([5a7d56d](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/5a7d56d95e85ecfc8286176e4dc8f94bc32e5f24))
+* **uds-image:** delete the lighting-example conflict from the IONOS brand rule ([321e8a6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/321e8a64c99688bd2e849f0c986eb07d79b4185e))
+* **uds-image:** drop input-hardware wording, merge lighting/treatment precedence into one hierarchy ([f1f0f46](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f1f0f4603ce9e03f75787ac57519de1777ce2c59))
+* **uds-image:** drop the last positive "even" from ionos lighting examples ([a8bd4f2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a8bd4f2bde066f0bcf6a6503cc2e0aaf132404be))
+* **uds-image:** extract the image-type detection rubric into its own rule ([95491fc](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/95491fcf405b1d894075c6bf8fb3900a7da0f43d))
+* **uds-image:** fix round 1 — avatar C3 relapse, the real bokeh homogeniser, stale refs ([39bf8f5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/39bf8f58329da8892c2c084147882a42ed65919b))
+* **uds-image:** give IONOS a negative baseline, and stop restating the scenario table ([5ca71f5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/5ca71f5a83ee03d6b66b717b515b54ed6e0b069b))
+* **uds-image:** give the C3 lighting pointer a fallback default ([ebafcb1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ebafcb1f8dc3503468498270ba83da4612c84fa5))
+* **uds-image:** keep every home-office day cell resolvable for the sealed room ([41383dd](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/41383dd6d4261ec1880cdc44728cf98651bbead5))
+* **uds-image:** remove the last copy-ready sentence templates and prop lists ([545d42f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/545d42f7d8ef880b7efa736f80aa1da19af53f30))
+* **uds-image:** rename image-type rules reachable, clean before they go live ([3b35bb8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3b35bb85d9a25f5dc5f2ec0b12396d3ef8eb73f2))
+* **uds-image:** resolve C3/C5/C7 intra-skill contradictions ([d5c5583](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d5c5583b238272ddcb5b465e568b9397b4cc8dac))
+* **uds-image:** retire the skylight entries no authored room can supply ([f9c0dba](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f9c0dba95fb70f6d9bf3cd2a3542d20b7f3c6be0))
+* **uds-image:** state the no-match prop rule positively, and record that it does not bind ([5f82f27](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/5f82f277ca19e935506e4dc89b01a3f89ce2f35d))
+* **uds-image:** the brand grade bias is stated INSIDE its no-injected-line condition ([1e3e0a1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1e3e0a1a34d1ec1b0c0850b0c01b804bcf971724))
+* **uds-image:** the condition reference PROHIBITS the appearance it owns ([a22726c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a22726c431c7b7a60a7165c0a242fdbbf3509cd2))
+* **uds-image:** the desk-nook room emitted a hand prop on every run ([df84ffc](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/df84ffc4c22c3759fd7e74ec1c9f9fc05076404e))
+* **uds-image:** the ionos grade mandate the de-banning pass missed ([91f3968](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/91f3968e58d53e78f50d50335b9236214097a53a))
+* **uds-image:** the negative baselines still vetoed the light the line now owns ([4869127](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/486912738bc7016f49f99a302e22060039b6d27e))
+
+
+### Documentation
+
+* **image:** drop the three pointers to the no-longer-inlined storytelling rule ([6a68205](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/6a68205c13cfbc15deac9ed05d4c4845dd46c2e0))
+* record how to run the minimal-conflict guard, and that it is not in CI ([d0fe6e0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d0fe6e05ac95e9ffa81921c130e8c62a56305a6b))
+* **skills:** fix two pointers the taxonomy change left wrong ([e091d0f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/e091d0f503af1c40bc5702a774e23e27c13a0d88))
+* **uds-image:** mark the storytelling rule superseded so nobody re-injects it ([d845fd4](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d845fd4fab00804fba55a305a7a41847d2d39220))
+
+
+### Miscellaneous
+
+* **image:** delete the fused treatment files and the retired scenario type rule ([9d8644e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9d8644e5be097ed0ed1d5906551d54d27370b93f))
+
+
+### Code Refactoring
+
+* **uds-image:** brand tone becomes a bias, not a veto over the light ([fdeb189](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/fdeb189a7dea28d196269857910a3f3cee54b47d))
+* **uds-image:** props come from place x who, in one canonical table ([b4a3da0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/b4a3da0812f1ff41293d181910cdcec3468e9833))
+* **uds-image:** SKILL.md's prop sentence becomes a pointer ([6200fae](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/6200faec58919767c56147f7214644460ec78f75))
+
 ## [2.20.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.19.0...v2.20.0) (2026-08-19)
 
 
