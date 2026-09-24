@@ -21,7 +21,9 @@ their answer on the runs that have one.
      mapping for the same reason: two mappings competing for one decision. -->
 
 - **An unstaged room.** Whatever the light turns out to be, the space around it should look
-  like somewhere work actually happens — surfaces in use, objects where a person left them.
+  like somewhere work actually happens: whatever the room has is in use and sits where somebody
+  left it, rather than arranged for the photograph. A room reads unstaged from how its own
+  contents sit, never from how many it has.
 - **A composed subject, mid-action.** Settled bearing and a moment in progress are not in
   tension; see `shared-natural-moment`.
 
@@ -45,16 +47,18 @@ tones, soft warm beige. Let objects and props use colours that feel natural and
 harmonised with the scene. Do not force brand colours onto objects unless the brief
 explicitly requests the IONOS colour palette.
 
-**Object colours — aim for visual richness, not muted neutrals:**
-Objects and props should have clear, saturated colours that create visual interest
-and contrast within the scene. Avoid everything being the same beige/grey/neutral
-tone — that produces flat, low-impact images. Instead, let the individual objects the
-scene already contains carry colours that suit what each one is, rather than defaulting to
-the same handful of colours every time. This file does not decide WHICH objects are in the
-frame — the scenario and the image-type rule do.
+**Colour across the frame — visual richness, not muted neutrals:**
+Whatever the frame already contains should carry colours that suit what each thing actually
+is, rather than the same handful of colours every time. Avoid everything sitting in one
+beige/grey/neutral tone — that produces flat, low-impact images.
 
-The colour palette across the scene should feel **visually varied and alive** — 2–3
-distinct colour accents across the props, not a monochrome or all-neutral composition.
+The frame should read **visually varied and alive**, and that variety is carried by
+everything in it: the surfaces, the materials, the furnishings, what the person is wearing,
+and whatever objects the scenario has genuinely put there. It is not a quota to be met by
+adding things. **This file does not decide WHICH objects are in the frame, and it does not
+ask for any** — the scenario decides that, and a frame the scenario furnished sparsely is
+correct as it stands. Where the frame is genuinely spare, get the variety from its surfaces
+and its materials rather than from a new object.
 
 **Brand colour on objects — only when explicitly requested:**
 Apply IONOS Blue (`#003D8F`) or Sky (`#11C7E6`) to props or screen content **only if**
