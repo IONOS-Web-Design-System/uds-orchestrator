@@ -25,159 +25,51 @@ not a constraint.
 **Exception — explicit user request only:** if the brief explicitly asks for the face
 to be visible ("facing camera", "clear face", "recognizable person"), open the prompt by
 stating plainly that the full face stays uncropped and visible, then apply portrait's
-framing rules for that shot distance.
-
-## Camera angle patterns
-
-The camera angle is the single most important decision in a scene image. Choose the pattern
-that fits the brief before writing any other part of the prompt.
-
-### Pattern A — Eye-level with waist anchor (standard)
-
-The default for workshop, retail, kitchen, and office scenes where the environment itself
-is rich. Camera is at approximately eye level or slightly elevated (15–20°). The subject
-is partially behind a waist-height surface (counter, desk, workbench) that acts as a
-natural divider — hands and upper body are active above it, legs are hidden below.
-
-```
-"eye-level shot, [person] behind a [counter/desk/workbench], [action in hands],
-[environment details] visible behind in soft focus"
-```
-
-### Pattern B — Overhead / top-down (workspace from above)
-
-Camera is positioned 50–75° above the subject, looking straight down at the workspace.
-The desk or table surface becomes the dominant ground plane — its texture (warm wood,
-light concrete, cream linen) is as important as the person. The subject's face is never
-in frame because their head points downward; only hands, forearms, and partial clothing
-enter the composition.
-
-**When to use:** any workspace/device brief where a rich surface texture exists, or when
-the brief calls for a "from above", "flat lay adjacent", or "workspace overview" feel.
-Works especially well for laptop/device briefs where the screen should be clearly visible.
-
-**Composition note:** overhead shots have natural symmetry — the key action (hands on keyboard, device screen) should sit center-frame for the strongest composition.
-
-```
-"overhead shot looking straight down from directly above, bird's-eye view,
-approximately 60-70 degrees above the surface — the desk surface fills the frame
-as the ground plane, seen from above,
-[surface: warm dark wood / cream marble / light concrete] desk surface with visible texture,
-[person's hands and forearms entering from the [left/bottom] edge of the frame only,
-partial sleeve visible, face completely out of frame],
-[device/object] on the surface, screen facing upward clearly visible,
-natural warm daylight from a window at one side casting directional shadows across
-the surface texture,
-editorial overhead bird's-eye photography style"
-```
-
-**Reference look:** warm dark wood grain + black clothing + MacBook with visible website;
-hands at lower-left entering frame; no face; surface texture fills 30–40% of frame.
-
-### Pattern C — Behind-the-person (over-shoulder, face absent by position)
-
-Camera is positioned behind and slightly to one side of the subject, looking toward the
-screen. The subject's back of head and one shoulder enter from one edge of the frame —
-they are a **compositional shape**, not a subject. The screen faces the camera naturally.
-Face is never visible because the camera is behind the person.
-
-**When to use:** laptop/tablet briefs where the screen content should be clearly legible,
-and where a "looking over someone's shoulder" feel adds authenticity and depth.
-
-```
-"over-the-shoulder shot from behind and slightly above to the right,
-[partial back of head with natural hair, one shoulder visible in the frame edge],
-[device] on [surface] with the screen clearly facing the viewer,
-screen displaying [interface description],
-[surface: warm cream / tan / light wood] visible as the mid-ground,
-bright airy natural light from the left, screen as the brightest element in the frame,
-editorial lifestyle photography style, shallow depth of field"
-```
-
-A foreground plane is optional here and should stay intentional, not formulaic: 1–2 objects
-softly out of focus near the camera can add depth, but pull them from what this specific
-person and setting would plausibly have close at hand — not a stock prop list reused scene
-to scene.
-
-**Reference look:** back of head as dark shape at right edge; an object native to the
-setting sits softly blurred in the near foreground; cream surface; MacBook with legible
-dashboard as the hero.
-
-### Pattern D — Eye-level, person in the scene, gaze averted (hybrid backdrop pattern)
-
-**Scene type only.** Pattern D is NOT for portrait type. If the brief asks for the person
-to face the camera with their identity as the story → that is portrait type, not Pattern D.
-Pattern D is for scene images where the person is an atmospheric presence, used specifically
-as a backdrop for hybrid mode UI overlay.
-
-Camera is at eye-level or slightly off-axis (15–30° to the side). The person is the
-**atmosphere anchor** — they occupy one side of the frame (typically left), face visible
-but looking down at their work or device, NOT toward the camera. The opposite side of
-the frame — wall, plant, or soft interior — is intentionally **lighter and more open**,
-creating negative space for a UI overlay in hybrid mode.
-
-The device is incidental: partially visible (just the keyboard edge, a phone held loosely)
-or not shown at all. The **setting carries the story** — warm sofa, large tropical plant,
-textured wall, lifestyle atmosphere.
-
-**When to use:**
-- Hybrid mode background images where the illustration panel needs compositional room
-- Scene briefs where the atmosphere and character together tell the story
-- "Lifestyle", "home office", "casual creative" contexts
-- When the brief wants a face to be visible but not posed/frontal
-
-**Composition specifics:**
-- Person fills 50–65% of the frame on one side (left or right — specify which, so the
-  moderator can place the UI overlay on the open side)
-- Face is visible but eyes are downcast or angled away — candid, not posed
-- Open side: relatively uniform — wall color, soft plant, window light — nothing busy
-  that would compete with the illustration panel
-- Rich warm interior setting: sofa, armchair, or standing at a home desk; a large leafy
-  plant adds depth and color; warm-toned wall
-
-```
-"eye-level shot from slightly to the [left/right], [person description] sitting on a
-[teal/warm grey/navy] sofa / standing at a home desk, wearing a [warm-colored garment],
-face partially visible, looking down at [laptop/phone — incidental],
-body occupying the [left/right] two-thirds of the frame,
-[large tropical plant] in soft focus behind the person's right/left shoulder,
-[warm sandy/ochre/cream wall] in soft focus on the open [right/left] side of the frame,
-warm ambient interior light from one side, no direct sunlight — soft but with visible
-light-to-shadow contrast,
-rich saturated foreground colors (jacket/clothing), open calmer tones on the [right/left],
-documentary lifestyle photography, shallow depth of field"
-```
-
-**Reference look:** burnt-orange jacket man on teal sofa, face partially visible looking
-down at keyboard; large green tropical plant behind right shoulder; warm sandy wall on
-the open right side; face is NOT toward camera — engagement is authentic and candid.
-
-**Negative-space rule for hybrid use:** when this image will be a backdrop for a hybrid
-asset, encode the open side explicitly — `"the [right/left] side of the frame remains
-relatively open and calm — [plain wall / soft window light] — with no busy elements
-overlapping that zone"`. This ensures the generated illustration panel has a clean
-compositional region to land in.
-
----
+rules for that shot distance.
 
 ## Composition rules
 
-- Choose a camera angle pattern from above **before writing the prompt** — it determines
-  every other compositional decision
-- **Shot distance:** pattern A → long/waist shot showing environment; pattern B → close to
-  medium (desk fills frame); pattern C → close to medium (screen fills ~50% of frame)
-- **Peripheral human presence** — for patterns B and C, the person is not a full figure.
-  They enter the frame as a **partial shape**: hands + forearms (B), or back of head +
-  shoulder (C). This is intentional. Encode it explicitly — "hands entering from the lower
-  left" or "partial back of head at the right edge of the frame"
-- Subject mid-action — hands engaged, body oriented toward the task, NOT facing camera
-- Framing is always off-center and asymmetric — avoid placing the device dead-center with
-  symmetrical margins; the person's partial presence should create diagonal tension
-- Include environmental context: tools, equipment, objects relevant to the setting
-- **Patterns A–C:** people may be cropped (partial figure), blurred (shallow DOF), or in the
-  background. NOT Pattern D — that pattern deliberately does the opposite, with the person
-  filling 50–65% of the frame and the face visible.
-- Use depth of field to keep the key product element sharp and people/background soft
+These are the properties a scene frame must have. They hold whatever viewpoint is chosen, and
+they are what a chosen viewpoint has to be checked against.
+
+- **The person belongs to the setting, not the other way round.** They are mid-action — hands
+  engaged, body oriented toward the task, not toward the camera. A subject who has stopped to
+  be photographed has already failed this rule.
+- **The setting has to stay legible.** Tools, equipment and objects that belong to this place
+  are in the frame and readable enough to say where this is and why the moment matters.
+- **Nothing may depend on the face.** Per the face rule above, the face is a bonus. A
+  composition that only works if the face reads is the wrong composition for this type.
+- **When only PART of the person is in the frame, that is deliberate and has to be stated.**
+  Hands and forearms entering at one edge, or the back of a head and one shoulder as a shape at
+  the frame's border, are intentional choices and must be encoded explicitly, in your own words,
+  so they read as composed rather than as a crop that went wrong.
+- **Off-centre and asymmetric.** Never the device dead-centre with symmetrical margins. The
+  person's partial presence, where there is one, should create diagonal tension.
+- **The key product element reads clearly and nothing competes with it.** Whatever is behind and
+  around it stays subordinate — present enough to place the scene, never loud enough to pull the
+  eye off the thing the image is about.
+- **One side of the frame stays open when this image will carry an overlay.** See the
+  negative-space rule below; it is a hard requirement in hybrid mode, not a preference.
+
+## The person as atmosphere, and the open side (hybrid backdrop)
+
+Some scene images exist to be the BACKDROP for a hybrid asset, with an illustration or UI panel
+landing on top of them. The person is then an atmospheric presence rather than a subject: they
+occupy one side of the frame, their face may well be visible but their attention is on their
+work or their device and not on the camera, and the setting carries the story — the sofa, the
+plant, the textured wall, the lived-in interior.
+
+This is still `scene` and not `portrait`. If the brief wants the person to face the camera with
+their identity as the story, that is portrait.
+
+- **Name the side.** State which side of the frame the person occupies, so the moderator knows
+  which side the overlay lands on. A composition that leaves this implicit cannot be composited
+  against.
+- **Keep the other side open and calm** — a plain wall, soft window light, an uncluttered
+  interior — with nothing busy overlapping that zone. Encode it explicitly and in your own
+  words; the illustration panel needs a clean region to land in.
+- **The device is incidental here.** Partly visible, or not shown at all. The setting is the
+  story, and an averted attention is what makes it candid instead of posed.
 
 ## Story direction
 - The image should communicate a complete micro-story: what is happening, where, and why
@@ -193,8 +85,8 @@ compositional region to land in.
 
 ## Surface texture as a design layer
 
-For patterns B and C (device-in-scene shots), the **desk or table surface** is a full
-compositional layer, not just a background. Specify it explicitly:
+When a desk or table surface is in the frame, it is a full compositional layer and not just a
+background. Specify it explicitly:
 
 | Surface | Mood | Prompt encoding |
 |---|---|---|
@@ -204,15 +96,13 @@ compositional layer, not just a background. Specify it explicitly:
 | Concrete / stone | Creative, studio, editorial | `"raw light concrete desk surface"` |
 | White / bright neutral | Clean, tech, high contrast | `"bright white desk surface, clean and minimal"` |
 
-For pattern B (overhead), the surface occupies 30–50% of the frame — this is its primary
-visual weight, not background. Describe the grain, texture, and light falling across it.
+Where that surface takes a large share of the frame, it is carrying real visual weight rather
+than sitting behind the subject — describe its grain, its texture, and the light falling across it.
 
-## Foreground objects — identity and depth (patterns B and C)
+## Foreground objects — identity and depth
 
-For device-in-scene shots, 1–2 foreground objects placed closest to the camera lens are
-the **identity layer** — they answer "who is this person?" at a glance. They sit at the
-very front of the desk surface and are rendered out of focus (bokeh) while the screen
-remains sharp behind them.
+When a work surface is in the frame, one or two objects at the very front of it are the
+**identity layer** — they answer "who is this person?" at a glance.
 
 **Which objects: `shared-scenario-props`.** That rule is the only place prop objects are
 named. It keys them on the scenario's `place` and on who the person is, and states how the two
@@ -220,8 +110,8 @@ combine, which object to vary, and how to colour it. This table used to be keyed
 — no place at all — so a hospitality object could reach an office brief and a house favourite
 could reach anything. Do not restate its objects here.
 
-What belongs to THIS rule is where they sit: at the very front of the desk surface, closest to
-the lens, softly out of focus while the screen stays sharp behind them. State the objects and
+What belongs to THIS rule is where they sit: at the very front of the work surface, nearest the
+viewer, and subordinate enough that the screen behind them still reads. State the objects and
 their placement in your own words rather than reusing a fixed sentence shape.
 
 ## Screen visibility (device-in-scene shots)
@@ -240,23 +130,21 @@ product grid and hero image", "a website with a large hero image and navigation 
 
 ## Composition across aspect ratios
 
-image-svc generates natively at the target aspect ratio; no crop occurs. Landscape targets are natively wide, tall targets natively tall. For patterns B and C, keep the screen and key foreground objects center-frame as a natural compositional anchor — the person's partial presence at the edges is peripheral by design and stays within the native canvas.
+image-svc generates natively at the target aspect ratio; no crop occurs. Landscape targets are natively wide, tall targets natively tall. Where the person's presence is peripheral, keep the screen and the key foreground objects toward the middle as the compositional anchor — the partial presence at the frame's edges is peripheral by design and stays within the native canvas.
 
 ## Person direction
 
 - DO NOT pose the subject facing the camera with a neutral expression
 - Expression matches the activity: focused, engaged, absorbed
-- For patterns B and C: encode the partial presence explicitly — "only hands and forearms
-  visible", "back of head and shoulder as a dark shape at the frame edge"
-- For pattern A: posture and body language harmonize with the environment
+- Posture and body language harmonize with the environment rather than addressing the viewer
 
 ## When an included person's face should stay visible
 
 People in a scenario shot default to secondary — cropped, blurred, or backgrounded is fine
-when the brief doesn't ask otherwise (Pattern A above already covers "a customer at a
-counter" or "team working together" this way). Some briefs still want that included person's
-face to read clearly while their hands stay on the interaction. Reach for this technique
-rather than posing them front-on, which turns the shot into `portrait`:
+when the brief doesn't ask otherwise (a customer at a counter, or a team working together, are
+already covered that way). Some briefs still want that included person's face to read clearly
+while their hands stay on the interaction. Reach for this technique rather than posing them
+front-on, which turns the shot into `portrait`:
 
 - **Physical anchor at waist height.** Place the subject behind a counter, desk, or
   workbench — the barrier sits at waist level, so the hands-on action (typing, handling a
@@ -264,7 +152,8 @@ rather than posing them front-on, which turns the shot into `portrait`:
   above it. Describe the subject as standing behind that surface with their upper body
   clearly above it and open space over the head — word it fresh each time rather than
   reusing one fixed phrase. This physical-anchor approach is the most reliable pattern
-  for combining a visible face with visible hands-on activity.
+  for combining a visible face with visible hands-on activity, and it works from any
+  viewpoint: it is where the subject stands, not where the camera is.
 - **Prefer standing or upright actions over crouching or bending.** A head-down pose drives
   the model to crop in and lose the face. Reframe a low-level task as the person pausing
   mid-task and looking up, or pick an equivalent upright action.
@@ -273,7 +162,7 @@ rather than posing them front-on, which turns the shot into `portrait`:
 
 ## Avoid
 
-- Subject standing upright, arms at sides, staring at lens
+- Subject standing upright, arms at sides, staring into the camera
 - Artificially posed "smile and hold" headshot composition
 - Background replaced with plain studio backdrop
 - Symmetrical, centered composition — always create diagonal tension
