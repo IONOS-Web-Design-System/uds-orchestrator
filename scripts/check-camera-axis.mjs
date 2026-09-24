@@ -599,6 +599,85 @@ const SHARED_SIDE = /\bover the shoulder\b|\bbehind and above\b|\babove and behi
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// HUMAN EXTENT — every device-focused preset must state HOW MUCH OF A PERSON its frame keeps.
+//
+// PROVENANCE, from a user review of the reference set on 2026-09-24. `device-focused-03` is a
+// laptop screen filling the frame whose entire human presence is two cropped forearms at the
+// bottom edge — no face, no head, no torso — and the preset written from it said only "a forearm
+// below", which records a framing landmark and buries the defining fact. Re-read from the pixels,
+// TEN of the twelve references carry no face at all and only two (07, 11) contain a figure with
+// one; meanwhile the axis was measuring an operator in frame in 6 of 6 frames on a live device
+// variant set and a medium-or-larger figure dominating 11 of 12 on an earlier grid, against a
+// type contract that says the device is the hero. The extent clause is the fix, and this is what
+// stops it being quietly dropped in the next rewrite of a line.
+//
+// SCOPED TO THE REFERENCE CATALOG, and biconditional against the visibility declaration, which is
+// the one place the requirement inverts:
+//   - a preset declared screen-see-able WITH an operator must name at least one human landmark,
+//     because an operator is in its frame by declaration and the line is the only per-preset voice
+//     that can say how much of them;
+//   - the `unattended-only` preset must name NONE. Naming a person there is exactly what invites
+//     the operator-behind-the-display contradiction that preset was rewritten to avoid, so the
+//     absence is a requirement and not an omission.
+// Anchored to the INJECTED line with comments stripped, like every other check here: the header's
+// own HUMAN EXTENT section names every one of these landmarks, and a guard a file's explanation
+// can satisfy has already happened twice in this workstream.
+//
+// THE PATTERN IS A SUBJECT PLUS A LANDMARK, NOT A LANDMARK ALONE, and the first draft of this
+// check got that wrong in a way red-proving caught: a bare body-part vocabulary is satisfied by
+// every CAMERA-POSITION idiom in the catalog. "close over the shoulder at screen height" contains
+// `shoulder`, "from behind and above the hands" contains `hands`, "held in both hands" contains
+// `hands` — so deleting the whole extent clause from `close-frontal-screen` left the guard green.
+// The clause therefore has to be recognised by its SUBJECT: a comma-clause that says what of THE
+// PERSON / THE OPERATOR / THE NEAR PERSON the frame keeps. That is a form requirement on the
+// author, which is the trade a guard on prose always makes — the alternative is a check that
+// cannot fail.
+//
+// The landmark vocabulary is AUTHOR-DECLARED and cannot be derived: it is the set of body
+// landmarks physically present in the twelve reference photographs. It deliberately does NOT
+// include the shot-size bands (`BANDS` above) — those are the character catalogs' vocabulary and a
+// device preset stating one would trip that table instead.
+// ─────────────────────────────────────────────────────────────────────────────
+const HUMAN_EXTENT_CLAUSE =
+  /\bthe (?:near person|person|operator|holder)\b[^,]*\b(?:hands?|forearms?|shoulders?|sleeves?|heads?|torso|lap|figure|profile|frame)\b/i;
+const HUMAN_LANDMARK = /\bthe (?:near person|person|operator|holder)\b/i;
+{
+  const entry = byFile.get(REFERENCE_CATALOG);
+  const unattended = new Set();
+  // The tag is read the same way the tag<->declaration check below does: from the DELIVERED body,
+  // per preset heading. Duplicated deliberately rather than shared — this check must not silently
+  // inherit a parse bug from that one, and both assert they read something.
+  const delivered_ = delivered(REFERENCE_CATALOG, entry.raw);
+  let slug = null;
+  for (const raw of delivered_.split('\n')) {
+    const h = /^##\s+(\S+)\s*$/.exec(raw.trim());
+    if (h) { slug = h[1]; continue; }
+    const t = /^ScreenVisible:\s*(\S+)\s*$/.exec(raw.trim());
+    if (t && slug && t[1] === 'unattended-only') unattended.add(slug);
+  }
+  if (unattended.size === 0) {
+    undetermined(`${REFERENCE_CATALOG}: the human-extent check read ZERO \`unattended-only\` presets, so its inverted half read nothing — either the tags moved or this extractor is not reading them`);
+  }
+  let extentRead = 0;
+  for (const p of entry.presets) {
+    if (p.text === null) continue;
+    extentRead++;
+    const names = HUMAN_EXTENT_CLAUSE.test(p.text) || HUMAN_LANDMARK.test(p.text);
+    if (unattended.has(p.slug)) {
+      if (names) {
+        violations.push(`${REFERENCE_CATALOG}:${p.line} ${p.slug}: declared \`ScreenVisible: unattended-only\` but its injected text names a human landmark ("${p.text}") — naming a person in the frame that is self-consistent only WITHOUT one is the contradiction that preset was rewritten to remove`);
+      }
+      continue;
+    }
+    if (!HUMAN_EXTENT_CLAUSE.test(p.text)) {
+      violations.push(`${REFERENCE_CATALOG}:${p.line} ${p.slug}: its injected text states no HUMAN EXTENT ("${p.text}") — no clause of the form "the person/operator ... <landmark>". Every reference but 07 and 11 carries no face, and this line is the only per-preset voice that can say so; a preset that records only the camera position is the \`device-focused-03\` defect the user found. A body part inside a camera-position idiom ("over the shoulder", "held in both hands") does NOT count`);
+    }
+  }
+  if (extentRead === 0) undetermined(`${REFERENCE_CATALOG}: the human-extent check read ZERO preset lines — 0 violations over 0 lines is not a pass`);
+  console.log(`human extent: ${extentRead} preset lines checked, ${unattended.size} exempt as unattended-only`);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // The inline `ScreenVisible:` tag is the form CODE can read; the two header lists above are the
 // author-facing form. A comment is stripped by the loader, which is why the declaration needed a
 // form outside one — and why there are now two forms of the same fact. Two forms are only safe if

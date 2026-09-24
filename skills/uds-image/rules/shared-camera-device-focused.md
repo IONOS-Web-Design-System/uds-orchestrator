@@ -41,6 +41,39 @@
      rejects. Authoring it would push the model toward the failure this axis is being hardened
      against, so it is excluded deliberately rather than for lack of material.
 
+     >>> THE EXCLUSION, REVISITED 2026-09-24 BECAUSE THE USER NAMED 10 AS A REFERENCE <<<
+     The user asked for "device-focus-10 the outdoor variant" to be honoured, so the exclusion was
+     re-examined against the pixels rather than left to stand on the note above. It STANDS, and
+     for a reason the original note did not give.
+     WHAT THE UNDERLYING PHOTOGRAPH ACTUALLY IS, looked at again: a hand with painted nails
+     holding a phone upright over warm paving in hard, directional sun, a blurred yellow shoulder
+     at the far left, the phone's display turned to the lens. It is the ONLY outdoor frame in the
+     twelve, and the user is right that it is a viewpoint the set otherwise lacks.
+     BUT ITS TRANSFERABLE CONTENT IS NOT CAMERA CONTENT, and that is the finding. Separate the
+     three facts in it and each one already has an owner elsewhere:
+       - OUTDOORS, warm paving, open ground behind — that is a PLACE, and the place axis is
+         `resolveEnvironment` over `shared-environment-*.md`. `PLACES` in image-svc's validate.ts
+         already carries `outdoors`; what is missing is an environment CATALOG for it, so an
+         outdoor device brief gets no `Environment:` line at all today. That is the real gap the
+         user is pointing at, and a camera preset cannot fill it — a camera preset that said
+         "outdoors" would be this axis taking a place decision, the conflict the split exists to
+         remove, and it would then assert outdoors on every brief that drew it.
+       - DIRECT SUN, HIGH SATURATION, hard-edged shadow — that is LIGHT, and 10 is ALREADY cited
+         as a lighting reference for exactly this in `shared-lighting.md`. It has been honoured;
+         it was honoured on the correct axis.
+       - what is left over, once place and light are removed, is the phone turned screen-out to
+         the lens and away from its holder. That is the one genuinely CAMERA fact in the frame,
+         and it is the geometry `craft-plausibility.md` arbitrates against, the type rule calls
+         "the #1 thing to avoid", and the negative baseline rejects.
+     So honouring the reference does NOT mean adding a twelfth preset — it means filling the
+     `outdoors` hole on the environment axis. That is a different file, a different axis and a
+     different task; it is recorded here as the follow-up because this is where the reference was
+     read. The exclusion is upheld because everything in 10 worth transferring has already been
+     transferred somewhere else, not because the reference is worthless.
+     AND ONE MORE THING 10 DOES SUPPORT, on this axis, which is now used: its human extent. Like
+     01, 02 and 03 it carries no face — one hand and a blurred shoulder — which is part of the
+     ten-of-twelve count in the HUMAN EXTENT section below.
+
      SLUG CHANGES, and why each one is a correctness fix rather than churn.
      Two renamed:
        - `screen-forward-elevated-frontal` -> `high-oblique-over-hands`. Reference 01 is a steep
@@ -60,8 +93,10 @@
          three tests in uds-moderator (`src/plan/__tests__/prompt.axes.test.ts`,
          `prompt.treatment.test.ts`, `src/orchestrate/__tests__/payloads.axesEndToEnd.test.ts`),
          which this task does not own. Swapping it onto the reference it actually describes fixes
-         the conflict without touching a repo it cannot edit. Its one remaining inaccuracy: the
-         held device in reference 12 is in ONE hand, not both.
+         the conflict without touching a repo it cannot edit. Its one remaining inaccuracy — the
+         slug says "in hands" while the held device in reference 12 is in ONE hand — is now stated
+         correctly in the TEXT ("held in one hand"), which is the half the model reads; the slug
+         keeps its plural because three uds-moderator tests assert it verbatim.
      No other slug changed, and none is referenced by any image-svc source or test.
 
      SCREEN VISIBILITY, per preset. The axis contract is that a frame must not require an operator
@@ -128,10 +163,54 @@
      baseline forbids them in the output.
      SEASONAL CONTENT. Reference 10 is a winter-sale campaign graphic end to end. Excluded with the
      rest of that reference; nothing seasonal reaches any preset.
-     PEOPLE. No preset describes a person — no age, dress, gaze or activity. A shoulder, a forearm,
-     a head and cropped faces appear only as the framing landmarks that define an over-the-shoulder
-     position, which is the same licence the previous eleven took and the same one the axis contract
-     grants ("a person is at most partial context").
+     PEOPLE. No preset describes a person as an IDENTITY — no age, dress, gaze or activity. What
+     each preset now DOES state is HOW MUCH OF A PERSON ITS FRAME KEEPS, and that is the change
+     this revision exists for.
+
+     >>> HUMAN EXTENT, per preset — added 2026-09-24 from a user review of the references <<<
+     THE DEFECT. The user opened `device-focused-03` and pointed out that its laptop screen fills
+     the frame and the only human presence is two cropped forearms at the bottom edge: no face, no
+     head, no torso, nobody identifiable. The previous text for that preset ended "a forearm
+     below" — four words that record a framing landmark and BURY the defining fact, which is that
+     a person is not in this picture. The set's own inventory made the same omission, describing
+     03 as "close over the shoulder at about screen height" and never saying there is no character
+     in it. That omission is exactly what the axis was failing at in pixels: measured on a live
+     device-focused variant set an operator was in frame in 6 of 6 frames, and on an earlier
+     12-frame grid a medium-or-larger figure DOMINATED 11 of 12 — against a type contract that
+     says the device is the hero and a person is at most partial context.
+
+     RE-READ FROM THE PIXELS, all twelve, for human extent alone:
+       - carry NO face at all (10 of 12): 01 hands at a keyboard and one forearm; 02 a near
+         shoulder and both hands; 03 two cropped forearms; 04 two hands and a sleeve; 05 the back
+         of a head and two forearms; 06 the back of a head, a large shoulder mass and one hand;
+         08 two hands, sleeves and a shoulder at the edge; 09 hair unfocused at the edge and one
+         hand; 10 one hand and a blurred shoulder; 12 the back of a head, one forearm and a lap.
+       - carry a figure WITH a face (2 of 12): 07, an operator seated in full profile, sharp;
+         11, a near torso cropped at the top edge plus a second, softer figure behind it.
+     So the authored set is overwhelmingly a set of frames a person is only PARTLY in, and every
+     one of the four references the user named (01, 02, 03 and the outdoor 10) carries no face.
+     That is the fact the injected line now states, and it is stated POSITIVELY — what the frame
+     keeps — never as a prohibition, for the reason the RENDERED TEXT paragraph above gives:
+     naming the thing to avoid is how the word reaches the prompt.
+
+     IT IS CARRIED IN THE TEXT AND NOT AS A SECOND `ScreenVisible:`-STYLE TAG, deliberately. A tag
+     is worth its guard only if code acts on it, and the code decision this fact would drive —
+     whether the prompt may author a WHOLE person — is already taken one level up and on a
+     coarser key: `effectiveCast` in image-svc's `src/craft/prompt.ts` refuses `cast: 'hero'` on
+     any `device-focused` brief and renders it as `background`, whose grammar in
+     `shared-character-presence.md` is "clipped by the frame edge... or reduced to a pair of
+     hands". A per-preset tag would today only re-decide what that clamp has already decided, on
+     the one catalog that carries the clamp — a consumer with no work to do, which is the
+     delivered-but-unread failure this workstream removed elsewhere. If a preset-level consumer
+     ever has a decision of its own, the tag is a three-line addition on the `ScreenVisible:`
+     pattern and the lists above are where it would be pinned.
+
+     ONE PRESET IS EXEMPT. `frontal-elevated-device-hero` names no human landmark at all and
+     keeps its old text unchanged, because it is the `unattended-only` frame: naming a person is
+     precisely what invites the operator-behind-the-display contradiction it was rewritten to
+     avoid. Its reference (09) does contain hair at the edge and a hand holding something in the
+     near foreground — the earlier inventory entry called it "a figure only as an unfocused edge
+     mass" and missed the hand — but the preset deliberately does not transfer either.
 
      ASPECT IS NOT A CAMERA FACT ON THIS AXIS, and one preset had to be corrected for it after
      the first measurement run. `top-down-in-hands` was authored as "tall crop", from reference 12,
@@ -143,10 +222,14 @@
 
      LENGTH. Only ONE line is injected per run, so the catalog costs the prompt nothing for being
      eleven — but the LENGTH of the line drawn is a real cost against a `minimal` budget already
-     over target. Measured: the previous eleven ran 59-129 chars, mean 96.1; these eleven run
-     128-149, mean 138.5. The increase buys the height, lens and depth facts the
-     description-derived text omitted — several old lines stated an angle and a lens and nothing
-     else, which is why the camera axis had nothing to say about where depth or the near plane sat.
+     over target. Measured, three generations of this catalog: the description-derived eleven ran
+     59-129 chars, mean 96.1; the reference-authored eleven ran 128-149, mean 138.5; with the
+     human-extent clause below they run 138-232, mean 206.4. The first increase bought the height,
+     lens and depth facts the description-derived text omitted. The second buys the one fact the
+     user's own review found missing, and it is spent on the axis measured to carry best: the
+     injected camera line is honoured into the final image prompt 57.8 % of the time on `minimal`
+     against 25.6 % on `full`, and moving specificity INTO an injected line is the lever that took
+     one dead preset from 0/8 to 8/8 on the scene split.
 
      GUARD: `scripts/check-camera-axis.mjs` in this repo. It derives the catalog list and the
      forbidden lighting vocabulary from image-svc, checks the reference roster in this header
@@ -162,35 +245,35 @@
 # Camera presets — device-focused
 
 ## high-oblique-over-hands
-steep oblique from behind and above the hands onto an open laptop, normal lens, the keystoned screen filling the upper frame, depth falling away fast
+steep oblique from behind and above the hands onto an open laptop, normal lens, the keystoned screen filling the upper frame, the person in frame only as hands at the keyboard and a forearm at the right edge, depth falling away fast
 ScreenVisible: yes
 
 ## over-shoulder-handheld
-over the shoulder onto a tablet held low in both hands, longer lens, one edge blocked by a hard-blurred near mass, the room deep and soft behind
+over the shoulder onto a tablet held low in both hands, longer lens, one edge blocked by a hard-blurred near mass, the person in frame only as that near shoulder and both hands, the room deep and soft behind
 ScreenVisible: yes
 
 ## close-frontal-screen
-close over the shoulder at screen height, the screen nearly square to the lens across the upper two-thirds, a forearm below, background soft
+close over the shoulder at screen height, the screen nearly square to the lens across the upper two-thirds, the person in frame only as two forearms cropped by the bottom edge, background soft
 ScreenVisible: yes
 
 ## high-angle-across-table
-high angle across a table onto a propped tablet at three-quarters, normal lens, near tabletop objects large and soft along the lower edge
+high angle across a table onto a propped tablet at three-quarters, normal lens, near tabletop objects large and soft along the lower edge, the person in frame only as two hands and a sleeve entering from the right
 ScreenVisible: yes
 
 ## high-over-shoulder-desk
-steep look down from above and behind a shoulder onto a phone held in both hands at a desk, normal lens, forearms leading in diagonally
+steep look down from above and behind a shoulder onto a phone held in both hands at a desk, normal lens, the person in frame only as the back of a head at the near corner and the two forearms leading in diagonally
 ScreenVisible: yes
 
 ## over-shoulder-eye-level
-tight over the shoulder at head height, the handheld screen in the far upper quadrant, the near shoulder a large soft mass across the rest
+tight over the shoulder at head height, the handheld screen in the far upper quadrant, the person in frame as the back of a head and the near shoulder, a large soft mass across the rest, and the one hand holding the device
 ScreenVisible: yes
 
 ## wide-side-on-workstation
-wide side-on at seated chest height and level, normal-wide lens, a monitor at one end and a laptop centre, deep focus front to back
+wide side-on at seated chest height and level, normal-wide lens, a monitor at one end and a laptop centre, the operator seated in profile at the far side with head and torso in frame, deep focus front to back
 ScreenVisible: yes
 
 ## elevated-three-quarter-desk
-elevated three-quarter about forty-five degrees down onto a propped tablet, normal lens, desk objects layered from the near corner back to it
+elevated three-quarter about forty-five degrees down onto a propped tablet, normal lens, desk objects layered from the near corner back to it, the person in frame only as two hands, a sleeve and a shoulder along the right edge
 ScreenVisible: yes
 
 ## frontal-elevated-device-hero
@@ -198,9 +281,9 @@ frontal and slightly elevated onto an open laptop from the display's own side of
 ScreenVisible: unattended-only
 
 ## table-level-gestural-candid
-table-level and level across a table, long lens, the device sharp at one side with gesturing hands sharp in front of it, everything beyond soft
+table-level and level across a table, long lens, the device sharp at one side with gesturing hands sharp in front of it, the near person cropped by the top edge at the torso and a second figure soft beyond
 ScreenVisible: yes
 
 ## top-down-in-hands
-near top-down from directly above and behind the head onto a handheld screen, normal lens, the head a soft mass at the bottom edge
+near top-down from directly above and behind the head onto a handheld screen held in one hand, normal lens, the person in frame only as that head a soft mass at the bottom edge, the holding forearm and a lap below
 ScreenVisible: yes
