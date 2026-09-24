@@ -461,19 +461,22 @@ else {
 //    read line-at-a-time in code and never inlined, so a reference in their HEADER cannot reach a
 //    model; their bodies are still checked.
 //
-//    COMMENTS ARE NOT EXEMPT, and that is the point. `loadSkillRules` strips HTML comments ONLY
-//    when the caller passes `stripComments`, which only the `minimal` profile does. Measured on
-//    the assembled `full` prompt: 16,162 chars of author comments reach the model on ionos
-//    (19.9% of the prompt) and 14,237 on strato. A forensics note that names a rule file is
-//    therefore a dangling pointer in the delivered bytes, not an aside to a human.
+//    COMMENTS ARE NOT EXEMPT, and that is the point — a forensics note that names a rule file is
+//    a dangling pointer in the delivered bytes, not an aside to a human. This was acute while
+//    `loadSkillRules` stripped only for `minimal`: measured on the assembled `full` prompt,
+//    16,162 chars of author comments reached the model on ionos (19.9% of the prompt) and 14,237
+//    on strato. image-svc now strips on EVERY profile, so those bytes are gone — but the sweep
+//    stays, because the strip is one line in another repo and this corpus is what would be left
+//    holding the dangling pointers if it were ever narrowed again.
 // ---------------------------------------------------------------------------
 // Files whose HTML COMMENTS provably cannot reach a model, so only their BODY is swept.
 //   shared-camera-* / shared-lighting* / shared-environment-* — read line-at-a-time in code
 //     (image-svc `resolveAxis`/`resolveCamera`/`resolveEnvironment`) and listed in
 //     `skills.coverage.test.ts`'s INTENTIONALLY_UNSELECTED, so the file is never inlined at all.
-//   craft-* — delivered ONLY through `buildCraftPrompt`'s thin-profile branch, which passes
-//     `stripComments: brief.craftProfile === 'minimal'`; `profileRules` returns [] for `none`, so
-//     `minimal` is the only profile that delivers a craft-* file and it strips the comments.
+//   craft-* — delivered through `buildCraftPrompt`, which now passes `stripComments` on every
+//     profile (it was `brief.craftProfile === 'minimal'`, and either form satisfies the check
+//     below). `profileRules` returns [] for `none`, so a craft-* file is delivered stripped or
+//     not at all.
 // THE EXEMPTION IS ITSELF GUARDED below (`comment-strip exemption still holds`) — an exemption
 // whose premise has gone stale is worse than no exemption, because it reads as a pass.
 const COMMENTS_NEVER_DELIVERED = /^(shared-(camera|lighting|environment)|craft-)/;
@@ -524,12 +527,21 @@ note(refFilesRead > 5, 'reference sweep read the deliverable corpus', `${refFile
     undetermined.push(`comment-strip exemption unverifiable: no image-svc at ${ISVC_PRE} (root came from ${ISVC_R.via}; set IMAGE_SVC_ROOT or IMAGE_SVC_DIR)`);
   } else {
     const pt = flat(readFileSync(promptTs, 'utf8'));
-    const gate = /stripComments\s*=\s*brief\.craftProfile\s*===\s*'minimal'/.test(pt);
+    // THE PROPERTY, NOT ONE SPELLING OF IT. This asserted the literal expression
+    // `stripComments = brief.craftProfile === 'minimal'`, which made it red against a change that
+    // strengthened the very premise it protects: image-svc now strips unconditionally
+    // (`stripComments = true`), so craft-* comments reach a model on NO profile rather than on all
+    // but one. A guard that fails when its premise is made stronger is testing the spelling.
+    // Both accepted forms are recognised, and anything else — `false`, a removal, a gate on some
+    // other condition — is still red, because the sweep below genuinely depends on this.
+    const always = /stripComments\s*=\s*true\b/.test(pt);
+    const minimalOnly = /stripComments\s*=\s*brief\.craftProfile\s*===\s*'minimal'/.test(pt);
+    const gate = always || minimalOnly;
     const passed = /loadSkillRules\(pluginDir, slug, rules, \{ stripComments \}\)/.test(pt);
     note(gate && passed, 'comment-strip exemption still holds (craft-* comments cannot reach a model)',
       gate && passed
-        ? "prompt.ts gates stripComments on craftProfile === 'minimal' and passes it to the craft-* loader"
-        : `prompt.ts no longer does: gate=${gate} passedToLoader=${passed} — craft-* comments may now be delivered, so re-scan them`);
+        ? `prompt.ts strips craft-* comments ${always ? 'unconditionally' : "on craftProfile === 'minimal'"} and passes it to the craft-* loader`
+        : `prompt.ts no longer does: stripsAlways=${always} stripsOnMinimal=${minimalOnly} passedToLoader=${passed} — craft-* comments may now be delivered, so re-scan them`);
   }
 }
 note(badRefs.length === 0, 'no unresolvable type-rule reference in any deliverable file',
