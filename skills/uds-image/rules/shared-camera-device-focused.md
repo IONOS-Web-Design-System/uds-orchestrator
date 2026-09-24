@@ -224,8 +224,9 @@
      eleven — but the LENGTH of the line drawn is a real cost against a `minimal` budget already
      over target. Measured, three generations of this catalog: the description-derived eleven ran
      59-129 chars, mean 96.1; the reference-authored eleven ran 128-149, mean 138.5; with the
-     human-extent clause below they run 138-232, mean 206.4. The first increase bought the height,
-     lens and depth facts the description-derived text omitted. The second buys the one fact the
+     human-extent clause below they run 138-232, mean 206.3 — the last of those read back
+     through `parseTreatmentPresets` on the DELIVERED body, not counted by hand. The first
+     increase bought the height, lens and depth facts the description-derived text omitted. The second buys the one fact the
      user's own review found missing, and it is spent on the axis measured to carry best: the
      injected camera line is honoured into the final image prompt 57.8 % of the time on `minimal`
      against 25.6 % on `full`, and moving specificity INTO an injected line is the lever that took
