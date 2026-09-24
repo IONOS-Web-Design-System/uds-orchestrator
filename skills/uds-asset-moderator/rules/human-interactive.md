@@ -140,21 +140,28 @@ state the camera shot in words.
 
 | You ask the user | uds-image type | Face guarantee | Shot to write into the brief |
 |---|---|---|---|
-| **avatar** (headshot / profile picture) | `avatar` | **Face always fully in frame at any angle** | "face clearly visible from hairline to chin" — square (1:1); optionally show occupation context in the background or via a prop |
+| **avatar** (profile picture / team card / small square) | `avatar` | NOT guaranteed — the type is decided by that square destination, not by the face; ask the user whether a recognisable face matters and only then demand one | square (1:1); one person who reads at thumbnail size; the person may be mid-action and the face may be turned or shadowed unless the user asks otherwise |
 | **portrait** (person facing camera, character-focused) | `portrait` | **Face always fully in frame** | "full face clearly visible from hairline to chin, <shot distance>"; lead with the face anchor first; vary posture and include work-relevant accessories |
 | **scene** (a person mid-action in a setting) | `scene` | NOT guaranteed — only if brief explicitly requests it | name the action and environment; the person fits into the scene; omit face anchor unless the user asks for face visibility |
-| **landscape** (environment / product / wide setting) | `scenario` | NOT guaranteed — people secondary or cropped | describe the space/product; any people are incidental |
+| **landscape** (environment / wide setting, no device as hero) | `scene` | NOT guaranteed — people secondary or cropped | describe the space and what happens in it; any people are incidental |
+| **device / screen** (a laptop, phone, dashboard or app IS the subject) | `device-focused` | NO — the face is deliberately partial or absent | name the device and what is on its screen; any person is a hand, an arm, or an over-the-shoulder presence only |
 
 Decision rule — state it to the user when relevant:
 - **If the human is the point** (their face should be recognizable, e.g. "a marketing expert",
   "our consultant", "a happy customer looking at the camera") → choose **portrait** (or
-  **avatar** for a headshot). These are the ONLY modes where `uds-image` enforces
-  "full face visible from hairline to chin" as a hard rule.
+  NOT **avatar**). `portrait` is the ONLY type where `uds-image` enforces "full face visible
+  from hairline to chin" as a hard rule. **avatar** is for the square profile/card slot and
+  does NOT carry that guarantee — if the user wants a square crop AND a recognisable face,
+  write the face requirement into the brief explicitly.
 - **Choose `scene` when the activity and setting are the story** and a clear face is not
   required — e.g. a baker arranging pastries, a developer coding, a figure mid-stride. The
   model may crop the face in this mode; that is intentional. Add the face anchor explicitly
   only if the user asks for face visibility in a scene.
-- **Choose `scenario` when the product/device is the hero** — face is secondary or absent.
+- **Choose `device-focused` ONLY when the product/device is the HERO** — face secondary or absent.
+  `device-focused` is the one type that suppresses the persona entirely, so it is the wrong answer
+  for a wide environment or product shot where a device is merely present: if the device is
+  incidental to what a person is doing, that is `scene`. (This row used to say "landscape →
+  `device-focused`", which steered every wide-setting brief into the persona-suppressing type.)
 
 Cautionary example: a "confident female marketing expert presenting to a client" written as a
 generic scene came back with **both heads cropped off** — expected for a `scene` type, because
@@ -162,7 +169,8 @@ face is not anchored. The fix is to choose **portrait** and write the face-visib
 `uds-image`'s hard rule applies.
 
 Always put the camera shot in the brief text in plain words (shot distance + "full face
-visible" for avatar/portrait). `uds-image` detects the type from these words and maps the
+visible" for `portrait`, or for `avatar` only when the user asked for a recognisable face).
+`uds-image` detects the type from these words and maps the
 aspect ratio; you do not set the type field — the wording is what triggers the right rule.
 
 ## Submit

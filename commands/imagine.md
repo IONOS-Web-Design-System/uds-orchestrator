@@ -163,8 +163,8 @@ proceed normally from step 1.
    - `skills/uds-asset-moderator/rules/human-interactive.md` — the conversation flow you follow.
    - `skills/uds-style-guide/SKILL.md` — brand palette/typography (never invent hex/brand facts).
    - When the asset is (or includes) an **image**, also read `skills/uds-image/SKILL.md` and
-     the matching `skills/uds-image/rules/image-type-*.md` (`avatar`, `portrait`,
-     `person-scenario`, `scenario`) — these own the camera-shot/face-visibility vocabulary you
+     the matching `skills/uds-image/rules/shared-image-type-*.md` (`device-focused`,
+     `portrait`, `avatar`, `scene`) — these own the camera-shot/face-visibility vocabulary you
      must put into the brief so faces aren't cropped (see human-interactive.md "Image assets").
 
 2. **Follow `human-interactive.md`.** Infer everything you can from `$ARGUMENTS` (likely

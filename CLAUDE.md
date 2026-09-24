@@ -61,6 +61,25 @@ claude --plugin-dir .
 # Use /reload-plugins to pick up file changes without restarting
 ```
 
+## Checked scripts
+
+`scripts/check-minimal-conflict.mjs` — guards the `uds-image` rule files that `image-svc`'s
+`minimal` craft profile inlines against the photographic conflict: no ✅/❌ photographic example
+list, no per-scenario lighting mapping, and the IONOS brand content (bias sentence, audience and
+wardrobe section, three-brand comparison table, palette anchors, negative-prompt baseline) still
+present. The file list is derived from `image-svc`'s `minimalRules`, never hardcoded.
+
+```bash
+node scripts/check-minimal-conflict.mjs [--verbose]   # 0 green, 1 violation, 2 cannot determine
+IMAGE_SVC_DIR=/path/to/image-svc node scripts/check-minimal-conflict.mjs
+RULES_DIR=/tmp/mutated-copy node scripts/check-minimal-conflict.mjs   # red-proving only
+```
+
+**NOT wired into CI** — this repo has no test harness. It lives here because `image-svc` was being
+edited concurrently when it was written; its eventual home is
+`image-svc/src/craft/__tests__/minimalConflict.test.ts`, where it can import `minimalRules` and the
+marker vocabularies instead of duplicating them. See the handoff note at the foot of the script.
+
 ## Release Workflow
 
 Releases are automated via [release-please](https://github.com/googleapis/release-please).

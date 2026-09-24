@@ -14,9 +14,10 @@ authentic to this particular character.
    restaurant owner. Let the answer shape the appearance.
 3. **Derive ONE token per dimension** — hair style, accessory (or none), clothing item.
    Keep each token short and concrete. Do not stack all dimensions into one dense phrase.
-4. **Encode only what the image model needs to make a choice** — a vibe word like
-   `"casual knitwear"` leaves more natural variety than `"a cream chunky-knit sweater"`.
-   The more specific the token, the more it locks all variants into one look.
+4. **Encode only what the image model needs to make a choice** — a register word leaves more
+   natural variety than a fully specified garment. The more specific the token, the more it locks
+   every variant into one look, and the more likely the token is simply copied out of this rule
+   instead of reasoned for the person in front of you.
 
 ## Occupation → appearance signals
 
@@ -74,6 +75,5 @@ archetype re-rendered. Specifically:
 - Vary clothing category — not every character wears a hoodie or a blouse
 
 When variants > 1 and the brief is generic (no explicit appearance request), **omit
-specific hair and accessory tokens** and encode only clothing vibe (`"casual knitwear"`,
-`"smart-casual top"`) — the image model will vary hair and accessories naturally across
-variants.
+specific hair and accessory tokens** and encode only the clothing register the brand rule names
+— the image model will vary hair and accessories naturally across variants.

@@ -1,4 +1,45 @@
-# Shared environment storytelling
+<!-- SUPERSEDED — RETAINED AS SOURCE MATERIAL, NOT AS A RULE. DO NOT RE-INJECT.
+     Nothing reads this file. It is not selected by image-svc's `resolveRuleSet`
+     (src/craft/profiles.ts), is not in any craftProfile's allowlist, and is not read by name by
+     any code path; image-svc's skills.coverage.test.ts carries it as the ONE deliberately
+     unconsumed rule, asserted by name, so re-selecting it turns that suite red rather than
+     quietly doubling the prompt.
+
+     WHY IT WAS RETIRED. 13 KB, previously inlined on EVERY `full` run regardless of any axis, and
+     measured as the primary homogeniser of the whole pipeline: it hands the craft model literal
+     sentence templates, and the model copied them near-verbatim across independent runs. Its four
+     axes have since been split out and each given a narrower, keyed home:
+
+       - lived-in backgrounds, surfaces, furniture, mid-ground  -> shared-environment-workspace.md
+                                                                   shared-environment-home-office.md
+         (one preset SELECTED IN CODE per run and injected as one `Environment:` line, so the model
+         never sees the menu it would otherwise pick a favourite from)
+       - light source, direction, quality, colour grade         -> shared-lighting.md
+                                                                   shared-lighting-by-scenario.md
+       - the candid, mid-action frame                           -> shared-natural-moment.md
+       - foreground objects and their colour                    -> shared-scenario-props.md
+
+     THE PROP AXIS IS THE ONE THAT MATTERS HERE, and it is why this banner exists rather than a
+     one-line note. This file states its objects UNCONDITIONALLY — as house decor, in prose and in
+     ✅ example sentences — while shared-scenario-props.md states every object behind a `place`
+     row or a `who` row. Unconditional prop text is exactly the mechanism that put the same
+     everyday desk object into briefs with nothing to do with it, and it survives paraphrase: five
+     of the occurrences below would re-enter the prompt the moment anything selected this file.
+     image-svc's scenarioProps.test.ts asserts no INJECTED rule states a prop without a key; this
+     file is outside that scan only because nothing injects it, so re-injecting it re-creates the
+     defect in one line and the props guard will not catch it.
+
+     If you want an axis from here, LIFT IT into the keyed file that owns it above. Do not add
+     this file to a rule set. -->
+
+# Shared environment storytelling — SUPERSEDED, DO NOT RE-INJECT
+
+> **This is not a live rule.** Nothing selects it and nothing may. Its four axes were split
+> into `shared-environment-workspace` / `shared-environment-home-office` (place),
+> `shared-lighting` + `shared-lighting-by-scenario` (light), `shared-natural-moment` (the
+> candid frame) and `shared-scenario-props` (foreground objects and their colour). The text
+> below states its objects with no key, so re-injecting it puts a house prop into every brief
+> again — see the comment above this heading for the full reasoning and the CI guards.
 
 Applies to all image types that include a person in a professional or lifestyle setting.
 The environment must feel like a place where real work happens — not a staged backdrop.
@@ -54,10 +95,9 @@ Great photography uses three planes of focus. Encode all three in the prompt usi
 **shallow depth of field** as the photography term — image models respond well to it.
 
 1. **Foreground (bokeh):** name a physical object from the trade that sits close to the
-   camera lens, occupying the bottom edge of the frame. Be concrete and specific — not
-   "some tools" but "a weathered hand plane and curled wood shavings sitting on a
-   workbench surface extremely close to the camera lens, rendered out of focus by
-   shallow depth of field".
+   camera lens, occupying the bottom edge of the frame. Be concrete and specific — a tool,
+   material, or product THIS character would genuinely have within reach — not a vague
+   "some tools", rendered softly out of focus by the shallow depth of field.
 2. **Subject (sharp):** the character, pulled into crisp focus against both planes.
 3. **Background (bokeh):** enumerate specific items densely packed — not "shelves with
    stuff" but "floor-to-ceiling industrial shelving tightly packed with rough-cut lumber
@@ -65,17 +105,16 @@ Great photography uses three planes of focus. Encode all three in the prompt usi
    wooden boards, all rendered out of focus".
 
 Choose foreground objects with **distinct, saturated colours** — they sit closest to
-the lens and carry the most visual weight in the bokeh layer. A cobalt-blue notebook,
-a terracotta mug, or a vivid green plant reads with far more impact than a white mug
-or beige folder. Aim for at least one visually strong colour in the foreground.
+the lens and carry the most visual weight in the bokeh layer. A strongly coloured object
+reads with far more impact than a white mug or beige folder, so pick a colour that suits
+the object and this specific scene rather than reaching for a muted neutral. Aim for at
+least one visually strong colour in the foreground.
 
-**Encoding template** — use this exact structure, filling in trade-specific objects:
-
-> `"shallow depth of field, editorial photography style, [colourful foreground object A] and
-> [colourful foreground object B] lying on the surface immediately in front of the
-> camera lens, rendered as out-of-focus bokeh in the lower frame — [character
-> description, in sharp focus] — background of [dense enumeration of environment
-> objects] all softly blurred behind"`
+**Describe the foreground in your own words each generation** — name 1–2 trade-specific
+objects close to the lens, in soft focus, ahead of the character in sharp focus, with the
+enumerated background blurred behind. Vary the phrasing itself, not just the object names:
+reusing the same sentence shape run after run is what makes independent images read as
+copies of each other, even when the nouns inside it differ.
 
 The foreground blur is the single strongest signal for "this was shot in a real place".
 Without it the image looks like a render. Without specific enumeration the model defaults
@@ -145,7 +184,7 @@ Build the prompt in this strict order. Face and camera distance are locked first
 Foreground is added last and only if the shot permits it.
 
 1. **Face anchor + camera shot** (CRITICAL — first sentence for `portrait` and `avatar`)
-   → for `scene` and `scenario`, omit the face anchor; begin with the action or device
+   → for `scene` and `device-focused`, omit the face anchor; begin with the action or device
      description instead; only add a face anchor if the brief explicitly requests it
    → for `portrait` and `avatar`, chosen using the decision ladder in SKILL.md CRITICAL RULE #1
 2. **Character** — demographics, build, attire with wear, object in hand, frame position
@@ -155,29 +194,28 @@ Foreground is added last and only if the shot permits it.
 5. **Natural appearance** — hair, skin texture, expression
 6. **Photography style** — `"documentary editorial photography style"`
 7. **Foreground bokeh (optional — add only if shot distance allows)**
-   Gate condition: include this sentence only when the camera is at waist-up or
-   wider distance. Skip it for close/medium shots where it would compete with face.
-   → `"shallow depth of field, [specific object A] and [specific object B] lying on the
-   surface immediately in front of the camera lens, rendered as out-of-focus bokeh at
-   the bottom edge of the frame"`
+   Gate condition: only when the camera is at waist-up or wider distance. Skip it for
+   close/medium shots where it would compete with the face.
+   → Name 1–2 objects specific to this character and trade, close to the lens at the
+   bottom edge of the frame and softly out of focus — worded fresh each time, not a
+   repeated sentence shape.
 
 Example (carpenter portrait — waist-up, left placement, foreground included):
-> `"full face clearly visible from hairline to chin, waist-up shot showing complete upper
-> body. a Black man in his 40s, solid muscular build, resting one hand on the edge of a
-> finished oak dining table, wearing a well-worn leather apron with sawdust and marks over
+> `"his whole face fully visible and unobstructed, framed from the waist up with the
+> complete upper body in view. a Black man in his 40s, solid muscular build, holding a strip of finished oak trim
+> in one hand, wearing a well-worn leather apron with sawdust and marks over
 > a faded denim shirt, standing in the left third of the frame. background of
 > floor-to-ceiling industrial metal shelving packed tightly with rough-cut lumber planks,
 > pipe clamps, half-finished cabinet doors, scattered chisels, and sawdust-covered surfaces,
 > all softly blurred. warm natural light from large side workshop windows casting long
 > gentle shadows across the floor. hair worn naturally, natural skin texture, genuine
 > confident expression. documentary editorial photography style.
-> shallow depth of field, a weathered hand plane and curled wood shavings lying on the
-> workbench surface immediately in front of the camera lens, rendered as out-of-focus bokeh
-> at the bottom edge of the frame."`
+> shallow depth of field, a chipped tin mug and a curl of wood shavings resting on the
+> workbench close to the lens, blurred softly at the bottom edge of the frame."`
 
 Example (carpenter portrait — extra-wide landscape full-body, foreground included):
-> `"full face clearly visible from hairline to chin, extra-wide establishing shot, character
-> occupying one vertical third of the frame, full body head to floor visible. a Black man
+> `"his face entirely uncropped and clearly readable, an extra-wide establishing shot with
+> the character occupying one vertical third of the frame, full body head to floor visible. a Black man
 > in his 40s, solid muscular build, arms crossed, wearing a well-worn leather apron over a
 > faded denim shirt, standing in the left third of the frame. background of
 > floor-to-ceiling industrial metal shelving packed tightly with rough-cut lumber planks,
@@ -185,6 +223,5 @@ Example (carpenter portrait — extra-wide landscape full-body, foreground inclu
 > all softly blurred. warm natural light from large side workshop windows casting long
 > gentle shadows across the workshop floor. hair worn naturally, natural skin texture,
 > trustworthy and competent expression. documentary editorial photography style.
-> shallow depth of field, a weathered hand plane and curled wood shavings lying at the
-> base of the frame immediately in front of the camera lens,
-> rendered as out-of-focus bokeh."`
+> shallow depth of field, a worn measuring tape and a scatter of sawdust sitting near
+> the lens at the base of the frame, gently out of focus."`

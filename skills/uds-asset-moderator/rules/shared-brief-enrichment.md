@@ -40,31 +40,16 @@ A good `feature` states, in this order, only what applies:
 Per-generator hazards to OMIT:
 - **image** `feature`: never request rendered text, headlines, logos, UI chrome, or a
   "blank screen to fill" — image models garble glyphs and we composite UI separately.
-  Describe lighting, lens, materials, environment instead.
-- **image** `feature` with a person: ALWAYS state the **camera shot** explicitly — an implicit
-  shot lets the model crop the head off. If the person must be recognizable / their face is
-  the point, frame it as a **portrait or avatar** and include "full face visible from hairline
-  to chin" — downstream `uds-image` enforces face-visibility ONLY for portrait/avatar, and
-  allows cropping for generic scenes. Use a scene/scenario framing (face may be partial) only
-  when a clear face is genuinely not needed (hands on a keyboard, a figure from behind, a
-  room). Naming a real person/role ("a marketing expert presenting") without a shot is the
-  classic way to get a headless torso. Also:
+  Describe the subject, its action and the setting instead.
+- **image** `feature` with a person:
   - **Bind the character to the scenario, and make it dynamic** — give them an action, posture,
-    and expression, shot at a natural three-quarter / slightly-angled view, ideally **caught
-    mid-moment (walking, laughing, reaching, gesturing) with a slight natural motion blur** so it
-    reads candid and alive. Never a person standing idle, arms down, facing the lens head-on
-    (unless the brief explicitly wants a front-on close-up, avatar, or portrait headshot).
-  - **Landscape aspect-ratio safety:** image-svc renders natively at the target aspect ratio.
-    For any person in a landscape image, compose them within the safe frame area (avoid extreme
-    edges); if seated or behind a surface, use that anchor to keep the head in the middle-to-upper
-    frame and away from the top edge. Pull back to an establishing shot if needed.
-  - **Lighting & mood:** default **bright, natural, scene-appropriate** — airy and uplifting, never moody or
-    dark. Set the mood with **colourful props + a soft bokeh background**. Warm, relaxed, cool/clinical,
-    or energetic tones all work; match the tone to the subject and brief intent, kept bright with
-    natural or practical accents.
+    and expression so it reads candid and alive. Never a person standing idle, arms down, facing
+    the lens head-on (unless the brief explicitly wants a front-on close-up, avatar, or portrait
+    headshot).
   - **Device with a person:** a phone/tablet/laptop in the shot does NOT make the device the
     subject. If a **person** is the named subject doing a task, keep their **face the anchor**
-    (person-scenario, headroom, crop-safe on landscape); the device is held/used. Only make the
+    (see `shared-image-type-scene`'s waist-height anchor technique for headroom, crop-safe
+    on landscape); the device is held/used. Only make the
     screen the hero when the brief is explicitly about what's on screen.
   - **Device physics — the screen cannot face both the person AND the camera at the same time.**
     Never write "screen facing forward and fully visible to the lens" when a person is also
@@ -81,7 +66,7 @@ Per-generator hazards to OMIT:
       `"graphics or UI rendered on the back of the device, content on tablet back, screen
       graphics on device lid"`.
 
-    **Strategy B — Screen as hero (`scenario` type, or two-person scene):**
+    **Strategy B — Screen as hero (`device-focused` type, or two-person scene):**
     The camera must occupy a position where the screen naturally faces it:
     - Phone/tablet: device flat on a surface, screen facing up; or person from over-the-shoulder
       angle so screen faces camera. Encode: `"non-branded tablet lying flat on the desk, screen
@@ -91,12 +76,6 @@ Per-generator hazards to OMIT:
       alone does not suppress the Apple logo.
     - Two-person scene: one person faces camera, one looks at the screen — the camera position
       between them can naturally see both face and partial screen without physical contradiction.
-  - **Landscape aspect-ratio safety — use a physical anchor, not prose headroom:** `prose headroom
-    instructions ("clear space above the head") are routinely ignored by the model.` Instead
-    seat the subject behind a desk or counter: `"subject seated behind a waist-height white desk,
-    upper body well above the desk surface, clear open space above the head"` — the desk creates a
-    structural mid-frame anchor that keeps the face centered and away from frame edges in
-    landscape formats.
   - **Screen-based product is the focus** (the UI is the point — "show the dashboard", "the app
     on the phone"). Order it: **first** a natural use moment, **then** full-screen visibility via
     camera placement. Write a real moment (tapping a phone to pay at a counter, typing at a
@@ -105,6 +84,13 @@ Per-generator hazards to OMIT:
     up to face the lens (fake-demo look) and NOT a lone idle device. Then name a **relevant, real
     app interface** (layout/UI regions, short labels only — no paragraphs; default to the
     `showroom` product, else the scenario). For a pixel-accurate UI, prefer `hybrid` mode.
+  - **Camera and lighting are NOT yours.** image-svc decides camera angle, framing, shot length,
+    lens, lighting direction and quality, colour grade, depth of field and atmosphere — from the
+    resolved `imageType`, `assetType` and any supplied reference image. Do NOT write them into the
+    `feature`. Two stages authoring the same axis is what produced framing instructions the
+    generator was separately told to ignore. State the focal subject, the action, the setting,
+    the composition intent (which side stays calm, how much of the frame the subject fills) and
+    what the asset must communicate — then stop.
 - **illustration** `feature`: describe *structure and intent* (which UDS components, what
   copy slots, what data the screen shows, what motion if `intent:animation`) — not pixel
   coordinates. The agent builds real components; over-specifying layout fights the system.

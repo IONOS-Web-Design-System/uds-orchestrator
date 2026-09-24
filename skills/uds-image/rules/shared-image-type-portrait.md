@@ -24,9 +24,9 @@ character; scene is for moments of life.
 Face visibility is a hard constraint. Camera shot is a preference that adjusts to serve it.
 See SKILL.md CRITICAL RULE #1 for the full decision ladder. The short version:
 
-- **Waist-up brief + any ratio:** use `"full face clearly visible from hairline to chin, waist-up shot showing complete upper body"` — leads the prompt.
-- **Full body / long shot + tall ratio (2:3, 3:4, 9:16):** use `"full face clearly visible from hairline to chin, full body in frame from head to floor"`.
-- **Full body / long shot + landscape ratio (16:9, 4:3):** use an extra-wide establishing shot so the face fits naturally in the natively wide canvas. Automatically use: `"full face clearly visible from hairline to chin, extra-wide establishing shot, character occupying one vertical third of the frame, full body head to floor visible"`.
+- **Waist-up brief + any ratio:** open the prompt by stating the face is fully visible and uncropped, framed from the waist up with the complete upper body showing.
+- **Full body / long shot + tall ratio (2:3, 3:4, 9:16):** open by stating the face is fully visible, with the entire figure in frame from head to floor.
+- **Full body / long shot + landscape ratio (16:9, 4:3):** use an extra-wide establishing shot so the face fits naturally in the natively wide canvas — state the face stays completely uncropped, the character occupying roughly one vertical third of the frame with the full body visible head to floor.
 
 Always state the face anchor first — before the character description, before anything else.
 - Subject stands, sits, or leans naturally within their environment
@@ -46,20 +46,19 @@ generation:
 - Mid-movement — turning toward camera, caught mid-step, hand just lifting an object
 
 **Accessories and props — make them work-specific and story-telling.** The prop should
-answer "what does this person do?" immediately:
-- A barista: espresso cup held in both hands, slight steam visible
-- A carpenter: holding a hand plane or chisel, or one hand loosely in pocket
-- A designer: holding a tablet or pen, sketchbook visible
-- A developer: mug of coffee in hand, or pen in hand
-- An entrepreneur: phone or notebook in hand, or weight shifted with arm at side
+answer "what does this person do?" immediately. **Which object: `shared-scenario-props`** — for
+this type prefer its person row, because a portrait prop is HELD (see the next paragraph) and a
+held object is the one that reads as identity. The trade-keyed list that stood here was a third
+copy of that rule and had drifted from the other two; do not restate its objects.
 
 **Critical — held, never rested.** For portrait type, always encode props as `"holding X"`
 or `"hand in pocket"` — NEVER `"resting one hand on [surface]"` or `"hand on workbench"`.
 Surface-contact language triggers a low-angle workbench composition where the camera looks
 at the hands from the side, sending the face out of frame. The person must stay upright
 with the face naturally in the upper portion of the frame. If the background includes a
-workbench, the person stands IN FRONT of it (not behind it leaning over it):
-`"standing in front of a workshop bench, [prop] held in one hand, facing the camera"`.
+workbench, the person stands IN FRONT of it, upright and facing the camera — not behind it
+leaning over it — with the relevant prop held in one hand. Describe that positioning in
+your own words rather than reusing one fixed phrasing every time.
 
 **Expression:** a brief, natural moment of eye contact — not a rigid forced smile. The
 expression should match the character's context: confident and direct, warm and inviting,
@@ -70,11 +69,6 @@ purposefully chosen — never pristine and brand-new looking unless that is the 
 explicit tone.
 
 The image should imply a story: who is this person, what do they do, why are they proud of it.
-
-## Lighting
-- Soft, even, slightly warm — flattering and natural
-- Window light or diffused ambient light preferred over harsh directional flash
-- Background should be slightly underexposed relative to subject to keep focus clear
 
 ## Component-driven placement (override rule)
 
