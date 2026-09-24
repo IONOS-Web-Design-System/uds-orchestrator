@@ -5,7 +5,7 @@ asset. `sharedContext` is the contract that makes that happen — both generator
 verbatim, so write it so it reads identically to each:
 
 - **`subject`** — the SAME focal subject named in both sub-briefs. If the imageBrief shows
-  "a florist at a counter", the illustrationBrief's UI must concern that same scene, not a
+  a subject at a particular place, the illustrationBrief's UI must concern that same scene, not a
   different one.
 - **`paletteRefs`** — brand-palette hex anchors only. Both generators key off these; the
   illustration's chrome and the image's tones must share this family. (Measured image tones

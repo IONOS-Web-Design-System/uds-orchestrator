@@ -34,7 +34,7 @@ subject, never text to reproduce in the asset**.
 | Context | leading `Context: …` | the section's framing, shared by sibling assets | bias `sharedContext` tone / subject family so siblings cohere — NOT this asset's subject |
 | Heading | `#` | the component's headline | infer the focal subject (paraphrased, English) |
 | Subheading | `##` | eyebrow / step ordinal / status badge / person role | an intent signal (see table below) |
-| Description | trailing paragraph(s) | body copy | flesh out subject + mood |
+| Description | trailing paragraph(s) | body copy | flesh out subject + mood, and take the staging it names — where the person is and what their body is doing |
 | Bullets | `- …` | feature list | supporting detail; never a text list drawn in the asset |
 
 ## The hard rule — never echo the component's copy into the asset
@@ -72,7 +72,7 @@ lines (person name + role/company). Each is a *signal* folded into intent:
 | `content_card_gallery_item` | feature name | (often absent) |
 | `step_card_accordion_item` / `step_accordion_item` | the step's action | step ordinal → this is step N of a sequence; convey progression, not the words |
 | `bento_box_item` | feature name | roadmap status → aspirational / in-progress tone, not a drawn badge |
-| `testimonial_slider` | person name | role / company → a portrait subject; drop the name/role text |
+| `testimonial_slider` | person name | role / company → who this person is and what they do; drop the name/role text. It fixes the identity, never the framing — the quote decides where they are and what they are doing |
 | `textmedia` | section headline | short claim |
 
 ## Deriving the subject
@@ -82,3 +82,10 @@ sibling consistency), phrased as a concrete English visual subject — never the
 `# AI Phone Receptionist – Ihr 24/7-Telefonempfang` + its description → subject "an AI
 phone-receptionist interface handling calls around the clock", not the German line. Then enrich per
 `shared-brief-enrichment.md`.
+
+Paraphrasing governs the WORDS, never the facts. Every place, object, body position and
+activity the copy names is a fact about the scene and has to be in the subject you write;
+only the phrasing and the language change. A fact stated inside a quotation, a subordinate
+clause or an aside is stated, and dropping it because it arrived in one of those is the
+single commonest way these briefs lose their scene. A testimonial is the usual victim: the
+speaker's own account of when and where they work is the staging, not decoration around it.
