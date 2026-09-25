@@ -506,8 +506,22 @@ for (const [file, { presets }] of byFile) {
   const both = refs.filter((r) => excluded.includes(r));
   if (both.length) violations.push(`${REFERENCE_CATALOG}: reference(s) [${both.join(', ')}] are in BOTH the References and Excluded rosters`);
 
-  if (entry.presets.length !== refs.length) {
-    violations.push(`${REFERENCE_CATALOG}: ${entry.presets.length} presets against ${refs.length} references in the roster — the contract is one preset per reference, so this is either a padded count or a dropped viewpoint`);
+  // One preset per reference, PLUS any preset explicitly rostered as `Retained without a
+  // reference:` — the same accounting the portrait catalog already uses. The anti-padding
+  // property is unchanged and is the whole point: a preset that is in NEITHER roster still fails
+  // here, so an invented viewpoint cannot be added silently. What this permits is a DECLARED
+  // derivation, which is a different act from padding a count — the two unattended presets added
+  // 2026-09-25 take the geometry of references 03 and 01 and drop their human clause, and they
+  // say so by name in the header.
+  const retainedSlugs = slugRoster(entry.raw, 'Retained without a reference') ?? [];
+  const accounted = refs.length + retainedSlugs.length;
+  if (entry.presets.length !== accounted) {
+    violations.push(`${REFERENCE_CATALOG}: ${entry.presets.length} presets against ${refs.length} references + ${retainedSlugs.length} rostered as retained = ${accounted} accounted for — the contract is one preset per reference plus whatever the header names as retained, so this is either a padded count or a dropped viewpoint`);
+  }
+  for (const slug of retainedSlugs) {
+    if (!entry.presets.some((p) => p.slug === slug)) {
+      violations.push(`${REFERENCE_CATALOG}: header rosters \`${slug}\` as retained without a reference, but no such preset exists in the body — the roster and the catalog have drifted`);
+    }
   }
   // The roster must account for a CONTIGUOUS reference set. A reference that exists in Figma but
   // appears in neither roster is the `device-focused-10` failure repeating silently: the previous

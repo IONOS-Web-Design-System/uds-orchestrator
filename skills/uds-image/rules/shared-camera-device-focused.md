@@ -116,7 +116,8 @@
        close-frontal-screen, high-angle-across-table, high-over-shoulder-desk,
        over-shoulder-eye-level, wide-side-on-workstation, elevated-three-quarter-desk,
        table-level-gestural-candid, top-down-in-hands.
-       Self-consistent only with NO operator: frontal-elevated-device-hero.
+       Self-consistent only with NO operator: frontal-elevated-device-hero,
+       close-frontal-screen-unattended, steep-oblique-unattended.
        Each preset also carries a machine-readable `ScreenVisible: yes | unattended-only` line,
        BELOW its text so `parseTreatmentPresets` still takes the text as the injectable line. That
        tag is the form code can read; these two lists are the author-facing form. They are pinned
@@ -241,50 +242,103 @@
      References: device-focused-01, device-focused-02, device-focused-03, device-focused-04,
      device-focused-05, device-focused-06, device-focused-07, device-focused-08,
      device-focused-09, device-focused-11, device-focused-12
-     Excluded: device-focused-10 -->
+     Excluded: device-focused-10
+     Retained without a reference: close-frontal-screen-unattended, steep-oblique-unattended
+
+     >>> WHY TWO PRESETS HAVE NO REFERENCE OF THEIR OWN <<<
+     They are the UNATTENDED halves of device-focused-03 and device-focused-01, and they exist
+     because the axis could not express `cast: 'none'` at all. MEASURED 2026-09-25 on the four
+     replayed production briefs: 10 of the 11 presets here name a person in their own text ("the
+     person in frame only as two hands", "the back of a head", "the operator seated in profile"),
+     so a brief whose planner said `cast: 'none'` drew a camera describing somebody who is not
+     there — and the craft model discarded the camera line entirely in 3 of 3 such draws (camera
+     retention 0/3 at `cast:'none'` with a person-implying preset, against 7/7 at `cast:'hero'`
+     with a person-free one). One person-free preset (`frontal-elevated-device-hero`) is not a
+     rotation, so narrowing to it would have replaced a dropped axis with a frozen one.
+     They take the GEOMETRY of the two references that are closest to the screen — 03 is the frame
+     whose inventory entry reads "NO CHARACTER IS IN THIS FRAME — the laptop screen FILLS it", 01
+     has the room "thrown far out of focus" — and drop the human clause, which is legitimate here
+     and nowhere else: this axis owns the FRAMING and `cast` owns whether anybody is present, so
+     removing a person from a camera description is not inventing a viewpoint the set lacks. Both
+     are `unattended-only` and `RequiresOperator: no`; both are `ShotSize: close-up`, which is the
+     range the user reported missing. -->
 
 # Camera presets — device-focused
 
 ## high-oblique-over-hands
 steep oblique from behind and above the hands onto an open laptop, normal lens, the keystoned screen filling the upper frame, the person in frame only as hands at the keyboard and a forearm at the right edge, depth falling away fast
 ScreenVisible: yes
+RequiresOperator: yes
+ShotSize: close-up
 
 ## over-shoulder-handheld
 over the shoulder onto a tablet held low in both hands, longer lens, one edge blocked by a hard-blurred near mass, the person in frame only as that near shoulder and both hands, the room deep and soft behind
 ScreenVisible: yes
+RequiresOperator: yes
+ShotSize: medium
 
 ## close-frontal-screen
 close over the shoulder at screen height, the screen nearly square to the lens across the upper two-thirds, the person in frame only as two forearms cropped by the bottom edge, background soft
 ScreenVisible: yes
+RequiresOperator: yes
+ShotSize: close-up
 
 ## high-angle-across-table
 high angle across a table onto a propped tablet at three-quarters, normal lens, near tabletop objects large and soft along the lower edge, the person in frame only as two hands and a sleeve entering from the right
 ScreenVisible: yes
+RequiresOperator: yes
+ShotSize: medium
 
 ## high-over-shoulder-desk
 steep look down from above and behind a shoulder onto a phone held in both hands at a desk, normal lens, the person in frame only as the back of a head at the near corner and the two forearms leading in diagonally
 ScreenVisible: yes
+RequiresOperator: yes
+ShotSize: medium
 
 ## over-shoulder-eye-level
 tight over the shoulder at head height, the handheld screen in the far upper quadrant, the person in frame as the back of a head and the near shoulder, a large soft mass across the rest, and the one hand holding the device
 ScreenVisible: yes
+RequiresOperator: yes
+ShotSize: close-up
 
 ## wide-side-on-workstation
 wide side-on at seated chest height and level, normal-wide lens, a monitor at one end and a laptop centre, the operator seated in profile at the far side with head and torso in frame, deep focus front to back
 ScreenVisible: yes
+RequiresOperator: yes
+ShotSize: wide
 
 ## elevated-three-quarter-desk
 elevated three-quarter about forty-five degrees down onto a propped tablet, normal lens, desk objects layered from the near corner back to it, the person in frame only as two hands, a sleeve and a shoulder along the right edge
 ScreenVisible: yes
+RequiresOperator: yes
+ShotSize: medium
 
 ## frontal-elevated-device-hero
 frontal and slightly elevated onto an open laptop from the display's own side of the table, normal lens, the table behind the device empty
 ScreenVisible: unattended-only
+RequiresOperator: no
+ShotSize: medium
 
 ## table-level-gestural-candid
 table-level and level across a table, long lens, the device sharp at one side with gesturing hands sharp in front of it, the near person cropped by the top edge at the torso and a second figure soft beyond
 ScreenVisible: yes
+RequiresOperator: yes
+ShotSize: medium
 
 ## top-down-in-hands
 near top-down from directly above and behind the head onto a handheld screen held in one hand, normal lens, the person in frame only as that head a soft mass at the bottom edge, the holding forearm and a lap below
 ScreenVisible: yes
+RequiresOperator: yes
+ShotSize: medium
+
+## close-frontal-screen-unattended
+close and square to an open laptop at screen height from the display's own side, the display filling the upper two-thirds of the frame, the desk behind the device empty, background soft
+ScreenVisible: unattended-only
+RequiresOperator: no
+ShotSize: close-up
+
+## steep-oblique-unattended
+steep oblique from above and behind an open laptop, normal lens, the keystoned screen filling the upper frame, nothing seated behind the device, depth falling away fast
+ScreenVisible: unattended-only
+RequiresOperator: no
+ShotSize: close-up

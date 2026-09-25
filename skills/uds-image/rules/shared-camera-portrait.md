@@ -189,30 +189,40 @@
 
 ## waist-up-eye-level-frontal
 waist-up at eye level, squared frontally to the lens, normal lens, readable background at medium depth
+ShotSize: medium
 
 ## waist-up-eye-level-three-quarter
 waist-up at eye level turned three-quarter to the lens and set off-centre to one side, normal lens, the room running back beside them at medium depth
+ShotSize: medium
 
 ## waist-up-offgaze-open-side
 waist-up at eye level turned three-quarter with the eyeline carried off past the lens, normal lens, a broad pale plane closing the opposite half of the frame
+ShotSize: medium
 
 ## over-shoulder-turned
 chest-up at eye level, the body turned away and the head brought back over the shoulder to the lens with the whole face in frame, long lens, everything beyond dissolved to bokeh discs
+ShotSize: medium
 
 ## tight-chest-up-longlens
 tight chest-up at eye level, a three-quarter turn, long lens with visible compression, the background compressed flat and thrown wholly out of focus
+ShotSize: close-up
 
 ## close-up-face-fills-frame
 close-up with the head filling the frame top to bottom, the crown cropped by the top edge and the whole face inside it, one shoulder corner below, long lens
+ShotSize: close-up
 
 ## low-angle-hero
 waist-up with the lens well below the subject's eye line and tilted up, the underside of the jaw visible and the wall running up behind the head, normal lens
+ShotSize: medium
 
 ## profile-side-on
 strict side-on at eye level, head-and-shoulders, the face in full profile set against the far side of the frame, normal lens, the eyeline carried out of frame along it
+ShotSize: close-up
 
 ## knee-up-standing-wide
 standing knee-up and turned three-quarter, wide-normal lens, a near mass entering one frame edge and falling hard out of focus
+ShotSize: wide
 
 ## full-body-environmental
 the whole figure head to foot inside the frame at eye level, wide lens, occupying about a third of the frame width with the space legible around it, deep focus
+ShotSize: wide

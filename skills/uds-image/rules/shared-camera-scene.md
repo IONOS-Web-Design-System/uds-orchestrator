@@ -77,40 +77,50 @@
 
 ## wide-establishing-eye-level
 wide establishing interior view from eye level or a little above it, normal-wide lens, most of the room legible from the near floor to the far wall and the subject small enough inside it to read as one element of the space
+ShotSize: wide
 Pattern: A
 
 ## medium-two-shot-side-on
 side-on medium two-shot at eye level, both figures fully in frame from about waist height up and turned toward each other rather than toward the lens, normal lens, the space between them left open and the room running on past their shoulders
+ShotSize: medium
 Pattern: A
 
 ## over-shoulder-from-behind
 over the shoulder from behind and slightly to one side at eye level, the back of the head and one shoulder entering at a frame edge as a near shape rather than centred, what they are working on square to the lens beyond them, normal lens, shallow depth
+ShotSize: medium
 Pattern: C
 
 ## foreground-framed-medium
 medium shot at eye level shooting past a heavy element close to the lens that takes one side or corner of the frame, that element strongly blurred, the subject sharp in the mid-ground beyond it
+ShotSize: medium
 Pattern: C
 
 ## side-on-medium-window-behind
 side-on medium at eye level with a window behind the subject, normal lens, the space running deep past them rather than closing off just behind
+ShotSize: medium
 Pattern: A
 
 ## wide-side-on-deep-focus
 wide side-on full-scene view from eye level, wide lens, deep focus holding from the nearest foreground to the far side of the space, the subject one element within it
+ShotSize: wide
 Pattern: A
 
 ## through-doorway-wide
 wide establishing view at eye level shot through a doorway or opening, its edges forming a dark border down two or three sides of the frame, normal-wide lens, the action deeper inside it and sharp
+ShotSize: wide
 Pattern: A, C
 
 ## overhead-top-down-workspace
 near top-down looking straight down from directly over a work surface, the surface filling the frame as the dominant ground plane, normal lens, only hands and forearms entering from one edge and the head out of frame entirely
+ShotSize: close-up
 Pattern: B
 
 ## low-wide-floor-level
 low camera close to floor level angled slightly up, wide lens, the near floor plane running away from the lens into the frame and the subject standing well back in the mid-ground, reading tall from that height
+ShotSize: wide
 Pattern: (none)
 
 ## medium-close-hands-and-face
 medium-close on the hands at work in the lower frame with the face clear and uncropped in the upper frame, the subject upright rather than bent over the task, normal lens, shallow depth
+ShotSize: close-up
 Pattern: A
