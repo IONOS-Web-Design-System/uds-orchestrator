@@ -81,21 +81,21 @@ Per-generator hazards to OMIT:
       graphics on device lid"`.
 
     **Strategy B — Screen as hero (`device-focused` type, or two-person scene):**
-    The camera must occupy a position where the screen naturally faces it:
-    - Phone/tablet: device flat on a surface, screen facing up; or person from over-the-shoulder
-      angle so screen faces camera. Encode: `"non-branded tablet lying flat on the desk, screen
-      facing upward, fully visible from above"`.
-    - Laptop: `"non-branded laptop on the desk, lid open at 105 degrees facing the camera,
-      over-the-shoulder shot from slightly above"`. Add `"non-branded"` positively — negativePrompt
-      alone does not suppress the Apple logo.
+    The display is the subject, and image-svc places the camera on the display's side — so write
+    the device IN USE and what its display shows, never where the camera stands:
+    - Encode the device, the hands working it and the interface: `"a non-branded laptop in use,
+      two hands on its keyboard, the display showing …"`, `"a phone held in one hand, the thumb on
+      its display, which shows …"`. Of the person, name only the parts that operate the device —
+      hands, forearms, a sleeve. Add `"non-branded"` positively — negativePrompt alone does not
+      suppress the Apple logo.
     - Two-person scene: one person faces camera, one looks at the screen — the camera position
       between them can naturally see both face and partial screen without physical contradiction.
   - **Screen-based product is the focus** (the UI is the point — "show the dashboard", "the app
-    on the phone"). Order it: **first** a natural use moment, **then** full-screen visibility via
-    camera placement. Write a real moment (tapping a phone to pay at a counter, typing at a
-    laptop, glancing at the phone in hand, two people over a dashboard) and have the camera catch
-    the screen naturally — **over-the-shoulder / from above** — NOT the person holding the device
-    up to face the lens (fake-demo look) and NOT a lone idle device. Then name a **relevant, real
+    on the phone"). Order it: **first** a natural use moment, **then** the display. Write a real
+    moment in the hands (tapping a phone to pay at a counter, typing at a laptop, scrolling the
+    phone in hand) — NOT the person holding the device up to face the lens (fake-demo look) and
+    NOT a hand resting idle beside a device nobody is using. Do not ask for the whole device, the
+    desk or the room to be in frame: the display is what the photograph is about. Then name a **relevant, real
     app interface** (layout/UI regions, short labels only — no paragraphs; default to the
     `showroom` product, else the scenario). For a pixel-accurate UI, prefer `hybrid` mode.
   - **Camera and lighting are NOT yours.** image-svc decides camera angle, framing, shot length,
