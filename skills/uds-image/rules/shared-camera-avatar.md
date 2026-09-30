@@ -198,21 +198,28 @@
 
 ## chest-up-context-behind
 chest-up at eye level squared frontally to the lens, normal lens, the working surround behind readable at medium depth across the whole frame width
+ShotSize: medium
 
 ## head-shoulders-offgaze-flat-behind
 head-and-shoulders at eye level, shoulders square to the lens, the head turned slightly and the eyeline carried past it, normal lens, a flat plane close behind
+ShotSize: close-up
 
 ## chest-up-deep-fall-off
 chest-up at eye level turned slightly off square, the subject centred, longer lens, a long interior running far back behind them and dissolving completely
+ShotSize: medium
 
 ## head-shoulders-frontal
 head-and-shoulders at eye level squared frontally to the lens, normal lens, a featureless seamless surround with no depth behind it at all
+ShotSize: close-up
 
 ## tight-head-shoulders
 tight head-and-shoulders at eye level squared to the lens, the head filling the upper two-thirds and the shoulders just entering the bottom corners, longer lens
+ShotSize: close-up
 
 ## head-shoulders-three-quarter
 head-and-shoulders at eye level turned three-quarter to the lens, normal lens, a plain plane close behind and open space left on the turned-away side
+ShotSize: close-up
 
 ## close-up-face-fills-frame
 close-up turned three-quarter with the head filling the frame top to bottom, the crown cropped by the top edge and the whole face inside it, one shoulder corner below
+ShotSize: close-up
