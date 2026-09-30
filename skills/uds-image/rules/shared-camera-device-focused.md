@@ -124,6 +124,26 @@
        to each other by check-camera-axis.mjs, so they cannot drift — a comment is stripped by the
        loader, which is why the declaration needed a form outside one.
 
+     DEVICE FORM, per preset. Each preset below also carries `Device: laptop | tablet | phone |
+     desktop` (a comma list where the viewpoint genuinely suits more than one), and image-svc
+     narrows the draw to the device the planner named in `sceneContext.device`. MEASURED
+     2026-09-30 on six replayed production device briefs: only 3 of the 10 operator presets are
+     laptop viewpoints, so a laptop brief drew a tablet-held-low or phone-in-one-hand camera in 10
+     of 12 draws, and the craft model resolved the contradiction by dropping the camera line or by
+     posing the wrong device. The device is a HARD narrowing, intersected before the shot-size
+     preference, never dropped in its favour. Machine-readable, for the axis's other consumers:
+       laptop: high-oblique-over-hands, close-frontal-screen, wide-side-on-workstation,
+       frontal-elevated-device-hero, table-level-gestural-candid, close-frontal-screen-unattended,
+       steep-oblique-unattended.
+       tablet: over-shoulder-handheld, high-angle-across-table, elevated-three-quarter-desk,
+       table-level-gestural-candid.
+       phone: high-over-shoulder-desk, over-shoulder-eye-level, top-down-in-hands.
+       desktop: wide-side-on-workstation.
+     `steep-oblique-unattended` was reworded the same day: "from above and behind an open laptop"
+     was read by the craft model as the LID side ("the screen is angled away from the lens,
+     showing its sleek metallic back") in the one draw that rendered it. With nobody seated there is
+     no "behind the person" to anchor the word, so the viewpoint is now named by the side the DISPLAY faces.
+
      RENDERED TEXT. All twelve references are photographs of real product UI, so every screen in
      the source set is covered in legible lettering, and this axis is the one axis whose subject IS
      a screen. The previous wording made a legibility CLAIM in three places — the display squarely
@@ -270,75 +290,88 @@ steep oblique from behind and above the hands onto an open laptop, normal lens, 
 ScreenVisible: yes
 RequiresOperator: yes
 ShotSize: close-up
+Device: laptop
 
 ## over-shoulder-handheld
 over the shoulder onto a tablet held low in both hands, longer lens, one edge blocked by a hard-blurred near mass, the person in frame only as that near shoulder and both hands, the room deep and soft behind
 ScreenVisible: yes
 RequiresOperator: yes
 ShotSize: medium
+Device: tablet
 
 ## close-frontal-screen
 close over the shoulder at screen height, the screen nearly square to the lens across the upper two-thirds, the person in frame only as two forearms cropped by the bottom edge, background soft
 ScreenVisible: yes
 RequiresOperator: yes
 ShotSize: close-up
+Device: laptop
 
 ## high-angle-across-table
 high angle across a table onto a propped tablet at three-quarters, normal lens, near tabletop objects large and soft along the lower edge, the person in frame only as two hands and a sleeve entering from the right
 ScreenVisible: yes
 RequiresOperator: yes
 ShotSize: medium
+Device: tablet
 
 ## high-over-shoulder-desk
 steep look down from above and behind a shoulder onto a phone held in both hands at a desk, normal lens, the person in frame only as the back of a head at the near corner and the two forearms leading in diagonally
 ScreenVisible: yes
 RequiresOperator: yes
 ShotSize: medium
+Device: phone
 
 ## over-shoulder-eye-level
 tight over the shoulder at head height, the handheld screen in the far upper quadrant, the person in frame as the back of a head and the near shoulder, a large soft mass across the rest, and the one hand holding the device
 ScreenVisible: yes
 RequiresOperator: yes
 ShotSize: close-up
+Device: phone
 
 ## wide-side-on-workstation
 wide side-on at seated chest height and level, normal-wide lens, a monitor at one end and a laptop centre, the operator seated in profile at the far side with head and torso in frame, deep focus front to back
 ScreenVisible: yes
 RequiresOperator: yes
 ShotSize: wide
+Device: laptop, desktop
 
 ## elevated-three-quarter-desk
 elevated three-quarter about forty-five degrees down onto a propped tablet, normal lens, desk objects layered from the near corner back to it, the person in frame only as two hands, a sleeve and a shoulder along the right edge
 ScreenVisible: yes
 RequiresOperator: yes
 ShotSize: medium
+Device: tablet
 
 ## frontal-elevated-device-hero
 frontal and slightly elevated onto an open laptop from the display's own side of the table, normal lens, the table behind the device empty
 ScreenVisible: unattended-only
 RequiresOperator: no
 ShotSize: medium
+Device: laptop
 
 ## table-level-gestural-candid
 table-level and level across a table, long lens, the device sharp at one side with gesturing hands sharp in front of it, the near person cropped by the top edge at the torso and a second figure soft beyond
 ScreenVisible: yes
 RequiresOperator: yes
 ShotSize: medium
+Device: laptop, tablet
 
 ## top-down-in-hands
 near top-down from directly above and behind the head onto a handheld screen held in one hand, normal lens, the person in frame only as that head a soft mass at the bottom edge, the holding forearm and a lap below
 ScreenVisible: yes
 RequiresOperator: yes
 ShotSize: medium
+Device: phone
 
 ## close-frontal-screen-unattended
 close and square to an open laptop at screen height from the display's own side, the display filling the upper two-thirds of the frame, the desk behind the device empty, background soft
 ScreenVisible: unattended-only
 RequiresOperator: no
 ShotSize: close-up
+Device: laptop
 
 ## steep-oblique-unattended
-steep oblique from above and behind an open laptop, normal lens, the keystoned screen filling the upper frame, nothing seated behind the device, depth falling away fast
+steep oblique from above an open laptop on the side its display faces, normal lens, the keystoned screen filling the upper frame, the desk behind the device empty and the seat in front of it empty too, depth falling away fast
 ScreenVisible: unattended-only
 RequiresOperator: no
 ShotSize: close-up
+Device: laptop
