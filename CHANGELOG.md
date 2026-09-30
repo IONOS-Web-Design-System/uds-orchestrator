@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.21.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.21.0...v2.21.1) (2026-09-30)
+
+
+### Documentation
+
+* **image:** record the improvement backlog ([a11bae7](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a11bae7ef769dae612aeaf5cbef1a9f11210474c))
+
 ## [2.21.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.20.0...v2.21.0) (2026-09-24)
 
 
