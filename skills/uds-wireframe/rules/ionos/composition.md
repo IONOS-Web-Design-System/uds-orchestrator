@@ -12,7 +12,7 @@ This is not a pixel-perfect reproduction. Make reasonable spatial decisions wher
 
 ```tsx
 // Wireframe illustration — not production code
-import { ThemeProvider } from '@ionos-web-design-system/react';
+import ThemeProvider from '@ionos-web-design-system/react/theme-provider';
 
 export default function MyWireframe() {
   return (

@@ -87,7 +87,7 @@ Produce a single `src/Composition.tsx`. For Remotion jobs, the template's `Root.
 // Wireframe illustration — not production code
 import { type VariantProps } from './schema';          // Remotion: always use VariantProps
 // OR for static wireframes:
-import { ThemeProvider } from '@ionos-web-design-system/react';  // NOTE: there is no `Surface` export — use a div with a bg-surface-* utility class
+import ThemeProvider from '@ionos-web-design-system/react/theme-provider';  // subpath import only — never the package barrel. NOTE: there is no `Surface` component — use a div with a bg-surface-* utility class
 
 export const MyComposition: React.FC<VariantProps> = ({ headline, subline, variantId, brand, colorScheme, platform }) => {
   return (

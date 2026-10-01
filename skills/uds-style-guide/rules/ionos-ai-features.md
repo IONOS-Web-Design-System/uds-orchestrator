@@ -133,7 +133,7 @@ background: linear-gradient(120deg, var(--color-ai-subtle-start), var(--color-ai
 | `tertiary`  | Gradient text only (transparent bg) |
 
 ```tsx
-import { Button } from '@ionos-web-design-system/react';
+import Button from '@ionos-web-design-system/react/button';
 <Button concept="ai" variant="primary">Generate with AI</Button>
 ```
 
