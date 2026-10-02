@@ -128,7 +128,7 @@ import { KitButton } from './kit';
     {[52, 48, 60, 52].map((w, i) => <Bar key={i} w={`${w}px`} h={7} op={0.22} />)}
   </div>
   {/* CTA — a kit button with a short real label, never a drawn rect */}
-  <KitButton label={texts.cta} size="small" />
+  <KitButton label={texts.cta ?? ''} size="small" />
 </nav>
 ```
 

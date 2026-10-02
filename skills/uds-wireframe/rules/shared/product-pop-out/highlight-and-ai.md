@@ -28,7 +28,7 @@ hero) is in `product-pop-out/character.md`.
    <PromptWindow
      variant="prompt-full"                  // the contract's variant, verbatim
      brand="{brand}"                        // the contract's LITERAL, verbatim
-     promptText={texts.promptText}          // ALL copy flows through `texts`
+     promptText={texts.promptText ?? ''}    // ALL copy flows through `texts`
      actions={['edit', 'regenerate']}       // prompt-full only; 2 entries
      leadingIcon="filled-sparkles"          // or the contract's AI icon
      sendGlyph="arrow"
@@ -116,8 +116,9 @@ hero) is in `product-pop-out/character.md`.
 
    In all present cases: anchored bottom-left, popping outside the interface's LEFT edge, never
    over the frame's center, never over the character's face-safe box. Chrome follows the
-   Floating Highlight Card template (`shared/floating-card.md`): borderless, plain neutral
-   shadow, no AI glow on the chrome itself.
+   Floating Highlight Card template (`shared/floating-card.md`): plain neutral shadow, no AI
+   glow on the chrome; hand-built panels borderless, a `KitCard` surface per that file's
+   KitCard exception (its surface and 1px border accepted).
 5. **AI styling (when this is an AI feature)** — the CTA/Publish action is
    `<KitButton concept="ai" icon={sparkles} …/>` (its glow is the `glow` prop, never drawn on the
    highlight chrome), the prompt window carries its own AI styling (`PromptWindow`, or the

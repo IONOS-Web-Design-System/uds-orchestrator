@@ -42,7 +42,7 @@ export default function MyIllustration() {
 }
 ```
 
-The device frame chrome (dark grey bezel), glass cards, and floating elements are all semi-transparent by design — they adapt to their host background naturally.
+The device frame chrome (dark grey bezel) and glass cards are semi-transparent by design — they adapt to their host background naturally. Kit floaters are NOT: a `KitPill`, `KitButton` or `KitIconButton` draws its own opaque surface, so it reads on any host. Never float a bare `KitIcon` on the transparent canvas — its token colour can vanish against an unknown host background; use a `KitIconButton` (it has its own backdrop) instead.
 
 ---
 
@@ -54,7 +54,7 @@ The device frame chrome (dark grey bezel), glass cards, and floating elements ar
 |------|-------|----------|--------------|-------------------|
 | **large** | ~750px | Full carousel, hero section | Full layout — nav + sections + multiple cards | 3–4 |
 | **medium** | ~500px | Half-screen panel, feature callout | One main section, condensed nav | 1–2 |
-| **small** | ~250px | Inline card, thumbnail, icon-area | Abstract — 2–3 cards max, no nav | 1 (one small `KitPill` chip) |
+| **small** | ~250px | Inline card, thumbnail, icon-area | Abstract — 2–3 cards max, no nav | 1 — one compact kit element: a KitIconButton (may bob) or a KitPill (fly-in, then still) |
 
 Size affects everything: larger means more sections, more glass cards, more floating elements, more animation. Smaller means fewer elements but **typography becomes more important** as the primary context signal.
 
@@ -84,8 +84,8 @@ Size affects everything: larger means more sections, more glass cards, more floa
 ```
 [no nav]
 [2–3 glass cards stacked or 2-column mini-grid]
-[1 small KitPill chip pop-out]
-[float bob only — no cursor (too cramped)]
+[1 pop-out — one compact kit element: a KitIconButton (may bob) or a KitPill (fly-in, then still)]
+[no cursor (too cramped); bob only a KitIconButton, never the KitPill]
 [typography anchor: 12–14px, more visible — this is the main context signal]
 ```
 
@@ -101,7 +101,7 @@ Wrap the device frame in a padded relative container, then use `position: absolu
 
 ```tsx
 import bell from '@ionos-web-design-system/icon/system/bell';
-import { KitIcon, KitPill } from './kit';
+import { KitIconButton, KitPill } from './kit';
 
 {/* Outer wrapper with generous padding for bleed space */}
 <div style={{ position: 'relative', display: 'inline-block', padding: '48px 72px 48px 48px' }}>
@@ -129,8 +129,8 @@ import { KitIcon, KitPill } from './kit';
     display: 'flex', alignItems: 'center', gap: 8,
     animation: 'flyIn 0.55s cubic-bezier(0.16,1,0.3,1) 0.4s both',
   }}>
-    <KitIcon icon={bell} size="small" />
-    <KitPill label={texts.notification} variant="success" />
+    <KitIconButton icon={bell} title={texts.notificationAction ?? ''} size="small" />
+    <KitPill label={texts.notification ?? ''} variant="success" />
   </div>
 </div>
 ```
@@ -196,8 +196,8 @@ import { KitButton } from './kit';
     <BarGroup lines={3} />
     {/* CTA row */}
     <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-      <KitButton label={texts.cta} />
-      <KitButton label={texts.secondaryCta} variant="secondary" />
+      <KitButton label={texts.cta ?? ''} />
+      <KitButton label={texts.secondaryCta ?? ''} variant="secondary" />
     </div>
   </div>
   <div style={{ borderRadius: 16, overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.10)' }}>

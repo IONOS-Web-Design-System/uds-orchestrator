@@ -25,7 +25,7 @@ The secondary palette (Amber, Purple, Green, Rose) exists precisely because it's
 A composition should always be anchored in the primary palette. IONOS Blue + Dark Midnight establishes trust and brand recognition. Other colors layer on top of this foundation.
 
 ### 2. Sky is directional, not decorative
-Sky (`#11C7E6`) is the brand's action color — it should point somewhere: a CTA button, a key statistic, a focal element. Using it as background fill or repeated throughout a layout turns a signaling color into noise.
+Sky (`#11C7E6`) is the brand's action/focal color — it should point somewhere: a key statistic, a focal element, a drawn accent. (CTA buttons are brand `KitButton`s, which take their colour from the tokens.) Using it as background fill or repeated throughout a layout turns a signaling color into noise.
 
 ### 3. Secondary colors need brand context
 Secondary colors (Amber, Purple, Green, Rose) only work when surrounded by a strong primary brand environment. If the blues aren't dominant, the secondary colors look random rather than IONOS. Require explicit approval before using any secondary color in a piece.
@@ -41,7 +41,7 @@ Overpass is the brand's "voice" — it communicates personality. Open Sans is th
 - **Background**: IONOS Blue (`#003D8F`) or a B9→B8 gradient (`#02102B` to `#001B41`)
 - **Headline**: Overpass Semibold, white text
 - **Body**: Open Sans Regular, white or Cloud (`#F4F7FA`) text
-- **CTA button**: Sky (`#11C7E6`) background with dark text — one button maximum in Sky per section
+- **CTA button**: a brand `KitButton` (the kit takes its colour from the tokens) — one primary CTA per section; Sky stays a focal accent for a drawn shape or key figure, never a hand-styled button fill
 - **Secondary accent**: Only with approval; keep it to one color, one element
 
 ### Scenario: Product UI / dashboard

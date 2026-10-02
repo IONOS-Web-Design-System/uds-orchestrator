@@ -64,7 +64,7 @@ When using secondary colors:
 **DO:**
 - Pair IONOS Blue with White or Cloud for maximum legibility
 - Use Dark Midnight (`#001B41`) for body text on screen — it's softer than pure black and on-brand
-- Use Sky for one focal point CTA per composition
+- Use Sky for one focal point per composition (a key figure or drawn accent; CTAs are brand `KitButton`s, coloured by the tokens)
 - Test all text/background combinations for WCAG AA (4.5:1 for normal text, 3:1 for large)
 
 **DON'T:**
@@ -86,7 +86,7 @@ brand-scale colour:
 
 ```css
 /* ✅ Semantic core tokens (resolve per brand under ThemeProvider/data-brand) */
-.cta-button   { background-color: var(--surface-base-invert); color: var(--text-base-invert); }
+.inverted-plate { background-color: var(--surface-base-invert); color: var(--text-base-invert); }   /* a drawn panel — buttons are KitButton */
 .body-text    { color: var(--text-base); }
 
 /* ✅ Literal hex for a specific brand-scale colour (there is no core var for it) */

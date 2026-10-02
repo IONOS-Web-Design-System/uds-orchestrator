@@ -13,7 +13,9 @@ conveyed by **2–3 small elements that FLOAT and INTERSECT** the card:
   e.g. an AI mark (`KitIconButton ai`) on a corner, a labelled chip (`KitPill`, 1–3 words) on an
   edge, a compact strip of 2–3 `KitIconButton`s on the image, and optionally a small info panel
   (`KitBadge` tags + `KitText` panel label + AI `KitButton concept="ai"`) intersecting one edge.
-  Each kit element sits in a positioned parent `div` that carries its shadow and animation;
+  Each kit element sits in a positioned parent `div` that carries its animation and its shadow
+  as `filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.22))'` (it follows the component's own
+  shape; a `boxShadow` on a square parent would draw a rectangle around a rounded chip);
 - each floating element carries a **large, prominent neutral drop shadow** (e.g.
   `0 16px 40px rgba(0,0,0,0.22)`) so it reads as clearly **elevated above the card** — a shadow,
   **never an AI glow** (the only AI glow is on the AI CTA);

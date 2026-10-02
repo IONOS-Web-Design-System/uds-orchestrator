@@ -148,7 +148,7 @@ Two correct options:
    | Role | Background token | Foreground (text/icon) token |
    |---|---|---|
    | Default card / panel | `var(--surface-base)` | `var(--text-base)` |
-   | Inverted (dark) drawn panel / toolbar backdrop | `var(--surface-base-invert)` | `var(--text-base-invert)` |
+   | Inverted (dark) decorative plate / drawn panel | `var(--surface-base-invert)` | `var(--text-base-invert)` |
    | Subtle / subtlest backdrop | `var(--surface-subtle)` / `var(--surface-subtlest)` | `var(--text-base)` |
    | AI accent surface | `var(--surface-semantic-ai)` | `var(--text-semantic-ai)` |
    | Success / danger / promo / caution | `var(--surface-semantic-<role>)` | `var(--text-semantic-<role>)` |
@@ -156,8 +156,8 @@ Two correct options:
    ```tsx
    import { svgData as gearSvg } from '@ionos-web-design-system/icon/system/gear';
 
-   // ✓ drawn dark toolbar backdrop, accessible glyph — surface + its paired text token
-   // (status chips, tags and buttons are kit components and need no colour pairing)
+   // ✓ non-interactive decorative plate with a motif glyph — surface + its paired text token
+   // (interactive elements — buttons, icon actions, chips, tags — are kit components and need no colour pairing)
    <div style={{ background: 'var(--surface-base-invert)', borderRadius: 16, padding: '12px 20px' }}>
      <div style={{
        width: 24, height: 24, backgroundColor: 'var(--text-base-invert)',

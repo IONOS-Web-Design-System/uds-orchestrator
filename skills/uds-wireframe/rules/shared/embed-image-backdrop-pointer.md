@@ -108,8 +108,10 @@ Layer order (document order, no z-index games):
      boxShadow: '0 24px 64px rgba(0,0,0,0.35)',
      display: 'flex', flexDirection: 'column', gap: 12,
    }}>
-     {texts.options.map((o, i) => <KitCheckbox key={o} checked={i === 0} label={o} />)}
-     <KitButton label={texts.cta} concept="ai" icon={sparkles} glow={glow} />
+     {[texts.option1 ?? '', texts.option2 ?? '', texts.option3 ?? ''].map((o, i) => (
+       <KitCheckbox key={i} checked={i === 0} label={o} />
+     ))}
+     <KitButton label={texts.cta ?? ''} concept="ai" icon={sparkles} glow={glow} />
    </div>
    ```
 
@@ -141,23 +143,24 @@ Layer order (document order, no z-index games):
        div meeting at the corner — still never a tilted segment. */}
    ```
 
-6. **Optional AI mark** — one small kit AI icon action near the marquee; the parent only
-   positions it (and carries the pop-in animation):
+6. **Optional AI badge** — one small labelled AI mark (sparkle + 1-2 words like "KI Text")
+   near the marquee. It is a small kit AI button; the parent only positions it (and carries the
+   pop-in animation):
 
    ```tsx
    import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
-   import { KitIconButton } from './kit';
+   import { KitButton } from './kit';
 
    <div style={{ position: 'absolute', /* near the marquee */ }}>
-     <KitIconButton ai icon={sparkles} title={texts.aiLabel} />
+     <KitButton concept="ai" size="small" label={texts.aiBadge ?? ''} icon={sparkles} />
    </div>
    ```
 
 Animation hooks (reference the patterns in `ionos/micro-animations.md` — do not
 re-invent them): panel enters with **Pattern 5 — Element Fly-In** (`flyIn`); the marquee
 draws in right after (animate `strokeDashoffset` on an SVG rect, or fade + scale the dashed
-div from 1.04→1); the AI mark pops last (its parent scales 0.6→1 with overshoot, same `flyIn` curve); the
+div from 1.04→1); the AI badge pops last (its parent scales 0.6→1 with overshoot, same `flyIn` curve); the
 connector line can grow from the panel toward the dot. The backdrop (including the calm
-region the marquee wraps) is present from frame 0; only the marquee, panel, AI mark, and
+region the marquee wraps) is present from frame 0; only the marquee, panel, AI badge, and
 connector animate in.
 

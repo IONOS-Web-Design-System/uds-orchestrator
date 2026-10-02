@@ -100,7 +100,7 @@ STRATO's AI signature is a separate **cyan→pink** gradient (`#1FD7FF → #E498
 **DO**
 - Use `#FF8800` (Brand Orange) as the primary anchor for logos, icons, headers, and stage backgrounds
 - Apply Brand Orange Gradient (`#FF8800` → `#FFC700`) for hero sections and main stage areas
-- Use `#272CB2` for all interactive elements (buttons, links, focus rings)
+- `#272CB2` is the interactive colour (links, focus rings, drawn interactive accents); buttons are brand `KitButton`s, which take it from the tokens
 - Use `#2F2F70` for primary body text on digital surfaces
 - Use `#F7F7F9` (Soft Blue) as the default page background
 - Apply `#FFEAD3` (Soft Orange) as a warm card tint to reinforce the orange brand presence

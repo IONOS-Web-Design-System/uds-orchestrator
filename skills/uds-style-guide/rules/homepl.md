@@ -62,7 +62,7 @@ All hex values are sourced from the compiled `homepl.light.css` token file (OKLC
 ## Color Usage Rules
 
 **DO**
-- Use `#E20000` (Brand Red) as the sole brand colour anchor — logos, primary buttons, one key accent per composition
+- Use `#E20000` (Brand Red) as the sole brand colour anchor — logos, one key accent per composition (primary buttons are brand `KitButton`s, which take it from the tokens)
 - Use `#F5F7FA` (K1) as the default page background
 - Use `#1B1B1B` (K9) for primary text — soft near-black, warmer than pure `#000000`
 - Apply `#FDF6F6` for card highlights and hover tints that need subtle warmth

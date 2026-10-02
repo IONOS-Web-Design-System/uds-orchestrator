@@ -42,7 +42,7 @@ note above.
 ```tsx
 import bell from '@ionos-web-design-system/icon/system/bell';
 import checkmark from '@ionos-web-design-system/icon/system/circle-checkmark';
-import { KitAvatar, KitIcon, KitIconButton, KitPill } from './kit';
+import { KitAvatar, KitIconButton, KitPill } from './kit';
 
 // Float configuration — adjust positions to fit your frame size
 const FLOATERS = [
@@ -66,8 +66,8 @@ const FLOATERS = [
     bob: false, delay: '1.3s',
     content: (
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <KitIcon icon={bell} size="small" />
-        <KitPill label={texts.notification} variant="neutral" />
+        <KitIconButton icon={bell} title={texts.notificationAction ?? ''} size="small" />
+        <KitPill label={texts.notification ?? ''} variant="neutral" />
       </div>
     ),
   },
@@ -75,13 +75,13 @@ const FLOATERS = [
   {
     style: { top: '42%', right: -44, zIndex: 10 } as React.CSSProperties,
     bob: true, delay: '0.7s',
-    content: <KitIconButton icon={checkmark} title={texts.confirmAction} />,
+    content: <KitIconButton icon={checkmark} title={texts.confirmAction ?? ''} />,
   },
   // Bottom avatar (large only) — initials are text: flies in, never bobs
   {
     style: { bottom: -16, right: 120, zIndex: 10 } as React.CSSProperties,
     bob: false, delay: '2.0s',
-    content: <KitAvatar initials="BX" size="small" />,
+    content: <KitAvatar initials={texts.initials ?? ''} size="small" />,
   },
 ];
 
@@ -105,8 +105,7 @@ const multiFloatStyle = `
 ))}
 ```
 
-For **medium illustrations**, use only floaters 0 and 1. For **small**, use one compact kit
-element only — the `KitIconButton` floater (it may bob) or the `KitPill` chip (fly-in only).
+For **medium illustrations**, use only floaters 0 and 1. For **small**, use one compact kit element: a KitIconButton (may bob) or a KitPill (fly-in, then still).
 
 ---
 
@@ -261,7 +260,7 @@ Then use exactly the animations that illustrate that story — card highlight, b
 |------|----------|----------------------|
 | Large (750px) | 3–4 | cascade + card highlight + bar-grow |
 | Medium (500px) | 1–2 | cascade + card highlight |
-| Small (250px) | 1 (one compact kit element) | float bob (non-text only) or one fly-in |
+| Small (250px) | 1 — one compact kit element: a KitIconButton (may bob) or a KitPill (fly-in, then still) | bob the KitIconButton, or fly the KitPill in once |
 
 - Card highlight cycles: 3.5–5s loop; fly-ins: 400–600ms
 - Total composition loop should feel natural at 5–8 seconds

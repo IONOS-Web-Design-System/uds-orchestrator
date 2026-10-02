@@ -70,7 +70,7 @@ signature), and never a hand-drawn gradient div.
 import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
 import { KitButton } from './kit';
 
-<KitButton label={texts.cta} concept="ai" icon={sparkles} glow={glow} />
+<KitButton label={texts.cta ?? ''} concept="ai" icon={sparkles} glow={glow} />
 ```
 
 The kit renders the static blue→magenta fill and its label colour. Animate the AI moment through
@@ -150,7 +150,7 @@ UDS `Button` ships the gradient natively; the kit exposes it as `KitButton conce
 ```tsx
 import { KitButton } from './kit';
 
-<KitButton label={texts.cta} concept="ai" variant="secondary" />
+<KitButton label={texts.cta ?? ''} concept="ai" variant="secondary" />
 ```
 
 > **In Remotion/wireframe contexts:** the AI CTA is always `KitButton concept="ai"`; its gradient

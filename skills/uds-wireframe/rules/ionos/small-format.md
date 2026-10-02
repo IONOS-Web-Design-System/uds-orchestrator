@@ -127,9 +127,9 @@ signature. The AI concept belongs to an **AI CTA or AI icon action ONLY — neve
 chrome, the nav rail, connector lines, or a plain icon** (those stay on brand tokens). At small
 format there is usually no CTA, so the AI signature is **one kit AI element**:
 
-- `<KitIconButton ai icon={sparkles} title={texts.aiLabel} size="large" />` — the AI icon action
+- `<KitIconButton ai icon={sparkles} title={texts.aiLabel ?? ''} size="large" />` — the AI icon action
   (gradient icon from the brand tokens), or
-- `<KitButton label={texts.cta} concept="ai" icon={sparkles} size="small" />` when the brief has a
+- `<KitButton label={texts.cta ?? ''} concept="ai" icon={sparkles} size="small" />` when the brief has a
   short AI action label.
 
 In an icon-story, sit it on or beside the central motif; in a cropped product frame, let its
@@ -140,7 +140,7 @@ import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
 import { KitIconButton } from './kit';
 
 <div style={{ position: 'absolute', right: 24, bottom: 24 }}>
-  <KitIconButton ai icon={sparkles} title={texts.aiLabel} size="large" />
+  <KitIconButton ai icon={sparkles} title={texts.aiLabel ?? ''} size="large" />
 </div>
 ```
 
@@ -149,8 +149,11 @@ import { KitIconButton } from './kit';
   on them (a navy "premium" chip is NOT the AI signature either).
 - **Size it as an accent, not the hero:** it annotates the composition; it must not out-size the
   central motif / cropped frame.
-- Do NOT substitute brand sky/cyan for the AI signal, and never hand-draw an AI gradient chip:
-  the kit carries the brand's AI concept (IONOS blue→magenta, STRATO cyan→pink). An AI feature
+- Do NOT substitute brand sky/cyan for the AI signal, and at small format never hand-draw an
+  AI gradient chip: the kit element carries the brand's AI concept (IONOS blue→magenta, STRATO
+  cyan→pink) and reads at this size. (The drawn AI badge in
+  `uds-style-guide/rules/ionos-ai-features.md` "AI badges" is the only sanctioned drawn AI chip,
+  for larger formats where a labelled badge is needed — the kit has no AI chip.) An AI feature
   with no AI element anywhere is a miss. A non-AI brief uses neither `ai` nor `concept="ai"`.
 
 ## Motion

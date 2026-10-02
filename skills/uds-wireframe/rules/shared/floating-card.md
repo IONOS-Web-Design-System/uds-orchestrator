@@ -88,8 +88,11 @@ this chrome — brand-specific animation and hybrid-image rules point back here 
 restating it, so pure-illustration jobs always have it too.
 
 **Contents.** Prompt = `KitInput`, generated copy = `KitText`, AI CTA = `KitButton concept="ai"`.
-If the surface is a `KitCard`, the wrapper carries only position, radius and shadow — never a
-second background.
+
+**KitCard exception.** If the surface is a `KitCard`, the wrapper carries only position, the
+neutral shadow and `borderRadius: 'var(--protected-container-rounded)'` (not 40), no
+background; KitCard's own surface and 1px border are accepted. The HARD RULE, "borderless" and
+"the element IS the surface" below apply to **hand-built panels only**.
 
 **No AI glow on panel/card chrome.** The only AI glow in any composition is on the CTA
 button (or equivalent primary action) inside the highlight element — `KitButton`'s `glow` prop.
@@ -103,9 +106,9 @@ gradient, or AI-tinted outer shadow on the wrapper.
 exclusively for the **selection marquee** inside the product frame's client-app zone —
 the design-tool affordance that marks the content being acted on. Panel chrome, prompt
 bubbles, mini-toolbars, stat chips, and the Floating Highlight element's wrapper are always
-borderless. This style was retired; applying it to panels is wrong.
+borderless (hand-built panels; see the KitCard exception). This style was retired.
 
-**Surface vs. glass — HARD RULE.** The highlight element's background is the **opaque
+**Surface vs. glass — HARD RULE (hand-built panels).** A hand-built highlight element's background is the **opaque
 surface token with a hex fallback** (`var(--surface-subtle, #FFFFFF)`) — the element is
 solid, not glass; there is no
 `backdropFilter` on the element itself. The translucent glass + `backdropFilter` treatment
@@ -121,5 +124,5 @@ element in this file, however AI-flavored its content, stays opaque per the HARD
 
 **Never nest a generation-area container inside this element.** Nesting a glass generation-area
 container (its own background + blur) inside the Floating Highlight element produces a white
-box-in-box with a double shadow. The element IS the surface — place its header, text/content,
-and CTA (or equivalent) directly as children, with no inner background container.
+box-in-box with a double shadow. A hand-built element IS the surface — place its header,
+text/content, and CTA (or equivalent) directly as children, with no inner background container.

@@ -26,7 +26,9 @@ A wireframe here means a **live, renderable React composition** using real UDS c
 checkboxes, status chips, tags, avatars, progress, loading placeholders, tabs, UI copy, content
 cards) is a `Kit*` component from `./kit`. Its API card is in the prompt section "# UDS kit". The
 rules below say WHERE an element goes and HOW BIG its container is, never how to draw it.
-Hand-build only layout and decoration. Kit components render inside the `data-brand` root.
+Hand-build only layout and decoration — plus the sanctioned measured Figma components: the
+corporate_stage `PromptWindow` (and its fallback skeleton) and the product-pop-out brand badges
+(`badges.md`). Kit components render inside the `data-brand` root.
 
 ## Before You Start
 

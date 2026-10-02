@@ -48,7 +48,7 @@ its fill, radius and label colour from the brand tokens:
 ```tsx
 import { KitButton } from './kit';
 
-<KitButton label={texts.cta} />
+<KitButton label={texts.cta ?? ''} />
 ```
 
 **Navigation bar placeholder** — the CTA is a kit button with a short real label (never a drawn rect):
@@ -67,6 +67,6 @@ import { KitButton } from './kit';
     {[52, 48, 60, 52].map((w, i) => <Bar key={i} w={`${w}px`} h={8} op={0.22} />)}
   </div>
   {/* CTA */}
-  <KitButton label={texts.cta} size="small" />
+  <KitButton label={texts.cta ?? ''} size="small" />
 </nav>
 ```
