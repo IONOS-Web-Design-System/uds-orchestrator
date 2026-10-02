@@ -56,10 +56,11 @@ export const AIFloatingHighlight: React.FC<{
   const raw = spring({ frame: frame - enterFrame, fps, config: { damping: 18, stiffness: 120 } });
   const enter = raw > 0.995 ? 1 : raw;
   const opacity = interpolate(frame, [enterFrame, enterFrame + 8], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  const typed = Math.floor(interpolate(frame, [enterFrame + 30, enterFrame + 30 + text.length * 2], [0, text.length], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }));
+  const typeEnd = enterFrame + 30 + text.length * 2;
+  const typed = Math.floor(interpolate(frame, [enterFrame + 30, typeEnd], [0, text.length], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }));
   return (
     <div style={{ width: 320, opacity, transform: `translateX(${interpolate(enter, [0, 1], [-120, 0])}px)`, boxShadow: '0 16px 48px rgba(0,0,0,0.35)', borderRadius: 'var(--protected-container-rounded)' }}>
-      <KitCard footer={<KitButton label={ctaLabel} concept="ai" icon={sparkles} glow={interpolate(typed, [Math.max(0, text.length - 1), Math.max(1, text.length)], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })} />}>
+      <KitCard footer={<KitButton label={ctaLabel} concept="ai" icon={sparkles} glow={interpolate(frame, [typeEnd, typeEnd + 8], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })} />}>
         {productLabel ? <KitText variant="bodySm" tone="subtle">{productLabel}</KitText> : null}
         <KitInput value={text.slice(0, typed)} caret={typed < text.length && Math.floor(frame / 16) % 2 === 0} />
       </KitCard>
@@ -88,7 +89,7 @@ export const AITextGenerationArea: React.FC<{
           <KitIcon icon={sparkles} size="small" />
           <KitText variant="bodySm" tone="subtle" weight="bold">{productLabel}</KitText>
         </div>
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative', minHeight: 72 }}>
           <div style={{ visibility: 'hidden' }}><KitText>{generatedText}</KitText></div>
           <div style={{ position: 'absolute', inset: 0, opacity: 1 - reveal }}><KitSkeleton shape="text" lines={3} /></div>
           <div style={{ position: 'absolute', inset: 0, opacity: reveal }}><KitText>{generatedText}</KitText></div>
