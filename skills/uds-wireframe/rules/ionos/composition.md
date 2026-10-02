@@ -55,11 +55,11 @@ import { KitButton, KitText } from './kit';
 <div style={{ display: 'flex', alignItems: 'center', gap: 32, padding: '16px 32px', background: 'var(--surface-base)' }}>
   <img src={ionosLogo} alt="IONOS" style={{ height: 24, width: 'auto', display: 'block' }} />
   <div style={{ display: 'flex', gap: 24, flex: 1 }}>
-    {['Products', 'Solutions', 'Pricing'].map((item) => (
-      <KitText key={item} variant="bodySm" weight="bold">{item}</KitText>
+    {[texts.nav1, texts.nav2, texts.nav3].map((item, i) => (
+      <KitText key={i} variant="bodySm" weight="bold">{item ?? ''}</KitText>
     ))}
   </div>
-  <KitButton label="Sign in" variant="secondary" size="small" />
+  <KitButton label={texts.signIn ?? ''} variant="secondary" size="small" />
 </div>
 ```
 
@@ -72,10 +72,10 @@ import { KitButton, KitText } from './kit';
 // (the core tokens match them on the same element).
 <div data-brand={brand} data-color-scheme="dark"
      style={{ background: 'var(--surface-base)', padding: '96px 64px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-  <KitText variant="heading3xl" weight="bold" align="center">Your hosting, simplified</KitText>
-  <KitText variant="bodyXl" tone="subtle" align="center">Everything you need to get online — domains, hosting, email.</KitText>
+  <KitText variant="heading3xl" weight="bold" align="center">{texts.heroTitle ?? ''}</KitText>
+  <KitText variant="bodyXl" tone="subtle" align="center">{texts.heroBody ?? ''}</KitText>
   <div style={{ marginTop: 16 }}>
-    <KitButton label="Get started" size="large" />
+    <KitButton label={texts.heroCta ?? ''} size="large" />
   </div>
 </div>
 ```
@@ -86,14 +86,10 @@ import { KitButton, KitText } from './kit';
 import { KitCard, KitText } from './kit';
 
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, padding: '48px 32px' }}>
-  {[
-    { title: 'Web Hosting', desc: 'Fast, reliable, scalable.' },
-    { title: 'VPS', desc: 'Full root access, any size.' },
-    { title: 'Domains', desc: '500+ extensions available.' },
-  ].map((item) => (
-    <KitCard key={item.title}>
-      <KitText variant="headingLg" weight="bold">{item.title}</KitText>
-      <KitText tone="subtle">{item.desc}</KitText>
+  {[1, 2, 3].map((n) => (
+    <KitCard key={n}>
+      <KitText variant="headingLg" weight="bold">{texts[`card${n}Title`] ?? ''}</KitText>
+      <KitText tone="subtle">{texts[`card${n}Body`] ?? ''}</KitText>
     </KitCard>
   ))}
 </div>
@@ -105,9 +101,9 @@ import { KitCard, KitText } from './kit';
 import { KitButton, KitInput } from './kit';
 
 <div style={{ maxWidth: 448, margin: '0 auto', padding: '64px 0', display: 'flex', flexDirection: 'column', gap: 16 }}>
-  <KitInput label="Email address" value="" placeholder="you@example.com" />
-  <KitInput label="Password" value="••••••••" />
-  <KitButton label="Sign in" />
+  <KitInput label={texts.emailLabel ?? ''} value="" placeholder={texts.emailHint ?? ''} />
+  <KitInput label={texts.passwordLabel ?? ''} value="••••••••" />
+  <KitButton label={texts.signIn ?? ''} />
 </div>
 ```
 
@@ -118,15 +114,10 @@ import { KitCard, KitText } from './kit';
 
 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, padding: 32 }}>
   {/* Stat cards */}
-  {[
-    { label: 'Active servers', value: '12' },
-    { label: 'Monthly traffic', value: '2.4 TB' },
-    { label: 'Uptime', value: '99.98%' },
-    { label: 'Support tickets', value: '3' },
-  ].map((stat) => (
-    <KitCard key={stat.label}>
-      <KitText variant="bodySm" tone="subtle">{stat.label}</KitText>
-      <KitText variant="heading2xl" weight="bold">{stat.value}</KitText>
+  {[1, 2, 3, 4].map((n) => (
+    <KitCard key={n}>
+      <KitText variant="bodySm" tone="subtle">{texts[`stat${n}Label`] ?? ''}</KitText>
+      <KitText variant="heading2xl" weight="bold">{texts[`stat${n}Value`] ?? ''}</KitText>
     </KitCard>
   ))}
 </div>
@@ -220,7 +211,7 @@ const STATUS_VARIANT = {
   Warning: 'caution',
 } as const;
 
-<KitPill label="Running" variant={STATUS_VARIANT.Running} />
+<KitPill label={texts.statusRunning ?? ''} variant={STATUS_VARIANT.Running} />
 ```
 
 ---

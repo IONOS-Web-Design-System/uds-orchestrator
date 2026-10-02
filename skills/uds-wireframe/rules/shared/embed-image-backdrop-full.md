@@ -86,8 +86,8 @@ Layer order:
      ```
 
 Animation hooks: stagger the cluster in with **Pattern 5 — Element Fly-In** (primary card
-first, toolbar and bubble at +0.3-0.5s offsets); at most one fragment may idle with
-**Pattern 4 — Float / Gentle Bob** (`floatBob`). The backdrop image is **ALWAYS static** —
+first, toolbar and bubble at +9-15 frame offsets); at most one non-text fragment may idle with
+**Pattern 4 — Float / Gentle Bob**. The backdrop image is **ALWAYS static** —
 even when the contract includes a `Backdrop motion:` line, the image itself never moves (no
 zoom, fade, pan, parallax, or drift). Only the floating fragments/annotations animate over
 the still backdrop.

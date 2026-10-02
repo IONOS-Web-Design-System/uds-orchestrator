@@ -11,17 +11,15 @@ shared file.
 
 ## Transparent Background
 
-The decorative illustration must have a **transparent outer canvas** so it can be dropped onto any host background — a light page, a dark hero section, a gradient, or an image.
+The decorative illustration must have a **transparent outer canvas** so it can be dropped onto any host background (light page, dark hero, gradient, image).
 
 **Structure rule:** The `data-*` wrapper and the outer canvas use `background: transparent`. The dark gradient belongs only inside the device frame's screen content area.
 
 ```tsx
 export default function MyIllustration() {
   return (
-    // ThemeProvider takes ONLY children. Brand/platform/colorScheme are applied
-    // as data-* attributes on a wrapping element (NOT props on ThemeProvider).
-    // data-brand is the brand's own slug — never hardcode a brand
-    // name in this shared file; substitute the render's actual brand.
+    // ThemeProvider takes ONLY children; brand/platform/scheme are data-* attributes on a
+    // wrapper (data-brand = the render's own brand slug — never hardcode one here).
     <div data-brand="{brand}" data-platform="comfortable" data-color-scheme="dark" style={{ display: 'inline-block', background: 'transparent' }}>
       <ThemeProvider>
         {/* Outer canvas — transparent, inline-block so it sizes to content */}
@@ -77,7 +75,7 @@ Size affects everything: larger means more sections, more glass cards, more floa
 [1 main content section — 2 columns or 3 cards]
 [1–2 floating pop-out elements]
 [cursor flow or card reaction — pick one]
-[typography anchor: 16–20px, the brand's display font (see the brand's typography rule — `uds-style-guide/rules/ionos-typography.md` for IONOS)]
+[typography anchor: 16–20px, the brand's display font (per the brand's typography rule)]
 ```
 
 **Small (250px):**
@@ -101,7 +99,13 @@ Wrap the device frame in a padded relative container, then use `position: absolu
 
 ```tsx
 import bell from '@ionos-web-design-system/icon/system/bell';
+import { svgData as performanceSvg } from '@ionos-web-design-system/icon/system/performance';
+import { Easing, interpolate, useCurrentFrame } from 'remotion';
 import { KitIconButton, KitPill } from './kit';
+
+// Frame-driven: the chip enters once on a clamped curve, then holds.
+const frame = useCurrentFrame();
+const chipIn = interpolate(frame, [12, 28], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(0.16, 1, 0.3, 1) });
 
 {/* Outer wrapper with generous padding for bleed space */}
 <div style={{ position: 'relative', display: 'inline-block', padding: '48px 72px 48px 48px' }}>
@@ -109,14 +113,13 @@ import { KitIconButton, KitPill } from './kit';
     {/* screen content */}
   </MacWindowFrame>
 
-  {/* Top-right floating stat card */}
+  {/* Top-right floating stat card — no text, so it may bob */}
   <div style={{
     position: 'absolute', top: 16, right: -24, zIndex: 10,
     ...glassCardElevated, padding: '14px 18px', minWidth: 180,
-    transform: 'rotate(1.5deg)',
-    animation: 'floatBob 4s ease-in-out infinite',
+    transform: `translateY(${Math.sin(frame / 19) * 8}px) rotate(1.5deg)`,
   }}>
-    <IconBlock name="trending-up" colorKey="green" size={18} containerSize={34} />
+    <IconBlock icon={performanceSvg} colorKey="green" size={18} containerSize={34} />
     <div style={{ marginTop: 10 }}>
       <Bar w="85%" h={10} op={0.30} />
       <Bar w="55%" h={7} op={0.18} style={{ marginTop: 6 }} />
@@ -127,7 +130,7 @@ import { KitIconButton, KitPill } from './kit';
   <div style={{
     position: 'absolute', bottom: 72, left: -28, zIndex: 10,
     display: 'flex', alignItems: 'center', gap: 8,
-    animation: 'flyIn 0.55s cubic-bezier(0.16,1,0.3,1) 0.4s both',
+    opacity: chipIn, transform: `translate(${(1 - chipIn) * 32}px, ${(1 - chipIn) * -16}px)`,
   }}>
     <KitIconButton icon={bell} title={texts.notificationAction ?? ''} size="small" />
     <KitPill label={texts.notification ?? ''} variant="success" />
@@ -137,18 +140,15 @@ import { KitIconButton, KitPill } from './kit';
 
 Good pop-out candidates: stat metric cards (glass card + bars), AI completion notifications, action confirmation chips (`KitPill`), "New" tags (`KitBadge`), user avatars (`KitAvatar`).
 
-The slight tilt (`rotate(1.5deg)`) and shadow make the card feel like it's physically lifted off the screen.
+The slight tilt and shadow lift the card off the screen.
 
 ---
 
 ## ThemeProvider Setup
 
 ```tsx
-// Wireframe illustration — not production code
-// ThemeProvider takes ONLY children. Brand/platform/colorScheme are applied as
-// data-* attributes on a wrapping element (NOT props on ThemeProvider).
-// data-brand is the brand's own slug — never hardcode a brand
-// name in this shared file; substitute the render's actual brand.
+// ThemeProvider takes ONLY children; brand/platform/scheme are data-* attributes on a
+// wrapper (data-brand = the render's own brand slug — never hardcode one here).
 <div data-brand="{brand}" data-platform="comfortable" data-color-scheme="dark">
   <ThemeProvider>
     {/* No `Surface` component in UDS — use a div with a bg-surface-* class or a CSS-var background.

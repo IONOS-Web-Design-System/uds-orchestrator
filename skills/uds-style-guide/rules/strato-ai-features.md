@@ -48,7 +48,7 @@ illustration accent, a text gradient), and never put white text on the AI gradie
   draw it. A sparkle you draw yourself on a light surface uses the **blue** pair
   (`#2F2F70 → #272CB2`); the pink `#E498FF` may tint a drawn sparkle that sits **on** the primary
   gradient or on a dark surface.
-- **AI chip / badge / result callout tint**: `#EDEEF3` surface + `#29294D` text. Keep the
+- **AI chip / badge** (drawn — the kit has no AI chip) **and result callout tint**: `#EDEEF3` surface + `#29294D` text. Keep the
   gradient for one primary AI CTA (or the badge mark), not the whole card.
 - **Thinking / generating indicator** (mandatory between trigger and result): the ai-subtle
   gradient `#FFC700 → #FF8800`. On STRATO, "AI is working" is warm and sunny, in brand orange.

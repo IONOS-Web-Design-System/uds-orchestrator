@@ -144,22 +144,14 @@ Layer order (document order, no z-index games):
    ```
 
 6. **Optional AI badge** — one small labelled AI mark (sparkle + 1-2 words like "KI Text")
-   near the marquee. It is a small kit AI button; the parent only positions it (and carries the
-   pop-in animation):
-
-   ```tsx
-   import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
-   import { KitButton } from './kit';
-
-   <div style={{ position: 'absolute', /* near the marquee */ }}>
-     <KitButton concept="ai" size="small" label={texts.aiBadge ?? ''} icon={sparkles} />
-   </div>
-   ```
+   near the marquee. It is the brand's drawn AI badge (`uds-style-guide/rules/<brand>-ai-features.md`
+   "AI badges"; the kit has no AI chip), not a kit button; its parent positions it and carries the
+   pop-in animation.
 
 Animation hooks (reference the patterns in `ionos/micro-animations.md` — do not
-re-invent them): panel enters with **Pattern 5 — Element Fly-In** (`flyIn`); the marquee
+re-invent them): panel enters with **Pattern 5 — Element Fly-In** (`fly`); the marquee
 draws in right after (animate `strokeDashoffset` on an SVG rect, or fade + scale the dashed
-div from 1.04→1); the AI badge pops last (its parent scales 0.6→1 with overshoot, same `flyIn` curve); the
+div from 1.04→1); the AI badge pops last (its parent scales 0.6→1 on the same clamped `enter` curve, then holds); the
 connector line can grow from the panel toward the dot. The backdrop (including the calm
 region the marquee wraps) is present from frame 0; only the marquee, panel, AI badge, and
 connector animate in.

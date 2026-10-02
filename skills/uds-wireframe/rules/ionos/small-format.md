@@ -149,12 +149,11 @@ import { KitIconButton } from './kit';
   on them (a navy "premium" chip is NOT the AI signature either).
 - **Size it as an accent, not the hero:** it annotates the composition; it must not out-size the
   central motif / cropped frame.
-- Do NOT substitute brand sky/cyan for the AI signal, and at small format never hand-draw an
-  AI gradient chip: the kit element carries the brand's AI concept (IONOS blue→magenta, STRATO
-  cyan→pink) and reads at this size. (The drawn AI badge in
-  `uds-style-guide/rules/ionos-ai-features.md` "AI badges" is the only sanctioned drawn AI chip,
-  for larger formats where a labelled badge is needed — the kit has no AI chip.) An AI feature
-  with no AI element anywhere is a miss. A non-AI brief uses neither `ai` nor `concept="ai"`.
+- Do NOT substitute brand sky/cyan for the AI signal, and never hand-draw an AI CTA or AI icon
+  action: the kit element carries the brand's AI concept and reads at this size. The brand's
+  drawn AI badge (`uds-style-guide/rules/<brand>-ai-features.md` "AI badges") is the sanctioned
+  AI chip when a labelled badge is needed — the kit has no AI chip. An AI feature with no AI
+  element anywhere is a miss. A non-AI brief uses neither `ai` nor `concept="ai"`.
 
 ## Motion
 

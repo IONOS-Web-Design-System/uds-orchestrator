@@ -107,7 +107,7 @@ broken. The loading state:
 ## AI badges — gradient required, never flat purple
 
 The kit has no AI chip, so an AI badge (e.g. a "KI-VORSCHLAG" / "AI suggestion" label) is a drawn
-accent. Non-AI status chips and tags are `KitPill` / `KitBadge`. A drawn AI badge MUST carry the
+accent (`<KitButton concept="ai">` is for AI CTAs only). Non-AI status chips and tags are `KitPill` / `KitBadge`. A drawn AI badge MUST carry the
 blue→magenta **gradient** — a solid/flat purple fill is WRONG. Two valid renderings:
 
 - **Full gradient background** — `linear-gradient(45deg, #095BB1, #D746F5)` with white text, OR

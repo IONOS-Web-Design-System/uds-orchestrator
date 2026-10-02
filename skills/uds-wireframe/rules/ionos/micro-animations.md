@@ -29,124 +29,96 @@ Pick at most **2 active animation sequences** per composition. More than that cr
 
 ---
 
+## Frame-driven only
+
+Every pattern below is driven by `useCurrentFrame()`: a CSS `@keyframes` / `animation` /
+`transition` never runs in a render and fails the eslint gate. Shared helpers:
+
+```tsx
+import { Easing, interpolate, useCurrentFrame } from 'remotion';
+
+const clamp = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
+// 0 → 1 once, over `dur` frames from `start`, then holds at exactly 1
+const enter = (frame: number, start: number, dur = 16) =>
+  interpolate(frame, [start, start + dur], [0, 1], { ...clamp, easing: Easing.bezier(0.16, 1, 0.3, 1) });
+```
+
+---
+
 ## Pattern 1 — Multiple Floating Elements
 
-For **large illustrations**, deploy 3–4 floating elements at different positions around the device frame. Each floater has a unique position and delay so they move out of sync — this creates a lively, orbital feel.
+For **large illustrations**, deploy 3–4 floating elements at different positions around the device frame. Each floater has a unique position, delay and bob period so they move out of sync — this creates a lively, orbital feel.
 
 Interface floaters (a notification chip, an icon action, an avatar) are kit components; the
 floater `div` only positions and animates them. Glass stat cards with icon blocks and bars stay
-hand-built decoration. **Only non-text floaters bob** (`bob: true`): a floater holding a kit label
-(`KitPill`, `KitAvatar` initials) flies in once and then holds still — see the text-stability
-note above.
+hand-built decoration. **Only non-text floaters bob**: a floater holding a kit label
+(`KitPill`, `KitBadge`, a labelled `KitButton`, `KitAvatar` initials) enters once on the clamped
+curve and then holds still — see the text-stability note above.
 
 ```tsx
 import bell from '@ionos-web-design-system/icon/system/bell';
 import checkmark from '@ionos-web-design-system/icon/system/circle-checkmark';
+import { svgData as performanceSvg } from '@ionos-web-design-system/icon/system/performance';
 import { KitAvatar, KitIconButton, KitPill } from './kit';
 
-// Float configuration — adjust positions to fit your frame size
-const FLOATERS = [
-  // Top-right stat card (most prominent) — glass decoration with bars, no text: bobs
-  {
-    style: { top: -28, right: -52, zIndex: 11, ...glassCardElevated } as React.CSSProperties,
-    bob: true, delay: '0s',
-    content: (
-      <>
-        <IconBlock name="trending-up" colorKey="green" size={18} containerSize={34} />
-        <div style={{ marginTop: 10 }}>
-          <Bar w="85%" h={10} op={0.32} />
-          <Bar w="55%" h={7} op={0.20} style={{ marginTop: 6 }} />
-        </div>
-      </>
-    ),
-  },
-  // Bottom-left notification chip — kit label: flies in, never bobs
-  {
-    style: { bottom: 72, left: -36, zIndex: 11 } as React.CSSProperties,
-    bob: false, delay: '1.3s',
-    content: (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <KitIconButton icon={bell} title={texts.notificationAction ?? ''} size="small" />
-        <KitPill label={texts.notification ?? ''} variant="neutral" />
-      </div>
-    ),
-  },
-  // Mid-right icon action (large only) — no text: bobs
-  {
-    style: { top: '42%', right: -44, zIndex: 10 } as React.CSSProperties,
-    bob: true, delay: '0.7s',
-    content: <KitIconButton icon={checkmark} title={texts.confirmAction ?? ''} />,
-  },
-  // Bottom avatar (large only) — initials are text: flies in, never bobs
-  {
-    style: { bottom: -16, right: 120, zIndex: 10 } as React.CSSProperties,
-    bob: false, delay: '2.0s',
-    content: <KitAvatar initials={texts.initials ?? ''} size="small" />,
-  },
-];
+// Inside the component; delays are in frames, each bob has its own period and height
+const frame = useCurrentFrame();
+const fly = (start: number) => {
+  const p = enter(frame, start);
+  return { opacity: p, transform: `translate(${(1 - p) * 32}px, ${(1 - p) * -16}px) scale(${0.94 + 0.06 * p})` };
+};
+const bob = (period: number, h: number) => `translateY(${Math.sin(frame / period) * h}px)`;
 
-// Multi-float keyframes (one per bobbing floater, unique bob height and tilt) + the fly-in
-const multiFloatStyle = `
-  @keyframes bob0 { 0%,100% { transform: translateY(0)    rotate(2.5deg); } 50% { transform: translateY(-10px) rotate(2.5deg); } }
-  @keyframes bob2 { 0%,100% { transform: translateY(0)    rotate(1deg); }   50% { transform: translateY(-8px)  rotate(1deg); } }
-  @keyframes flyIn { from { opacity: 0; transform: translate(32px, -16px) scale(0.94); } to { opacity: 1; transform: none; } }
-`;
-
-// Render:
-{FLOATERS.map((f, i) => (
-  <div key={i} style={{
-    position: 'absolute', ...f.style,
-    animation: f.bob
-      ? `bob${i} ${3.5 + i * 0.4}s ease-in-out ${f.delay} infinite`
-      : `flyIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) ${f.delay} both`,
-  }}>
-    {f.content}
+{/* 0 — top-right stat card (most prominent): glass decoration, no text — bobs */}
+<div style={{ position: 'absolute', top: -28, right: -52, zIndex: 11, ...fly(0) }}>
+  <div style={{ ...glassCardElevated, transform: `${bob(17, 10)} rotate(2.5deg)` }}>
+    <IconBlock icon={performanceSvg} colorKey="green" size={18} containerSize={34} />
+    <div style={{ marginTop: 10 }}>
+      <Bar w="85%" h={10} op={0.32} />
+      <Bar w="55%" h={7} op={0.20} style={{ marginTop: 6 }} />
+    </div>
   </div>
-))}
+</div>
+{/* 1 — bottom-left notification chip: kit label — enters once, never bobs */}
+<div style={{ position: 'absolute', bottom: 72, left: -36, zIndex: 11, display: 'flex', alignItems: 'center', gap: 8, ...fly(39) }}>
+  <KitIconButton icon={bell} title={texts.notificationAction ?? ''} size="small" />
+  <KitPill label={texts.notification ?? ''} variant="neutral" />
+</div>
+{/* 2 — mid-right icon action (large only): no text — bobs */}
+<div style={{ position: 'absolute', top: '42%', right: -44, zIndex: 10, ...fly(21) }}>
+  <div style={{ transform: bob(21, 8) }}>
+    <KitIconButton icon={checkmark} title={texts.confirmAction ?? ''} />
+  </div>
+</div>
+{/* 3 — bottom avatar (large only): initials are text — enters once, never bobs */}
+<div style={{ position: 'absolute', bottom: -16, right: 120, zIndex: 10, ...fly(60) }}>
+  <KitAvatar initials={texts.initials ?? ''} size="small" />
+</div>
 ```
 
-For **medium illustrations**, use only floaters 0 and 1. For **small**, use one compact kit element: a KitIconButton (may bob) or a KitPill (fly-in, then still).
+For **medium illustrations**, use only floaters 0 and 1. For **small**, use one compact kit element: a KitIconButton (may bob) or a KitPill (enters once, then still).
 
 ---
 
 ## Pattern 2 — Card Press / Highlight
 
-Simulates a highlighted card interaction. Use on any card that should draw the viewer's attention — pairs naturally with floating elements.
+Simulates a highlighted card interaction. Use on any card that should draw the viewer's attention — pairs naturally with floating elements. One press cycle, then the card rests:
 
 ```tsx
-const cardInteractiveStyle = `
-  @keyframes cardHighlight {
-    0%   {
-      transform: translateY(0) scale(1);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-      border-color: rgba(255,255,255,0.10);
-    }
-    50%  {
-      transform: translateY(-5px) scale(1.005);
-      box-shadow: 0 20px 48px rgba(0,0,0,0.45);
-      border-color: rgba(17,199,230,0.40);
-    }
-    68%  {
-      transform: translateY(-3px) scale(0.998);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
-    }
-    100% {
-      transform: translateY(0) scale(1);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-      border-color: rgba(255,255,255,0.10);
-    }
-  }
-`;
+// lift 0 → 1 → 0 over frames 36–141 (a 3.5 s cycle at 30 fps)
+const lift = interpolate(frame, [36, 88, 141], [0, 1, 0], clamp);
 
-// Apply to the card element — use animationDelay to stagger when the highlight begins:
 <div style={{
   ...glassCard,
-  animation: 'cardHighlight 3.5s ease-in-out infinite',
-  animationDelay: '1.2s',
+  transform: `translateY(${-5 * lift}px) scale(${1 + 0.005 * lift})`,
+  boxShadow: `0 ${4 + 16 * lift}px ${16 + 32 * lift}px rgba(0,0,0,${0.2 + 0.25 * lift})`,
+  borderColor: `rgba(17,199,230,${0.1 + 0.3 * lift})`,
 }}>
-  {/* card content */}
+  {/* card content — keep it static text; the card settles at lift = 0 */}
 </div>
 ```
+
+A card holding readable text must not press in a loop: run the cycle once and let it settle.
 
 ---
 
@@ -155,31 +127,17 @@ const cardInteractiveStyle = `
 Bars appearing progressively — suggests content being generated (AI output), a form being filled, or a search returning results.
 
 ```tsx
-const barGrowStyle = `
-  @keyframes barGrow {
-    0%       { width: 0%;  opacity: 0; }
-    8%       { opacity: 0.25; }
-    100%     { width: 62%; opacity: 0.25; }
-  }
-  @keyframes barGrow2 {
-    0%,  28% { width: 0%;  opacity: 0; }
-    36%      { opacity: 0.20; }
-    100%     { width: 48%; opacity: 0.20; }
-  }
-  @keyframes barGrow3 {
-    0%,  52% { width: 0%;  opacity: 0; }
-    60%      { opacity: 0.14; }
-    100%     { width: 72%; opacity: 0.14; }
-  }
-`;
+const BARS = [
+  { h: 14, w: 62, op: 0.25, start: 0 },
+  { h: 9, w: 48, op: 0.20, start: 20 },
+  { h: 9, w: 72, op: 0.14, start: 37 },
+];
 
 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-  <div style={{ height: 14, borderRadius: 7, background: 'rgba(255,255,255,0.25)',
-    animation: 'barGrow 2.4s ease-out forwards' }} />
-  <div style={{ height: 9, borderRadius: 4, background: 'rgba(255,255,255,0.20)',
-    animation: 'barGrow2 2.4s ease-out forwards' }} />
-  <div style={{ height: 9, borderRadius: 4, background: 'rgba(255,255,255,0.14)',
-    animation: 'barGrow3 2.4s ease-out forwards' }} />
+  {BARS.map((b, i) => {
+    const g = interpolate(frame, [b.start, b.start + 72], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+    return <div key={i} style={{ height: b.h, borderRadius: b.h / 2, background: `rgba(255,255,255,${b.op})`, width: `${b.w * g}%`, opacity: g > 0 ? 1 : 0 }} />;
+  })}
 </div>
 ```
 
@@ -187,23 +145,15 @@ const barGrowStyle = `
 
 ## Pattern 4 — Float / Gentle Bob
 
-For pop-out floating elements that should feel alive. Use `--rot` CSS variable for a unique tilt per element:
+For pop-out floating elements with no readable text (glass cards of bars, icons) that should feel alive. Give each one its own period and tilt:
 
 ```tsx
-const floatStyle = `
-  @keyframes floatBob {
-    0%,  100% { transform: translateY(0)   rotate(var(--rot, 2deg)); }
-    50%        { transform: translateY(-8px) rotate(var(--rot, 2deg)); }
-  }
-`;
-
 <div style={{
   ...glassCardElevated,
   position: 'absolute', top: -24, right: -36, zIndex: 10,
-  animation: 'floatBob 4s ease-in-out infinite',
-  '--rot': '2.5deg',
-} as React.CSSProperties}>
-  {/* content */}
+  transform: `translateY(${Math.sin(frame / 19) * 8}px) rotate(2.5deg)`,
+}}>
+  {/* non-text content only */}
 </div>
 ```
 
@@ -211,25 +161,12 @@ const floatStyle = `
 
 ## Pattern 5 — Element Fly-In
 
-Shows elements "arriving" — a notification appearing, an AI result completing, a panel sliding into position:
+Shows elements "arriving" — a notification appearing, an AI result completing, a panel sliding into position. It runs once and holds, so it is safe for text-bearing elements:
 
 ```tsx
-const flyInStyle = `
-  @keyframes flyIn {
-    from { opacity: 0; transform: translate(32px, -16px) scale(0.94); }
-    to   { opacity: 1; transform: translate(0, 0) scale(1); }
-  }
-`;
-
-// Immediate:
-<div style={{ animation: 'flyIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both' }}>
-  {/* element */}
-</div>
-
-// Staggered second element:
-<div style={{ animation: 'flyIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both', opacity: 0 }}>
-  {/* element */}
-</div>
+// `fly` from Pattern 1: opacity + translate/scale on the clamped `enter` curve
+<div style={fly(0)}>{/* element */}</div>
+<div style={fly(24)}>{/* staggered second element */}</div>
 ```
 
 ---
@@ -243,7 +180,7 @@ If the user wants any of the following, invoke the `remotion-best-practices` ski
 - Video/GIF export needed
 - Complex choreography with 20+ animated elements
 
-**Handoff:** "This animation needs more precise timeline control than CSS offers. I'll use Remotion." Then invoke `remotion-best-practices` and wrap the UDS wireframe content in a Remotion `<Composition>`.
+**Handoff:** invoke `remotion-best-practices` and sequence the beats with `<Sequence>` inside the Remotion `<Composition>`.
 
 ---
 
@@ -260,9 +197,9 @@ Then use exactly the animations that illustrate that story — card highlight, b
 |------|----------|----------------------|
 | Large (750px) | 3–4 | cascade + card highlight + bar-grow |
 | Medium (500px) | 1–2 | cascade + card highlight |
-| Small (250px) | 1 — one compact kit element: a KitIconButton (may bob) or a KitPill (fly-in, then still) | bob the KitIconButton, or fly the KitPill in once |
+| Small (250px) | 1 — one compact kit element: a KitIconButton (may bob) or a KitPill (enters once, then still) | bob the KitIconButton, or fly the KitPill in once |
 
-- Card highlight cycles: 3.5–5s loop; fly-ins: 400–600ms
+- Card highlight cycle: 3.5–5s; fly-ins: 12–18 frames
 - Total composition loop should feel natural at 5–8 seconds
 - Animate only the elements that serve the narrative — never background or unrelated elements
-- Float bobs must all have different delays and loop durations (3.5–5.5s) so they drift out of sync
+- Float bobs must all have different delays and periods so they drift out of sync

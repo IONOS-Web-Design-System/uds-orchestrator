@@ -67,9 +67,6 @@ When the AI feature is an **inline editing action** (text selection, image resiz
 **Pattern (Figma node 77:203 — KI Text / text-select AI):** Website hero (background image + "URBAN BIKES" heading) scaled so the selected heading fills the viewport center. Frame bleeds right and bottom. AI panel (tone selector + CTA) appears in the left third of the viewport, also extending slightly past the left canvas edge.
 
 ```tsx
-import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
-import { KitButton } from './kit';
-
 // Zoom-to-highlight: position frame so the AI interaction zone lands at canvas center
 <AbsoluteFill style={{ overflow: 'hidden' }}>
   {/* Product frame — oversize, bleeds right + bottom */}
@@ -99,13 +96,14 @@ import { KitButton } from './kit';
   </div>
 
   {/* AI badge (sparkle + label) — floating above the interaction target, also outside frame.
-      The kit draws the AI concept; the parent only positions it. */}
+      It is the brand's DRAWN AI badge (uds-style-guide/rules/<brand>-ai-features.md "AI badges";
+      the kit has no AI chip); the parent only positions it. */}
   <div style={{
     position: 'absolute',
     // positioned over the selection target in the frame
     zIndex: 110,
   }}>
-    <KitButton concept="ai" size="small" label={texts.aiBadge ?? ''} icon={sparkles} />
+    {/* drawn AI badge: sparkle + texts.aiBadge */}
   </div>
 </AbsoluteFill>
 ```
@@ -117,7 +115,7 @@ In all three patterns above, the AI affordance (card, panel, badge) must break o
 | AI feature type | Required placement |
 |---|---|
 | Prompt card (`KitInput` + AI `KitButton`) | Sibling of frame; overlaps frame right/bottom edge; may extend past canvas edge |
-| Inline AI badge (`KitButton concept="ai" size="small"` with label, floating over text selection or image region) | Floats above the selection target in the viewport; outside frame or at its edge |
+| Inline AI badge (the brand's drawn AI badge with label, floating over text selection or image region) | Floats above the selection target in the viewport; outside frame or at its edge |
 | Options panel (tone selector, checklist, settings) | Opposite side from the frame's primary bleed; may extend slightly past canvas edge |
 
 > **Rule in one sentence:** The AI feature must break at least one boundary — the frame edge, the canvas edge, or both.

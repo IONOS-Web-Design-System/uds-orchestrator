@@ -86,6 +86,9 @@ const PhoneFrame = ({ children, width = 320 }: { children: React.ReactNode; widt
 
 ## Windows Window Frame
 ```tsx
+import { svgData as minusSvg } from '@ionos-web-design-system/icon/system/minus';
+import { svgData as xmarkSvg } from '@ionos-web-design-system/icon/system/xmark';
+
 const WindowsFrame = ({ children }: { children: React.ReactNode }) => (
   <div style={{
     borderRadius: '8px 8px 4px 4px', overflow: 'hidden',
@@ -98,14 +101,10 @@ const WindowsFrame = ({ children }: { children: React.ReactNode }) => (
     }}>
       <div style={{ width: 96, height: 7, borderRadius: 3, background: 'rgba(255,255,255,0.20)' }} />
       <div style={{ marginLeft: 'auto', display: 'flex' }}>
-        {/* Windows control icons — use system icons, never emoji */}
-        {[
-          { name: 'minus', close: false },
-          { name: 'crop-square', close: false },
-          { name: 'x', close: true },
-        ].map(({ name, close }, i) => (
+        {/* minimize, maximize (drawn), close — never emoji */}
+        {[minusSvg, '', xmarkSvg].map((svg, i) => (
           <div key={i} style={{ width: 46, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon group="system" name={name} size={12} style={{ color: 'rgba(255,255,255,0.65)' }} />
+            <div style={svg ? { width: 12, height: 12, backgroundColor: 'rgba(255,255,255,0.65)', WebkitMask: `url(${svg}) center / contain no-repeat` } : { width: 9, height: 9, border: '1px solid rgba(255,255,255,0.65)' }} />
           </div>
         ))}
       </div>

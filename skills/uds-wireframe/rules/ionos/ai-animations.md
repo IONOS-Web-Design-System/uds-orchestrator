@@ -26,7 +26,7 @@ transform on the parent, never on the button.
 ```tsx
 export const AIPillButton: React.FC<{
   fps: number; label?: string; loadingLabel?: string; triggerFrame?: number; loadingEndFrame?: number;
-}> = ({ fps, label = 'Improve with AI', loadingLabel = 'Generating…', triggerFrame = 0, loadingEndFrame }) => {
+}> = ({ fps, label = '', loadingLabel, triggerFrame = 0, loadingEndFrame }) => {
   const frame = useCurrentFrame();
   const loading = triggerFrame > 0 && frame >= triggerFrame && (loadingEndFrame === undefined || frame < loadingEndFrame);
   const glow = 0.55 + 0.45 * Math.sin(((frame % 72) / 72) * Math.PI * 2);
@@ -47,11 +47,14 @@ The card surface is a `KitCard`; placement, size and elevation follow `shared/fl
 (elevation lives on the parent wrapper — the kit has no style props). The prompt types into a
 `KitInput`, and the AI CTA is a `KitButton`. The entrance is a spring on the parent, snapped once
 settled. Typing starts only after the card has settled — never animate text inside a moving parent.
+The typed prompt is at most 32 characters: the single-line `KitInput` clips longer text at this
+320px card width. Feed it from `texts.*` (`text={texts.prompt ?? ''}`); longer copy goes in a
+`KitText` below the input.
 
 ```tsx
 export const AIFloatingHighlight: React.FC<{
   fps: number; enterFrame?: number; text?: string; productLabel?: string; ctaLabel?: string;
-}> = ({ fps, enterFrame = 20, text = '', productLabel, ctaLabel = 'Improve with AI' }) => {
+}> = ({ fps, enterFrame = 20, text = '', productLabel, ctaLabel = '' }) => {
   const frame = useCurrentFrame();
   const raw = spring({ frame: frame - enterFrame, fps, config: { damping: 18, stiffness: 120 } });
   const enter = raw > 0.995 ? 1 : raw;
@@ -78,7 +81,7 @@ skeleton and the visible text overlay it and crossfade by opacity on parent divs
 ```tsx
 export const AITextGenerationArea: React.FC<{
   startFrame?: number; endFrame?: number; productLabel?: string; generatedText?: string;
-}> = ({ startFrame = 0, endFrame = 60, productLabel = 'AI text generation', generatedText = '' }) => {
+}> = ({ startFrame = 0, endFrame = 60, productLabel = '', generatedText = '' }) => {
   const frame = useCurrentFrame();
   const reveal = interpolate(frame, [endFrame, endFrame + 12], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   const visible = frame >= startFrame;
@@ -108,7 +111,7 @@ A `KitSkeleton` rectangle holds the image slot while generating. The finished im
 ```tsx
 export const AIImageGenerationArea: React.FC<{
   width?: number; height?: number; startFrame?: number; endFrame?: number; productLabel?: string; image?: React.ReactNode;
-}> = ({ width = 400, height = 200, startFrame = 0, endFrame = 60, productLabel = 'AI Image Generator', image }) => {
+}> = ({ width = 400, height = 200, startFrame = 0, endFrame = 60, productLabel = '', image }) => {
   const frame = useCurrentFrame();
   const reveal = interpolate(frame, [endFrame, endFrame + 12], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
@@ -130,6 +133,7 @@ export const AIImageGenerationArea: React.FC<{
 
 ## Usage
 
-Place templates inside the composition's `data-brand` root. Use exactly one AI CTA per moment.
+Place templates inside the composition's `data-brand` root and pass every label from `texts.*`
+(`label={texts.aiCta ?? ''}`). Use exactly one AI CTA per moment.
 The AI concept appears only when the feature is a genuine AI feature (see the AI-feature gate in
 uds-style-guide).
