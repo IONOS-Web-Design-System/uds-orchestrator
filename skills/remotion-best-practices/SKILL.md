@@ -9,22 +9,9 @@ metadata:
 
 Use this skill whenever you are dealing with Remotion code to obtain the domain-specific knowledge.
 
-> **Note on structure:** detailed UDS icon recipes (`rules/shared-uds-icons.md`) and the
-> motion / text-rendering rules (`rules/shared-motion-text.md`) are split into rule files but
-> are **always in effect** (auto-included). Other Remotion features (audio, video, captions,
-> transitions, 3D, maps, voiceover, …) live in `rules/*.md` and are out of scope for the
-> silent interface illustrations this pipeline produces — load them on demand only if a brief
-> genuinely needs one. See the reference index at the bottom.
-
-## New project setup
-
-When in an empty folder or workspace with no existing Remotion project, scaffold one using:
-
-```bash
-npx create-video@latest --yes --blank --no-tailwind my-video
-```
-
-Replace `my-video` with a suitable project name.
+`rules/shared-uds-icons.md` and `rules/shared-motion-text.md` are always in effect. Other
+`rules/*.md` (audio, video, captions, 3D, maps, …) are out of scope for silent interface
+illustrations — load one only if a brief genuinely needs it (index at the bottom).
 
 ## Required file structure
 
@@ -37,11 +24,7 @@ Helper components may live in additional files (e.g. `src/PopOut.tsx`, `src/icon
 but the root component that `Root.tsx` imports MUST be `./Composition`. Never name it
 `MyComposition.tsx`, `AppAnimation.tsx`, or any other name.
 
-## Font loading — REQUIRED before first frame
-
-Fonts must be fully loaded before Remotion renders any frame. Without this, headless Chrome
-falls back to a system font for the first frames and then switches — causing a visible flash
-or jitter in the output video.
+## Fonts — pre-loaded by the template
 
 The remotion-starter template pre-bundles **all UDS brand fonts** in `public/fonts/`. Font loading is handled by `src/fonts.ts`, called unconditionally from **`src/index.ts`** (the bundle entry point — never rewritten by the agent). You do not need to write font loading code. Use font-family names directly in inline styles:
 
@@ -59,37 +42,6 @@ The remotion-starter template pre-bundles **all UDS brand fonts** in `public/fon
 ```
 
 **Do NOT modify `src/index.ts`** — it is the bundle entry point and must not be changed.
-
-If you need to load additional fonts in a one-off composition outside the template, use the same `delayRender` + `FontFace` pattern:
-
-```tsx
-import { continueRender, delayRender, staticFile } from 'remotion';
-
-const fontHandle = delayRender('Loading fonts');
-const _fontSafety = setTimeout(() => continueRender(fontHandle), 8000);
-
-new FontFace('MyFont', `url(${staticFile('fonts/MyFont-Regular.woff2')}) format('woff2')`)
-  .load()
-  .then((face) => {
-    clearTimeout(_fontSafety);
-    document.fonts.add(face);
-    continueRender(fontHandle);
-  })
-  .catch(() => { clearTimeout(_fontSafety); continueRender(fontHandle); });
-```
-
-Bundled fonts by brand — all loaded automatically via `loadBrandFonts()`:
-
-| Brand | Body font | Heading font | Font source |
-|---|---|---|---|
-| IONOS | Open Sans | Overpass | Google Fonts |
-| Strato | Poppins | Poppins | Google Fonts |
-| Fasthosts | AntennaCond | AntennaCond | ⚠ Proprietary (.woff) |
-| home.pl | Azo Sans | Azo Sans | ⚠ Commercial |
-| Strefa | Montserrat | Montserrat | Google Fonts |
-| UDAG | Inter | Inter | Google Fonts |
-| World4You | Inter | Satoshi | Google Fonts / Fontshare |
-| Arsys | Open Sans | FS Blake | Open Sans: GF; FS Blake: ⚠ Proprietary |
 
 Do not use `@remotion/google-fonts` or CDN links — network calls are unreliable in the headless renderer. All fonts are already bundled locally. See [rules/local-fonts.md](rules/local-fonts.md) for the manual pattern if needed.
 
@@ -132,13 +84,9 @@ inside `<ThemeProvider>` under a `data-brand` root, so the brand's **semantic CS
 properties resolve live**. Color UI with those real tokens or with a literal brand hex.
 
 **NEVER write a Figma token path as a CSS variable.** `var(--brand/ionos-blue-600)`,
-`var(--brand-ionos-blue-600)`, `var(--neutral/white)` — none of these exist as CSS custom
-properties. The `/` makes the `var()` a **parse error** (and the hyphenated `--brand-*` form
-isn't defined either), so the whole declaration is **dropped** — and the hex fallback is NOT
-applied, because a malformed/undefined-name `var()` fails before the fallback is reached. The
-element ends up transparent/unstyled, which silently destroys contrast (e.g. white icons on a
-panel whose background vanished → invisible). The `/`-paths in `uds-style-guide` are **Figma
-hierarchy notation for reference only — never valid CSS.**
+`var(--brand-ionos-blue-600)`, `var(--neutral/white)` do not exist: the `/` is a parse error, the
+declaration is dropped (the hex fallback is NOT applied) and the element renders unstyled. The
+`/`-paths in `uds-style-guide` are Figma reference notation only.
 
 Two correct options:
 
@@ -153,52 +101,11 @@ Two correct options:
    | AI accent surface | `var(--surface-semantic-ai)` | `var(--text-semantic-ai)` |
    | Success / danger / promo / caution | `var(--surface-semantic-<role>)` | `var(--text-semantic-<role>)` |
 
-   ```tsx
-   import { svgData as gearSvg } from '@ionos-web-design-system/icon/system/gear';
+2. **Literal brand hex** from `uds-style-guide` for a brand-scale colour (no core var exists):
+   `background: '#003D8F'` (IONOS Blue), `color: '#fff'` — set the foreground explicitly too.
 
-   // ✓ non-interactive decorative plate with a motif glyph — surface + its paired text token
-   // (interactive elements — buttons, icon actions, chips, tags — are kit components and need no colour pairing)
-   <div style={{ background: 'var(--surface-base-invert)', borderRadius: 16, padding: '12px 20px' }}>
-     <div style={{
-       width: 24, height: 24, backgroundColor: 'var(--text-base-invert)',
-       WebkitMaskImage: `url(${gearSvg})`, maskImage: `url(${gearSvg})`,
-       WebkitMaskSize: 'contain', maskSize: 'contain',
-     }} />
-   </div>
-   ```
-
-2. **Literal brand hex** from `uds-style-guide` for a specific brand-scale colour (there is no
-   core CSS var for the brand colour scale): `background: '#003D8F'` (IONOS Blue),
-   `color: '#fff'`. If you give a container a hex background, set the icon/text colour explicitly
-   so the pair is legible — never rely on a `var()` that might not resolve.
-
-**Accessibility rule:** an icon's or text's colour must contrast against the colour that
-actually paints behind it. Pick the surface and its foreground together; never pair an
-unverified `var()` background with a hardcoded light foreground.
-
-## Designing a video
-
-Animate properties using `useCurrentFrame()` and `interpolate()`. Use Easing to customize the timing of the animation.
-
-```tsx
-import { useCurrentFrame, Easing } from "remotion";
-
-export const FadeIn = () => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-
-  const opacity = interpolate(frame, [0, 2 * fps], [0, 1], {
-    extrapolateRight: "clamp",
-    extrapolateLeft: "clamp",
-    easing: Easing.bezier(0.16, 1, 0.3, 1),
-  });
-
-  return <div style={{ opacity }}>Hello World!</div>;
-};
-```
-
-CSS transitions or animations are FORBIDDEN - they will not render correctly.  
-Tailwind animation class names are FORBIDDEN - they will not render correctly.
+**Accessibility rule:** a drawn icon's or text's colour must contrast against what actually
+paints behind it. Pick the surface and its foreground together. (Kit components pair their own.)
 
 ## Images & assets
 
@@ -253,21 +160,10 @@ export const RemotionRoot = () => (
 For data-driven or dynamically sized compositions, use `calculateMetadata` — see
 [rules/calculate-metadata.md](rules/calculate-metadata.md).
 
-## Starting preview
+## Preview
 
-```bash
-npx remotion studio
-```
-
-## Optional: one-frame render check
-
-Render a single frame to sanity-check layout, colors, or timing. Skip it for trivial edits.
-
-```bash
-npx remotion still [composition-id] --scale=0.25 --frame=30
-```
-
-At 30 fps, `--frame=30` is the one-second mark (`--frame` is zero-based).
+`npx remotion studio`; one frame: `npx remotion still [composition-id] --scale=0.25 --frame=30`
+(`--frame` is zero-based).
 
 ## Reference rules (load on demand)
 

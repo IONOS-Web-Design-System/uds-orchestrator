@@ -46,28 +46,23 @@ If the prompt contains "decorative", "dark", "cinematic", "premium", or "marketi
 
 ## Rules Index
 
-All rules are inlined below. Quick navigation:
+The loader inlines the rules this render needs (by brand, motion, size and embed style):
 
 | Rule file | Covers |
 |---|---|
-| `ionos/remotion-template.md` | **Read first for Remotion jobs** — VariantProps schema, Root.tsx contract, TypeScript error triage |
-| `ionos/ai-animations.md` | **AI animation templates** — copy-ready Remotion templates on the UDS kit: `AIPillButton` (AI CTA), `AIFloatingHighlight`, `AITextGenerationArea`, `AIImageGenerationArea` |
-| `ionos/product-frame-color.md` | IONOS product frame color values — color system, icon import form + anti-patterns, AI icon usage (icon **names** come from the generated `# Icon name index` prompt section, not this file) |
-| `ionos/composition.md` | Standard layout patterns, component selection, placeholder content guidelines |
-| `shared/frame-anatomy.md` | Brand-agnostic product frame structure — composition rule, content detail rules, contrast rules, frame layout rules, animated overflow |
-| `shared/constrained-viewport.md` | **Constrained viewport cropping patterns** (bottom bleed, zoom-to-highlight, square canvas, counterbalance rule) |
-| `shared/connector-line.md` | Connector-line pattern (pure illustration) — feature pop-out with an axis-aligned line to a marked target |
-| `shared/floating-card.md` | Floating Highlight Card anatomy + panel chrome rules (applies to all patterns) |
-| `ionos/decorative-mode.md` | Decorative mode narrative, concrete IONOS color values for the shared primitives below, brand logos, typography anchor, composition examples |
-| `shared/device-frames.md`, `shared/placeholder-bars.md`, `shared/icon-cards.md`, `shared/glass-card.md`, `shared/background-patterns.md`, `shared/decorative-primitives.md` | Brand-agnostic decorative-mode primitives — device frame wrapping, Bar/BarGroup helpers, icon cards, glass card system, background patterns, transparent canvas / illustration size / pop-outs / ThemeProvider / image integration |
-| `ionos/micro-animations.md` | CSS animation patterns — cursor flow, card press, bar grow, float bob, fly-in |
-| `ionos/asset-integration.md` | Local file and Figma URL asset integration, pipeline catalog `role:`-driven selection & placement, staggered reveal |
-| `shared/embed-preamble.md` | **Hybrid embed-contract preamble — every brand.** Read first when brief contains `[HYBRID EMBED CONTRACT]`; then the per-style file below matching the brief's `Style:` line |
-| `shared/embed-<style>.md` | Per-style embed geometry — one file per embed style (`device-mockup`, `background-pointer`, `background-full`, `interface-asset`, `floating-card`, `inline-asset`); the loader inlines only the style this render uses |
-| `shared/product-pop-out/{composition,character,highlight-and-ai}.md` | `product-pop-out` embed geometry, split by concern (layers 1-2, layer 3 the character contract, layers 4-5); the loader walks the sub-folder recursively and inlines all three |
-| `shared/embed-color-harmony.md` | Color-harmony rule for the five opaque embed styles |
-| `ionos/image-backdrop.md` | IONOS-specific embed-contract notes only — the geometry itself lives in `shared/embed-preamble.md` + the per-style `shared/embed-<style>.md` files |
-| `ionos/small-format.md` | **Small-format illustrations** (< ~512px both axes) — icon-story grammar, cropped-product-frame pattern, icon sizing, loop motion rules, hybrid-in-small-format embed styles |
+| `ionos/remotion-template.md` | **Read first for Remotion jobs** — VariantProps, Root.tsx contract, tsc triage |
+| `ionos/ai-animations.md` | AI templates on the kit: `AIPillButton`, `AIFloatingHighlight`, `AITextGenerationArea`, `AIImageGenerationArea` |
+| `ionos/product-frame-color.md` | IONOS product-frame colours, icon import form, AI icons |
+| `ionos/composition.md` | Layout patterns, placeholder content |
+| `shared/frame-anatomy.md` | Product-frame structure, content, contrast, layout |
+| `shared/constrained-viewport.md` | Cropping patterns: bottom bleed, zoom-to-highlight, square, counterbalance |
+| `shared/connector-line.md` | Pop-out with an axis-aligned connector line |
+| `shared/floating-card.md` | Floating Highlight anatomy + panel chrome (all patterns) |
+| `ionos/decorative-mode.md` + `shared/{device-frames,placeholder-bars,icon-cards,glass-card,background-patterns,decorative-primitives}.md` | Decorative mode: colours, logos, anchor, primitives |
+| `ionos/micro-animations.md` | Floaters, card press, bar grow, float bob, fly-in |
+| `ionos/asset-integration.md` | Local/Figma/catalog asset selection & placement, staggered reveal |
+| `shared/embed-preamble.md` + `shared/embed-<style>.md`, `shared/product-pop-out/*.md`, `shared/embed-color-harmony.md`, `ionos/image-backdrop.md` | Hybrid embed contract (see routing below) |
+| `ionos/small-format.md` | Small format (< ~512px both axes) |
 
 ## Pattern → Rule routing
 
@@ -75,7 +70,7 @@ When the brief names a `Composition pattern:` (set by the moderator), load the c
 
 | Pattern name | Extra rule to load |
 |---|---|
-| `product-frame-full`, `product-frame-bottom-bleed`, `product-frame-zoom-cutout`, `product-frame-square` | `shared/constrained-viewport.md` (already in index — confirm loaded) |
+| `product-frame-full`, `product-frame-bottom-bleed`, `product-frame-zoom-cutout`, `product-frame-square` | `shared/constrained-viewport.md` |
 | `product-frame-connector-line` | `shared/connector-line.md` |
 | `image-backdrop-feature-pointer` | `shared/embed-preamble.md` + `shared/embed-image-backdrop-pointer.md` |
 | `image-backdrop-full-bleed` | `shared/embed-preamble.md` + `shared/embed-image-backdrop-full.md` |
@@ -85,7 +80,7 @@ When the brief names a `Composition pattern:` (set by the moderator), load the c
 
 When `dimensions.w < 512 AND dimensions.h < 512` and no `Composition pattern:` is set, default to `small-cropped-frame` for product briefs and `small-icon-story` for abstract briefs.
 
-When the brief contains `[HYBRID EMBED CONTRACT]`, always load `shared/embed-preamble.md` first, then the file(s) matching the contract's `Style:` line (or, for the two composites, the `[PRODUCT-POP-OUT COMPOSITE]` / `[DEVICE-MOCKUP COMPOSITE]` tag): `embed-image-backdrop-pointer.md`, `embed-image-backdrop-full.md`, `embed-interface-asset.md`, `embed-floating-intersect.md`, `embed-inline-asset.md`, `embed-device-mockup.md`, or — for `product-pop-out` — every file under `shared/product-pop-out/` (`composition.md`, `character.md`, `highlight-and-ai.md`). For the five opaque styles, also load `shared/embed-color-harmony.md`.
+When the brief contains `[HYBRID EMBED CONTRACT]`, load `shared/embed-preamble.md` first, then the file(s) for the contract's `Style:` line (or the `[PRODUCT-POP-OUT COMPOSITE]` / `[DEVICE-MOCKUP COMPOSITE]` tag: every `shared/product-pop-out/` file, or `embed-device-mockup.md`). The five opaque styles also load `shared/embed-color-harmony.md`.
 
 ## Output Format
 
@@ -95,7 +90,7 @@ Produce a single `src/Composition.tsx`. For Remotion jobs, the template's `Root.
 // Wireframe illustration — not production code
 import { type VariantProps } from './schema';          // Remotion: always use VariantProps
 // OR for static wireframes:
-import ThemeProvider from '@ionos-web-design-system/react/theme-provider';  // subpath import only — never the package barrel. NOTE: there is no `Surface` component — use a div with a bg-surface-* utility class
+import ThemeProvider from '@ionos-web-design-system/react/theme-provider';  // subpath import only; there is no `Surface` component
 
 export const MyComposition: React.FC<VariantProps> = ({ headline, subline, variantId, brand, colorScheme, platform }) => {
   return (
