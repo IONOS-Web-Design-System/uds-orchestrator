@@ -90,6 +90,9 @@ background: linear-gradient(to right, #272CB2, #2F2F70);
 /* Blu1000 → Blu1100 */
 ```
 
+### AI Gradient (AI features only)
+STRATO's AI signature is a separate **cyan→pink** gradient (`#1FD7FF → #E498FF`) with dark `#29294D` label text. It is not one of the orange brand gradients, and not the IONOS blue→magenta. Use it only on genuine AI affordances. Full concept and hex table: `rules/strato-ai-features.md`.
+
 ---
 
 ## Color Usage Rules
