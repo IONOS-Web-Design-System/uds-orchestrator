@@ -112,41 +112,46 @@ product is always the better central motif.
 ### Icon sizing — large and prominent at small format
 
 Small icons read as noise on a small canvas. Size them **up**, relative to the canvas:
-- **Sidebar / nav icons:** ~36–56px glyphs, usually inside rounded-square buttons (the active
-  one in a filled brand-blue tile, as in the reference).
+- **Sidebar / nav icons:** ~36–56px glyphs; the active one
+  sits on a drawn filled brand-blue rounded-square tile, as in the reference (frame chrome).
 - **Circular badge / motif icons:** glyph ~28–44px inside a **64–96px** coloured circle
   (cyan / green / brand-blue), floating over or beside the frame.
-- **Floating-stat / chip icons:** ~24–32px.
+- **Floating-stat icons:** ~24–32px.
 - Avoid sub-20px icons at this scale. The central motif of an icon-story can be very large
   (up to ~40% of the shorter canvas edge).
 
-## AI features — render one AI-gradient BADGE (keep it off chrome and plain icons)
+## AI features — one kit AI mark (keep the AI concept off chrome and plain icons)
 
-When the brief is a **genuine AI feature**, the composition MUST carry the IONOS AI
-signature. The gradient's placement rule is unchanged and correct: it belongs to an **AI CTA
-or AI badge ONLY — never the panel chrome, the nav rail, connector lines, or a plain icon**
-(those stay on brand tokens). At small format there is usually no CTA, so the gradient's home
-is a **badge**: include one small **AI badge / status pill** — a labelled chip naming the AI
-capability (a short "AI" / "KI" label, optionally with the sparkle glyph inside it) — and fill
-**that badge** with the brand AI gradient. In an icon-story, sit the badge on or beside the
-central motif; in a cropped product frame, let it straddle the frame edge as the floating
-highlight. This is a sanctioned badge use per `uds-style-guide/rules/ionos-ai-features.md`
-(the gradient applies to an AI CTA **or badge**).
+When the brief is a **genuine AI feature**, the composition MUST carry the brand AI
+signature. The AI concept belongs to an **AI CTA or AI icon action ONLY — never the panel
+chrome, the nav rail, connector lines, or a plain icon** (those stay on brand tokens). At small
+format there is usually no CTA, so the AI signature is **one kit AI element**:
 
-- The badge is the **single** AI-gradient element. The sparkle glyph, the hub/central motif,
-  service icons, connectors, and card/panel chrome stay on brand tokens (brand blue /
-  `surface-*`) — do NOT fill them with the gradient (a navy "premium" chip with no gradient
-  is NOT the AI signature either).
-- **Size it as an accent, not the hero:** a compact pill (~24–32px tall) or a small circular
-  badge — it annotates the composition; it must not out-size the central motif / cropped frame.
-- Do NOT substitute brand sky/cyan (`#11C7E6`) for the AI signal — that is a generic CTA
-  colour, not the AI signature (see `ionos-ai-features`). An AI feature with no gradient
-  anywhere is a miss.
+- `<KitIconButton ai icon={sparkles} title={texts.aiLabel} size="large" />` — the AI icon action
+  (gradient icon from the brand tokens), or
+- `<KitButton label={texts.cta} concept="ai" icon={sparkles} size="small" />` when the brief has a
+  short AI action label.
 
-Use the brand AI gradient exactly (hardcode in Remotion — CSS custom properties may not
-resolve in a render): `linear-gradient(45deg, #095BB1, #D746F5)` — `#095BB1` =
-`var(--color-ai-primary-start)`, `#D746F5` = `var(--color-ai-primary-end)`. A non-AI brief
-stays on standard brand blue/sky with no gradient.
+In an icon-story, sit it on or beside the central motif; in a cropped product frame, let its
+parent `div` straddle the frame edge as the floating highlight.
+
+```tsx
+import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
+import { KitIconButton } from './kit';
+
+<div style={{ position: 'absolute', right: 24, bottom: 24 }}>
+  <KitIconButton ai icon={sparkles} title={texts.aiLabel} size="large" />
+</div>
+```
+
+- It is the **single** AI element. The hub/central motif, service icons, connectors, and
+  card/panel chrome stay on brand tokens (brand blue / `surface-*`) — do NOT draw an AI gradient
+  on them (a navy "premium" chip is NOT the AI signature either).
+- **Size it as an accent, not the hero:** it annotates the composition; it must not out-size the
+  central motif / cropped frame.
+- Do NOT substitute brand sky/cyan for the AI signal, and never hand-draw an AI gradient chip:
+  the kit carries the brand's AI concept (IONOS blue→magenta, STRATO cyan→pink). An AI feature
+  with no AI element anywhere is a miss. A non-AI brief uses neither `ai` nor `concept="ai"`.
 
 ## Motion
 
@@ -155,7 +160,7 @@ pulse outward, logos ease/float in, a lock clicks once. Frame-driven only (`useC
 + `interpolate`) — never CSS transitions. A still `illustration` intent needs no motion.
 
 **Looping motion goes on non-text layers only.** Float/bob/pulse the icons, logos, rings, and
-connectors — NOT a chip, pill, label, or any element that renders readable text. Text-stability
+connectors — NOT a kit element, a label, or any element that renders readable text. Text-stability
 (never animate a transform on text-bearing layers; avoid shimmer/sub-pixel drift): see
 remotion-best-practices `shared-motion-text.md` (always in effect).
 
@@ -177,7 +182,7 @@ embed styles:
    embed style `floating-card`) — the image is a single contained rounded card (dominant,
    ~60–80% of canvas, soft shadow) on the canvas background (per the Background rule above —
    `surface-subtlest` by default, or the AI-showroom gradient), with 1–2 small
-   highlight chips/pills (a labelled chip and/or an icon pill) overlapping its edges; no
+   highlights (a `KitPill` status chip and/or a `KitIconButton`, each in a positioned parent `div`) overlapping its edges; no
    connector lines, no selection marquee. Transparent cutouts also work well here.
 
 Keep the canvas background (per the Background rule above) in usages #2 and #3; usage #1

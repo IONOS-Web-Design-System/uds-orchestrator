@@ -18,9 +18,9 @@ intentional highlight.
 This is one valid form. Other contextual forms (prompt bar, stat callout, suggestion chip,
 generating indicator) follow the same chrome rules below (see "Panel chrome rules") but can be
 smaller, less padded, or shaped differently — e.g. a slim rounded rectangle for a prompt bar,
-a compact rounded-square for a stat callout, a small pill for a suggestion chip, a tiny
-dot-plus-label for a generating indicator. They do not need the full `borderRadius: 40` pill
-treatment.
+a compact rounded-square for a stat callout, a `KitButton variant="secondary"` for a suggestion
+chip, a `KitSkeleton` for a generating indicator. They do not need the full `borderRadius: 40`
+pill treatment. The controls inside are kit components; the wrapper is only a positioned panel.
 ```tsx
 // Floating highlight element — pill-shaped card variant, NO border, plain neutral drop shadow
 // (no AI glow — the AI glow is on the CTA button only). For the animated
@@ -34,7 +34,7 @@ treatment.
   zIndex: 100,
   // position: sibling of the frame, anchored bottom-left, overlapping its left/bottom edge and popping outside to the left
 }}>
-  {/* text prompt or AI generation content + CTA button */}
+  {/* KitInput (prompt) or KitText (generated content) + KitButton concept="ai" (the CTA) */}
 </div>
 ```
 
@@ -44,7 +44,7 @@ treatment.
 - Pop slightly outside the video canvas edge to the left if needed — the `AbsoluteFill` clips it and that's intentional
 
 **Secondary floating elements (nice-to-have):**
-- Tool palettes, stat chips, notification pills — also outside the frame
+- Tool palettes, stat callouts, `KitPill` notification chips — also outside the frame
 - Less prominent: smaller, lower opacity, shorter animation
 - Stagger their arrival after the main highlight: +10–15 frames delay
 - Never let a secondary element drift on top of the frame's center either — the same
@@ -62,9 +62,9 @@ treatment.
                 background: 'var(--surface-subtle, #FFFFFF)',
                 boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
                 transform: `translateX(${highlightX}px) scale(${highlightScale})` }}>
-    {/* AI content + CTA — or a prompt bar / stat callout / suggestion chip / generating indicator */}
+    {/* kit contents: KitInput + KitButton concept="ai" — or a prompt bar / stat callout / suggestion chip / generating indicator */}
   </div>
-  {/* 3 — optional secondary element (tool palette, pill) */}
+  {/* 3 — optional secondary element (tool palette, KitPill chip) */}
   <div style={{ position: 'absolute', bottom: 40, left: 220, zIndex: 90, opacity: 0.7 }}>
     {/* smaller, less prominent */}
   </div>
@@ -87,12 +87,13 @@ and highlight elements in every pattern above. This file is the single canonical
 this chrome — brand-specific animation and hybrid-image rules point back here rather than
 restating it, so pure-illustration jobs always have it too.
 
+**Contents.** Prompt = `KitInput`, generated copy = `KitText`, AI CTA = `KitButton concept="ai"`.
+If the surface is a `KitCard`, the wrapper carries only position, radius and shadow — never a
+second background.
+
 **No AI glow on panel/card chrome.** The only AI glow in any composition is on the CTA
-button (or equivalent primary action) inside the highlight element — the `linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end))`
-fill plus a matching tinted `boxShadow: '0 4px 16px color-mix(in srgb, var(--color-ai-primary-start) 30%, transparent), 0 2px 10px color-mix(in srgb, var(--color-ai-primary-end) 18%, transparent)'`
-on the button — both derived from the same brand-agnostic AI-gradient tokens (the brand's
-concrete gradient-stop hex values live in e.g. `ionos/product-frame-color.md` "AI Icon Usage
-Guidelines"; never hardcode them in this shared file). The outer chrome (`boxShadow` on
+button (or equivalent primary action) inside the highlight element — `KitButton`'s `glow` prop.
+Never hand-build an AI gradient fill or tinted glow on a button. The outer chrome (`boxShadow` on
 any card wrapper — pill, prompt bar, stat callout, suggestion chip, generating indicator,
 whatever the `borderRadius: 40` pill variant or another contextual form uses) is
 always a **plain neutral drop shadow** (`0 16px 48px rgba(0,0,0,0.35)`). Never a colored,

@@ -111,13 +111,15 @@ hero) is in `product-pop-out/character.md`.
    **(c) `generic` — a content-shaped accent** (every non-AI showroom). The contract gives an
    anchor and a `maxBox` CEILING, not a footprint. Choose the element's own size from the content
    you are rendering: it must fit inside `maxBox` and **MUST NOT fill it**. A value callout, a
-   two-word chip, a one-line status row and a compact card are all correct — whichever the content
+   two-word chip (`KitPill`), a one-line status row and a compact card (`KitCard`) are all correct — whichever the content
    actually is. What is wrong is defaulting to a box-filling card regardless of content.
 
    In all present cases: anchored bottom-left, popping outside the interface's LEFT edge, never
    over the frame's center, never over the character's face-safe box. Chrome follows the
    Floating Highlight Card template (`shared/floating-card.md`): borderless, plain neutral
    shadow, no AI glow on the chrome itself.
-5. **AI styling (when this is an AI feature)** — the brand AI gradient on the CTA/Publish
-   action and the prompt bubble, a soft AI glow on the highlight only, and a filled-sparkles
-   icon. Not an AI feature → standard brand blue/sky, no AI gradient or glow anywhere.
+5. **AI styling (when this is an AI feature)** — the CTA/Publish action is
+   `<KitButton concept="ai" icon={sparkles} …/>` (its glow is the `glow` prop, never drawn on the
+   highlight chrome), the prompt window carries its own AI styling (`PromptWindow`, or the
+   fallback above), and the AI marker is the filled-sparkles icon. Not an AI feature → a brand
+   `KitButton` (no `concept="ai"`), no AI gradient or glow anywhere.

@@ -13,19 +13,18 @@ Orange stays the brand hero. Cyan→pink is reserved for AI.
 
 **Same gate as every brand:** apply AI styling ONLY when the feature itself performs AI
 generation or inference (a prompt or chat assistant, a "generate" or "improve with AI" action,
-an AI result or AI badge). Every other CTA stays on STRATO Blue `#272CB2` with white text.
+an AI result or AI badge). Every other CTA is a brand `KitButton` (no `concept="ai"`; STRATO Blue from the tokens).
 `illustrationBrief.aiFeature` / `aiStyled` decides it. Never reason it from the palette.
 
-## Use these hex values. Do not use `var(--color-ai-*)` for strato.
+## Tokens and the kit first; hex only for hand-drawn shapes
 
-The published `@ionos-web-design-system/core` the renderer installs still maps strato's AI
-tokens to the old orange gradient. `var(--color-ai-primary-start/end)`,
-`var(--color-ai-subtle-*)` and `var(--surface-semantic-ai)` would therefore render orange,
-or the old pink surface. For `brand=strato`, hardcode the hex values below. This
-**overrides** every `var(--color-ai-*)` snippet in the shared wireframe/embed rules, and the
-"white text" those snippets pair with the AI CTA.
+The renderer's UDS core carries the STRATO AI concept. AI CTAs and AI icon actions are kit
+components (`<KitButton concept="ai">`, `<KitIconButton ai>`), and they take the values below
+from the tokens automatically. AI-coloured copy, if wanted, is a hand-drawn text gradient using
+the hex values. Use the literal hex values only for an AI-related shape you draw yourself (an
+illustration accent, a text gradient), and never put white text on the AI gradient.
 
-| Role | Light scheme | Dark scheme | Token it replaces |
+| Role | Light scheme | Dark scheme | Token |
 |---|---|---|---|
 | AI primary gradient: start (cyan) | `#1FD7FF` | `#1FD7FF` | `ai-primary-start` |
 | AI primary gradient: end (pink) | `#E498FF` | `#E498FF` | `ai-primary-end` |
@@ -38,24 +37,26 @@ or the old pink surface. For `brand=strato`, hardcode the hex values below. This
 
 ## How each piece is used
 
-- **Primary AI CTA** (generate / improve with AI / send prompt): a `linear-gradient(45deg, #1FD7FF, #E498FF)`
-  fill with a **dark `#29294D` label and icon**. White text on this gradient is wrong. It fails
-  contrast, because both stops are light (white 1.7:1 and 2.1:1, `#29294D` 8.1:1 and 6.7:1). Static 45° angle in generated assets, never animated.
-- **Secondary / tertiary AI action** (outlined or text-only "Ask AI", "Suggest"): no fill. The
-  label is a blue text-gradient (`#2F2F70 → #272CB2` on light, `#F7F7F9 → #64AAFF` on dark) via
-  `background-clip: text`. Hover or active state = a solid `#EDEEF3` fill under the text. No gradient border.
-- **AI icon on its own** (sparkles icon button, a lone AI mark on a light surface): use the
-  **blue** text-gradient (`#2F2F70 → #272CB2`), not cyan→pink. The cyan→pink pair is too
-  light for a small icon on a light surface. The pink `#E498FF` may tint a sparkle that sits
-  **on** the primary gradient or on a dark surface.
+- **Primary AI CTA** (generate / improve with AI / send prompt): `<KitButton concept="ai" label={…} icon={sparkles} />`.
+  The kit draws the cyan→pink fill with the dark `#29294D` label and icon from the tokens. Animate
+  its `glow` prop for the AI moment; never wrap it in a hand-drawn gradient or white label.
+- **Secondary / tertiary AI action** (outlined or text-only "Ask AI", "Suggest"):
+  `<KitButton concept="ai" variant="secondary" …/>` or `variant="tertiary"`. The kit renders the
+  blue text-gradient label and the `#EDEEF3` hover fill. No gradient border.
+- **AI icon on its own** (sparkles icon button, a lone AI mark on a light surface):
+  `<KitIconButton ai icon={sparkles} title={…} />`. The kit takes its colour from the tokens; never
+  draw it. A sparkle you draw yourself on a light surface uses the **blue** pair
+  (`#2F2F70 → #272CB2`); the pink `#E498FF` may tint a drawn sparkle that sits **on** the primary
+  gradient or on a dark surface.
 - **AI chip / badge / result callout tint**: `#EDEEF3` surface + `#29294D` text. Keep the
   gradient for one primary AI CTA (or the badge mark), not the whole card.
 - **Thinking / generating indicator** (mandatory between trigger and result): the ai-subtle
   gradient `#FFC700 → #FF8800`. On STRATO, "AI is working" is warm and sunny, in brand orange.
   Use it only for the in-progress state, never as a resting card background. Calm opacity or
   shimmer movement, ≥10–15 frames, no hard cut.
-- **Glow / bloom** on an AI moment: radial `#1FD7FF` or `#E498FF` at ~0.15–0.25 opacity, pulsed
-  on opacity/scale. Glow belongs to the CTA, never to the card.
+- **Glow / bloom** on an AI moment: on the AI CTA it is the `KitButton` `glow` prop, animated from
+  the frame. A bloom you draw yourself (an illustration accent) is radial `#1FD7FF` or `#E498FF` at
+  ~0.15–0.25 opacity, pulsed on opacity/scale. Glow belongs to the CTA, never to the card.
 
 ## DON'T
 

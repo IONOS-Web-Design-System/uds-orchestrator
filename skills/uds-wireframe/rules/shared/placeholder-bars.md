@@ -33,32 +33,28 @@ Reference table:
 |-----------|------|-------|
 | Page headline | `<Bar w="55%" h={18} op={0.30} />` | Large, bright |
 | Section heading | `<Bar w="45%" h={14} op={0.25} />` | |
-| Eyebrow / pill label | `<Bar w="80px" h={7} op={0.18} />` | Fixed pixel width |
+| Eyebrow label | `<Bar w="80px" h={7} op={0.18} />` | Fixed pixel width |
 | Subheadline | `<Bar w="42%" h={11} op={0.22} />` | |
 | Body paragraph | `<BarGroup lines={3} />` | 3-line block |
 | Card subtitle | `<Bar w="65%" h={9} op={0.18} />` | |
 | Nav item | `<Bar w="52px" h={8} op={0.20} />` | In a flex row of 4–5 |
 | Table cell | `<Bar w="75%" h={8} op={0.16} />` | |
-| Tag / badge label | `<Bar w="48px" h={7} op={0.22} />` | |
+| Tag / badge, status chip | `<KitBadge label={…} />` / `<KitPill label={…} />` | A kit element with a 1–2 word label, not a bar |
 
-**Rule:** Never use real text in decorative mode. Even one-word labels must be bars. The only exception: a proper brand name that must be visually recognisable — in that case use real text with `var(--text-base-invert)` (see the brand's decorative rule, e.g. `ionos/decorative-mode.md` "Brand Logos", for which name to use).
+**Rule:** Never use free-standing real text in decorative mode. Even one-word labels must be bars. Two exceptions: kit elements (a `KitButton` CTA, a `KitPill` chip, a `KitBadge` tag) carry their own short real label, and a proper brand name that must be visually recognisable — in that case use real text with `var(--text-base-invert)` (see the brand's decorative rule, e.g. `ionos/decorative-mode.md` "Brand Logos", for which name to use).
 
-**Button placeholder** — the accent fill/border are brand-specific; resolve `ACCENT_SKY` from
-the brand's decorative color rule (e.g. `ionos/decorative-mode.md` "Decorative Color Values") —
-never hardcode a brand hex in this shared file:
+**Buttons are not placeholders.** A CTA is a kit button with a short real label; the kit draws
+its fill, radius and label colour from the brand tokens:
 ```tsx
-<div style={{
-  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-  height: 40, minWidth: 120, paddingInline: 20, borderRadius: 8,
-  background: 'rgba(ACCENT_SKY, 0.18)',
-  border: '1px solid rgba(ACCENT_SKY, 0.35)',
-}}>
-  <Bar w="70px" h={8} op={0.55} />
-</div>
+import { KitButton } from './kit';
+
+<KitButton label={texts.cta} />
 ```
 
-**Navigation bar placeholder** — the CTA fill/border are the same brand-specific `ACCENT_SKY` as above:
+**Navigation bar placeholder** — the CTA is a kit button with a short real label (never a drawn rect):
 ```tsx
+import { KitButton } from './kit';
+
 <nav style={{
   display: 'flex', alignItems: 'center', gap: 32,
   padding: '0 48px', height: 64,
@@ -71,6 +67,6 @@ never hardcode a brand hex in this shared file:
     {[52, 48, 60, 52].map((w, i) => <Bar key={i} w={`${w}px`} h={8} op={0.22} />)}
   </div>
   {/* CTA */}
-  <div style={{ height: 36, width: 100, borderRadius: 6, background: 'rgba(ACCENT_SKY, 0.25)', border: '1px solid rgba(ACCENT_SKY, 0.4)' }} />
+  <KitButton label={texts.cta} size="small" />
 </nav>
 ```

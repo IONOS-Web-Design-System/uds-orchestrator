@@ -35,8 +35,8 @@ itself, a dark request.
 | Main content area | `var(--surface-base, #FFFFFF)` | `var(--text-base)` |
 | Right properties panel (shell rail) | `var(--surface-subtle, #F4F7FA)` | `var(--text-subtle)` for bars/data, `var(--text-base)` for labels |
 | Active sidebar item | `var(--surface-base, #FFFFFF)` | `var(--text-base)` |
-| Header action: "Publish" | `#1A91DE` (sky blue fill) — brand CTA, unaffected by scheme | white |
-| Header action: "Preview" | transparent + `border: 1px solid var(--border-subtle)` | `var(--text-base)` |
+| Header action: "Publish" | `<KitButton size="small" />` | — |
+| Header action: "Preview" | `<KitButton variant="secondary" size="small" />` | — |
 
 **Two fill tiers.** The shell and its rails — outer frame, left tool sidebar, and right
 properties panel — are `surface-subtle`; the working content area and the elements that must
@@ -51,13 +51,14 @@ interface (see `shared/surface-theme.md`). Using it on a panel makes that panel 
 the canvas wherever the two meet.
 
 **Decorative/abstract elements inside a light shell:**
-- Icon buttons: `var(--text-base)` SVG icons, `opacity: 0.8` idle, `1.0` active
+- Tool icons: `KitIcon` / `KitIconButton`; `opacity: 0.8` idle, `1.0` active, on the parent `div`
 - Property panel rows: `var(--surface-base, #FFFFFF)` background, bar fill `var(--text-subtle)`
 - Analytics / stat indicators: `var(--text-subtle)` for values and bars
 - Placeholder / skeleton bars in the shell: `var(--text-semantic-skeleton)` — the dedicated
   skeleton fill token. It is scheme-aware (light `oklch(0.9092 0.0111 243.66 / 0.5)`, dark
   `oklch(1 0 0 / 0.15)`), so it stays correct on both schemes. Do NOT use a surface tier for a
-  skeleton bar, and never the brand blue.
+  skeleton bar, and never the brand blue. A loading state inside a UI panel is
+  `<KitSkeleton shape="text" lines={…} />`, not drawn bars.
 
 ### Product shell — dark variant (`colorScheme === 'dark'`, or explicit decorative brief ONLY)
 
@@ -73,11 +74,11 @@ sidebar's role here.
 | Left tool sidebar | `linear-gradient(180deg, #001B41, #0B2A63)` | white `rgba(255,255,255,0.8)` |
 | Right properties panel | `linear-gradient(180deg, #001B41, #0B2A63)` | `#9DC2D9` for bars/data, white for labels |
 | Active sidebar item | `rgba(255,255,255,0.12)` overlay on sidebar | white |
-| Header action: "Publish" | `#1A91DE` (sky blue fill) | white |
-| Header action: "Preview" | transparent + `border: 1px solid rgba(255,255,255,0.5)` | white |
+| Header action: "Publish" | `<KitButton size="small" />` | — |
+| Header action: "Preview" | `<KitButton variant="secondary" size="small" />` | — |
 
 **Decorative/abstract elements inside the dark shell variant:**
-- Icon buttons: white SVG icons, `opacity: 0.8` idle, `1.0` active
+- Tool icons: `KitIcon` / `KitIconButton` (dark-scheme root); `opacity: 0.8` idle, `1.0` active, on the parent `div`
 - Property panel rows: `background: rgba(63,94,135,0.6)`, bar fill `#9DC2D9`
 - Analytics / stat indicators: `#9DC2D9` for values and bars
 - All placeholder bars in the shell: `rgba(157,194,217,0.5)` — the steel-blue family, NOT white, NOT sky `#11C7E6`
@@ -181,23 +182,14 @@ the shell's default brandmark; `ionos-dark` applies only in the dark shell varia
 
 ## AI Icon Usage Guidelines
 
-All 6 IONOS AI icons use **ai-primary gradient fill** (`linear-gradient(45deg, #095BB1, #D746F5)`).
-Apply via `background: AI_GRADIENT` + `maskImage` — NOT `backgroundColor` (which gives solid color only).
-
-```tsx
-// Gradient-filled AI icon pattern:
-<div style={{
-  width: 24, height: 24, flexShrink: 0,
-  background: 'linear-gradient(45deg, #095BB1, #D746F5)',
-  maskImage: `url(${writeSvg})`, WebkitMaskImage: `url(${writeSvg})`,
-  maskSize: 'contain', maskRepeat: 'no-repeat',
-  WebkitMaskSize: 'contain', WebkitMaskRepeat: 'no-repeat',
-}} />
-```
+An AI icon is a kit component, never a hand-drawn gradient mask: `<KitIconButton ai icon={…} title={…} />`
+for an AI icon action (gradient icon from the brand tokens), the `icon` of a
+`<KitButton concept="ai" …/>` inside an AI CTA, or `<KitIcon icon={…} />` for a lone glyph. Never
+use `ai` on a non-AI feature.
 
 | Import name | Use for | Import path |
 |---|---|---|
-| `filled-sparkles` | **Primary / general AI** — any AI affordance, CTA badge | `icon/system/filled-sparkles` |
+| `filled-sparkles` | **Primary / general AI** — any AI affordance, the AI CTA icon | `icon/system/filled-sparkles` |
 | `filled-generative-write` | Text generation, copywriting, AI writer | `icon/system/filled-generative-write` |
 | `filled-generative-wand` | Non-text generation, image AI, advanced products | `icon/system/filled-generative-wand` |
 | `filled-chat-ai` | AI chat, assistant, conversational products | `icon/system/filled-chat-ai` |
@@ -223,9 +215,9 @@ Import without `dist/` — sub-path export only. **Do not guess names — webpac
 
 ## Semantic roles use semantic tokens
 
-Do NOT hand-roll hexes for status, AI, promo or badge treatments — the design system ships
-scheme-aware semantic pairs. Surfaces take `--surface-semantic-*`, their typography takes the
-matching `--text-semantic-*`:
+Status chips are `KitPill` and sale/price/new tags `KitBadge` — never hand-rolled. The table is
+for shapes you draw yourself (a row tint, a status dot); never hand-roll hexes for them. Surfaces
+take `--surface-semantic-*`, their typography the matching `--text-semantic-*`:
 
 | Role | Surface | Text |
 |---|---|---|
@@ -235,7 +227,4 @@ matching `--text-semantic-*`:
 | Danger / offline | `var(--surface-semantic-danger)` | `var(--text-semantic-danger)` |
 | Neutral | `var(--surface-semantic-neutral)` | `var(--text-semantic-neutral)` |
 | Promo | `var(--surface-semantic-promo)` | `var(--text-semantic-promo)` |
-| Price / promo / neutral badges | `var(--surface-semantic-badge-price\|-promo\|-neutral)` | `var(--text-semantic-badge-price\|-promo\|-neutral)` |
 | Skeleton / placeholder fills | — | `var(--text-semantic-skeleton)` |
-
-This supersedes the hand-rolled status-badge hexes in `ionos/composition.md`.

@@ -80,7 +80,7 @@ brand-specific asset name in this shared file.
 - Product logo: always the real SVG brandmark, never a placeholder bar — pick the light-scheme or dark-scheme brandmark variant per `colorScheme` (see the brand's color rule, e.g. `ionos/product-frame-color.md`, for the concrete asset names)
 - Client app image: always use `<Img src={staticFile(imageSlug + '.png')}>` from the asset catalog
 - Never use the sky accent color in the product shell — that is a CTA colour; use `DARK_SHELL_ACCENT` for shell decorative elements (concrete value in the brand's color rule, e.g. `ionos/product-frame-color.md`)
-- AI feature affordances: see `uds-style-guide/ionos-ai-features` for gradient button, generating surface, and animation rules
+- AI feature affordances: the AI CTA is `KitButton concept="ai"` and an AI icon action `KitIconButton ai`; see `uds-style-guide/ionos-ai-features` for the generating state and animation rules
 
 ## Opaque base plate (transparent-root composite styles)
 

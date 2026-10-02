@@ -50,12 +50,12 @@ This pattern applies to **landscape/widescreen canvases** (e.g. 1280×720). For 
     background: 'var(--surface-subtle)',
     boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
   }}>
-    {/* AI prompt + CTA */}
+    {/* KitInput (the prompt) + KitButton concept="ai" (the CTA) — the panel only places them */}
   </div>
 
   {/* Optional secondary element near the cropped bottom edge */}
   <div style={{ position: 'absolute', bottom: 24, left: 200, zIndex: 90, opacity: 0.85 }}>
-    {/* tool chip, palette, or stat pill */}
+    {/* a KitPill status chip, a tool palette, or a stat card */}
   </div>
 </AbsoluteFill>
 ```
@@ -67,6 +67,9 @@ When the AI feature is an **inline editing action** (text selection, image resiz
 **Pattern (Figma node 77:203 — KI Text / text-select AI):** Website hero (background image + "URBAN BIKES" heading) scaled so the selected heading fills the viewport center. Frame bleeds right and bottom. AI panel (tone selector + CTA) appears in the left third of the viewport, also extending slightly past the left canvas edge.
 
 ```tsx
+import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
+import { KitIconButton } from './kit';
+
 // Zoom-to-highlight: position frame so the AI interaction zone lands at canvas center
 <AbsoluteFill style={{ overflow: 'hidden' }}>
   {/* Product frame — oversize, bleeds right + bottom */}
@@ -91,21 +94,18 @@ When the AI feature is an **inline editing action** (text selection, image resiz
     borderRadius: 24,
     background: 'var(--surface-subtle)',
     boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
-    // contains tone tabs, option checkboxes, AI CTA button
   }}>
-    {/* AI options panel */}
+    {/* AI options panel: KitTabs (tone), KitCheckbox options, KitButton concept="ai" (the CTA) */}
   </div>
 
-  {/* AI badge — floating above the interaction target, also outside frame */}
+  {/* AI mark — floating above the interaction target, also outside frame.
+      The kit draws the AI concept; the parent only positions it. */}
   <div style={{
     position: 'absolute',
     // positioned over the selection target in the frame
     zIndex: 110,
-    width: 72, height: 72, borderRadius: '50%',
-    background: 'linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end))', color: '#fff',
-    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
   }}>
-    {/* sparkles icon + label */}
+    <KitIconButton ai icon={sparkles} title={texts.aiAction} size="large" />
   </div>
 </AbsoluteFill>
 ```
@@ -116,8 +116,8 @@ In all three patterns above, the AI affordance (card, panel, badge) must break o
 
 | AI feature type | Required placement |
 |---|---|
-| Prompt card (text input + CTA pill) | Sibling of frame; overlaps frame right/bottom edge; may extend past canvas edge |
-| Inline badge (floating over text selection or image region) | Floats above the selection target in the viewport; outside frame or at its edge |
+| Prompt card (`KitInput` + AI `KitButton`) | Sibling of frame; overlaps frame right/bottom edge; may extend past canvas edge |
+| Inline AI mark (`KitIconButton ai`, floating over text selection or image region) | Floats above the selection target in the viewport; outside frame or at its edge |
 | Options panel (tone selector, checklist, settings) | Opposite side from the frame's primary bleed; may extend slightly past canvas edge |
 
 > **Rule in one sentence:** The AI feature must break at least one boundary — the frame edge, the canvas edge, or both.
@@ -181,7 +181,7 @@ const H = height;
     zIndex: 100,
     transform: `translateY(${cardEnterY}px) scale(${cardScale})`,
   }}>
-    {/* AI prompt text (headline prop) + CTA button ("Seite erstellen" / market equivalent) */}
+    {/* AI prompt (KitInput, value from the headline prop) + KitButton concept="ai" ("Seite erstellen" / market equivalent) */}
   </div>
 
 </AbsoluteFill>

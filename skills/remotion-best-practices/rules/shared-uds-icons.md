@@ -1,4 +1,4 @@
-# UDS icons in Remotion — use the svgData inline approach (always applies)
+# UDS icons in Remotion — svgData inline outside the kit (always applies)
 
 **Do NOT use UDS icon inject functions or CSS class names in Remotion compositions.**
 Both approaches depend on CSS being injected at runtime — inject functions call
@@ -6,11 +6,16 @@ Both approaches depend on CSS being injected at runtime — inject functions cal
 processed by loaders that may mangle the base64 `url("data:...")` mask-image values.
 Neither is reliable in Remotion's headless renderer.
 
-**Use the `svgData` inline approach instead.** Every UDS icon module exports a `svgData`
+**The one exception is the UDS kit.** A kit component's icon prop (`KitIcon icon`,
+`KitIconButton icon`, `KitButton icon`) takes the icon module's **default** import, and the kit
+injects its CSS once, frame-safe: `import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';`.
+Pass the default import only to a kit prop — never use it, or a class name, anywhere else.
+
+**Everywhere outside the kit, use the `svgData` inline approach.** Every UDS icon module exports a `svgData`
 property (a `data:image/svg+xml;base64,…` URI). Import it directly and apply it via
 React inline styles — no CSS, no loaders, deterministic on every frame.
 
-## The one correct import form
+## The svgData import form (outside the kit)
 
 ```tsx
 import { svgData as arrowTopSvg }   from '@ionos-web-design-system/icon/system/arrow-top';

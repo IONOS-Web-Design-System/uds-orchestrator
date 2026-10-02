@@ -31,16 +31,25 @@ Pick at most **2 active animation sequences** per composition. More than that cr
 
 ## Pattern 1 — Multiple Floating Elements
 
-For **large illustrations**, deploy 3–4 floating elements at different positions around the device frame. Each floater has a unique rotation, bob height, and delay so they move out of sync — this creates a lively, orbital feel.
+For **large illustrations**, deploy 3–4 floating elements at different positions around the device frame. Each floater has a unique position and delay so they move out of sync — this creates a lively, orbital feel.
+
+Interface floaters (a notification chip, an icon action, an avatar) are kit components; the
+floater `div` only positions and animates them. Glass stat cards with icon blocks and bars stay
+hand-built decoration. **Only non-text floaters bob** (`bob: true`): a floater holding a kit label
+(`KitPill`, `KitAvatar` initials) flies in once and then holds still — see the text-stability
+note above.
 
 ```tsx
+import bell from '@ionos-web-design-system/icon/system/bell';
+import checkmark from '@ionos-web-design-system/icon/system/circle-checkmark';
+import { KitAvatar, KitIcon, KitIconButton, KitPill } from './kit';
+
 // Float configuration — adjust positions to fit your frame size
 const FLOATERS = [
-  // Top-right stat card (most prominent)
+  // Top-right stat card (most prominent) — glass decoration with bars, no text: bobs
   {
-    style: { top: -28, right: -52, zIndex: 11 } as React.CSSProperties,
-    cardStyle: glassCardElevated,
-    rot: '2.5deg', delay: '0s', bobH: -10,
+    style: { top: -28, right: -52, zIndex: 11, ...glassCardElevated } as React.CSSProperties,
+    bob: true, delay: '0s',
     content: (
       <>
         <IconBlock name="trending-up" colorKey="green" size={18} containerSize={34} />
@@ -51,64 +60,53 @@ const FLOATERS = [
       </>
     ),
   },
-  // Bottom-left notification pill
+  // Bottom-left notification chip — kit label: flies in, never bobs
   {
-    style: { bottom: 72, left: -36, zIndex: 11, borderRadius: 999, padding: '10px 16px' } as React.CSSProperties,
-    cardStyle: { background: 'rgba(17,199,230,0.10)', border: '1px solid rgba(17,199,230,0.28)', backdropFilter: 'blur(12px)' },
-    rot: '-1.5deg', delay: '1.3s', bobH: -6,
+    style: { bottom: 72, left: -36, zIndex: 11 } as React.CSSProperties,
+    bob: false, delay: '1.3s',
     content: (
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <Icon group="system" name="bell" size={14} style={{ color: '#11C7E6' }} />
-        <Bar w="88px" h={7} op={0.50} />
+        <KitIcon icon={bell} size="small" />
+        <KitPill label={texts.notification} variant="neutral" />
       </div>
     ),
   },
-  // Mid-right icon pill (large only)
+  // Mid-right icon action (large only) — no text: bobs
   {
     style: { top: '42%', right: -44, zIndex: 10 } as React.CSSProperties,
-    cardStyle: { background: 'rgba(18,207,118,0.10)', border: '1px solid rgba(18,207,118,0.22)', borderRadius: 12, padding: '10px 14px', backdropFilter: 'blur(12px)' },
-    rot: '1deg', delay: '0.7s', bobH: -8,
-    content: (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <Icon group="system" name="check-circle" size={16} style={{ color: '#12CF76' }} />
-        <Bar w="64px" h={7} op={0.45} />
-      </div>
-    ),
+    bob: true, delay: '0.7s',
+    content: <KitIconButton icon={checkmark} title={texts.confirmAction} />,
   },
-  // Bottom avatar chip (large only)
+  // Bottom avatar (large only) — initials are text: flies in, never bobs
   {
-    style: { bottom: -16, right: 120, zIndex: 10, borderRadius: 999, padding: '6px 12px' } as React.CSSProperties,
-    cardStyle: { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.14)', backdropFilter: 'blur(8px)' },
-    rot: '-2deg', delay: '2.0s', bobH: -5,
-    content: (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'rgba(17,199,230,0.25)', border: '1px solid rgba(17,199,230,0.4)' }} />
-        <Bar w="52px" h={7} op={0.35} />
-      </div>
-    ),
+    style: { bottom: -16, right: 120, zIndex: 10 } as React.CSSProperties,
+    bob: false, delay: '2.0s',
+    content: <KitAvatar initials="BX" size="small" />,
   },
 ];
 
-// Multi-float keyframes (one per floater, unique bob height)
+// Multi-float keyframes (one per bobbing floater, unique bob height and tilt) + the fly-in
 const multiFloatStyle = `
   @keyframes bob0 { 0%,100% { transform: translateY(0)    rotate(2.5deg); } 50% { transform: translateY(-10px) rotate(2.5deg); } }
-  @keyframes bob1 { 0%,100% { transform: translateY(0)    rotate(-1.5deg); } 50% { transform: translateY(-6px)  rotate(-1.5deg); } }
   @keyframes bob2 { 0%,100% { transform: translateY(0)    rotate(1deg); }   50% { transform: translateY(-8px)  rotate(1deg); } }
-  @keyframes bob3 { 0%,100% { transform: translateY(0)    rotate(-2deg); }  50% { transform: translateY(-5px)  rotate(-2deg); } }
+  @keyframes flyIn { from { opacity: 0; transform: translate(32px, -16px) scale(0.94); } to { opacity: 1; transform: none; } }
 `;
 
 // Render:
 {FLOATERS.map((f, i) => (
   <div key={i} style={{
-    position: 'absolute', ...f.style, ...f.cardStyle,
-    animation: `bob${i} ${3.5 + i * 0.4}s ease-in-out ${f.delay} infinite`,
+    position: 'absolute', ...f.style,
+    animation: f.bob
+      ? `bob${i} ${3.5 + i * 0.4}s ease-in-out ${f.delay} infinite`
+      : `flyIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) ${f.delay} both`,
   }}>
     {f.content}
   </div>
 ))}
 ```
 
-For **medium illustrations**, use only floaters 0 and 1. For **small**, use only floater 0 — but make it a compact pill rather than a full card.
+For **medium illustrations**, use only floaters 0 and 1. For **small**, use one compact kit
+element only — the `KitIconButton` floater (it may bob) or the `KitPill` chip (fly-in only).
 
 ---
 
@@ -263,7 +261,7 @@ Then use exactly the animations that illustrate that story — card highlight, b
 |------|----------|----------------------|
 | Large (750px) | 3–4 | cascade + card highlight + bar-grow |
 | Medium (500px) | 1–2 | cascade + card highlight |
-| Small (250px) | 1 (pill only) | float bob only |
+| Small (250px) | 1 (one compact kit element) | float bob (non-text only) or one fly-in |
 
 - Card highlight cycles: 3.5–5s loop; fly-ins: 400–600ms
 - Total composition loop should feel natural at 5–8 seconds

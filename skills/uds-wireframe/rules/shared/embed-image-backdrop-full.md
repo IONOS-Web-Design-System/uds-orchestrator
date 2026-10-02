@@ -26,46 +26,54 @@ Layer order:
    surface anatomy: white/light background, rounded corners (16-20px), soft shadow
    (`0 24px 64px rgba(0,0,0,0.3)`).
 
-   - **Primary card (always):** a compact functional UI card with status/label elements, a
-     CTA button, and optional media slots. No marketing headline/subline — only functional
+   - **Primary card (always):** a compact functional UI card (`KitCard`) with status/label
+     elements (`KitPill`, `KitText`), a CTA (`KitButton`), and optional media slots. No marketing headline/subline — only functional
      labels and UI chrome. The same catalog image may be reused INSIDE the card's media
      slots (`<Img src={staticFile('<slug>.png')} style={{ objectFit: 'cover' }} />` in a
      small rounded container) — that reuse is intentional, not a bug.
-   - **Mini-toolbar (optional):** a small horizontal pill of icon buttons with one prominent
-     accent/gradient button:
+   - **Mini-toolbar (optional):** a small horizontal strip of kit icon actions, the last one
+     the AI action. The strip is a drawn backdrop (layout + surface + shadow); every icon in it
+     is a `KitIconButton`:
 
      ```tsx
+     import pen from '@ionos-web-design-system/icon/system/pen';
+     import upload from '@ionos-web-design-system/icon/system/upload';
+     import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
+     import { KitIconButton } from './kit';
+
      <div style={{
        position: 'absolute', /* near the primary card */
        display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
-       background: '#fff', borderRadius: 999, boxShadow: '0 12px 32px rgba(0,0,0,0.25)',
+       background: 'var(--surface-base)', borderRadius: 24, boxShadow: '0 12px 32px rgba(0,0,0,0.25)',
      }}>
-       {/* 3-4 small system icons, then: */}
-       <div style={{
-         width: 32, height: 32, borderRadius: '50%', display: 'flex',
-         alignItems: 'center', justifyContent: 'center', color: '#fff',
-         background: 'linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end))',
-       }}>
-         <Icon group="system" name="sparkles" size={16} />
-       </div>
+       <KitIconButton icon={pen} title={texts.edit} size="small" />
+       <KitIconButton icon={upload} title={texts.upload} size="small" />
+       <KitIconButton ai icon={sparkles} title={texts.aiAction} size="small" />
      </div>
      ```
 
    - **Prompt bubble (optional):** a prompt surface follows `ionos-ai-features` — prompt
      bubbles use `var(--surface-base)`; reserve `ai-subtle` for the AI 'thinking'
      indicator only — borderless, soft shadow — **never a dashed or bordered outline
-     (retired styles)** — with a tiny accent sparkle icon (`var(--color-ai-primary-end)`),
-     a muted caption (e.g. "Anforderung KI Website-Generator"), and a short bold request
-     line:
+     (retired styles)** — with a small sparkle icon (`KitIcon`), a muted caption
+     (`KitText tone="subtle"`, e.g. "Anforderung KI Website-Generator"), and a short bold
+     request line (`KitText weight="bold"`):
 
      ```tsx
+     import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
+     import { KitIcon, KitText } from './kit';
+
      <div style={{
        position: 'absolute', /* offset from the cluster */ maxWidth: 300,
        background: 'var(--surface-base)', // prompt bubble surface
        borderRadius: 14, padding: 16,
        boxShadow: '0 16px 48px rgba(0,0,0,0.3)',
      }}>
-       {/* icon + caption row, then bold navy request text */}
+       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+         <KitIcon icon={sparkles} size="small" />
+         <KitText variant="bodySm" tone="subtle">{texts.promptCaption}</KitText>
+       </div>
+       <KitText weight="bold">{texts.promptRequest}</KitText>
      </div>
      ```
 

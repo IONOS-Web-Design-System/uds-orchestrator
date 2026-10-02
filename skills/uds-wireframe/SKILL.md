@@ -22,6 +22,12 @@ description: >
 
 A wireframe here means a **live, renderable React composition** using real UDS components arranged to illustrate a layout. Real IONOS brand colors and typography — "low fidelity" comes from placeholder content, not greyscale aesthetics.
 
+**UDS kit.** Every interface element the kit covers (buttons/CTAs, icon actions, inputs, toggles,
+checkboxes, status chips, tags, avatars, progress, loading placeholders, tabs, UI copy, content
+cards) is a `Kit*` component from `./kit`. Its API card is in the prompt section "# UDS kit". The
+rules below say WHERE an element goes and HOW BIG its container is, never how to draw it.
+Hand-build only layout and decoration. Kit components render inside the `data-brand` root.
+
 ## Before You Start
 
 Ask these before generating (skip any the user already answered):
@@ -43,7 +49,7 @@ All rules are inlined below. Quick navigation:
 | Rule file | Covers |
 |---|---|
 | `ionos/remotion-template.md` | **Read first for Remotion jobs** — VariantProps schema, Root.tsx contract, TypeScript error triage |
-| `ionos/ai-animations.md` | **AI animation templates** — copy-ready Remotion code for button, loading state, radial bloom, sparkle pulse |
+| `ionos/ai-animations.md` | **AI animation templates** — copy-ready Remotion templates on the UDS kit: `AIPillButton` (AI CTA), `AIFloatingHighlight`, `AITextGenerationArea`, `AIImageGenerationArea` |
 | `ionos/product-frame-color.md` | IONOS product frame color values — color system, icon import form + anti-patterns, AI icon usage (icon **names** come from the generated `# Icon name index` prompt section, not this file) |
 | `ionos/composition.md` | Standard layout patterns, component selection, placeholder content guidelines |
 | `shared/frame-anatomy.md` | Brand-agnostic product frame structure — composition rule, content detail rules, contrast rules, frame layout rules, animated overflow |

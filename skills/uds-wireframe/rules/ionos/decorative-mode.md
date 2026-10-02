@@ -13,9 +13,9 @@ Compared to standard mode:
 | | Standard | Decorative |
 |---|---|---|
 | Background | Light (`colorScheme="light"`) | **Transparent** outer canvas — dark gradient lives only inside the device frame's screen |
-| Text | Plausible placeholder copy | Visual bar placeholders + 1–2 readable context strings (typography anchor) |
+| Text | Plausible placeholder copy | Visual bar placeholders + 1–2 readable context strings (typography anchor) + short kit labels (buttons, chips) |
 | Icons | Utility accents (20–24px) | Focal points (32–48px) in colored glass containers |
-| Cards | UDS Card / Box components (no `Surface` export) | Glass morphism overlays (rgba border + blur) |
+| Cards | `KitCard` (no `Surface` export) | Glass morphism overlays (rgba border + blur) |
 | Logo | None | Brand logo from `@ionos-web-design-system/icon/brandmark` in nav bar |
 | Images | Embedded inline | Floating panel with shadow treatment |
 | Output | `.tsx` only | `.tsx` only |
@@ -48,7 +48,7 @@ file is the single source of truth for the value; do not re-derive it elsewhere.
 |---|---|---|
 | `DECORATIVE_BG_START` | `#02102B` (Blue Black) | Dark gradient / solid background start; `var(--surface-base-invert)` Remotion fallback |
 | `DECORATIVE_BG_END` | `#0B2A63` (Dark Blue) | Dark gradient background end |
-| `ACCENT_SKY` (as an `rgba()` triple: `17, 199, 230`) | `#11C7E6` (Sky) | Sky-tinted glass cards, sky icon containers, CTA / nav / notification accents |
+| `ACCENT_SKY` (as an `rgba()` triple: `17, 199, 230`) | `#11C7E6` (Sky) | Sky-tinted glass cards, sky icon containers, nav accents (buttons and chips are kit components and take the brand colours from the tokens) |
 
 ### Icon Color Palette (concrete)
 
@@ -114,6 +114,8 @@ import { svgData as logo } from '@ionos-web-design-system/icon/brandmark/{name}'
 
 **Nav bar with logo (full pattern):**
 ```tsx
+import { KitButton } from './kit';
+
 <nav style={{
   display: 'flex', alignItems: 'center', gap: 32,
   padding: '0 24px', height: 48,
@@ -125,8 +127,8 @@ import { svgData as logo } from '@ionos-web-design-system/icon/brandmark/{name}'
   <div style={{ display: 'flex', gap: 20, marginLeft: 'auto' }}>
     {[52, 48, 60, 52].map((w, i) => <Bar key={i} w={`${w}px`} h={7} op={0.22} />)}
   </div>
-  {/* CTA button placeholder */}
-  <div style={{ height: 32, width: 88, borderRadius: 6, background: 'rgba(17,199,230,0.22)', border: '1px solid rgba(17,199,230,0.40)' }} />
+  {/* CTA — a kit button with a short real label, never a drawn rect */}
+  <KitButton label={texts.cta} size="small" />
 </nav>
 ```
 
@@ -139,24 +141,16 @@ The logo is **never** a bar placeholder — it is always the real SVG from the b
 Even though decorative mode replaces text with bars, **every illustration must include 1–2 readable context strings** — short noun phrases extracted from the user's prompt. These ground the viewer and make clear what the illustration represents.
 
 ```tsx
+import { KitText } from './kit';
+
 // Context anchor — extract from user's prompt:
 // "IONOS Cloud", "Server Dashboard", "Analytics", "Checkout", "Hosting Plans"
-const ContextAnchor = ({ label, size = 'large' }: { label: string; size?: 'large'|'medium'|'small' }) => {
-  const fs = size === 'large' ? 24 : size === 'medium' ? 18 : 13;
-  return (
-    <span style={{
-      fontFamily: 'var(--uds-font-title)',
-      fontSize: fs,
-      fontWeight: 600,
-      color: 'var(--text-base-invert)',
-      letterSpacing: '-0.02em',
-      opacity: 0.92,
-      display: 'block',
-    }}>
-      {label}
-    </span>
-  );
-};
+// It renders inside the data-color-scheme="dark" root, so the kit's base tone is light on dark.
+const ContextAnchor = ({ label, size = 'large' }: { label: string; size?: 'large'|'medium'|'small' }) => (
+  <div style={{ opacity: 0.92 }}>
+    <KitText variant={size === 'large' ? 'headingXl' : size === 'medium' ? 'headingLg' : 'bodySm'} weight="bold">{label}</KitText>
+  </div>
+);
 ```
 
 Placement rules:
@@ -170,7 +164,9 @@ Placement rules:
 - "checkout flow" → `<ContextAnchor label="Checkout" />`
 - "analytics panel" → `<ContextAnchor label="Analytics" />`
 
-This is the **only readable text** in a decorative wireframe. Everything else stays as bars.
+This is the **only free-standing readable text** in a decorative wireframe. Kit elements (a CTA
+`KitButton`, a `KitPill` chip) carry their own short real label (1–2 words); everything else
+stays as bars.
 
 ---
 
@@ -180,14 +176,14 @@ This is the **only readable text** in a decorative wireframe. Everything else st
 
 ```
 [dark gradient background — radial spotlight from top center]
-  [nav: logo bar | 4 nav item bars | cta rect]
+  [nav: logo | 4 nav item bars | KitButton small CTA]
   
   [hero section — centered, 80px vertical padding]
     [eyebrow bar — 80px wide]
     [headline bar — 55% wide, 20px tall]
     [subheadline bar — 42% wide, 14px tall]
     [body BarGroup 3 lines]
-    [button row: sky CTA rect + ghost rect]
+    [button row: KitButton primary + KitButton secondary]
   
   [feature grid — 3 columns, gap-8]
     [glass card: sky icon 52px + bar heading + BarGroup 2]

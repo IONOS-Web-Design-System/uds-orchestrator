@@ -11,10 +11,11 @@ There are two ways images arrive: **user-provided** (interactive use) and the **
 ## User-provided images (interactive)
 
 **Local file path** (`/Users/.../hero.jpg`, `./assets/x.png`)
-Prefer the UDS `Picture` component; plain `<img>` is acceptable for quick sketches.
+Use Remotion's `<Img>` (it waits for the image before the frame renders); plain `<img>` is
+acceptable for a static sketch.
 ```tsx
-import { Picture } from '@ionos-web-design-system/react/picture';
-<Picture src="/Users/you/hero.jpg" alt="Hero" className="w-full h-96 object-cover rounded-lg" />
+import { Img } from 'remotion';
+<Img src="/Users/you/hero.jpg" style={{ width: '100%', height: 384, objectFit: 'cover', borderRadius: 8 }} />
 ```
 Local paths only resolve in a dev server with filesystem access; `public/` paths are reliable.
 
@@ -23,7 +24,7 @@ Extract `fileKey` + `nodeId` (`node-id=1-2` → `1:2`), call
 `mcp__plugin_figma_figma__get_screenshot(fileKey, nodeId)` for a 7-day URL, embed via `<img>`, and
 leave a comment with the source URL so it can be re-fetched when it expires.
 
-**Placement quick-reference:** Hero — full-width `object-cover`, centered headline/CTA made legible with a text-shadow or a local panel behind the text (NEVER a dark overlay/scrim over the image).
+**Placement quick-reference:** Hero — full-width `object-cover`, centered headline (`KitText`) / CTA (`KitButton`) made legible with a local panel behind them (NEVER a dark overlay/scrim over the image).
 Card — `object-cover object-top`, caption below. Aside — rounded + bordered, small caption.
 
 ---
@@ -141,10 +142,12 @@ It's always fine to skip the catalog and build from primitives. When the layout 
 none is provided/suitable, use a token-styled placeholder:
 
 ```tsx
-<div className="w-full h-64 rounded-lg flex items-center justify-center"
-     style={{ background: 'var(--surface-base-invert)', color: 'var(--text-base-invert)' }}>
-  <Icon group="system" name="image" size={48} className="opacity-30" />
-  <span className="text-sm opacity-40 ml-2">Image placeholder</span>
+import image from '@ionos-web-design-system/icon/system/image';
+import { KitIcon } from './kit';
+
+<div style={{ width: '100%', height: 256, borderRadius: 8, display: 'flex', alignItems: 'center',
+              justifyContent: 'center', background: 'var(--surface-subtle)' }}>
+  <div style={{ opacity: 0.3 }}><KitIcon icon={image} size="xLarge" /></div>
 </div>
 ```
 

@@ -14,8 +14,8 @@ Layer order (document order, no z-index games):
 1. **Root** — `<AbsoluteFill>` with an opaque brand-gradient background (per
    `uds-style-guide`; for IONOS this is the deep-blue → dark-midnight gradient,
    `var(--color-gradient-start) → var(--color-gradient-end)`). For AI features, the brand
-   AI gradient (`var(--color-ai-primary-start) → var(--color-ai-primary-end)`; see
-   `uds-style-guide/rules/ionos-ai-features.md`) may replace it.
+   AI gradient (`var(--private-ai-primary-start) → var(--private-ai-primary-end)`, the runtime
+   AI tokens; see the brand's AI feature rule in `uds-style-guide`) may replace it.
 2. **Backdrop card = ONE FRAME** — the catalog image as a rounded-corner card covering
    roughly **75-90% of the canvas**, offset toward one side (per the composition plan),
    with `objectFit: 'cover'`, `overflow: 'hidden'`, and a soft shadow.
@@ -88,33 +88,36 @@ Layer order (document order, no z-index games):
    ```
 
 4. **Floating feature panel** — a compact panel half-overlapping the backdrop card's edge
-   on the negative-space side, containing the feature's UI (segmented control, radio list,
-   primary CTA — real UDS components or tight sketches). **Panel chrome follows the
+   on the negative-space side, containing the feature's UI as kit components (`KitTabs` for a
+   segmented control, `KitCheckbox` options, the AI CTA `KitButton concept="ai"`). **Panel chrome follows the
    Floating Highlight Card template (see `shared/floating-card.md` for the surface rule):
    borderless, with a plain neutral drop shadow (no AI glow — AI glow is on the CTA
    only) — NO border of any kind (dashed AND gradient borders are retired panel styles).
    The AI gradient belongs to the CTA inside, not the panel chrome.**
 
    ```tsx
+   import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
+   import { KitButton, KitCheckbox } from './kit';
+
    // Floating Highlight Card chrome (see shared/floating-card.md for the chrome spec
-   // and animated-entrance guidance):
+   // and animated-entrance guidance). `glow` is a clamped interpolate from the frame.
    <div style={{
      position: 'absolute', left: '5%', top: '30%', width: 280,
      borderRadius: 24, padding: 20,
      background: 'var(--surface-subtle)', // opaque — no backdropFilter on the card itself
      boxShadow: '0 24px 64px rgba(0,0,0,0.35)',
+     display: 'flex', flexDirection: 'column', gap: 12,
    }}>
-     {/* options list; CTA: linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end)) + white text;
-         sparkle icon accent: var(--color-ai-primary-end) */}
+     {texts.options.map((o, i) => <KitCheckbox key={o} checked={i === 0} label={o} />)}
+     <KitButton label={texts.cta} concept="ai" icon={sparkles} glow={glow} />
    </div>
    ```
 
-   If the panel shows a generating/loading moment, use the mandatory `ai-subtle`
-   treatment from `ionos-ai-features` for the AI 'thinking' indicator only (calm
-   `var(--color-ai-subtle-start) → var(--color-ai-subtle-end)` oscillation, ≥10–15
-   frames, no hard cut). The `ai-subtle` gradient is a TOKEN with light AND dark values —
-   always use `var(--color-ai-subtle-start)`/`var(--color-ai-subtle-end)` (auto light/dark)
-   rather than a hardcoded light-only fallback.
+   If the panel shows a generating/loading moment, set the CTA's `loading` prop and show
+   `KitSkeleton` lines where the result appears (≥10–15 frames, no hard cut — see the
+   brand's AI feature rule in `uds-style-guide`). A drawn 'thinking' bar may use the
+   scheme-aware `var(--private-ai-subtle-start) → var(--private-ai-subtle-end)` gradient,
+   never a hardcoded light-only value.
 
 5. **Connector line** — a thin line from the panel's edge to the selection marquee,
    ending in a filled dot. **The connector is ALWAYS axis-aligned — a single horizontal
@@ -138,26 +141,23 @@ Layer order (document order, no z-index games):
        div meeting at the corner — still never a tilted segment. */}
    ```
 
-6. **Optional accent badge** — one small circular badge (brand accent fill, icon +
-   1-2 words like "KI Text") near the marquee:
+6. **Optional AI mark** — one small kit AI icon action near the marquee; the parent only
+   positions it (and carries the pop-in animation):
 
    ```tsx
-   <div style={{
-     position: 'absolute', /* near the marquee */
-     display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
-     borderRadius: 999, background: 'var(--color-ai-primary-end)',
-     color: '#fff', fontSize: 13, fontWeight: 700,
-     boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
-   }}>
-     <Icon group="system" name="sparkles" size={14} /> KI Text
+   import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
+   import { KitIconButton } from './kit';
+
+   <div style={{ position: 'absolute', /* near the marquee */ }}>
+     <KitIconButton ai icon={sparkles} title={texts.aiLabel} />
    </div>
    ```
 
 Animation hooks (reference the patterns in `ionos/micro-animations.md` — do not
 re-invent them): panel enters with **Pattern 5 — Element Fly-In** (`flyIn`); the marquee
 draws in right after (animate `strokeDashoffset` on an SVG rect, or fade + scale the dashed
-div from 1.04→1); the badge pops last (scale 0.6→1 overshoot, same `flyIn` curve); the
+div from 1.04→1); the AI mark pops last (its parent scales 0.6→1 with overshoot, same `flyIn` curve); the
 connector line can grow from the panel toward the dot. The backdrop (including the calm
-region the marquee wraps) is present from frame 0; only the marquee, panel, badge, and
+region the marquee wraps) is present from frame 0; only the marquee, panel, AI mark, and
 connector animate in.
 

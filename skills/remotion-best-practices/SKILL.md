@@ -137,7 +137,7 @@ properties. The `/` makes the `var()` a **parse error** (and the hyphenated `--b
 isn't defined either), so the whole declaration is **dropped** — and the hex fallback is NOT
 applied, because a malformed/undefined-name `var()` fails before the fallback is reached. The
 element ends up transparent/unstyled, which silently destroys contrast (e.g. white icons on a
-pill whose background vanished → invisible). The `/`-paths in `uds-style-guide` are **Figma
+panel whose background vanished → invisible). The `/`-paths in `uds-style-guide` are **Figma
 hierarchy notation for reference only — never valid CSS.**
 
 Two correct options:
@@ -148,15 +148,22 @@ Two correct options:
    | Role | Background token | Foreground (text/icon) token |
    |---|---|---|
    | Default card / panel | `var(--surface-base)` | `var(--text-base)` |
-   | Inverted (dark) chip / pill / toolbar | `var(--surface-base-invert)` | `var(--text-base-invert)` |
+   | Inverted (dark) drawn panel / toolbar backdrop | `var(--surface-base-invert)` | `var(--text-base-invert)` |
    | Subtle / subtlest backdrop | `var(--surface-subtle)` / `var(--surface-subtlest)` | `var(--text-base)` |
    | AI accent surface | `var(--surface-semantic-ai)` | `var(--text-semantic-ai)` |
    | Success / danger / promo / caution | `var(--surface-semantic-<role>)` | `var(--text-semantic-<role>)` |
 
    ```tsx
-   // ✓ dark pill, accessible icons — surface + its paired text token
-   <div style={{ background: 'var(--surface-base-invert)', borderRadius: 999, padding: '12px 20px' }}>
-     <Icon color="var(--text-base-invert)" />
+   import { svgData as gearSvg } from '@ionos-web-design-system/icon/system/gear';
+
+   // ✓ drawn dark toolbar backdrop, accessible glyph — surface + its paired text token
+   // (status chips, tags and buttons are kit components and need no colour pairing)
+   <div style={{ background: 'var(--surface-base-invert)', borderRadius: 16, padding: '12px 20px' }}>
+     <div style={{
+       width: 24, height: 24, backgroundColor: 'var(--text-base-invert)',
+       WebkitMaskImage: `url(${gearSvg})`, maskImage: `url(${gearSvg})`,
+       WebkitMaskSize: 'contain', maskSize: 'contain',
+     }} />
    </div>
    ```
 

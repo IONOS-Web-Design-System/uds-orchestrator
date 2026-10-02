@@ -42,7 +42,7 @@ Per-brand fonts/markets: see `rules/shared-brand-overview.md` (authoritative) an
 2. **Brand-specific rule files** — Navigate via the table above for colors and typography.
 3. **AI feature color language**: read the active brand's file when building any AI affordance.
    - ionos: **`rules/ionos-ai-features.md`** (blue→magenta gradient, AI tokens, Button `ai` concept).
-   - strato: **`rules/strato-ai-features.md`** (cyan→pink gradient with dark label text, blue text-gradient for secondary AI actions, yellow→orange thinking state). Use these hex values, not `var(--color-ai-*)`.
+   - strato: **`rules/strato-ai-features.md`** (cyan→pink gradient with dark label text, blue text-gradient for secondary AI actions, yellow→orange thinking state). AI CTAs and AI icon actions come from the UDS kit (`KitButton concept="ai"`, `KitIconButton ai`); the hex values are for shapes you draw yourself.
 
 ## Quick Reference — IONOS Brand
 
@@ -58,7 +58,7 @@ The three primary IONOS colors (the `Figma token` column is **reference notation
 
 IONOS typefaces: **Overpass** for headlines, **Open Sans** for everything else.
 
-**AI features** use the signature blue→magenta gradient — `<Button concept="ai">`, or in code the `--surface-semantic-ai` token. See `rules/ionos-ai-features.md`. Reserve it for AI affordances only.
+**AI features** use the signature blue→magenta gradient — in code the UDS kit's `<KitButton concept="ai">` / `<KitIconButton ai>`, and the `--surface-semantic-ai` token for a drawn AI tint. See `rules/ionos-ai-features.md`. Reserve it for AI affordances only.
 
 > **Token path notation — Figma paths are NOT CSS variables.** This guide writes brand colours
 > as Figma hierarchy paths (`brand/ionos-blue-600`). There is **no** matching CSS custom property

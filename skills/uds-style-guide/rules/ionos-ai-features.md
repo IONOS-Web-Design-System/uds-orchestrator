@@ -25,50 +25,67 @@ gradient on a non-AI badge.
 
 | Token (CSS custom property) | Value (ionos) | Use |
 |---|---|---|
-| `--color-ai-primary-start` | indigo `oklch(0.4782 0.1542 255.37)` | Primary AI CTA gradient — start |
-| `--color-ai-primary-end`   | magenta `oklch(0.6677 0.2631 320.15)` | Primary AI CTA gradient — end |
-| `--color-ai-subtle-start` / `--color-ai-subtle-end` | light + dark-scheme pairs | Subtle AI surfaces (prompt/generating backgrounds) |
-| `--color-ai-secondary-*`, `--color-ai-tertiary-*` | gradient pairs | Secondary/tertiary AI emphasis |
+| `--private-ai-primary-start` | indigo `oklch(0.4782 0.1542 255.37)` | Primary AI gradient — start |
+| `--private-ai-primary-end`   | magenta `oklch(0.6677 0.2631 320.15)` | Primary AI gradient — end |
+| `--private-ai-subtle-start` / `--private-ai-subtle-end` | light + dark-scheme pairs | The AI 'thinking' indicator only |
+| `--private-ai-secondary-*`, `--private-ai-tertiary-*` | gradient pairs | Secondary/tertiary AI emphasis |
 | `--surface-semantic-ai`, `--text-semantic-ai` | semantic | AI surface tint / on-AI text |
 
-The magenta end (`--color-ai-primary-end`) is the AI **accent** — use it for the
-sparkle/star icon that signals an AI affordance.
+These are the CSS variables that exist at runtime inside the `data-brand` root. The
+`--color-ai-*` names seen in Tailwind are `@theme inline` aliases, not runtime variables: never
+write `var(--color-ai-*)` in a style object.
 
-### Resolved sRGB hex (for hardcoded / Remotion-wireframe contexts)
+**The kit owns AI controls.** The AI CTA is `<KitButton concept="ai" …/>` and an AI icon action is
+`<KitIconButton ai …/>` (see the prompt section "# UDS kit"). They take every value in this file
+from the tokens. Everything below that names a hex value or a gradient is for shapes **you draw
+yourself** (an illustration accent, a bloom, a thinking bar, a drawn AI badge), never for a
+button, input or icon action.
 
-CSS custom properties may not resolve in a Remotion render, and OKLCH must NOT be
-hand-converted — use these exact hex values when hardcoding:
+The magenta end (`--private-ai-primary-end`) is the AI **accent** — use it for a drawn
+sparkle/star shape that signals an AI affordance.
+
+### Resolved sRGB hex (for hand-drawn AI shapes)
+
+OKLCH must NOT be hand-converted — use these exact hex values when you draw an AI shape:
 
 | Token | Hex |
 |---|---|
 | `ai-primary-start` (IONOS blue) | `#095BB1` |
 | `ai-primary-end` (magenta, = IONOS purple-400) | `#D746F5` — AI gradient end; also the promotional-shape colour (same on light + dark) |
-| `ai-subtle-start` | light `#FAE7FE` · dark `oklch(0.3696 0.1806 304.15)` — scheme-aware token; prefer `var(--color-ai-subtle-start)` |
-| `ai-subtle-end` | light `#FFFFFF` · dark `oklch(0.229 0.0801 256.64)` — prefer `var(--color-ai-subtle-end)` |
+| `ai-subtle-start` | light `#FAE7FE` · dark `oklch(0.3696 0.1806 304.15)` — scheme-aware token; prefer `var(--private-ai-subtle-start)` |
+| `ai-subtle-end` | light `#FFFFFF` · dark `oklch(0.229 0.0801 256.64)` — prefer `var(--private-ai-subtle-end)` |
 | purple-500 `#B410E7` | **RETIRED — do not use in any scenario** |
 | "generating" text (purple-600) `#8212C2` | transient AI-generating text colour only; reverts to `var(--text-base)` / `var(--text-subtle)` once generation completes |
 
 The gradient **starts blue and ends magenta** — `#095BB1 → #D746F5`. A purple-only or
 pink-only gradient is wrong; the blue start is what makes it read as IONOS.
 
-Interactive AI controls (generate / "improve with AI" / prompt send) use this gradient —
-**never** brand sky `#11C7E6` (that is a generic CTA colour, not the AI signature).
+Interactive AI controls (generate / "improve with AI" / prompt send) carry this gradient through
+`KitButton concept="ai"` — **never** brand sky `#11C7E6` (that is a generic CTA colour, not the AI
+signature), and never a hand-drawn gradient div.
 
-## Primary AI CTA — the gradient
+## Primary AI CTA — `<KitButton concept="ai">`
 
-A full blue→magenta gradient background with white text. Default direction `45deg`.
-**In Remotion/wireframe contexts, always use a static `45deg` angle. Do NOT animate or
-interpolate the gradient angle.**
+```tsx
+import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
+import { KitButton } from './kit';
+
+<KitButton label={texts.cta} concept="ai" icon={sparkles} glow={glow} />
+```
+
+The kit renders the static blue→magenta fill and its label colour. Animate the AI moment through
+the `glow` prop (0–1, computed from the frame) and the `loading` prop, and press feedback as a
+transform on a parent `div`. Never rotate or interpolate a gradient angle.
 
 ### AI moment animation — preferred effects
 
 To animate an AI moment (button activation, content generation, result reveal), use:
-- **Glow/radial bloom** — a radial gradient using `#095BB1` (blue) or `#D746F5` (magenta)
-  at low opacity (~0.15–0.25), pulsed via `interpolate()` on `opacity` or `scale`
-- **Harmonized gradient fade** — fade in/out a `linear-gradient(120deg, #FAE7FE, #FFFFFF)`
-  (`ai-subtle`) as the background of the active surface; slow, calm movement only
-- **Light bloom on text/icon** — briefly lift the AI star icon or result text with a
-  soft `drop-shadow(0 0 8px #D746F5)` at low opacity, fading out after the reveal
+- **The CTA's glow** — `KitButton`'s `glow` prop, pulsed from the frame
+- **Glow/radial bloom** (a drawn accent behind a result) — a radial gradient using `#095BB1`
+  (blue) or `#D746F5` (magenta) at low opacity (~0.15–0.25), pulsed via `interpolate()` on
+  `opacity` or `scale`
+- **Light bloom on a drawn icon** — briefly lift a drawn AI star with a soft
+  `drop-shadow(0 0 8px #D746F5)` at low opacity, fading out after the reveal
 
 These effects are calm and premium — they signal AI without overpowering the content.
 
@@ -77,25 +94,23 @@ These effects are calm and premium — they signal AI without overpowering the c
 **Every AI interaction must include a visible loading/generating state** between the
 trigger (button click) and the result reveal. A direct cut from action to result looks
 broken. The loading state:
-- Shows the `ai-subtle` gradient (`var(--color-ai-subtle-start)` → `var(--color-ai-subtle-end)`;
-  light `#FAE7FE → #FFFFFF`, dark via the token) ONLY on the AI **'thinking' indicator** — e.g. a
-  text-placeholder / typing bar — never as a general panel, prompt-bubble, or card surface
+- In UI chrome it is `KitButton`'s `loading` prop on the CTA and/or `<KitSkeleton shape="text" />`
+  lines where the result will appear (see `ionos/ai-animations.md` Template 2)
+- A drawn 'thinking' bar may use the `ai-subtle` gradient
+  (`linear-gradient(120deg, var(--private-ai-subtle-start), var(--private-ai-subtle-end))`) — ONLY
+  on that indicator, never as a general panel, prompt-bubble, or card surface
 - Lasts at least 10–15 frames (at 30fps) — long enough to read as deliberate processing
-- May pulse a `filled-sparkles` AI icon in the AI accent `#D746F5` (low-opacity oscillation), or a
-  soft gradient scan across the content area — never use the retired `#B410E7`
+- May pulse a drawn `filled-sparkles` mark in the AI accent `#D746F5` (low-opacity
+  oscillation) — never use the retired `#B410E7`
 - Resolves into the result reveal with a fade or slide — never a hard cut
 
-```css
-background: linear-gradient(45deg, var(--color-ai-primary-start), var(--color-ai-primary-end));
-color: #fff;
-```
+## AI badges — gradient required, never flat purple
 
-## AI badges / pills — gradient required, never flat purple
+The kit has no AI chip, so an AI badge (e.g. a "KI-VORSCHLAG" / "AI suggestion" label) is a drawn
+accent. Non-AI status chips and tags are `KitPill` / `KitBadge`. A drawn AI badge MUST carry the
+blue→magenta **gradient** — a solid/flat purple fill is WRONG. Two valid renderings:
 
-AI badges and pills (e.g. a "KI-VORSCHLAG" / "AI suggestion" label) MUST render the same
-blue→magenta **gradient** as the CTA — a solid/flat purple fill is WRONG. Two valid renderings:
-
-- **Full gradient background** — `linear-gradient(45deg, #095BB1, #D746F5)` with white/light text, OR
+- **Full gradient background** — `linear-gradient(45deg, #095BB1, #D746F5)` with white text, OR
 - **Gradient text on a neutral surface** — gradient-clipped text (`#095BB1 → #D746F5`) on
   `var(--surface-base)` / `var(--surface-subtle)`, matching the `ai` Button's `secondary`/`tertiary`
   text-gradient treatment described below.
@@ -111,35 +126,34 @@ static badge background.
 
 ## Subtle AI surfaces — the 'thinking' indicator ONLY
 
-`ai-subtle` is a **scheme-aware token** — `--color-ai-subtle-start/end` carry BOTH light and dark
-values. Reserve it for the AI **'thinking' indicator** only — e.g. a text-placeholder bar that
-animates while the model "thinks". It is NOT a general surface: prompt inputs, panels, bubbles,
-and cards use `var(--surface-base)` / `var(--surface-subtle)`, never `ai-subtle`.
+`ai-subtle` is a **scheme-aware token** — `--private-ai-subtle-start/end` carry BOTH light and dark
+values. Reserve it for the AI **'thinking' indicator** only — e.g. a drawn text-placeholder bar
+that animates while the model "thinks". It is NOT a general surface: prompt inputs, panels,
+bubbles, and cards use `var(--surface-base)` / `var(--surface-subtle)`, never `ai-subtle`.
 
 ```css
 /* AI 'thinking' indicator only — the token carries light + dark */
-background: linear-gradient(120deg, var(--color-ai-subtle-start), var(--color-ai-subtle-end));
+background: linear-gradient(120deg, var(--private-ai-subtle-start), var(--private-ai-subtle-end));
 ```
 
-## Real component — `<Button concept="ai">`
+## The `ai` concept variants
 
-`@ionos-web-design-system/react` ships the gradient natively. 4 concepts:
-`brand` · `monochrome` · `ai` · `callout`. The `ai` concept has 3 variants:
+UDS `Button` ships the gradient natively; the kit exposes it as `KitButton concept="ai"`. The
+`ai` concept has 3 variants:
 
 | Variant | Appearance |
 |---|---|
-| `primary`   | Full gradient background + white text |
+| `primary`   | Full gradient background + on-AI label |
 | `secondary` | Gradient text on transparent bg (**gradient borders are retired** — no gradient border) |
 | `tertiary`  | Gradient text only (transparent bg) |
 
 ```tsx
-import Button from '@ionos-web-design-system/react/button';
-<Button concept="ai" variant="primary">Generate with AI</Button>
+import { KitButton } from './kit';
+
+<KitButton label={texts.cta} concept="ai" variant="secondary" />
 ```
 
-AI loading state uses a gradient glow/scan rather than a spinner.
-
-> **In Remotion/wireframe contexts:** The AI CTA button gradient is always static —
-> `linear-gradient(45deg, #095BB1, #D746F5)`. Animate the AI *moment* using glow,
-> radial bloom, or harmonized `ai-subtle` gradient fade — not by rotating the CTA angle.
-> A loading state between trigger and result is required — see "Loading state" above.
+> **In Remotion/wireframe contexts:** the AI CTA is always `KitButton concept="ai"`; its gradient
+> is static. Animate the AI *moment* with the `glow` and `loading` props, a drawn radial bloom, or
+> a drawn `ai-subtle` thinking bar — never by rotating a gradient angle. A loading state between
+> trigger and result is required — see "Loading state" above.

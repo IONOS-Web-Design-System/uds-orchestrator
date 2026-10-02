@@ -42,6 +42,11 @@ cursor shows and un-wraps when it hides (or when typing ends) — the last word 
 cursor `display: 'inline-block', width: 0, overflow: 'visible'` and blink it via `opacity` —
 never by conditionally mounting it (`{show && <span>▌</span>}` toggles width → wrap jitter).
 
+**Typing into a UI field is the kit's job.** A prompt field, search box or input that types is
+`<KitInput value={typedText} caret={Math.floor(frame / 16) % 2 === 0} />` (UDS kit, `./kit`):
+pass the clamped slice below as `value` and a frame-driven boolean blink as `caret`. The
+hand-rolled recipe below is for free text outside a field (typed copy drawn into a scene).
+
 ```tsx
 // ✓ CORRECT — typing from frame 0, single .slice() node, stable layout
 const CHAR_FRAMES = 2;                     // frames per character

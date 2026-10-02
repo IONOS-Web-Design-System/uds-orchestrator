@@ -5,8 +5,7 @@ decorative: true
 # Decorative Primitives (transparent canvas, size, pop-outs, theming, image)
 
 Miscellaneous brand-agnostic decorative-mode primitives that don't warrant their own file.
-Concrete color values referenced below (`DECORATIVE_BG_START`, `DECORATIVE_BG_END`,
-`ACCENT_SKY`) are brand-specific — resolve them from the brand's decorative color rule (e.g.
+Concrete color values referenced below (`DECORATIVE_BG_START`, `DECORATIVE_BG_END`) are brand-specific — resolve them from the brand's decorative color rule (e.g.
 `ionos/decorative-mode.md` "Decorative Color Values") — never hardcode a brand hex in this
 shared file.
 
@@ -55,7 +54,7 @@ The device frame chrome (dark grey bezel), glass cards, and floating elements ar
 |------|-------|----------|--------------|-------------------|
 | **large** | ~750px | Full carousel, hero section | Full layout — nav + sections + multiple cards | 3–4 |
 | **medium** | ~500px | Half-screen panel, feature callout | One main section, condensed nav | 1–2 |
-| **small** | ~250px | Inline card, thumbnail, icon-area | Abstract — 2–3 cards max, no nav | 1 (pill only) |
+| **small** | ~250px | Inline card, thumbnail, icon-area | Abstract — 2–3 cards max, no nav | 1 (one small `KitPill` chip) |
 
 Size affects everything: larger means more sections, more glass cards, more floating elements, more animation. Smaller means fewer elements but **typography becomes more important** as the primary context signal.
 
@@ -85,7 +84,7 @@ Size affects everything: larger means more sections, more glass cards, more floa
 ```
 [no nav]
 [2–3 glass cards stacked or 2-column mini-grid]
-[1 small pill pop-out]
+[1 small KitPill chip pop-out]
 [float bob only — no cursor (too cramped)]
 [typography anchor: 12–14px, more visible — this is the main context signal]
 ```
@@ -94,13 +93,16 @@ Size affects everything: larger means more sections, more glass cards, more floa
 
 ## Pop-out Floating Elements
 
-The most visually dynamic decorative compositions have **one or two elements that escape the device frame boundary** — a stat card floating above the screen edge, a notification pill bleeding outside the laptop bezel. These tell the viewer "this is important".
+The most visually dynamic decorative compositions have **one or two elements that escape the device frame boundary** — a stat card floating above the screen edge, a notification chip bleeding outside the laptop bezel. These tell the viewer "this is important".
 
 > Text-stability (never animate a transform on text-bearing layers; avoid shimmer/sub-pixel drift): see remotion-best-practices `shared-motion-text.md` (always in effect).
 
 Wrap the device frame in a padded relative container, then use `position: absolute` to place pop-out elements:
 
 ```tsx
+import bell from '@ionos-web-design-system/icon/system/bell';
+import { KitIcon, KitPill } from './kit';
+
 {/* Outer wrapper with generous padding for bleed space */}
 <div style={{ position: 'relative', display: 'inline-block', padding: '48px 72px 48px 48px' }}>
   <MacWindowFrame>
@@ -121,21 +123,19 @@ Wrap the device frame in a padded relative container, then use `position: absolu
     </div>
   </div>
 
-  {/* Bottom-left notification pill — tint is the brand's ACCENT_SKY (see header note) */}
+  {/* Bottom-left notification chip — the kit draws the chip; the parent only places and animates it */}
   <div style={{
     position: 'absolute', bottom: 72, left: -28, zIndex: 10,
-    background: 'rgba(ACCENT_SKY, 0.12)', border: '1px solid rgba(ACCENT_SKY, 0.30)',
-    borderRadius: 999, padding: '8px 14px',
     display: 'flex', alignItems: 'center', gap: 8,
     animation: 'flyIn 0.55s cubic-bezier(0.16,1,0.3,1) 0.4s both',
   }}>
-    <Icon group="system" name="bell" size={14} style={{ color: 'ACCENT_SKY' }} />
-    <Bar w="80px" h={7} op={0.45} />
+    <KitIcon icon={bell} size="small" />
+    <KitPill label={texts.notification} variant="success" />
   </div>
 </div>
 ```
 
-Good pop-out candidates: stat metric cards, AI completion notifications, action confirmation pills, "New" feature banners, user avatar / presence chips.
+Good pop-out candidates: stat metric cards (glass card + bars), AI completion notifications, action confirmation chips (`KitPill`), "New" tags (`KitBadge`), user avatars (`KitAvatar`).
 
 The slight tilt (`rotate(1.5deg)`) and shadow make the card feel like it's physically lifted off the screen.
 
@@ -180,22 +180,24 @@ When the user provides a pixel image, render it as a "floating panel" — it sho
 ```
 
 **Split-hero layout (common pattern):**
-- Left column (60%): dark background, bar headline + BarGroup + button placeholder + optional stat row
+- Left column (60%): dark background, bar headline + BarGroup + CTA (`KitButton`) + optional stat row
 - Right column (40%): image panel floating with shadow
 
-The button placeholder's fill/border below use the same brand-specific `ACCENT_SKY` (see header note):
+The CTA row is kit buttons with short real labels — never a drawn button-shaped div:
 
 ```tsx
+import { KitButton } from './kit';
+
 <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 64, alignItems: 'center', padding: '80px 64px' }}>
   <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
     <Bar w="80px" h={7} op={0.18} />
     <Bar w="65%" h={20} op={0.30} />
     <Bar w="50%" h={15} op={0.25} />
     <BarGroup lines={3} />
-    {/* button placeholder */}
+    {/* CTA row */}
     <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-      <div style={{ height: 44, width: 140, borderRadius: 8, background: 'rgba(ACCENT_SKY, 0.25)', border: '1px solid rgba(ACCENT_SKY, 0.5)' }} />
-      <div style={{ height: 44, width: 120, borderRadius: 8, border: '1px solid rgba(255, 255, 255, 0.18)' }} />
+      <KitButton label={texts.cta} />
+      <KitButton label={texts.secondaryCta} variant="secondary" />
     </div>
   </div>
   <div style={{ borderRadius: 16, overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.10)' }}>

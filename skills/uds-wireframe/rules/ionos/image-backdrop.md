@@ -20,7 +20,8 @@ references semantically:
 
 - Brand gradient root (`var(--color-gradient-start) → var(--color-gradient-end)`): IONOS
   Blue → Dark Midnight — see `uds-style-guide`.
-- Brand AI gradient (`var(--color-ai-primary-start) → var(--color-ai-primary-end)`, blue →
-  magenta) — see `uds-style-guide/rules/ionos-ai-features.md` for the resolved hex.
+- Brand AI gradient for a drawn AI background (`var(--private-ai-primary-start) →
+  var(--private-ai-primary-end)`, blue → magenta) — see `uds-style-guide/rules/ionos-ai-features.md`
+  for the resolved hex. AI CTAs and AI icon actions are kit components and need no value here.
 - AI-generating accent purple (purple-600) used for the selection marquee only (never the
   AI CTA gradient) — see `ionos/product-frame-color.md`.

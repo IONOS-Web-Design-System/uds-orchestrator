@@ -41,57 +41,60 @@ export default function MyWireframe() {
 
 ## Layout Patterns and Component Selection
 
+Interface elements come from the UDS kit (`./kit`, see the prompt section "# UDS kit"). The
+patterns below hand-build only the layout `div`s (position, grid, gaps, padding) and place kit
+components in them. Never import a raw `@ionos-web-design-system/react/*` component other than
+`ThemeProvider`.
+
 ### Navigation / Header
 
 ```tsx
-import { NavigationBar } from '@ionos-web-design-system/react/navigation-bar';
+import { svgData as ionosLogo } from '@ionos-web-design-system/icon/brandmark/ionos-light';
+import { KitButton, KitText } from './kit';
 
-<NavigationBar
-  brand="ionos"
-  items={[
-    { label: 'Products', href: '#' },
-    { label: 'Solutions', href: '#' },
-    { label: 'Pricing', href: '#' },
-  ]}
-/>
+<div style={{ display: 'flex', alignItems: 'center', gap: 32, padding: '16px 32px', background: 'var(--surface-base)' }}>
+  <img src={ionosLogo} alt="IONOS" style={{ height: 24, width: 'auto', display: 'block' }} />
+  <div style={{ display: 'flex', gap: 24, flex: 1 }}>
+    {['Products', 'Solutions', 'Pricing'].map((item) => (
+      <KitText key={item} variant="bodySm" weight="bold">{item}</KitText>
+    ))}
+  </div>
+  <KitButton label="Sign in" variant="secondary" size="small" />
+</div>
 ```
 
 ### Hero / Banner Section
 
 ```tsx
-import { Button } from '@ionos-web-design-system/react/button';
-import { ThemeInverter } from '@ionos-web-design-system/react/theme-inverter';
+import { KitButton, KitText } from './kit';
 
-<ThemeInverter>
-  {/* No `Surface` component — themed background via a bg-surface-* div */}
-  <div className="bg-surface-base px-16 py-24 text-center">
-    <h1 className="font-heading text-6xl font-semibold mb-4">
-      Your hosting, simplified
-    </h1>
-    <p className="text-xl mb-8 opacity-80">
-      Everything you need to get online — domains, hosting, email.
-    </p>
-    <Button variant="primary" size="lg" onClick={() => {}}>
-      Get started
-    </Button>
+// A dark section is a nested root carrying BOTH data-brand and data-color-scheme
+// (the core tokens match them on the same element).
+<div data-brand={brand} data-color-scheme="dark"
+     style={{ background: 'var(--surface-base)', padding: '96px 64px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+  <KitText variant="heading3xl" weight="bold" align="center">Your hosting, simplified</KitText>
+  <KitText variant="bodyXl" tone="subtle" align="center">Everything you need to get online — domains, hosting, email.</KitText>
+  <div style={{ marginTop: 16 }}>
+    <KitButton label="Get started" size="large" />
   </div>
-</ThemeInverter>
+</div>
 ```
-
-Use `ThemeInverter` for dark-background hero sections — it flips tokens automatically.
 
 ### Card Grid
 
 ```tsx
-import { Card } from '@ionos-web-design-system/react/card';
+import { KitCard, KitText } from './kit';
 
-<div className="grid grid-cols-3 gap-6 px-8 py-12">
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, padding: '48px 32px' }}>
   {[
     { title: 'Web Hosting', desc: 'Fast, reliable, scalable.' },
     { title: 'VPS', desc: 'Full root access, any size.' },
     { title: 'Domains', desc: '500+ extensions available.' },
   ].map((item) => (
-    <Card key={item.title} title={item.title} description={item.desc} />
+    <KitCard key={item.title}>
+      <KitText variant="headingLg" weight="bold">{item.title}</KitText>
+      <KitText tone="subtle">{item.desc}</KitText>
+    </KitCard>
   ))}
 </div>
 ```
@@ -99,22 +102,21 @@ import { Card } from '@ionos-web-design-system/react/card';
 ### Form / Input Section
 
 ```tsx
-import { TextField } from '@ionos-web-design-system/react/text-field';
-import { Button } from '@ionos-web-design-system/react/button';
+import { KitButton, KitInput } from './kit';
 
-<div className="max-w-md mx-auto py-16 flex flex-col gap-4">
-  <TextField label="Email address" placeholder="you@example.com" onChange={() => {}} />
-  <TextField label="Password" type="password" placeholder="••••••••" onChange={() => {}} />
-  <Button variant="primary" onClick={() => {}}>Sign in</Button>
+<div style={{ maxWidth: 448, margin: '0 auto', padding: '64px 0', display: 'flex', flexDirection: 'column', gap: 16 }}>
+  <KitInput label="Email address" value="" placeholder="you@example.com" />
+  <KitInput label="Password" value="••••••••" />
+  <KitButton label="Sign in" />
 </div>
 ```
 
 ### Dashboard / Data Layout
 
 ```tsx
-import { Card } from '@ionos-web-design-system/react/card';
+import { KitCard, KitText } from './kit';
 
-<div className="grid grid-cols-4 gap-4 p-8">
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, padding: 32 }}>
   {/* Stat cards */}
   {[
     { label: 'Active servers', value: '12' },
@@ -122,37 +124,37 @@ import { Card } from '@ionos-web-design-system/react/card';
     { label: 'Uptime', value: '99.98%' },
     { label: 'Support tickets', value: '3' },
   ].map((stat) => (
-    <Card key={stat.label}>
-      <div className="text-sm opacity-60">{stat.label}</div>
-      <div className="text-3xl font-semibold mt-1">{stat.value}</div>
-    </Card>
+    <KitCard key={stat.label}>
+      <KitText variant="bodySm" tone="subtle">{stat.label}</KitText>
+      <KitText variant="heading2xl" weight="bold">{stat.value}</KitText>
+    </KitCard>
   ))}
 </div>
 ```
+
+Other kit elements fill the same roles: tab strips are `KitTabs`, toggles `KitSwitch`, checkboxes
+`KitCheckbox`, initials circles `KitAvatar`, progress bars/rings `KitProgress`, loading rows
+`KitSkeleton`, icon actions `KitIconButton`.
 
 ---
 
 ## Icon Usage
 
-**Do NOT use the `<Icon>` component or `useDynamicIcon`** — both are forbidden for Remotion
-by `remotion-best-practices/rules/shared-uds-icons.md`: they inject CSS at runtime
-(`document.createStyleSheet()` per frame, or a loader-mangled class name), which is
-unreliable in Remotion's headless renderer. Use the `svgData` inline approach instead —
-full recipe there; the essentials:
+**Icons inside kit components and UI chrome** go through the kit: `KitIcon`, `KitIconButton`, or
+the `icon` prop of `KitButton`. They take the icon module's **default** import (the kit injects
+the icon CSS once, frame-safe):
 
 ```tsx
-import { svgData as checkmarkSvg } from '@ionos-web-design-system/icon/system/checkmark';
+import checkmark from '@ionos-web-design-system/icon/system/checkmark';
+import { KitIcon } from './kit';
 
-// System icons — mono mask, colour via backgroundColor
-<div style={{
-  display: 'inline-block', width: 20, height: 20,
-  backgroundColor: 'currentColor',
-  WebkitMaskImage: `url(${checkmarkSvg})`, maskImage: `url(${checkmarkSvg})`,
-  WebkitMaskSize: 'contain', maskSize: 'contain',
-  WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat',
-  WebkitMaskPosition: 'center', maskPosition: 'center',
-}} />
+<KitIcon icon={checkmark} size="small" />
 ```
+
+**Do NOT use the raw `<Icon>` component, `useDynamicIcon`, or an icon class name** outside the
+kit — see `remotion-best-practices/rules/shared-uds-icons.md`. A glyph you draw as **decoration**
+(an illustration motif, a large circular badge glyph, a full-colour product icon) uses the
+`svgData` inline approach — full recipe there; the essentials:
 
 ```tsx
 import { svgData as cloudMigrationSvg } from '@ionos-web-design-system/icon/ionos/cloud-migration-light';
@@ -204,40 +206,22 @@ Avoid: "Lorem ipsum", "Item 1 / Item 2", "Click here", "Test text".
 
 ## Semantic Status Colors
 
-For status badges (Running, Maintenance, Offline/Error, Warning) in dashboards and server lists, use UDS utility tokens for the badge background and Dark Midnight for the text. This avoids hard-coded hex — utility tokens are saturated/bright, so they work as low-opacity backgrounds but not as text colors on white.
+Status badges (Running, Maintenance, Offline/Error, Warning) in dashboards and server lists are
+`KitPill` status chips. The kit maps each variant to the scheme-aware semantic tokens — never
+hand-roll a status badge, its colours or its radius.
 
 ```tsx
-// Correct pattern — CSS tokens throughout, no hard-coded hex
-const STATUS_STYLES = {
-  Running:     { bg: 'rgba(18, 207, 118, 0.12)',  token: 'var(--utility/green-300)',  label: 'Running' },
-  Maintenance: { bg: 'rgba(255, 170, 0, 0.12)',   token: 'var(--utility/yellow-300)', label: 'Maintenance' },
-  Offline:     { bg: 'rgba(255, 97, 89, 0.12)',   token: 'var(--utility/red-300)',    label: 'Offline' },
-  Warning:     { bg: 'rgba(255, 170, 0, 0.12)',   token: 'var(--utility/yellow-300)', label: 'Warning' },
-};
+import { KitPill } from './kit';
 
-function StatusBadge({ status }: { status: keyof typeof STATUS_STYLES }) {
-  const s = STATUS_STYLES[status];
-  return (
-    <span style={{
-      backgroundColor: s.bg,
-      // Dark Midnight text via a token (hex: ionos-color-palette.md) — NOT a Figma path
-      color: 'var(--text-base)',
-      borderLeft: `3px solid ${s.token}`,
-      fontFamily: 'Open Sans, sans-serif',
-      fontSize: '0.75rem',
-      fontWeight: 600,
-      padding: '2px 10px',
-      borderRadius: '999px',
-      textTransform: 'uppercase',
-      letterSpacing: '0.56px',
-    }}>
-      {s.label}
-    </span>
-  );
-}
+const STATUS_VARIANT = {
+  Running: 'success',
+  Maintenance: 'caution',
+  Offline: 'danger',
+  Warning: 'caution',
+} as const;
+
+<KitPill label="Running" variant={STATUS_VARIANT.Running} />
 ```
-
-The border-left trick lets the utility color show its true value without requiring it to be legible as a text color.
 
 ---
 
@@ -265,11 +249,12 @@ The hex fallback does not save you (a malformed-name `var()` fails before the fa
 
 ```tsx
 // ✅ Correct — semantic token, or hex. Pair surface + its foreground for contrast.
-<h1 style={{ color: 'var(--text-base-invert)' }}>Headline</h1>   // white-on-dark
+// (UI copy itself is KitText; these are drawn shapes and their foreground.)
+<div style={{ background: 'var(--surface-base-invert)', color: 'var(--text-base-invert)' }}>…</div>   // white-on-dark
 <div style={{ background: '#003D8F', color: '#fff' }}>IONOS Blue panel</div>
 
 // ❌ Wrong — Figma token paths are not CSS variables; the declaration is dropped → unstyled
-<h1 style={{ color: 'var(--neutral/white)' }}>Headline</h1>
+<div style={{ color: 'var(--neutral/white)' }}>…</div>
 <div style={{ background: 'var(--brand/ionos-blue-600)' }}>…</div>
 ```
 
