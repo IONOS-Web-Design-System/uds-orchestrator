@@ -1,21 +1,21 @@
 ---
 name: ionos-wireframe-ai-animations
-description: Ready-to-use Remotion templates for IONOS AI feature moments — CTA pill button, text-generation area, image-generation area. Copy directly into Composition.tsx.
+description: Ready-to-use Remotion templates for IONOS AI feature moments (AI CTA button, floating highlight, text-generation area, image-generation area), built on the UDS kit (import from './kit'). Copy directly into Composition.tsx.
 motion: [animation]
 metadata:
-  tags: ionos, ai, animation, remotion, loading, neumorphism, template
+  tags: ionos, ai, animation, remotion, loading, template
 ---
 
 # IONOS AI Animation Templates (UDS kit)
 
-Every AI moment is built from the UDS kit (`./kit`, see "# UDS kit"). The brand AI concept
+Every AI moment is built from the UDS kit (`./kit`, see the prompt section "# UDS kit"). The brand AI concept
 (gradient, label color, AI surface) comes from the tokens. **Never hand-build an AI button,
 gradient, glow or thinking surface, and never hardcode AI hex values.**
 
 ```tsx
 import { interpolate, spring, useCurrentFrame } from 'remotion';
 import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
-import { KitButton, KitCard, KitInput, KitSkeleton, KitText } from './kit';
+import { KitButton, KitCard, KitIcon, KitInput, KitSkeleton, KitText } from './kit';
 ```
 
 ## Template 1 — AI CTA button
@@ -30,7 +30,8 @@ export const AIPillButton: React.FC<{
   const frame = useCurrentFrame();
   const loading = triggerFrame > 0 && frame >= triggerFrame && (loadingEndFrame === undefined || frame < loadingEndFrame);
   const glow = 0.55 + 0.45 * Math.sin(((frame % 72) / 72) * Math.PI * 2);
-  const press = spring({ frame: frame - triggerFrame, fps, config: { damping: 18, stiffness: 180 } });
+  const raw = spring({ frame: frame - triggerFrame, fps, config: { damping: 18, stiffness: 180, overshootClamping: true } });
+  const press = raw > 0.995 ? 1 : raw;
   const scale = triggerFrame > 0 ? interpolate(press, [0, 0.45, 1], [1, 0.93, 1]) : 1;
   return (
     <div style={{ display: 'inline-flex', transform: `scale(${scale})` }}>
@@ -42,9 +43,10 @@ export const AIPillButton: React.FC<{
 
 ## Floating highlight card
 
-The card surface is a `KitCard`. The prompt types into a `KitInput`, and the AI CTA is a
-`KitButton`. Chrome placement and size follow `shared/floating-card.md`; the entrance is a spring
-on the parent, snapped once settled.
+The card surface is a `KitCard`; placement, size and elevation follow `shared/floating-card.md`
+(elevation lives on the parent wrapper — the kit has no style props). The prompt types into a
+`KitInput`, and the AI CTA is a `KitButton`. The entrance is a spring on the parent, snapped once
+settled. Typing starts only after the card has settled — never animate text inside a moving parent.
 
 ```tsx
 export const AIFloatingHighlight: React.FC<{
@@ -54,10 +56,10 @@ export const AIFloatingHighlight: React.FC<{
   const raw = spring({ frame: frame - enterFrame, fps, config: { damping: 18, stiffness: 120 } });
   const enter = raw > 0.995 ? 1 : raw;
   const opacity = interpolate(frame, [enterFrame, enterFrame + 8], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  const typed = Math.floor(interpolate(frame, [enterFrame + 10, enterFrame + 10 + text.length * 2], [0, text.length], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }));
+  const typed = Math.floor(interpolate(frame, [enterFrame + 30, enterFrame + 30 + text.length * 2], [0, text.length], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }));
   return (
-    <div style={{ width: 420, opacity, transform: `translateX(${interpolate(enter, [0, 1], [-120, 0])}px)` }}>
-      <KitCard footer={<KitButton label={ctaLabel} concept="ai" icon={sparkles} glow={typed >= text.length ? 1 : 0} />}>
+    <div style={{ width: 320, opacity, transform: `translateX(${interpolate(enter, [0, 1], [-120, 0])}px)`, boxShadow: '0 16px 48px rgba(0,0,0,0.35)', borderRadius: 'var(--protected-container-rounded)' }}>
+      <KitCard footer={<KitButton label={ctaLabel} concept="ai" icon={sparkles} glow={interpolate(typed, [Math.max(0, text.length - 1), Math.max(1, text.length)], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })} />}>
         {productLabel ? <KitText variant="bodySm" tone="subtle">{productLabel}</KitText> : null}
         <KitInput value={text.slice(0, typed)} caret={typed < text.length && Math.floor(frame / 16) % 2 === 0} />
       </KitCard>
@@ -69,7 +71,8 @@ export const AIFloatingHighlight: React.FC<{
 ## Template 2 — Text generation area
 
 `KitSkeleton` lines stand for "thinking" until `endFrame`, then the generated copy is revealed in
-`KitText`. The reveal is an opacity crossfade on parent divs.
+`KitText`. A hidden ghost copy of the text reserves the height, so long copy never overflows; the
+skeleton and the visible text overlay it and crossfade by opacity on parent divs.
 
 ```tsx
 export const AITextGenerationArea: React.FC<{
@@ -81,9 +84,13 @@ export const AITextGenerationArea: React.FC<{
   return (
     <div style={{ width: 420, opacity: visible ? 1 : 0 }}>
       <KitCard>
-        <KitText variant="bodySm" tone="subtle" weight="bold">{productLabel}</KitText>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <KitIcon icon={sparkles} size="small" />
+          <KitText variant="bodySm" tone="subtle" weight="bold">{productLabel}</KitText>
+        </div>
         <div style={{ position: 'relative' }}>
-          <div style={{ opacity: 1 - reveal }}><KitSkeleton shape="text" lines={3} /></div>
+          <div style={{ visibility: 'hidden' }}><KitText>{generatedText}</KitText></div>
+          <div style={{ position: 'absolute', inset: 0, opacity: 1 - reveal }}><KitSkeleton shape="text" lines={3} /></div>
           <div style={{ position: 'absolute', inset: 0, opacity: reveal }}><KitText>{generatedText}</KitText></div>
         </div>
       </KitCard>
@@ -95,7 +102,7 @@ export const AITextGenerationArea: React.FC<{
 ## Template 3 — Image generation area
 
 A `KitSkeleton` rectangle holds the image slot while generating. The finished image (a Remotion
-`<Img>` of the asset slug, when one exists) crossfades in on a parent div.
+`<Img>` of the asset slug, when one exists) crossfades in on a parent div. `width` is the whole card width; `height` is the image slot height.
 
 ```tsx
 export const AIImageGenerationArea: React.FC<{
@@ -106,7 +113,10 @@ export const AIImageGenerationArea: React.FC<{
   return (
     <div style={{ width, opacity: frame >= startFrame ? 1 : 0 }}>
       <KitCard>
-        <KitText variant="bodySm" tone="subtle" weight="bold">{productLabel}</KitText>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <KitIcon icon={sparkles} size="small" />
+          <KitText variant="bodySm" tone="subtle" weight="bold">{productLabel}</KitText>
+        </div>
         <div style={{ position: 'relative', width: '100%', height }}>
           <div style={{ opacity: 1 - reveal }}><KitSkeleton shape="rectangle" height={height} /></div>
           {image ? <div style={{ position: 'absolute', inset: 0, opacity: reveal }}>{image}</div> : null}
