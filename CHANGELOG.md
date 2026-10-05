@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.22.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.21.1...v2.22.0) (2026-10-05)
+
+
+### Features
+
+* **uds-wireframe:** interface elements come from the frame-safe UDS kit (./kit) ([545a95e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/545a95e90ca05382e38165490e1dd2c0073c1ca6))
+
 ## [2.21.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.21.0...v2.21.1) (2026-09-30)
 
 
