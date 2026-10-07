@@ -46,8 +46,8 @@ export const AIPillButton: React.FC<{
 
 The card surface is a `KitCard`; placement, size and elevation follow `shared/floating-card.md`
 (elevation lives on the parent wrapper — the kit has no style props). The prompt types into the
-designed AI prompt window `<PromptWindow …/>` in flow (no `left`/`bottom`; `width` = the card's inner
-width), and the AI CTA is a `KitButton` whose `loading` is the generating moment. The entrance is a spring on
+`<PromptWindow …/>` in flow (`width` = the card's inner width); the AI CTA `KitButton`'s `loading` is the
+generating moment. The entrance is a spring on
 the parent, snapped once settled. Typing starts only after the card has settled — never animate text
 inside a moving parent. A prompt longer than ~40 characters is `variant="prompt-full"` (3 lines). Feed it
 from `texts.*` (`text={texts.prompt ?? ''}`).

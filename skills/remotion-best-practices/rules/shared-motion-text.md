@@ -32,7 +32,6 @@ floor at 0 (`extrapolateLeft: 'clamp'` AND `Math.max(0, …)`).
 toggles width, so the trailing word wraps and "jumps").
 
 **Typing into a UI field is the kit's job:** `<KitInput value={typedText} caret={Math.floor(frame / 16) % 2 === 0} />`
-(an AI prompt: `PromptWindow` from './uds/PromptWindow'; a site search: `KitSearchInput`)
 with the clamped slice below as `value`. The recipe below is for free text outside a field.
 
 ```tsx

@@ -107,12 +107,9 @@ export const MyComposition: React.FC<VariantProps> = ({ headline, subline, varia
 
 ## Density and spacing
 
-Interfaces are app-dense: the root's `data-platform={platform}` is `compact` by default, which shrinks
-the kit atoms and the type scale. Space every container and the gaps between elements with the core
-spacing tokens — `gap: 'var(--space-3)'`, `padding: 'var(--space-4) var(--space-5)'` (`--space-1`…
-`--space-11`, platform-scaled) — never raw px; px is only for fixed geometry (frame and device sizes,
-canvas positions). Keep the interface small inside the frame: body copy `body`/`bodySm`, headings no
-larger than `headingLg`.
+Interfaces are app-dense (`compact` platform). Container padding and gaps use core spacing tokens —
+`gap: 'var(--space-3)'`, `padding: 'var(--space-4)'` (`--space-1`…`11`) — never raw px (px only for
+frame sizes and positions). Headings at most `headingLg`.
 
 ## Related Skills
 

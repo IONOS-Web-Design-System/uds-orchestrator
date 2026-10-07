@@ -50,7 +50,7 @@ This pattern applies to **landscape/widescreen canvases** (e.g. 1280×720). For 
     background: 'var(--surface-subtle)',
     boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
   }}>
-    {/* PromptWindow in flow (the AI prompt; its send circle is the action) — the panel only places it */}
+    {/* PromptWindow (the AI prompt) — the panel only places it */}
   </div>
 
   {/* Optional secondary element near the cropped bottom edge */}
@@ -179,7 +179,7 @@ const H = height;
     zIndex: 100,
     transform: `translateY(${cardEnterY}px) scale(${cardScale})`,
   }}>
-    {/* AI prompt (PromptWindow in flow, promptText from the headline prop) + KitButton concept="ai" ("Seite erstellen" / market equivalent) */}
+    {/* AI prompt (PromptWindow, promptText from the headline prop) + KitButton concept="ai" ("Seite erstellen") */}
   </div>
 
 </AbsoluteFill>
