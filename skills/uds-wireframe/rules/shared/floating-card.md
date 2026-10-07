@@ -34,7 +34,7 @@ pill treatment. The controls inside are kit components; the wrapper is only a po
   zIndex: 100,
   // position: sibling of the frame, anchored bottom-left, overlapping its left/bottom edge and popping outside to the left
 }}>
-  {/* KitInput (prompt) or KitText (generated content) + KitButton concept="ai" (the CTA) */}
+  {/* KitSearchInput ai (prompt) or KitText (generated content) + KitButton concept="ai" (the CTA) */}
 </div>
 ```
 
@@ -62,7 +62,7 @@ pill treatment. The controls inside are kit components; the wrapper is only a po
                 background: 'var(--surface-subtle, #FFFFFF)',
                 boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
                 transform: `translateX(${highlightX}px) scale(${highlightScale})` }}>
-    {/* kit contents: KitInput + KitButton concept="ai" — or a prompt bar / stat callout / suggestion chip / generating indicator */}
+    {/* kit contents: KitSearchInput ai + KitButton concept="ai" — or a prompt bar / stat callout / suggestion chip / generating indicator */}
   </div>
   {/* 3 — optional secondary element (tool palette, KitPill chip) */}
   <div style={{ position: 'absolute', bottom: 40, left: 220, zIndex: 90, opacity: 0.7 }}>
@@ -87,7 +87,7 @@ and highlight elements in every pattern above. This file is the single canonical
 this chrome — brand-specific animation and hybrid-image rules point back here rather than
 restating it, so pure-illustration jobs always have it too.
 
-**Contents.** Prompt = `KitInput`, generated copy = `KitText`, AI CTA = `KitButton concept="ai"`.
+**Contents.** AI prompt = `<KitSearchInput ai …/>` (search field = `KitSearchInput`; a plain `KitInput` is only a form field), generated copy = `KitText`, AI CTA = `KitButton concept="ai"`.
 
 **KitCard exception.** If the surface is a `KitCard`, the wrapper carries only position, the
 neutral shadow and `borderRadius: 'var(--protected-container-rounded)'` (not 40), no

@@ -65,7 +65,7 @@ accent; resolve the concrete value from the brand's color rule (e.g. `ionos/prod
     boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
     zIndex: 100,
   }}>
-    {/* kit contents: KitInput / KitText + KitButton concept="ai" (the CTA) */}
+    {/* kit contents: KitSearchInput ai / KitText + KitButton concept="ai" (the CTA) */}
   </div>
 </AbsoluteFill>
 ```
