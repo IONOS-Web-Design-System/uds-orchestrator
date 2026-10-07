@@ -1,25 +1,16 @@
-// PromptWindow as THE AI prompt template everywhere (2026-10-07): besides the corporate_stage
-// contract rect (absolute, left/bottom), it renders IN FLOW inside a card / panel / step layout.
 import { describe, it, expect } from 'vitest';
 import type { ReactElement } from 'react';
-import { PromptWindow, SendButton, SIMPLE } from '../PromptWindow';
+import { PromptWindow, SendButton } from '../PromptWindow';
 import { PROMPT_WINDOW_BRANDS, aiGradient } from '../promptWindow.brands';
 
 type StyledEl = ReactElement<{ style?: Record<string, unknown>; children?: unknown }>;
 const base = { promptText: 'Eine App für mein Café', width: 360 } as const;
 
-describe('PromptWindow in-flow placement (no left/bottom)', () => {
+// User ruling 2026-10-07 (2nd): PromptWindow is ONLY a floating AI window — absolute, a direct child
+// of the root — never inside an interface. A prompt inside an interface is KitInput + an AI button.
+describe('PromptWindow is floating only', () => {
   for (const variant of ['prompt-simple', 'prompt-full'] as const) {
-    it(`${variant}: flows in its parent — no absolute position, no offsets, no stacking override`, () => {
-      const style = (PromptWindow({ ...base, variant, brand: 'ionos' }) as StyledEl).props.style!;
-      expect(style.position).toBe('relative');
-      expect(style.left).toBeUndefined();
-      expect(style.bottom).toBeUndefined();
-      expect(style.zIndex).toBeUndefined();
-      expect(style.width).toBe(360);
-    });
-
-    it(`${variant}: the contract rect keeps the absolute, bottom-anchored, z-indexed window`, () => {
+    it(`${variant}: always absolute, bottom-anchored and z-indexed from its left/bottom`, () => {
       const style = (PromptWindow({ ...base, variant, brand: 'ionos', left: 12, bottom: 40 }) as StyledEl).props.style!;
       expect(style.position).toBe('absolute');
       expect(style.left).toBe(12);
@@ -28,9 +19,9 @@ describe('PromptWindow in-flow placement (no left/bottom)', () => {
     });
   }
 
-  it('in-flow geometry is the same measured geometry (height from the Figma aspect)', () => {
-    const style = (PromptWindow({ ...base, variant: 'prompt-simple', brand: 'ionos' }) as StyledEl).props.style!;
-    expect(style.height).toBeCloseTo(360 / SIMPLE.aspect, 5);
+  it('left and bottom are required (an in-flow window does not type-check)', () => {
+    // @ts-expect-error — no in-flow placement: a floating window needs its rect
+    PromptWindow({ ...base, variant: 'prompt-simple', brand: 'ionos' });
   });
 });
 

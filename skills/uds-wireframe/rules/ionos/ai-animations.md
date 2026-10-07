@@ -15,8 +15,7 @@ gradient, glow or thinking surface, and never hardcode AI hex values.**
 ```tsx
 import { interpolate, spring, useCurrentFrame } from 'remotion';
 import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
-import { KitButton, KitCard, KitIcon, KitSkeleton, KitText } from './kit';
-import { PromptWindow } from './uds/PromptWindow';
+import { KitButton, KitCard, KitIcon, KitInput, KitSkeleton, KitText } from './kit';
 ```
 
 ## Template 1 — AI CTA button
@@ -45,12 +44,12 @@ export const AIPillButton: React.FC<{
 ## Floating highlight card
 
 The card surface is a `KitCard`; placement, size and elevation follow `shared/floating-card.md`
-(elevation lives on the parent wrapper — the kit has no style props). The prompt types into the
-`<PromptWindow …/>` in flow (`width` = the card's inner width); the AI CTA `KitButton`'s `loading` is the
-generating moment. The entrance is a spring on
-the parent, snapped once settled. Typing starts only after the card has settled — never animate text
-inside a moving parent. A prompt longer than ~40 characters is `variant="prompt-full"` (3 lines). Feed it
-from `texts.*` (`text={texts.prompt ?? ''}`).
+(elevation lives on the parent wrapper — the kit has no style props). The prompt types into a
+`KitInput`, and the AI CTA is a `KitButton`. The entrance is a spring on the parent, snapped once
+settled. Typing starts only after the card has settled — never animate text inside a moving parent.
+The typed prompt is at most 32 characters: the single-line `KitInput` clips longer text at this
+320px card width. Feed it from `texts.*` (`text={texts.prompt ?? ''}`); longer copy goes in a
+`KitText` below the input.
 
 ```tsx
 export const AIFloatingHighlight: React.FC<{
@@ -63,10 +62,10 @@ export const AIFloatingHighlight: React.FC<{
   const typeEnd = enterFrame + 30 + text.length * 2;
   const typed = Math.floor(interpolate(frame, [enterFrame + 30, typeEnd], [0, text.length], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }));
   return (
-    <div style={{ width: 400, opacity, transform: `translateX(${interpolate(enter, [0, 1], [-120, 0])}px)`, boxShadow: '0 16px 48px rgba(0,0,0,0.35)', borderRadius: 'var(--protected-container-rounded)' }}>
-      <KitCard footer={<KitButton label={ctaLabel} concept="ai" icon={sparkles} loading={frame >= typeEnd + 8 && frame < typeEnd + 38} />}>
+    <div style={{ width: 320, opacity, transform: `translateX(${interpolate(enter, [0, 1], [-120, 0])}px)`, boxShadow: '0 16px 48px rgba(0,0,0,0.35)', borderRadius: 'var(--protected-container-rounded)' }}>
+      <KitCard footer={<KitButton label={ctaLabel} concept="ai" icon={sparkles} glow={interpolate(frame, [typeEnd, typeEnd + 8], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })} />}>
         {productLabel ? <KitText variant="bodySm" tone="subtle">{productLabel}</KitText> : null}
-        <PromptWindow variant="prompt-simple" brand="ionos" promptText={text.slice(0, typed)} width={340} />
+        <KitInput value={text.slice(0, typed)} caret={typed < text.length && Math.floor(frame / 16) % 2 === 0} />
       </KitCard>
     </div>
   );

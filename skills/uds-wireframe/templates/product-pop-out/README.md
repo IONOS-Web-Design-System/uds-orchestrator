@@ -1,8 +1,9 @@
 # PromptWindow
 
-The measured Figma prompt window — THE AI prompt template for every composition: the
-`corporate_stage` product-pop-out highlight (absolute, from the contract rect) and any AI prompt
-inside a card, panel or step layout (in flow: pass no `left`/`bottom`). Brands: `ionos`, `strato`.
+The measured Figma prompt window — the template for a FLOATING AI prompt window: the
+`corporate_stage` product-pop-out highlight (from the contract rect) or any floating AI window, always
+absolute and a direct child of the root, never inside an interface (a prompt inside an interface is
+`KitInput` + an AI button). Brands: `ionos`, `strato`.
 `agent-svc` copies this directory into every render workspace as `src/uds/`, where it is
 **protected** from codegen overwrite (`agent-svc/src/storage.ts`, `PROTECTED_PREFIXES`).
 
@@ -20,8 +21,7 @@ enumerated, so an attempt to reach inside is a compile error.
 | `actions` | `readonly [PromptAction, PromptAction]` | `prompt-full` only; defaults to `['edit','regenerate']` |
 | `leadingIcon` | `AiIconName \| 'none'` | The gradient-filled AI marker |
 | `sendGlyph` | `'arrow' \| 'paper-plane'` | Flat white on the gradient circle |
-| `width` | `number` (px) | The contract rect's width, or the card/panel width it sits in |
-| `left` / `bottom` | `number` (px), both or neither | The contract rect (absolute, z-index 100); omit both to flow in the parent |
+| `width` / `left` / `bottom` | `number` (px) | The window's rect (absolute, z-index 100) |
 
 ## Where every number came from
 

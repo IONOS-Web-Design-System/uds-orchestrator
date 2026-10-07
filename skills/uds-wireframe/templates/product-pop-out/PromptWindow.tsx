@@ -31,25 +31,22 @@ export interface PromptWindowProps {
   /** The AI marker. Gradient-filled. A star is not expressible here, by design. */
   leadingIcon?: AiIconName | 'none';
   sendGlyph?: SendGlyph;
-  /** px — from the contract rect, or the width of the card / panel it sits in. */
+  /** px, from the contract rect (or the floating window's own rect). */
   width: number;
+  /** px. The window is ALWAYS a floating entity — absolute, a direct child of the root — never
+   *  placed inside an interface (a prompt inside an interface is KitInput + an AI button). */
+  left: number;
+  bottom: number;
 }
 
-/** Placement: the corporate_stage contract rect (absolute, bottom-anchored, px) — or neither
- *  offset, and the window flows in its parent (a card, a panel, a step layout). Both or none. */
-export type PromptWindowPlacement = { left: number; bottom: number } | { left?: undefined; bottom?: undefined };
-
-/** The window's own positioning. Absolute only on the contract rect, where it pops out of the
- *  interface and must win the stacking fight; in flow it is an ordinary block in its parent. */
-function placement(p: PromptWindowPlacement): Record<string, string | number> {
-  return p.left !== undefined && p.bottom !== undefined
-    // zIndex: 100 — carried over from the retired `shared/floating-card.md` skeleton rule,
-    // which used this exact value for this exact floating element. Z-ORDER IS GEOMETRY: the
-    // component decides it here, the same way it decides padding/gaps/type ramp/radii, rather
-    // than exposing it as a prop codegen could omit or contradict (that gap is what let an
-    // un-z-indexed window lose a stacking fight to the interface panel drawn after it).
-    ? { position: 'absolute', left: p.left, bottom: p.bottom, zIndex: 100 }
-    : { position: 'relative' };
+/** The window's own positioning: absolute, bottom-anchored. */
+function placement(p: { left: number; bottom: number }): Record<string, string | number> {
+  // zIndex: 100 — carried over from the retired `shared/floating-card.md` skeleton rule,
+  // which used this exact value for this exact floating element. Z-ORDER IS GEOMETRY: the
+  // component decides it here, the same way it decides padding/gaps/type ramp/radii, rather
+  // than exposing it as a prop codegen could omit or contradict (that gap is what let an
+  // un-z-indexed window lose a stacking fight to the interface panel drawn after it).
+  return { position: 'absolute', left: p.left, bottom: p.bottom, zIndex: 100 };
 }
 
 /**
@@ -165,7 +162,7 @@ export function RingButton({ action, size, brand, ink, surface }: {
   );
 }
 
-export function PromptWindow(p: PromptWindowProps & PromptWindowPlacement) {
+export function PromptWindow(p: PromptWindowProps) {
   const b = PROMPT_WINDOW_BRANDS[p.brand];
   const sendGlyph = p.sendGlyph ?? 'arrow';
   const marker = p.leadingIcon ?? 'filled-sparkles';

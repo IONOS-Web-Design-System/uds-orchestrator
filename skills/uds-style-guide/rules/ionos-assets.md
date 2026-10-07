@@ -115,8 +115,8 @@ control*).
    user-side of the interaction, never a zoomed-in detail of the output.
    Common shapes:
    - A chat input with typed prompt text (canonical IONOS form for AI
-     features — Tab 2 reference); in code a `PromptWindow` with the typed
-     `promptText`.
+     features — Tab 2 reference); in code a `KitInput` with a frame-driven
+     `caret`, beside a `KitButton concept="ai"`.
    - A small control panel with one highlighted button mid-click (`KitButton`,
      press feedback as a transform on its parent).
    - A toggle / switch mid-action (`KitSwitch`), or a drawn slider.
