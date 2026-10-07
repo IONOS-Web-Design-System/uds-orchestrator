@@ -2,7 +2,7 @@
 displayName: "AI Receptionist"
 category: ai
 aiTier: 1
-aliases: ["ai receptionist", "receptionist", "frontdesk"]
+aliases: ["ai receptionist", "receptionist", "frontdesk", "telefonassistent", "ki-telefonassistent"]
 figmaRefs: []
 ---
 A woman in her mid-30s who carries the effortless poise of someone who has managed a busy

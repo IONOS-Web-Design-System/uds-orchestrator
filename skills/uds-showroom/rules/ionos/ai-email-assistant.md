@@ -2,7 +2,7 @@
 displayName: "AI Email Assistant"
 category: ai
 aiTier: 1
-aliases: ["email assistant"]
+aliases: ["email assistant", "e-mail assistant", "e-mail assistent", "email assistent"]
 figmaRefs: []
 ---
 A man in his late 20s, a productivity-obsessed communications coordinator with the focused

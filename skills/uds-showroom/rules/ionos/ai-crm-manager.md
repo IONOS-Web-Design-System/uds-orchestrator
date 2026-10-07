@@ -2,7 +2,7 @@
 displayName: "AI CRM Manager"
 category: ai
 aiTier: 1
-aliases: ["crm manager", "crm"]
+aliases: ["crm manager", "crm", "customer manager", "ai customer manager"]
 figmaRefs: []
 ---
 A man in his mid-30s, the kind of sales operations lead who can map a customer relationship
