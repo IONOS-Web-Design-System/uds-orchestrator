@@ -45,8 +45,8 @@ export const AIPillButton: React.FC<{
 
 The card surface is a `KitCard`; placement, size and elevation follow `shared/floating-card.md`
 (elevation lives on the parent wrapper — the kit has no style props). The prompt types into the
-AI prompt bar `<KitPromptBar …/>`, whose own AI button is the CTA (never a plain `KitInput`, never a
-second AI `KitButton` beside it); its `loading` is the generating moment. The entrance is a spring on
+AI prompt bar `<KitPromptBar …/>`: its AI button is the CTA (no second AI `KitButton`) and its
+`loading` is the generating moment. The entrance is a spring on
 the parent, snapped once settled. Typing starts only after the card has settled — never animate text
 inside a moving parent. A prompt longer than one row of this 400px card is `lines="multi"`. Feed it
 from `texts.*` (`text={texts.prompt ?? ''}`).

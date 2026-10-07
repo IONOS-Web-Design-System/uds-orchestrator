@@ -87,7 +87,7 @@ and highlight elements in every pattern above. This file is the single canonical
 this chrome — brand-specific animation and hybrid-image rules point back here rather than
 restating it, so pure-illustration jobs always have it too.
 
-**Contents.** AI prompt = `<KitPromptBar …/>` (its AI button IS the CTA — no second AI `KitButton` beside it), generated copy = `KitText`, a standalone AI CTA = `KitButton concept="ai"`.
+**Contents.** Prompt = `KitPromptBar` (its AI button is the CTA), generated copy = `KitText`, other AI CTA = `KitButton concept="ai"`.
 
 **KitCard exception.** If the surface is a `KitCard`, the wrapper carries only position, the
 neutral shadow and `borderRadius: 'var(--protected-container-rounded)'` (not 40), no
