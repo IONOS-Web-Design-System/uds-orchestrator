@@ -105,12 +105,6 @@ export const MyComposition: React.FC<VariantProps> = ({ headline, subline, varia
 };
 ```
 
-## Density and spacing
-
-Interfaces are app-dense (`compact` platform). Container padding and gaps use core spacing tokens —
-`gap: 'var(--space-3)'`, `padding: 'var(--space-4)'` — never raw px (px only for
-frame sizes and positions). Headings at most `headingLg`.
-
 ## Related Skills
 
 - **`uds-style-guide`** — brand colors, typography, AI feature color language (ionos-ai-features)
