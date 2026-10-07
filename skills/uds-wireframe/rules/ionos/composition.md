@@ -266,7 +266,7 @@ in Tailwind arbitrary values (never a Figma `/`-path):
 </div>
 
 // Spacing tokens
-<div className="p-[var(--space/space-8)]">
+<div className="p-[var(--space-8)]">
   Token-driven padding
 </div>
 ```

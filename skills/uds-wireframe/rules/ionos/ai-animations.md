@@ -15,7 +15,8 @@ gradient, glow or thinking surface, and never hardcode AI hex values.**
 ```tsx
 import { interpolate, spring, useCurrentFrame } from 'remotion';
 import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
-import { KitButton, KitCard, KitIcon, KitPromptBar, KitSkeleton, KitText } from './kit';
+import { KitButton, KitCard, KitIcon, KitSkeleton, KitText } from './kit';
+import { PromptWindow } from './uds/PromptWindow';
 ```
 
 ## Template 1 — AI CTA button
@@ -45,10 +46,10 @@ export const AIPillButton: React.FC<{
 
 The card surface is a `KitCard`; placement, size and elevation follow `shared/floating-card.md`
 (elevation lives on the parent wrapper — the kit has no style props). The prompt types into the
-AI prompt bar `<KitPromptBar …/>`: its AI button is the CTA (no second AI `KitButton`) and its
-`loading` is the generating moment. The entrance is a spring on
+designed AI prompt window `<PromptWindow …/>` in flow (no `left`/`bottom`; `width` = the card's inner
+width), and the AI CTA is a `KitButton` whose `loading` is the generating moment. The entrance is a spring on
 the parent, snapped once settled. Typing starts only after the card has settled — never animate text
-inside a moving parent. A prompt longer than one row of this 400px card is `lines="multi"`. Feed it
+inside a moving parent. A prompt longer than ~40 characters is `variant="prompt-full"` (3 lines). Feed it
 from `texts.*` (`text={texts.prompt ?? ''}`).
 
 ```tsx
@@ -63,10 +64,9 @@ export const AIFloatingHighlight: React.FC<{
   const typed = Math.floor(interpolate(frame, [enterFrame + 30, typeEnd], [0, text.length], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }));
   return (
     <div style={{ width: 400, opacity, transform: `translateX(${interpolate(enter, [0, 1], [-120, 0])}px)`, boxShadow: '0 16px 48px rgba(0,0,0,0.35)', borderRadius: 'var(--protected-container-rounded)' }}>
-      <KitCard>
+      <KitCard footer={<KitButton label={ctaLabel} concept="ai" icon={sparkles} loading={frame >= typeEnd + 8 && frame < typeEnd + 38} />}>
         {productLabel ? <KitText variant="bodySm" tone="subtle">{productLabel}</KitText> : null}
-        <KitPromptBar value={text.slice(0, typed)} caret={typed < text.length && Math.floor(frame / 16) % 2 === 0}
-          action={ctaLabel} loading={frame >= typeEnd + 8 && frame < typeEnd + 38} />
+        <PromptWindow variant="prompt-simple" brand="ionos" promptText={text.slice(0, typed)} width={340} />
       </KitCard>
     </div>
   );

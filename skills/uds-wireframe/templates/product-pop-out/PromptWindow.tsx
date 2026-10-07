@@ -31,11 +31,25 @@ export interface PromptWindowProps {
   /** The AI marker. Gradient-filled. A star is not expressible here, by design. */
   leadingIcon?: AiIconName | 'none';
   sendGlyph?: SendGlyph;
-  /** px, from the contract rect. */
+  /** px — from the contract rect, or the width of the card / panel it sits in. */
   width: number;
-  /** px, from the contract rect. There is no `height` — see the variant branches. */
-  left: number;
-  bottom: number;
+}
+
+/** Placement: the corporate_stage contract rect (absolute, bottom-anchored, px) — or neither
+ *  offset, and the window flows in its parent (a card, a panel, a step layout). Both or none. */
+export type PromptWindowPlacement = { left: number; bottom: number } | { left?: undefined; bottom?: undefined };
+
+/** The window's own positioning. Absolute only on the contract rect, where it pops out of the
+ *  interface and must win the stacking fight; in flow it is an ordinary block in its parent. */
+function placement(p: PromptWindowPlacement): Record<string, string | number> {
+  return p.left !== undefined && p.bottom !== undefined
+    // zIndex: 100 — carried over from the retired `shared/floating-card.md` skeleton rule,
+    // which used this exact value for this exact floating element. Z-ORDER IS GEOMETRY: the
+    // component decides it here, the same way it decides padding/gaps/type ramp/radii, rather
+    // than exposing it as a prop codegen could omit or contradict (that gap is what let an
+    // un-z-indexed window lose a stacking fight to the interface panel drawn after it).
+    ? { position: 'absolute', left: p.left, bottom: p.bottom, zIndex: 100 }
+    : { position: 'relative' };
 }
 
 /**
@@ -108,7 +122,7 @@ export function SendButton({ size, brand, glyph, glyphRatio }: {
   size: number; brand: PromptWindowBrand; glyph: SendGlyph; glyphRatio: number;
 }) {
   return (
-    // The CIRCLE carries the AI gradient; the GLYPH is flat white. `alignItems:'center'` on
+    // The CIRCLE carries the AI gradient; the GLYPH is flat, in the brand's on-gradient colour. `alignItems:'center'` on
     // the parent row is what gives equal clearance above and below — this button must never
     // carry its own vertical offset.
     <div style={{
@@ -116,7 +130,7 @@ export function SendButton({ size, brand, glyph, glyphRatio }: {
       background: aiGradient(brand),
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <FlatIcon svg={SEND_SVG[glyph]} size={size * glyphRatio} colour="#FFFFFF" />
+      <FlatIcon svg={SEND_SVG[glyph]} size={size * glyphRatio} colour={PROMPT_WINDOW_BRANDS[brand].onGradient} />
     </div>
   );
 }
@@ -151,7 +165,7 @@ export function RingButton({ action, size, brand, ink, surface }: {
   );
 }
 
-export function PromptWindow(p: PromptWindowProps) {
+export function PromptWindow(p: PromptWindowProps & PromptWindowPlacement) {
   const b = PROMPT_WINDOW_BRANDS[p.brand];
   const sendGlyph = p.sendGlyph ?? 'arrow';
   const marker = p.leadingIcon ?? 'filled-sparkles';
@@ -160,7 +174,7 @@ export function PromptWindow(p: PromptWindowProps) {
     const h = p.width / SIMPLE.aspect;   // height is DERIVED, never a prop
     return (
       <div style={{
-        position: 'absolute', left: p.left, bottom: p.bottom,
+        ...placement(p),
         width: p.width, height: h, boxSizing: 'border-box',
         display: 'flex', alignItems: 'center', gap: p.width * SIMPLE.gapOfW,
         paddingTop: 0, paddingRight: p.width * SIMPLE.padRightOfW,
@@ -169,12 +183,6 @@ export function PromptWindow(p: PromptWindowProps) {
         background: b.simple.surface,
         backdropFilter: `blur(${b.simple.blurPx}px)`,
         boxShadow: b.shadow,
-        // zIndex: 100 — carried over from the retired `shared/floating-card.md` skeleton rule,
-        // which used this exact value for this exact floating element. Z-ORDER IS GEOMETRY: the
-        // component decides it here, the same way it decides padding/gaps/type ramp/radii, rather
-        // than exposing it as a prop codegen could omit or contradict (that gap is what let an
-        // un-z-indexed window lose a stacking fight to the interface panel drawn after it).
-        zIndex: 100,
       }}>
         {marker !== 'none' && (
           <AiIcon svg={AI_SVG[marker]} size={h * SIMPLE.fontOfH * 1.15} brand={p.brand} />
@@ -198,19 +206,13 @@ export function PromptWindow(p: PromptWindowProps) {
   const actions = p.actions ?? (['edit', 'regenerate'] as const);
   return (
     <div style={{
-      position: 'absolute', left: p.left, bottom: p.bottom,
+      ...placement(p),
       width: p.width, boxSizing: 'border-box',
       display: 'flex', flexDirection: 'column', gap: p.width * FULL.gapOfW,
       padding: p.width * FULL.padOfW, borderRadius: p.width * FULL.radiusOfW,
       background: b.full.surface,
       backdropFilter: `blur(${b.full.blurPx}px)`,
       boxShadow: b.shadow,
-      // zIndex: 100 — carried over from the retired `shared/floating-card.md` skeleton rule,
-      // which used this exact value for this exact floating element. Z-ORDER IS GEOMETRY: the
-      // component decides it here, the same way it decides padding/gaps/type ramp/radii, rather
-      // than exposing it as a prop codegen could omit or contradict (that gap is what let an
-      // un-z-indexed window lose a stacking fight to the interface panel drawn after it).
-      zIndex: 100,
     }}>
       <span style={{
         display: '-webkit-box', WebkitLineClamp: FULL.maxLines,

@@ -18,8 +18,10 @@ export interface BrandValues {
   simple: { surface: string; blurPx: number; face: string };
   full: { surface: string; blurPx: number; face: string };
   text: string;
-  /** [start, end] — blue to magenta. A purple-only or pink-only pair is wrong. */
+  /** [start, end] of the brand's AI gradient (IONOS blue→magenta, STRATO cyan→pink). */
   gradient: readonly [string, string];
+  /** Glyph/label colour ON the gradient: white on IONOS, the dark AI label on STRATO. */
+  onGradient: string;
   shadow: string;
 }
 
@@ -45,7 +47,19 @@ export const PROMPT_WINDOW_BRANDS = {
     full: { surface: 'rgba(255,255,255,0.88)', blurPx: 14, face: 'Overpass' },
     text: '#001B41',
     gradient: ['#095BB1', '#D746F5'],
+    onGradient: '#FFFFFF',
     shadow: '0 8px 24px rgba(0,27,65,0.10)',
+  },
+  // STRATO AI concept (uds-style-guide/rules/strato-ai-features.md): cyan→pink with the DARK
+  // #29294D label — never white on the AI gradient. Body text Blu1100, face Poppins. The glass
+  // material is the IONOS template's, unchanged.
+  strato: {
+    simple: { surface: 'rgba(255,255,255,0.88)', blurPx: 14, face: 'Poppins' },
+    full: { surface: 'rgba(255,255,255,0.88)', blurPx: 14, face: 'Poppins' },
+    text: '#2F2F70',
+    gradient: ['#1FD7FF', '#E498FF'],
+    onGradient: '#29294D',
+    shadow: '0 8px 24px rgba(47,47,112,0.10)',
   },
 } as const satisfies Record<string, BrandValues>;
 

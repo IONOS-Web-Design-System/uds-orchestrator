@@ -1,6 +1,8 @@
 # PromptWindow
 
-The measured Figma prompt window for `corporate_stage` product-pop-out composites.
+The measured Figma prompt window — THE AI prompt template for every composition: the
+`corporate_stage` product-pop-out highlight (absolute, from the contract rect) and any AI prompt
+inside a card, panel or step layout (in flow: pass no `left`/`bottom`). Brands: `ionos`, `strato`.
 `agent-svc` copies this directory into every render workspace as `src/uds/`, where it is
 **protected** from codegen overwrite (`agent-svc/src/storage.ts`, `PROTECTED_PREFIXES`).
 
@@ -13,12 +15,13 @@ enumerated, so an attempt to reach inside is a compile error.
 | Prop | Type | Notes |
 |---|---|---|
 | `variant` | `'prompt-simple' \| 'prompt-full'` | The moderator picks this from the copy's measured length |
-| `brand` | `PromptWindowBrand` | Keys `promptWindow.brands.ts` |
+| `brand` | `PromptWindowBrand` | Keys `promptWindow.brands.ts`: `ionos` (blue→magenta, white glyph), `strato` (cyan→pink, dark `#29294D` glyph, Poppins) |
 | `promptText` | `string` | From `texts.promptText`, so market re-renders can translate it |
 | `actions` | `readonly [PromptAction, PromptAction]` | `prompt-full` only; defaults to `['edit','regenerate']` |
 | `leadingIcon` | `AiIconName \| 'none'` | The gradient-filled AI marker |
 | `sendGlyph` | `'arrow' \| 'paper-plane'` | Flat white on the gradient circle |
-| `width` / `left` / `bottom` | `number` (px) | From the contract rect |
+| `width` | `number` (px) | The contract rect's width, or the card/panel width it sits in |
+| `left` / `bottom` | `number` (px), both or neither | The contract rect (absolute, z-index 100); omit both to flow in the parent |
 
 ## Where every number came from
 
