@@ -87,9 +87,7 @@ and highlight elements in every pattern above. This file is the single canonical
 this chrome — brand-specific animation and hybrid-image rules point back here rather than
 restating it, so pure-illustration jobs always have it too.
 
-**Contents.** Prompt = `KitInput` beside an AI `KitButton concept="ai"` or `KitIconButton ai`, generated copy = `KitText`.
-A floating AI prompt WINDOW is the designed `PromptWindow` (`./uds/PromptWindow`): absolute `left`/`bottom`, a
-direct child of the root — never inside an interface.
+**Contents.** Prompt = `KitInput` + AI `KitButton`, copy = `KitText`; a floating AI prompt window = `PromptWindow` (root child).
 
 **KitCard exception.** If the surface is a `KitCard`, the wrapper carries only position, the
 neutral shadow and `borderRadius: 'var(--protected-container-rounded)'` (not 40), no
