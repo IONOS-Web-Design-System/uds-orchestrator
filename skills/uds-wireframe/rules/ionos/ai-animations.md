@@ -15,7 +15,7 @@ gradient, glow or thinking surface, and never hardcode AI hex values.**
 ```tsx
 import { interpolate, spring, useCurrentFrame } from 'remotion';
 import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
-import { KitButton, KitCard, KitIcon, KitSearchInput, KitSkeleton, KitText } from './kit';
+import { KitButton, KitCard, KitIcon, KitPromptBar, KitSkeleton, KitText } from './kit';
 ```
 
 ## Template 1 — AI CTA button
@@ -45,17 +45,16 @@ export const AIPillButton: React.FC<{
 
 The card surface is a `KitCard`; placement, size and elevation follow `shared/floating-card.md`
 (elevation lives on the parent wrapper — the kit has no style props). The prompt types into the
-AI prompt bar `<KitSearchInput ai …/>` (AI marker + send action built in — never a plain `KitInput`),
-and the AI CTA is a `KitButton`. The entrance is a spring on the parent, snapped once
-settled. Typing starts only after the card has settled — never animate text inside a moving parent.
-The typed prompt is at most 24 characters: the single-line bar clips longer text at this
-400px card width. Feed it from `texts.*` (`text={texts.prompt ?? ''}`); longer copy goes in a
-`KitText` below the input.
+AI prompt bar `<KitPromptBar …/>`, whose own AI button is the CTA (never a plain `KitInput`, never a
+second AI `KitButton` beside it); its `loading` is the generating moment. The entrance is a spring on
+the parent, snapped once settled. Typing starts only after the card has settled — never animate text
+inside a moving parent. A prompt longer than one row of this 400px card is `lines="multi"`. Feed it
+from `texts.*` (`text={texts.prompt ?? ''}`).
 
 ```tsx
 export const AIFloatingHighlight: React.FC<{
-  fps: number; enterFrame?: number; text?: string; productLabel?: string; ctaLabel?: string; sendLabel?: string;
-}> = ({ fps, enterFrame = 20, text = '', productLabel, ctaLabel = '', sendLabel = '' }) => {
+  fps: number; enterFrame?: number; text?: string; productLabel?: string; ctaLabel?: string;
+}> = ({ fps, enterFrame = 20, text = '', productLabel, ctaLabel = '' }) => {
   const frame = useCurrentFrame();
   const raw = spring({ frame: frame - enterFrame, fps, config: { damping: 18, stiffness: 120 } });
   const enter = raw > 0.995 ? 1 : raw;
@@ -64,9 +63,10 @@ export const AIFloatingHighlight: React.FC<{
   const typed = Math.floor(interpolate(frame, [enterFrame + 30, typeEnd], [0, text.length], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }));
   return (
     <div style={{ width: 400, opacity, transform: `translateX(${interpolate(enter, [0, 1], [-120, 0])}px)`, boxShadow: '0 16px 48px rgba(0,0,0,0.35)', borderRadius: 'var(--protected-container-rounded)' }}>
-      <KitCard footer={<KitButton label={ctaLabel} concept="ai" icon={sparkles} glow={interpolate(frame, [typeEnd, typeEnd + 8], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })} />}>
+      <KitCard>
         {productLabel ? <KitText variant="bodySm" tone="subtle">{productLabel}</KitText> : null}
-        <KitSearchInput ai value={text.slice(0, typed)} caret={typed < text.length && Math.floor(frame / 16) % 2 === 0} actionTitle={sendLabel} />
+        <KitPromptBar value={text.slice(0, typed)} caret={typed < text.length && Math.floor(frame / 16) % 2 === 0}
+          action={ctaLabel} loading={frame >= typeEnd + 8 && frame < typeEnd + 38} />
       </KitCard>
     </div>
   );

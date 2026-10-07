@@ -50,7 +50,7 @@ This pattern applies to **landscape/widescreen canvases** (e.g. 1280×720). For 
     background: 'var(--surface-subtle)',
     boxShadow: '0 16px 48px rgba(0,0,0,0.35)',
   }}>
-    {/* KitSearchInput ai (the prompt) + KitButton concept="ai" (the CTA) — the panel only places them */}
+    {/* KitPromptBar (the prompt; its AI button is the CTA) — the panel only places it */}
   </div>
 
   {/* Optional secondary element near the cropped bottom edge */}
@@ -114,7 +114,7 @@ In all three patterns above, the AI affordance (card, panel, badge) must break o
 
 | AI feature type | Required placement |
 |---|---|
-| Prompt card (`KitSearchInput ai` + AI `KitButton`) | Sibling of frame; overlaps frame right/bottom edge; may extend past canvas edge |
+| Prompt card (`KitPromptBar`) | Sibling of frame; overlaps frame right/bottom edge; may extend past canvas edge |
 | Inline AI badge (the brand's drawn AI badge with label, floating over text selection or image region) | Floats above the selection target in the viewport; outside frame or at its edge |
 | Options panel (tone selector, checklist, settings) | Opposite side from the frame's primary bleed; may extend slightly past canvas edge |
 
@@ -179,7 +179,7 @@ const H = height;
     zIndex: 100,
     transform: `translateY(${cardEnterY}px) scale(${cardScale})`,
   }}>
-    {/* AI prompt (KitSearchInput ai, value from the headline prop) + KitButton concept="ai" ("Seite erstellen" / market equivalent) */}
+    {/* AI prompt (KitPromptBar, value from the headline prop, action "Seite erstellen" / market equivalent) */}
   </div>
 
 </AbsoluteFill>
