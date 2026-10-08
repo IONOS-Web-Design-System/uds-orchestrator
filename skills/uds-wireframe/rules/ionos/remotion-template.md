@@ -40,11 +40,11 @@ type MyCompositionProps = { textToType: string };
 | `brand` | `enum` | Active brand (ionos, strato, fasthosts, ...) |
 | `platform` | `"comfortable" \| "compact"` | UDS spacing scale |
 | `colorScheme` | `"light" \| "dark"` | Root colour mode |
-| `headline` | `string` (max 120) | Primary text slot — the main message |
-| `subline` | `string` (optional, max 200) | Secondary text slot |
+| `texts` | `Record<string, string>` | ALL readable copy, keyed by slot (`texts.headline`, `texts.cta`, …) |
+| `market` | `string` (optional) | Market code ("de", "en", …) |
 | `imageSlug` | `string` (optional) | Asset filename slug — resolves via `staticFile(imageSlug + '.png')` |
+| `transparent` | `boolean` (optional) | Renderer-set; the root background is `transparent ? 'transparent' : <canvas bg>` |
 
-Use `headline` and `subline` for the animation's readable text content. Use `variantId` to differentiate layout or motion between variants. Do not use `subline` for AI-generated text — that is the `headline` content.
 
 ### Reading text slots safely — every `texts.<slot>` is `string | undefined`
 
@@ -80,7 +80,7 @@ Three files are owned by the template and must **never** appear in your output. 
 
 ## Root.tsx — Do Not Modify
 
-The template's `Root.tsx` is pre-wired. You only need to write `src/Composition.tsx`. The `<Composition>` component already uses `schema={VariantSchema}` so TypeScript knows the props:
+Write `src/Root.tsx` exactly in this shape (it registers the one composition) alongside `src/Composition.tsx`. The `<Composition>` component already uses `schema={VariantSchema}` so TypeScript knows the props:
 
 ```tsx
 // Root.tsx (agent rewrites this for each job — for reference only):
