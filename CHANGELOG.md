@@ -1,5 +1,44 @@
 # Changelog
 
+## [3.0.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.22.0...v3.0.0) (2026-10-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* **uds-wireframe:** low-fidelity demonstration skill — one frame + one real feature, drawn hero prompt, feature pop-out, placeholder bars; no KitInput
+
+### Features
+
+* **uds-interface:** high-fidelity skill — realistic content, layout patterns, interface anatomy, device screen, interaction motion ([cc38fce](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/cc38fced2446cc0db71487540bd08dffe0220fca))
+* **uds-ui-core:** shared base skill — template, embeds, product-pop-out, frame colours, wide format (moved from uds-wireframe) ([91624e1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/91624e186b13556904b8d41d54013143ba3e1efe))
+* **uds-wireframe:** AI prompts type into the kit's AI prompt bar (KitSearchInput ai) ([91188e7](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/91188e7fa661513e5c6f84600cf30747b7c51163))
+* **uds-wireframe:** low-fidelity demonstration skill — one frame + one real feature, drawn hero prompt, feature pop-out, placeholder bars; no KitInput ([f9ca3ba](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f9ca3bae8afafce979f2116e264e8bfc6374a7e9))
+* **uds-wireframe:** PromptWindow is THE AI prompt template (in-flow placement, strato); compact density + spacing tokens ([f7f2af5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f7f2af504f29d2f926b478c7dcb5668c704e4f25))
+
+
+### Bug Fixes
+
+* **skills:** drawn fields use real input tokens; placeholder bars follow colorScheme ([22030e8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/22030e836acb986d4d626ef0c49ff3f1b0a9f261))
+* **skills:** guard defects in shared rules (font name, AI accent hex, motion-scoped pointer) ([7cdc58f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/7cdc58ff65f94af61f84316f0185323547ac83b2))
+* **skills:** high fidelity draws contract-named overlays; formatted values via texts; &lt;= 512px wording ([43a94a8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/43a94a8103f9c7a133cc58967510ac9f8de7081d))
+* **skills:** use the defined term for the AI selection colour; repoint connector-line ([49a4c15](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/49a4c15ee25a5366845646c3eb17f4bd0d505391))
+* **skills:** wording fixes for fidelity directions (placeholder bars scope, form labels, cross-skill pointers) ([1f23432](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1f234321df4a14b1a9a143be557795324eb37744))
+* **uds-asset-moderator:** illustration brief follows the FIDELITY budget, no exhaustive component/data lists ([cc3adc6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/cc3adc692beff3efeb8ee60292bc89ef6a785369))
+* **uds-interface:** move client-app demo layer out of interface-anatomy; drop cross-skill rule-file pointers from uds-ui-core ([999bc96](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/999bc96d5513c917298160b5a05214d9b0fc2cd8))
+* **uds-showroom:** aliases for the German / renamed product names consumers send ([5818588](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/58185887a0c5a34853b86aff0c30e2a0078051b0))
+* **uds-wireframe:** AI prompts are KitPromptBar (UDS DomainSearchBar), not KitSearchInput ai ([4997389](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/49973897572bc120febe4b54ffb9ea712df016fe))
+* **uds-wireframe:** PromptWindow is a floating AI window only; prompts inside an interface are KitInput + AI button ([0625269](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/06252690da98dac71b54016ffe37fb658956c907))
+* **uds-wireframe:** remotion-template props table matches the schema (texts, transparent optional); Root.tsx is written, not pre-wired ([2c64db9](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/2c64db9a2c80d00e87777432f9e4336237b83c80))
+* **uds-wireframe:** shorter density paragraph (net prompt size &lt;= 0) ([a2e7890](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a2e78905a442e5f0be465e3b268999b79aff04ff))
+* **uds-wireframe:** shorter floating-card contents line (bundle size ceiling) ([a0b8f31](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a0b8f314665ce1d8d398d367cad7455661e1d233))
+* **uds-wireframe:** tighten PromptWindow / density wording (net prompt size &lt;= 0); no brand literal in shared floating-card ([9721cb7](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9721cb766a72538ee647fecf872fc7616e516f3e))
+* **uds-wireframe:** tighten the KitPromptBar wording (net prompt size &lt;= 0) ([ac7367e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ac7367e4de67cd447f7adeab123fb1c0b8de8119))
+
+
+### Code Refactoring
+
+* **uds-wireframe:** density/spacing rule moves to agent-svc's non-negotiables (it was ignored here) ([027fa71](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/027fa71ae9fe3ed4c8198587a5e4990d45c87666))
+
 ## [2.22.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.21.1...v2.22.0) (2026-10-05)
 
 
