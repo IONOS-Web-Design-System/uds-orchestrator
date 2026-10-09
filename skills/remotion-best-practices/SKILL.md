@@ -79,9 +79,8 @@ expressed as `interpolate(frame, ...)`. Detailed fade / typing / text-stability 
 
 ## Colors & design tokens — use `@ionos-web-design-system/core`, never Figma token paths
 
-The template bundles `@ionos-web-design-system/core` brand CSS, and the composition renders
-inside `<ThemeProvider>` under a `data-brand` root, so the brand's **semantic CSS custom
-properties resolve live**. Color UI with those real tokens or with a literal brand hex.
+The composition renders inside `<ThemeProvider>` under a `data-brand` root, so the brand's
+**semantic CSS custom properties resolve live**. Hand-built layout uses UDS tokens inline — see KIT.md.
 
 **NEVER write a Figma token path as a CSS variable.** `var(--brand/ionos-blue-600)`,
 `var(--brand-ionos-blue-600)`, `var(--neutral/white)` do not exist: the `/` is a parse error, the
@@ -90,22 +89,18 @@ declaration is dropped (the hex fallback is NOT applied) and the element renders
 
 Two correct options:
 
-1. **Semantic core tokens** (valid CSS custom properties — resolve per brand/scheme). Use a
-   `--surface-*` background WITH its matching `--text-*` foreground — the pair is contrast-checked:
-
-   | Role | Background token | Foreground (text/icon) token |
-   |---|---|---|
-   | Default card / panel | `var(--surface-base)` | `var(--text-base)` |
-   | Inverted (dark) decorative plate / drawn panel | `var(--surface-base-invert)` | `var(--text-base-invert)` |
-   | Subtle / subtlest backdrop | `var(--surface-subtle)` / `var(--surface-subtlest)` | `var(--text-base)` |
-   | AI accent surface | `var(--surface-semantic-ai)` | `var(--text-semantic-ai)` |
-   | Success / danger / promo / caution | `var(--surface-semantic-<role>)` | `var(--text-semantic-<role>)` |
+1. **Semantic core tokens.** Pair each `--surface-*` background with its matching `--text-*`
+   foreground (contrast-checked):
+   `--surface-base` / `--surface-subtle` / `--surface-subtlest` → `--text-base`;
+   `--surface-base-invert` → `--text-base-invert` (inverted dark plate / drawn panel);
+   `--surface-semantic-ai` → `--text-semantic-ai`; success / danger / promo / caution:
+   `--surface-semantic-<role>` → `--text-semantic-<role>`.
 
 2. **Literal brand hex** from `uds-style-guide` for a brand-scale colour (no core var exists):
    `background: '#003D8F'` (IONOS Blue), `color: '#fff'` — set the foreground explicitly too.
 
-**Accessibility rule:** a drawn icon's or text's colour must contrast against what actually
-paints behind it. Pick the surface and its foreground together. (Kit components pair their own.)
+A drawn icon's or text's colour must contrast against what actually paints behind it (kit
+components pair their own).
 
 ## Images & assets
 
