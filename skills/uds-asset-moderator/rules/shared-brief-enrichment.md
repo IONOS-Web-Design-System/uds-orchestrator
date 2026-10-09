@@ -105,12 +105,13 @@ Per-generator hazards to OMIT:
     generator was separately told to ignore. State the focal subject, the action, the setting,
     the composition intent (which side stays calm, how much of the frame the subject fills) and
     what the asset must communicate — then stop.
-- **illustration** `feature`: describe *structure and intent* (which UDS components, what
-  copy slots, what data the screen shows, what motion if `intent:animation`) — not pixel
-  coordinates. The agent builds real components; over-specifying layout fights the system.
-  Copy slots must be **synthesized / generic** (placeholder labels, lorem, redaction bars) — NEVER
-  the brief's own heading, subheading, or description text, which the host component already renders
-  (see `rules/shared-brief-parsing.md`).
+- **illustration** `feature`: follow the request's FIDELITY line (stated in the task). Low (default):
+  ONE product frame, the single feature to highlight and its floating element, placeholder
+  structure around it — never enumerate navigation items, KPI cards, data rows or panels. High: a
+  believable real screen — layout, realistic labels and sample data, the one interaction to show.
+  Never pixel coordinates.
+  Never reuse the brief's own heading, subheading or description text, which the host component
+  already renders (see `rules/shared-brief-parsing.md`).
 
 Budget: keep each `feature` under ~1500 characters; the orchestrator appends up to ~2500
 (shared context + hybrid embed contract), hard-capped at 5000 combined. Lead with the most
