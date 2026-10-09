@@ -33,8 +33,9 @@ What THIS rule adds on top:
 3. **The catalog image is the hero/media asset INSIDE the wireframe** — placed in the
    interface's hero/media slot with `objectFit: 'cover'`. Leave a calm, uncluttered
    negative-space region within that slot — no marketing headline is rendered over it (see
-   `shared-brief-parsing.md` no-marketing-heading); never a scrim over the image. Placeholder
-   bars/content blocks sit below the hero, per the product-frame placeholder palette.
+   `shared-brief-parsing.md` no-marketing-heading); never a scrim over the image. In a demonstration
+   wireframe, placeholder bars/content blocks sit below the hero, per the product-frame placeholder palette; a
+   realistic interface shows real labels and values instead.
 4. **1-2 floating highlight fragments** overlapping the wireframe's edge — a prompt
    bubble and/or a small mini-toolbar of `KitIconButton`s, per the **Floating Highlight Card
    template** (the floating-highlight surface rule): borderless, plain neutral

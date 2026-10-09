@@ -16,8 +16,8 @@ distinct layer from the shell.
 elevation (`boxShadow`) and a lighter/whiter surface for the client-app panel, not via opposing
 themes.
 - Shell icons / text: `var(--text-base)`, 0.8 opacity idle / 1.0 active
-- Shell decorative bars: `var(--text-subtle)`
-- Client-app text bars: `#BCC8D4` (fixed — the client-app's own light theme)
+- Shell decorative bars (in a demonstration wireframe; a realistic interface shows real labels and values instead): `var(--text-subtle)`
+- Client-app text bars (in a demonstration wireframe; a realistic interface shows real labels and values instead): `#BCC8D4` (fixed — the client-app's own light theme)
 - Floating pop-out / glass elements: `var(--surface-subtle)` (when the direction skill calls for a floating highlight card, its own rule defines the anatomy)
  (floating elements sit on the CANVAS, so they need the same border/shadow separation as the
  frame — see "Separating same-tier surfaces" below)

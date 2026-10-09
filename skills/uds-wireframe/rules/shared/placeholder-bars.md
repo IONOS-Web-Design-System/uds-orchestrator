@@ -1,8 +1,4 @@
----
-decorative: true
----
-
-# Text Placeholder Bars (Decorative Mode)
+# Text Placeholder Bars
 
 All text in decorative mode is replaced by visual bars — rounded rectangles that suggest text height, width, and opacity hierarchy. Define these two helpers near the top of the `.tsx` file:
 

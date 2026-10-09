@@ -34,7 +34,7 @@ export interface PromptWindowProps {
   /** px, from the contract rect (or the floating window's own rect). */
   width: number;
   /** px. The window is ALWAYS a floating entity — absolute, a direct child of the root — never
-   *  placed inside an interface (a prompt inside an interface is KitInput + an AI button). */
+   *  placed inside an interface (a prompt inside an interface is a drawn field + an AI button). */
   left: number;
   bottom: number;
 }

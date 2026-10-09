@@ -31,7 +31,7 @@ floor at 0 (`extrapolateLeft: 'clamp'` AND `Math.max(0, …)`).
 'visible'`), blinked via `opacity` — never conditionally mounted (`{show && <span>▌</span>}`
 toggles width, so the trailing word wraps and "jumps").
 
-**Typing into a UI field is the kit's job:** `<KitInput value={typedText} caret={Math.floor(frame / 16) % 2 === 0} />`
+**Typing into a UI field:** draw the field (tokens for border/radius/padding) and render `typedText` in it with a blinking caret
 with the clamped slice below as `value`. The recipe below is for free text outside a field.
 
 ```tsx

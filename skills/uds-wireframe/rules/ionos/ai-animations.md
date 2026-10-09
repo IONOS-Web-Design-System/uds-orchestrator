@@ -15,7 +15,7 @@ gradient, glow or thinking surface, and never hardcode AI hex values.**
 ```tsx
 import { interpolate, spring, useCurrentFrame } from 'remotion';
 import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
-import { KitButton, KitCard, KitIcon, KitInput, KitSkeleton, KitText } from './kit';
+import { KitButton, KitCard, KitIcon, KitSkeleton, KitText } from './kit';
 ```
 
 ## Template 1 — AI CTA button
@@ -45,9 +45,9 @@ export const AIPillButton: React.FC<{
 
 The card surface is a `KitCard`; placement, size and elevation follow `shared/floating-card.md`
 (elevation lives on the parent wrapper — the kit has no style props). The prompt types into a
-`KitInput`, and the AI CTA is a `KitButton`. The entrance is a spring on the parent, snapped once
+drawn prompt field, and the AI CTA is a `KitButton`. The entrance is a spring on the parent, snapped once
 settled. Typing starts only after the card has settled — never animate text inside a moving parent.
-The typed prompt is at most 32 characters: the single-line `KitInput` clips longer text at this
+The typed prompt is at most 32 characters: the single-line field clips longer text at this
 320px card width. Feed it from `texts.*` (`text={texts.prompt ?? ''}`); longer copy goes in a
 `KitText` below the input.
 
@@ -65,7 +65,7 @@ export const AIFloatingHighlight: React.FC<{
     <div style={{ width: 320, opacity, transform: `translateX(${interpolate(enter, [0, 1], [-120, 0])}px)`, boxShadow: '0 16px 48px rgba(0,0,0,0.35)', borderRadius: 'var(--protected-container-rounded)' }}>
       <KitCard footer={<KitButton label={ctaLabel} concept="ai" icon={sparkles} glow={interpolate(frame, [typeEnd, typeEnd + 8], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })} />}>
         {productLabel ? <KitText variant="bodySm" tone="subtle">{productLabel}</KitText> : null}
-        <KitInput value={text.slice(0, typed)} caret={typed < text.length && Math.floor(frame / 16) % 2 === 0} />
+        <div style={{ border: '1px solid var(--border-subtle)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-base)' }}><KitText>{text.slice(0, typed)}</KitText></div>
       </KitCard>
     </div>
   );

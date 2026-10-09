@@ -57,11 +57,11 @@ import { KitCard, KitText } from './kit';
 ### Form / Input Section
 
 ```tsx
-import { KitButton, KitInput } from './kit';
+import { KitButton, KitText } from './kit';
 
 <div style={{ maxWidth: 448, margin: '0 auto', padding: '64px 0', display: 'flex', flexDirection: 'column', gap: 16 }}>
-  <KitInput label={texts.emailLabel ?? ''} value="" placeholder={texts.emailHint ?? ''} />
-  <KitInput label={texts.passwordLabel ?? ''} value="••••••••" />
+  <div style={{ border: '1px solid var(--border-subtle)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-base)' }}><KitText>{texts.emailHint ?? ''}</KitText></div>
+  <div style={{ border: '1px solid var(--border-subtle)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-base)' }}><KitText>{'••••••••'}</KitText></div>
   <KitButton label={texts.signIn ?? ''} />
 </div>
 ```

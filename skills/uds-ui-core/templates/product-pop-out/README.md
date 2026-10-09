@@ -3,7 +3,7 @@
 The measured Figma prompt window — the template for a FLOATING AI prompt window: the
 `corporate_stage` product-pop-out highlight (from the contract rect) or any floating AI window, always
 absolute and a direct child of the root, never inside an interface (a prompt inside an interface is
-`KitInput` + an AI button). Brands: `ionos`, `strato`.
+a drawn field + an AI button). Brands: `ionos`, `strato`.
 `agent-svc` copies this directory into every render workspace as `src/uds/`, where it is
 **protected** from codegen overwrite (`agent-svc/src/storage.ts`, `PROTECTED_PREFIXES`).
 

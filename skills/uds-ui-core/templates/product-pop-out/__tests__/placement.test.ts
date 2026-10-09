@@ -7,7 +7,7 @@ type StyledEl = ReactElement<{ style?: Record<string, unknown>; children?: unkno
 const base = { promptText: 'Eine App für mein Café', width: 360 } as const;
 
 // User ruling 2026-10-07 (2nd): PromptWindow is ONLY a floating AI window — absolute, a direct child
-// of the root — never inside an interface. A prompt inside an interface is KitInput + an AI button.
+// of the root — never inside an interface. A prompt inside an interface is a drawn field + an AI button.
 describe('PromptWindow is floating only', () => {
   for (const variant of ['prompt-simple', 'prompt-full'] as const) {
     it(`${variant}: always absolute, bottom-anchored and z-indexed from its left/bottom`, () => {
