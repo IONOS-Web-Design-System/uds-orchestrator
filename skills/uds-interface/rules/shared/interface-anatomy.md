@@ -15,9 +15,9 @@ Diagram below illustrates the dark shell **variant** (token names shown for orie
 the brand's color rule, e.g. `ionos/product-frame-color.md`, for the concrete hex values); the
 light **default** renders the identical structure with the colorScheme-resolved tokens
 (`var(--surface-subtle, #F4F7FA)` shell + both side rails — the left sidebar and the right
-properties panel; `var(--surface-base, #FFFFFF)` content area and the cards/rows on it — see
-`ionos/product-frame-color.md`; `surface-subtlest` is the canvas OUTSIDE the frame and must not
-appear on chrome).
+properties panel; `var(--surface-base, #FFFFFF)` content area and the cards/rows on it — unless
+the brand's visual-language rule sets other tiers, e.g. `ionos/visual-language.md`;
+`surface-subtlest` is the canvas OUTSIDE the frame and must not appear on chrome).
 `DARK_SHELL_ACCENT` below is the brand's dark-shell-complementing accent for
 data/highlights in the dark variant — resolve the concrete value from the brand's color rule (e.g.
 `ionos/product-frame-color.md` "Product shell — dark variant") — never hardcode a brand hex

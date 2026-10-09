@@ -10,32 +10,12 @@ This is not a pixel-perfect reproduction. Make reasonable spatial decisions wher
 
 ## Setup — Always Required
 
-```tsx
-// Wireframe illustration — not production code
-import ThemeProvider from '@ionos-web-design-system/react/theme-provider';
+The root is the `data-brand` / `data-platform` / `data-color-scheme` wrapper around `<ThemeProvider>`
+from the skill's Output Format.
 
-export default function MyWireframe() {
-  return (
-    // ThemeProvider takes ONLY children. Brand/platform/colorScheme are applied
-    // as data-* attributes on a wrapping element (NOT props on ThemeProvider).
-    <div data-brand="ionos" data-platform="comfortable" data-color-scheme="light">
-      <ThemeProvider>
-        {/* There is NO `Surface` component in UDS. For a themed background use a
-            div with a bg-surface-* utility class (or style={{ backgroundColor: 'var(--surface-…)' }}). */}
-        <div className="bg-surface-base text-semantic-base">
-          {/* composition goes here */}
-        </div>
-      </ThemeProvider>
-    </div>
-  );
-}
-```
-
-- **There is no `Surface` component** — `@ionos-web-design-system/react` does not export it. Use a `div` with a `bg-surface-*` class (`bg-surface-base`, `bg-surface-subtle`, `bg-surface-subtlest`) or `style={{ backgroundColor: 'var(--surface-subtlest)' }}`.
+- **There is no `Surface` component** — `@ionos-web-design-system/react` does not export it. Use a `div` with `style={{ backgroundColor: 'var(--surface-…)' }}` (or a `bg-surface-*` class).
 - `ThemeProvider` takes **no props** — only `children`. It reads the theme from the `data-*` attributes on an ancestor element.
-- `data-brand="ionos"` — active brand (only ionos is fully style-guided currently)
-- `data-color-scheme="light"` — default for standard mode; use `"dark"` for decorative mode (set on the wrapper, not via ThemeInverter)
-- `data-platform="comfortable"` — default spacing; use `"compact"` for dense UIs
+- `data-color-scheme="light"` is the default; `"dark"` for decorative mode (on the wrapper, not via ThemeInverter). `data-platform="comfortable"` is the default.
 
 ---
 
@@ -72,18 +52,9 @@ Icon names are chosen at codegen time from the `# Icon name index` prompt sectio
 no runtime icon-name lookup in this one-shot pipeline, so `useDynamicIcon`'s premise (a name
 known only at render time) never applies here.
 
-**Brandmark icons**: do not use the `<Icon>` component — it applies fixed icon sizing that
-distorts logo proportions. Import the logo's `svgData` and use it as an `<img src>`:
-```tsx
-import { svgData as ionosLogo } from '@ionos-web-design-system/icon/brandmark/ionos-light';
-
-<div style={{ width: 80, height: 24 }}>
-  <img src={ionosLogo} alt="IONOS" style={{ height: '100%', width: 'auto', display: 'block' }} />
-</div>
-```
-`svgData` is a `data:image/svg+xml;base64,…` string, so it needs no loader and no file.
-The package ships **no `.svg` files** — never reference one, and never point an `<img>` at a
-`/node_modules/…` path. Available names and the light/dark form: see the `# Icon name index`.
+**Brandmark icons**: never the `<Icon>` component (it distorts logo proportions) — the logo's
+`svgData` as an `<img src>`, per `ionos/product-frame-color.md` "IONOS Brandmark Import". The package
+ships **no `.svg` files**; never point an `<img>` at a `/node_modules/…` path.
 
 ---
 
@@ -159,26 +130,4 @@ The hex fallback does not save you (a malformed-name `var()` fails before the fa
 <div style={{ background: 'var(--brand/ionos-blue-600)' }}>…</div>
 ```
 
----
-
-## Tailwind CSS in compositions
-
-`@ionos-web-design-system/core` exposes **semantic** tokens as CSS variables — use those names
-in Tailwind arbitrary values (never a Figma `/`-path):
-
-```tsx
-// ✅ semantic core tokens (valid) — or a literal hex for a specific brand colour
-<div className="bg-[var(--surface-base-invert)] text-[var(--text-base-invert)] p-8">
-  Inverted surface
-</div>
-<div className="bg-[#003D8F] text-[#fff] p-8">
-  IONOS Blue background
-</div>
-
-// Spacing tokens
-<div className="p-[var(--space-8)]">
-  Token-driven padding
-</div>
-```
-
-For standard layout utilities (flex, grid, gap, padding), use plain Tailwind classes.
+Tailwind arbitrary values follow the same rule: `bg-[var(--surface-base-invert)]`, `p-[var(--space-8)]`, never a `/`-path.

@@ -27,23 +27,22 @@ itself, a dark request.
 
 ### Product shell — light default (`colorScheme !== 'dark'`, non-decorative)
 
+Tiers follow `ionos/visual-language.md`: the plane is `surface-subtle`, everything that sits on it is
+`surface-base` with no stroke.
+
 | Zone | Background | Icon / text color |
 |---|---|---|
-| Outer frame / app shell | `var(--surface-subtle, #F4F7FA)` | — |
-| Left tool sidebar (part of the shell) | `var(--surface-subtle, #F4F7FA)` | `var(--text-base)`, 0.8 opacity idle / 1.0 active |
-| Main content area | `var(--surface-base, #FFFFFF)` | `var(--text-base)` |
-| Right properties panel (shell rail) | `var(--surface-subtle, #F4F7FA)` | `var(--text-subtle)` for bars/data, `var(--text-base)` for labels |
-| Active sidebar item | `var(--surface-base, #FFFFFF)` | `var(--text-base)` |
+| Outer frame / content plane | `var(--surface-subtle, #F4F7FA)` | `var(--text-base)` |
+| Top header bar | `var(--surface-base, #FFFFFF)` + 1px bottom `var(--border-base)` | `var(--text-base)` |
+| Left tool sidebar, right properties panel (rails) | `var(--surface-base, #FFFFFF)`, no stroke | `var(--text-base)`, 0.8 opacity idle / 1.0 active; `var(--text-subtle)` for data |
+| Cards, rows, panels on the plane | `var(--surface-base, #FFFFFF)`, no stroke | `var(--text-base)` |
+| Active sidebar item | `var(--surface-subtle, #F4F7FA)` pill | `var(--text-base)` |
 | Header action: "Publish" | `<KitButton size="small" />` | — |
 | Header action: "Preview" | `<KitButton variant="secondary" size="small" />` | — |
 
-**Two fill tiers.** The shell and its rails — outer frame, left tool sidebar, and right
-properties panel — are `surface-subtle`; the working content area and the elements that must
-lift off it (active sidebar pill, panel rows, cards) are `surface-base`. The frame and its two
-rails deliberately share a tier — the rails *are* the shell. A rail always differs from the
-content it borders. Where two `surface-base` elements do sit directly on each other (a card or
-row on the content plane), separate them with a border or a soft elevation — never a third fill
-tier, and never `surface-subtlest` — per the frame-separation rule in `shared/frame-anatomy.md`.
+**Two fill tiers, alternating.** A white element never sits on white: a group inside a white card
+returns to `surface-subtle` (the frame-separation rule in `shared/frame-anatomy.md` is met by the
+tier change, so no border). Never a third tier.
 
 **`surface-subtlest` is never a chrome surface.** It belongs to the asset canvas outside the
 interface (see `shared/surface-theme.md`). Using it on a panel makes that panel dissolve into
@@ -51,7 +50,7 @@ the canvas wherever the two meet.
 
 **Decorative/abstract elements inside a light shell:**
 - Tool icons: `KitIcon` / `KitIconButton`; `opacity: 0.8` idle, `1.0` active, on the parent `div`
-- Property panel rows: `var(--surface-base, #FFFFFF)` background, bar fill `var(--text-subtle)`
+- Property panel rows (inside the white rail): `var(--surface-subtle, #F4F7FA)` background, bar fill `var(--text-subtle)`
 - Analytics / stat indicators: `var(--text-subtle)` for values and bars
 - Placeholder / skeleton bars in the shell: `var(--text-semantic-skeleton)` — the dedicated
   skeleton fill token. It is scheme-aware (light `oklch(0.9092 0.0111 243.66 / 0.5)`, dark
@@ -85,18 +84,11 @@ sidebar's role here.
 ### Opaque base-plate fallback hex (transparent-root composite styles)
 
 Per `shared/frame-anatomy.md` "Opaque base plate," `product-pop-out` / `device-mockup` interface
-surfaces must use `var(--surface-base, <hex>)` — token plus a hardcoded same-scheme fallback,
-never a bare token — because the composition root there is transparent and an unresolved token
-collapses to see-through. The fallback only fires if the token itself fails to resolve, and it
-always matches the current `colorScheme`, so it does not conflict with the "do NOT hardcode a
-dark panel on a light render" rule above — the light fallback applies exactly when the light
-branch already applies, and the dark fallback applies exactly when the dark branch already
-applies:
+surfaces use the token plus a same-scheme hex fallback, never a bare token:
 
-- **Light default** (`colorScheme !== 'dark'`, non-decorative): `var(--surface-base, #FFFFFF)`
+- **Light default:** `var(--surface-base, #FFFFFF)` (the plane: `var(--surface-subtle, #F4F7FA)`)
 - **Dark variant** (`colorScheme === 'dark'`, or explicit decorative): `var(--surface-base, #001B41)`
-  — Dark Midnight, the same hex this file's own dark-shell gradients (outer frame, sidebar, panel
-  above) already start from
+  (Dark Midnight, the start of the dark-shell gradients above)
 
 ## IONOS Brandmark Import
 

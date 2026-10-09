@@ -1,91 +1,73 @@
 ## Layout Patterns and Component Selection
 
 Interface elements come from the UDS kit (`./kit`, see the prompt section "# UDS kit"). The
-patterns below hand-build only the layout `div`s (position, grid, gaps, padding) and place kit
-components in them. Never import a raw `@ionos-web-design-system/react/*` component other than
-`ThemeProvider`.
+patterns below hand-build only the layout `div`s (position, grid, gaps, padding, plane fills) and
+place kit components in them; tiers and type roles follow `ionos/visual-language.md`. Never import
+a raw `@ionos-web-design-system/react/*` component other than `ThemeProvider`.
 
-### Navigation / Header
+### Header
 
 ```tsx
 import { svgData as ionosLogo } from '@ionos-web-design-system/icon/brandmark/ionos-light';
-import { KitButton, KitText } from './kit';
+import search from '@ionos-web-design-system/icon/system/search';
+import bell from '@ionos-web-design-system/icon/system/bell';
+import { KitIcon, KitIconButton, KitText } from './kit';
 
-<div style={{ display: 'flex', alignItems: 'center', gap: 32, padding: '16px 32px', background: 'var(--surface-base)' }}>
-  <img src={ionosLogo} alt="IONOS" style={{ height: 24, width: 'auto', display: 'block' }} />
-  <div style={{ display: 'flex', gap: 24, flex: 1 }}>
-    {[texts.nav1, texts.nav2, texts.nav3].map((item, i) => (
-      <KitText key={i} variant="bodySm" weight="bold">{item ?? ''}</KitText>
+<div style={{ display: 'flex', alignItems: 'center', gap: 32, padding: '12px 32px', background: 'var(--surface-base)', borderBottom: '1px solid var(--border-base)' }}>
+  <img src={ionosLogo} alt="IONOS" style={{ height: 22, width: 'auto', display: 'block' }} />
+  <div style={{ flex: 1, maxWidth: 420, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', borderRadius: 999, background: 'var(--surface-subtle)' }}>
+    <KitIcon icon={search} size="small" />
+    <KitText variant="bodySm" tone="subtle">{texts.searchHint ?? ''}</KitText>
+  </div>
+  <KitIconButton icon={bell} title={texts.notifications ?? ''} />
+</div>
+```
+
+### Page plane, title and card grid
+
+```tsx
+import { KitButton, KitCard, KitText } from './kit';
+
+<div style={{ background: 'var(--surface-subtle)', padding: '40px 48px', display: 'flex', flexDirection: 'column', gap: 32 }}>
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <KitText variant="heading4xl">{texts.pageTitle ?? ''}</KitText>
+      <KitText variant="bodyLg" tone="subtle">{texts.pageIntro ?? ''}</KitText>
+    </div>
+    <KitButton label={texts.primaryCta ?? ''} />
+  </div>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+    {[1, 2, 3].map((n) => (
+      <KitCard key={n}>
+        <KitText variant="headingLg" weight="semibold">{texts[`card${n}Title`] ?? ''}</KitText>
+        <KitText tone="subtle">{texts[`card${n}Body`] ?? ''}</KitText>
+      </KitCard>
     ))}
   </div>
-  <KitButton label={texts.signIn ?? ''} variant="secondary" size="small" />
 </div>
 ```
 
-### Hero / Banner Section
+### Form
+
+A white card on the plane; fields are drawn (the only stroked element), labels `bodySm` semibold.
 
 ```tsx
-import { KitButton, KitText } from './kit';
-
-// A dark section is a nested root carrying BOTH data-brand and data-color-scheme
-// (the core tokens match them on the same element).
-<div data-brand={brand} data-color-scheme="dark"
-     style={{ background: 'var(--surface-base)', padding: '96px 64px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-  <KitText variant="heading3xl" weight="bold" align="center">{texts.heroTitle ?? ''}</KitText>
-  <KitText variant="bodyXl" tone="subtle" align="center">{texts.heroBody ?? ''}</KitText>
-  <div style={{ marginTop: 16 }}>
-    <KitButton label={texts.heroCta ?? ''} size="large" />
+<KitCard>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 448 }}>
+    <KitText variant="headingXl" weight="semibold">{texts.formTitle ?? ''}</KitText>
+    <KitText variant="bodySm" weight="semibold">{texts.emailLabel ?? ''}</KitText>
+    <div style={{ border: '1px solid var(--border-input-default, #718095)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-input-default)' }}><KitText>{texts.emailHint ?? ''}</KitText></div>
+    <KitButton label={texts.submit ?? ''} />
   </div>
-</div>
+</KitCard>
 ```
 
-### Card Grid
+### Dashboard / data
 
-```tsx
-import { KitCard, KitText } from './kit';
-
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, padding: '48px 32px' }}>
-  {[1, 2, 3].map((n) => (
-    <KitCard key={n}>
-      <KitText variant="headingLg" weight="bold">{texts[`card${n}Title`] ?? ''}</KitText>
-      <KitText tone="subtle">{texts[`card${n}Body`] ?? ''}</KitText>
-    </KitCard>
-  ))}
-</div>
-```
-
-### Form / Input Section
-
-```tsx
-import { KitButton, KitText } from './kit';
-
-<div style={{ maxWidth: 448, margin: '0 auto', padding: '64px 0', display: 'flex', flexDirection: 'column', gap: 16 }}>
-  <KitText variant="bodySm" tone="subtle">{texts.emailLabel ?? ''}</KitText>
-  <div style={{ border: '1px solid var(--border-input-default, #718095)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-input-default)' }}><KitText>{texts.emailHint ?? ''}</KitText></div>
-  <KitText variant="bodySm" tone="subtle">{texts.passwordLabel ?? ''}</KitText>
-  <div style={{ border: '1px solid var(--border-input-default, #718095)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-input-default)' }}><KitText>{'••••••••'}</KitText></div>
-  <KitButton label={texts.signIn ?? ''} />
-</div>
-```
-
-### Dashboard / Data Layout
-
-```tsx
-import { KitCard, KitText } from './kit';
-
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, padding: 32 }}>
-  {/* Stat cards */}
-  {[1, 2, 3, 4].map((n) => (
-    <KitCard key={n}>
-      <KitText variant="bodySm" tone="subtle">{texts[`stat${n}Label`] ?? ''}</KitText>
-      <KitText variant="heading2xl" weight="bold">{texts[`stat${n}Value`] ?? ''}</KitText>
-    </KitCard>
-  ))}
-</div>
-```
+Stat tiles are `KitCard`s on the plane (gap 8): label `bodySm` `tone="subtle"`, value
+`heading2xl` `weight="semibold"`. A list or table sits in ONE white card; its rows are separated by
+spacing or a hairline divider, and a selected row is a `surface-subtle` band.
 
 Other kit elements fill the same roles: tab strips are `KitTabs`, toggles `KitSwitch`, checkboxes
 `KitCheckbox`, initials circles `KitAvatar`, progress bars/rings `KitProgress`, loading rows
-`KitSkeleton`, icon actions `KitIconButton`.
-
----
+`KitSkeleton`, status chips `KitPill`.
