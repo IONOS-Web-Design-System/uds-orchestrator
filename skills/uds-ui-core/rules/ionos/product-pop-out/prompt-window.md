@@ -22,8 +22,8 @@ Hardcode the hex values; CSS custom properties do not reliably resolve in a Remo
 
 **Both surfaces are real glass** — a translucent nearly-white `rgba(255,255,255,0.88)` backdrop
 with a `blur(14px)` that actually takes effect, per the designer's instruction. `0.88` is this
-codebase's established glass alpha (`shared/floating-card.md`'s "0.88 + backdrop-blur glass",
-carved out for this component specifically — see that file's exception). `prompt-full` used to
+codebase's established glass alpha (the floating-highlight rule's "0.88 + backdrop-blur glass",
+carved out for this component specifically — see that rule's exception). `prompt-full` used to
 be opaque (`#FFFFFF`, briefly `#F5F5F5` before that) with NO blur at all; it now shares the same
 alpha and blur as `prompt-simple` so the bar and the card read as one material. Do **not** add a
 `-webkit-backdrop-filter` fallback — verified in the Chromium generation Remotion uses,

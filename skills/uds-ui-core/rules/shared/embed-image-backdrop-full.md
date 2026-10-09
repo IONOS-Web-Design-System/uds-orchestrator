@@ -25,7 +25,7 @@ Layer order:
    slightly overlap each other and may overlap the photo subject's edge. Hand-built fragments
    share the same surface anatomy: white/light background, rounded corners (16-20px), soft
    shadow (`0 24px 64px rgba(0,0,0,0.3)`). A `KitCard` fragment is the exception per
-   `shared/floating-card.md`: its wrapper carries position, that shadow and
+   the floating-highlight surface rule: its wrapper carries position, that shadow and
    `borderRadius: 'var(--protected-container-rounded)'`, no background; KitCard's own surface and
    1px border are accepted.
 

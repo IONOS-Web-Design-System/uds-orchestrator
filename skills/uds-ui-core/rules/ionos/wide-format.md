@@ -7,7 +7,7 @@ wide: true
 
 **When this applies:** the canvas is an extended landscape — **width ÷ height ≥ 2.2**
 (e.g. 1344×487, 1600×600, 970×250). Below that ratio, ignore this rule and use the standard
-composition guidance. If the canvas is *also* under 512px on **both** axes, `small-format.md`
+composition guidance. If the canvas is *also* under 512px on **both** axes, the small-format rule (when the direction skill ships one)
 governs instead — that rule wins, because at that size there is no width to spare for empty
 side margins.
 

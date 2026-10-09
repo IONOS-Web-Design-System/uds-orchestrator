@@ -21,8 +21,8 @@ The product shell and the client-app zone are two visually distinct layers. Neve
 **Base shell follows `shared/surface-theme.md`; do NOT hardcode a dark panel on a
 light render.** The shell's frame/sidebar/panel backgrounds derive from `colorScheme`-resolved
 UDS surface tokens, and **light is the default**. Render the dark-navy shell ONLY when
-`colorScheme === 'dark'`, or the brief is explicitly decorative/cinematic (see
-`ionos/decorative-mode.md`) — a generic "AI feature" or "premium" brief is NOT, by
+`colorScheme === 'dark'`, or the brief is explicitly decorative/cinematic (the direction
+skill's decorative-mode rule, when it has one) — a generic "AI feature" or "premium" brief is NOT, by
 itself, a dark request.
 
 ### Product shell — light default (`colorScheme !== 'dark'`, non-decorative)

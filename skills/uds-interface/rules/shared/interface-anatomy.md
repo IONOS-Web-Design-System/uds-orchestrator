@@ -18,20 +18,20 @@ light **default** renders the identical structure with the colorScheme-resolved 
 properties panel; `var(--surface-base, #FFFFFF)` content area and the cards/rows on it — see
 `ionos/product-frame-color.md`; `surface-subtlest` is the canvas OUTSIDE the frame and must not
 appear on chrome).
-`DARK_SHELL_ACCENT` below is the brand's dark-shell-complementing accent for decorative
-bars/data in the dark variant — resolve the concrete value from the brand's color rule (e.g.
+`DARK_SHELL_ACCENT` below is the brand's dark-shell-complementing accent for
+data/highlights in the dark variant — resolve the concrete value from the brand's color rule (e.g.
 `ionos/product-frame-color.md` "Product shell — dark variant") — never hardcode a brand hex
 in this shared file.
 
 ```
 ┌─ Product Shell — dark variant (dark navy gradient) ─┐
 │ [sidebar: dark navy gradient]  [CLIENT APP: #F4F7FA]  [panel: dark navy gradient]│
-│  W logo                     ┌─────────────────┐    [DARK_SHELL_ACCENT bars]  │
+│  W logo                     ┌─────────────────┐    [real data, accent-colored]  │
 │  ──────────────             │ [client header]  │    [dropdowns]     │
 │  icon  ←white               │ [hero image]     │    [analytics]     │
 │  icon                       │ "Brand Heading"  │                    │
-│  icon (active strip)        │ [Bar #BCC8D4]    │                    │
-│  icon                       │ [Bar #BCC8D4]    │                    │
+│  icon (active strip)        │ "Row label — value"│                  │
+│  icon                       │ "Row label — value"│                  │
 └──────────────────────────── └─────────────────┘ ───────────────────┘
 ```
 
@@ -59,10 +59,8 @@ as a distinct layer from the shell:
   {/* Hero: real catalog image, object-fit cover */}
   <Img src={staticFile(`${imageSlug}.png`)} style={{ width: '100%', height: 140, objectFit: 'cover' }} />
   {/* Headline — real text, 24–36px Overpass or brand font */}
-  {/* Content rows — Bars in #BCC8D4 (cool-grey-300) */}
+  {/* Content rows — real labels and values from the brief's context, in text colors that read on the light panel */}
 </div>
 ```
 
-**Text placeholder bars in the client app**: `#BCC8D4` (cool-grey-300), NOT white or dark —
-fixed, part of the client-app's own light theme in both shell branches.
-**AI selection target inside client app**: `border: 2px dashed #8212C2` — the text-selection marquee ONLY. The floating highlight card itself has NO border; it uses a plain neutral drop shadow (no AI glow — the AI glow is on the CTA button only) (see `shared/floating-card.md`).
+**Content in the client app**: content rows carry real labels and values from the brief's context (never placeholder bars), in text colors that read on the client app's own fixed light theme in both shell branches. Any selection or highlight is a real UI state of the product, not a floating overlay.

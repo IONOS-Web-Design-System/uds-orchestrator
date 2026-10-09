@@ -55,8 +55,8 @@ Layer order (document order, no z-index games):
    STATIC. NEVER fade it in, zoom, pan, Ken-Burns, parallax, or drift the imagery — there
    is NO sanctioned backdrop motion, in ANY embed style. Put NO transform/opacity animation
    on the scene wrapper or the `<Img>` itself. ONLY the floating UI fragments and annotations
-   (cards, marquee, connector, badge, cursor flow) animate: they draw/fly in (micro-animations
-   Pattern 5) over an already-fully-visible, static backdrop, then settle. This holds
+   (cards, marquee, connector, badge, cursor flow) animate: they draw/fly in (the fly-in
+   pattern of the direction skill's animation rules) over an already-fully-visible, static backdrop, then settle. This holds
    regardless of animation intent — the backdrop is the still stage; only the overlay moves.
 
 3. **Selection marquee over a calm negative-space region of the imagery** — the
@@ -90,7 +90,7 @@ Layer order (document order, no z-index games):
 4. **Floating feature panel** — a compact panel half-overlapping the backdrop card's edge
    on the negative-space side, containing the feature's UI as kit components (`KitTabs` for a
    segmented control, `KitCheckbox` options, the AI CTA `KitButton concept="ai"`). **Panel chrome follows the
-   Floating Highlight Card template (see `shared/floating-card.md` for the surface rule):
+   Floating Highlight Card template (the floating-highlight surface rule):
    borderless, with a plain neutral drop shadow (no AI glow — AI glow is on the CTA
    only) — NO border of any kind (dashed AND gradient borders are retired panel styles).
    The AI gradient belongs to the CTA inside, not the panel chrome.**
@@ -99,8 +99,8 @@ Layer order (document order, no z-index games):
    import sparkles from '@ionos-web-design-system/icon/system/filled-sparkles';
    import { KitButton, KitCheckbox } from './kit';
 
-   // Floating Highlight Card chrome (see shared/floating-card.md for the chrome spec
-   // and animated-entrance guidance). `glow` is a clamped interpolate from the frame.
+   // Floating Highlight Card chrome (chrome spec and animated-entrance guidance come
+   // from the direction skill's floating-highlight rule). `glow` is a clamped interpolate from the frame.
    <div style={{
      position: 'absolute', left: '5%', top: '30%', width: 280,
      borderRadius: 24, padding: 20,
@@ -148,7 +148,7 @@ Layer order (document order, no z-index games):
    "AI badges"; the kit has no AI chip), not a kit button; its parent positions it and carries the
    pop-in animation.
 
-Animation hooks (reference the patterns in `ionos/micro-animations.md` — do not
+Animation hooks (reference the direction skill's micro-animation patterns — do not
 re-invent them): panel enters with **Pattern 5 — Element Fly-In** (`fly`); the marquee
 draws in right after (animate `strokeDashoffset` on an SVG rect, or fade + scale the dashed
 div from 1.04→1); the AI badge pops last (its parent scales 0.6→1 on the same clamped `enter` curve, then holds); the

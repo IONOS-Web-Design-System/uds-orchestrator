@@ -102,7 +102,7 @@ hero) is in `product-pop-out/character.md`.
    | surface | translucent glass, working blur | translucent glass, working blur |
 
    This window is glass by design — a narrow, named exception to the opaque Floating Highlight
-   surface rule in `shared/floating-card.md` (which continues to govern every hand-built
+   surface rule of the direction skill's floating-highlight rule (which continues to govern every hand-built
    accent). For the fallback only: the exact alpha/blur, the text colour, the gradient and the
    type faces are brand values — take them from the brand's own AI rule (e.g.
    `ionos/product-pop-out/prompt-window.md` for IONOS), never invent them here. On the import
@@ -116,7 +116,7 @@ hero) is in `product-pop-out/character.md`.
 
    In all present cases: anchored bottom-left, popping outside the interface's LEFT edge, never
    over the frame's center, never over the character's face-safe box. Chrome follows the
-   Floating Highlight Card template (`shared/floating-card.md`): plain neutral shadow, no AI
+   Floating Highlight Card template (the direction skill's floating-highlight rule): plain neutral shadow, no AI
    glow on the chrome; hand-built panels borderless, a `KitCard` surface per that file's
    KitCard exception (its surface and 1px border accepted).
 5. **AI styling (when this is an AI feature)** — the CTA/Publish action is
