@@ -4,7 +4,7 @@ small: true
 
 # Small-format illustrations
 
-**When this applies:** the brief's dimensions are small — **under ~512px on both axes**
+**When this applies:** the brief's dimensions are small — **≤ 512px on both sides**
 (e.g. 432×324, 480×480, social-card / inline-badge sizes). A whole product UI shrunk to fit
 this canvas is unreadable. (For larger canvases, ignore this rule and use the standard
 composition / product-frame guidance.)

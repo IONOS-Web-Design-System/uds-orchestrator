@@ -15,7 +15,7 @@ every element the kit covers; text fields are drawn (see "# UDS kit"). Spacing u
 
 | Rule file | Covers |
 |---|---|
-| `shared/realistic-content.md` | Labels, data and copy from the brief's context; no demonstration layer |
+| `shared/realistic-content.md` | Labels, data and copy from the brief's context; no demonstration layer beyond what the contract defines |
 | `ionos/layout-patterns.md` | Navigation, hero, card grid, form, dashboard patterns |
 | `shared/interface-anatomy.md` | Real product-frame content detail; the client-app zone |
 | `shared/screen-content.md`, `shared/device-screen.md` | Device screens (bare interface) |

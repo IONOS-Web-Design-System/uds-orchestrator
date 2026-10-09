@@ -11,4 +11,6 @@ Animation in a realistic interface shows the product BEING USED:
   skeleton resolves into content).
 - One continuous interaction of 2–3 beats that resolves and HOLDS; no looping showcase.
 - No feature-highlight choreography: no zoom-to-highlight, no floating callouts flying in, no
-  connector lines — those belong to the demonstration wireframe (uds-wireframe).
+  connector lines — those belong to the demonstration wireframe (uds-wireframe). An element the
+  embed style or module contract defines (see `shared/realistic-content.md`) still enters as that
+  contract says.
