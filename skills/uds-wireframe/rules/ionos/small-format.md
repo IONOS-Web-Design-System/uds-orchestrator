@@ -9,14 +9,38 @@ small: true
 this canvas is unreadable. (For larger canvases, ignore this rule and use the standard
 composition / product-frame guidance.)
 
-Pick ONE of two approaches:
+## Decide by context: product feature → cropped frame, otherwise → icon-story
 
-- **Icon-story** — an abstract composition of a central motif + connected services + a
-  connector (see "icon-story grammar" below). Best for integration / multi-service / concept
-  stories.
-- **Cropped product frame** — show a REAL product frame, but **cropped to its important
-  corner at a legible scale**, letting the rest bleed off the canvas edges (see "Cropped
-  product frame" below). Best when the brief is about a specific product screen/feature.
+Read what the brief is ABOUT, then pick exactly one approach:
+
+| The brief's context is… | Approach |
+|---|---|
+| **A product feature** — something the user does or sees *inside a specific product*: a screen, panel or tool of it, a function (search, generate, edit, publish, analyse), an AI capability working in its UI, a result/status it shows | **Cropped product frame with feature storytelling** (see "Cropped product frame" below) |
+| **Anything else** — a concept, benefit or promise (security, speed, sovereignty, savings), an integration or connection between services/apps, a category or offer, a multi-product overview, an abstract value proposition | **Icon-story** (see "icon-story grammar" below) |
+
+Ask: "could a customer point at this on their screen inside the product?" Yes → cropped
+frame. No → icon-story. A product name alone does not decide it — "IONOS GPT finds live
+news" is a feature (cropped frame); "IONOS GPT keeps your data in Germany" is a promise
+(icon-story).
+
+**Feature storytelling (cropped frame):** the frame sets the scene, the feature is the plot.
+Keep the region where the feature happens in view at a legible scale, and let 1–2 floating
+highlights **pop out over the frame's cut edge** to tell what the feature does — the moment it
+acts (a status chip turning "live", the AI action, the result card or stat it produces). In an
+animation the story runs in order: frame settles → the feature acts → the highlight pops.
+
+**Never the in-between:** a complete card or mini product frame, fully visible and centred
+with empty margins on every side, is NEITHER approach — it is a whole UI shrunk to fit. If
+it is a product feature, enlarge the frame past the canvas and crop it; if it is not,
+switch to an icon-story.
+
+**Planner:** state the chosen approach and its anatomy in the first sentence of the
+illustration brief's `feature`, e.g. "Cropped product frame of <product> anchored top-left,
+bleeding off the right and bottom edges; the <feature> pops out as a floating highlight…"
+or "Icon-story: <central motif> with <connected services>…" — the illustration generator
+draws what that sentence says. **Illustration generator:** this context decision outranks
+any generic preference for an icon-story elsewhere in the prompt; when the brief describes
+a product feature, build the cropped frame.
 
 Either way: **the fix for "UI too small to read" is to CROP, not to SHRINK** — show fewer
 elements at a legible size rather than the whole UI in miniature. Icons are **large and
@@ -47,6 +71,10 @@ it follows the brand/scheme when no `CANVAS BACKGROUND:` line applies. (Equivale
 class: `bg-surface-subtlest`.)
 
 ## The icon-story grammar
+
+The icon-story lives **directly on the canvas background** — never inside a card, panel or
+window wrapping the whole composition (that turns it back into a shrunk UI). No headline
+or sub-line text block; at most a short label on a pill or chip.
 
 Compose three roles — central motif + connected services + a connector that tells the story:
 
