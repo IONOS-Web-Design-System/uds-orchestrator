@@ -113,7 +113,7 @@ The rule (the "frame-separation rule" referenced from `ionos/product-frame-color
 two surfaces of the same or near-same tier meet — the product frame on the canvas, OR a
 `surface-base` card/row sitting on the `surface-base` content plane — separate them with ONE of:
 
-- a 1px border in `var(--border-subtle)`, or
+- a 1px border in `var(--border-base)`, or
 - a soft elevation shadow (e.g. `boxShadow: '0 2px 12px rgba(0,0,0,0.10)'`), or
 - both.
 

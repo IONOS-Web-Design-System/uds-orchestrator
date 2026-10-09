@@ -61,9 +61,9 @@ import { KitButton, KitText } from './kit';
 
 <div style={{ maxWidth: 448, margin: '0 auto', padding: '64px 0', display: 'flex', flexDirection: 'column', gap: 16 }}>
   <KitText variant="bodySm" tone="subtle">{texts.emailLabel ?? ''}</KitText>
-  <div style={{ border: '1px solid var(--border-subtle)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-base)' }}><KitText>{texts.emailHint ?? ''}</KitText></div>
+  <div style={{ border: '1px solid var(--border-input-default, #718095)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-input-default)' }}><KitText>{texts.emailHint ?? ''}</KitText></div>
   <KitText variant="bodySm" tone="subtle">{texts.passwordLabel ?? ''}</KitText>
-  <div style={{ border: '1px solid var(--border-subtle)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-base)' }}><KitText>{'••••••••'}</KitText></div>
+  <div style={{ border: '1px solid var(--border-input-default, #718095)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-input-default)' }}><KitText>{'••••••••'}</KitText></div>
   <KitButton label={texts.signIn ?? ''} />
 </div>
 ```

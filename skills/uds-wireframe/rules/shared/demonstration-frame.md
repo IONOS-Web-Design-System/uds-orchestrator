@@ -4,7 +4,7 @@ A demonstration wireframe shows ONE product frame and ONE real feature. Everythi
 feature is placeholder structure.
 
 - **Frame**: one product frame (shell colours per `ionos/product-frame-color.md`); navigation is
-  3–4 short labels or bars, never a full menu.
+  3–4 short real labels (or bars when the frame is tiny), never a full menu.
 - **Skeleton around the feature**: placeholder bars (`shared/placeholder-bars.md`) and
   `KitSkeleton` stand in for content that is not the feature. No data tables, KPI grids, lists
   of rows, or multiple panels.

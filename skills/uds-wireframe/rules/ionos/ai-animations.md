@@ -65,7 +65,7 @@ export const AIFloatingHighlight: React.FC<{
     <div style={{ width: 320, opacity, transform: `translateX(${interpolate(enter, [0, 1], [-120, 0])}px)`, boxShadow: '0 16px 48px rgba(0,0,0,0.35)', borderRadius: 'var(--protected-container-rounded)' }}>
       <KitCard footer={<KitButton label={ctaLabel} concept="ai" icon={sparkles} glow={interpolate(frame, [typeEnd, typeEnd + 8], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })} />}>
         {productLabel ? <KitText variant="bodySm" tone="subtle">{productLabel}</KitText> : null}
-        <div style={{ border: '1px solid var(--border-subtle)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-base)' }}><KitText>{text.slice(0, typed)}</KitText></div>
+        <div style={{ border: '1px solid var(--border-input-default, #718095)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-input-default)' }}><KitText>{text.slice(0, typed)}</KitText></div>
       </KitCard>
     </div>
   );
