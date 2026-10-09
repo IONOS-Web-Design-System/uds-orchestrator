@@ -17,8 +17,9 @@ see `shared/embed-image-backdrop-pointer.md` "Style: image-backdrop with feature
 
 `ACCENT` below is the brand's AI-selection accent — the same color used for the
 text-selection marquee inside the client-app zone. There is no dedicated CSS token for this
-accent; resolve the concrete value from the brand's color rule (e.g. `ionos/product-frame-color.md`
-"AI selection target inside client app") — never hardcode a brand hex in this shared file.
+accent; it is the brand's AI-generating text colour, as set in `shared/demonstration-frame.md`
+("AI selection target inside client app", "Client-app zone in a demonstration wireframe") —
+never hardcode a brand hex in this shared file.
 
 ```tsx
 <AbsoluteFill style={{ overflow: 'hidden' }}>
