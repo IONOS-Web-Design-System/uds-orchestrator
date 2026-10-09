@@ -82,10 +82,9 @@ expressed as `interpolate(frame, ...)`. Detailed fade / typing / text-stability 
 The composition renders inside `<ThemeProvider>` under a `data-brand` root, so the brand's
 **semantic CSS custom properties resolve live**. Hand-built layout uses UDS tokens inline — see the prompt section "# UDS kit".
 
-**NEVER write a Figma token path as a CSS variable.** `var(--brand/ionos-blue-600)`,
-`var(--brand-ionos-blue-600)` do not exist: the `/` is a parse error, the
-declaration is dropped (the hex fallback is NOT applied) and the element renders unstyled. The
-`/`-paths in `uds-style-guide` are Figma reference notation only.
+**NEVER write a Figma token path as a CSS variable.** `var(--brand/ionos-blue-600)` is a parse error (the
+`/`): the declaration is dropped, hex fallback included. `var(--brand-ionos-blue-600)` is undefined. Neither
+resolves to a token. The `/`-paths in `uds-style-guide` are Figma reference notation only.
 
 Two correct options:
 
