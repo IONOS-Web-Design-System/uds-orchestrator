@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.0.0...v3.0.1) (2026-10-09)
+
+
+### Bug Fixes
+
+* **small-format:** decide by context — product feature → cropped frame with feature storytelling, otherwise icon-story ([6c0d66e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/6c0d66e7957494671bf919f3f0e2e430b7c1acb9))
+
 ## [3.0.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v2.22.0...v3.0.0) (2026-10-09)
 
 
