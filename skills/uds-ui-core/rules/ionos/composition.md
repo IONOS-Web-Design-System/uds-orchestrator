@@ -1,4 +1,4 @@
-# Wireframe Composition Guide
+# UDS Composition Guide
 
 ## Mental Model
 
@@ -161,7 +161,7 @@ The hex fallback does not save you (a malformed-name `var()` fails before the fa
 
 ---
 
-## Tailwind CSS in Wireframes
+## Tailwind CSS in compositions
 
 `@ionos-web-design-system/core` exposes **semantic** tokens as CSS variables — use those names
 in Tailwind arbitrary values (never a Figma `/`-path):

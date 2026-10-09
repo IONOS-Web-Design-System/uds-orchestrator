@@ -1,8 +1,14 @@
-# Product Frame — Anatomy, Content & Layout Rules
+# Product Frame — Anatomy & Layout Rules
 
-Brand-agnostic geometry for the "one product frame, one floating highlight" composition. The
-concrete color values referenced below (surface tokens, named accents like "sky") live in each
-brand's own color rule — e.g. `ionos/product-frame-color.md` for IONOS.
+Brand-agnostic geometry of the product frame: contrast, frame layout, opaque base plate,
+animated overflow and same-tier surface separation. The concrete color values referenced below
+(surface tokens, named accents like "sky") live in each brand's own color rule — e.g.
+`ionos/product-frame-color.md` for IONOS.
+
+**Client-app zone**: the inner panel of the product frame that shows the customer's own
+website or app (a real website preview, not tool chrome), nested inside the product shell. It
+keeps its own fixed light theme, independent of the shell's `colorScheme`, and must read as a
+distinct layer from the shell.
 
 ## Contrast Rule (product frame context)
 

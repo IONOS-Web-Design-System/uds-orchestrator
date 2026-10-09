@@ -7,12 +7,11 @@ metadata:
 
 # IONOS Product Frame — Color & Icon Rules
 
-The frame/highlight-card **geometry** (composition rule, content detail rules, contrast rule,
-frame layout rules, animated overflow, and constrained-viewport cropping) is brand-agnostic
-and lives in `shared/frame-anatomy.md`, `shared/constrained-viewport.md`, and
-`shared/floating-card.md` — plus, for plain/reconstruct renders only, the connector-line
-pattern in `shared/connector-line.md`. This file holds only the IONOS concrete color values,
-brandmark import, and icon rules that those shared geometry files reference semantically
+The frame **geometry** (contrast rule, frame layout rules, opaque base plate, animated
+overflow, same-tier surface separation) is brand-agnostic and lives in
+`shared/frame-anatomy.md`; viewport cropping and floating highlight cards live in the
+direction skills' own rules. This file holds only the IONOS concrete color values,
+brandmark import, and icon rules that those geometry files reference semantically
 (tokens like `var(--surface-subtle)`, or named colors like "sky" / "steel-blue").
 
 ## IONOS Product Frame — Color System (Figma node 65:606)
