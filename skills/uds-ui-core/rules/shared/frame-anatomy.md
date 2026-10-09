@@ -4,49 +4,6 @@ Brand-agnostic geometry for the "one product frame, one floating highlight" comp
 concrete color values referenced below (surface tokens, named accents like "sky") live in each
 brand's own color rule — e.g. `ionos/product-frame-color.md` for IONOS.
 
-## Composition Rule — One Frame, One Highlight
-
-**Every product animation has exactly two primary elements:**
-1. **One main product frame** — the product/app UI
-2. **One floating highlight card** — the AI feature moment, always a sibling of the frame (never inside it)
-
-Secondary floating elements (tool chips, stat pills) are allowed as decoration but must be less prominent and also live outside the frame.
-
-## Product Frame — Content Detail Rules
-
-Always include these realistic anchors (scale with frame size):
-- **Catalog image asset** — pick from available assets via `staticFile()`; place in hero
-- **Big hero heading** — 24–40px, real contextual text (brand name, tagline)
-- **Product logo** — brand logo in shell header; client logo in client-app header
-- **Size-dependent detail**:
-  - Large frame (>900px wide): left sidebar + hero + content grid + right properties panel
-  - Medium (500–900px): left sidebar + hero + 1–2 content rows, no right panel
-  - Small (<500px): hero only, minimal nav
-
-Diagram below illustrates the dark shell **variant** (token names shown for orientation — see
-the brand's color rule, e.g. `ionos/product-frame-color.md`, for the concrete hex values); the
-light **default** renders the identical structure with the colorScheme-resolved tokens
-(`var(--surface-subtle, #F4F7FA)` shell + both side rails — the left sidebar and the right
-properties panel; `var(--surface-base, #FFFFFF)` content area and the cards/rows on it — see
-`ionos/product-frame-color.md`; `surface-subtlest` is the canvas OUTSIDE the frame and must not
-appear on chrome).
-`DARK_SHELL_ACCENT` below is the brand's dark-shell-complementing accent for decorative
-bars/data in the dark variant — resolve the concrete value from the brand's color rule (e.g.
-`ionos/product-frame-color.md` "Product shell — dark variant") — never hardcode a brand hex
-in this shared file.
-
-```
-┌─ Product Shell — dark variant (dark navy gradient) ─┐
-│ [sidebar: dark navy gradient]  [CLIENT APP: #F4F7FA]  [panel: dark navy gradient]│
-│  W logo                     ┌─────────────────┐    [DARK_SHELL_ACCENT bars]  │
-│  ──────────────             │ [client header]  │    [dropdowns]     │
-│  icon  ←white               │ [hero image]     │    [analytics]     │
-│  icon                       │ "Brand Heading"  │                    │
-│  icon (active strip)        │ [Bar #BCC8D4]    │                    │
-│  icon                       │ [Bar #BCC8D4]    │                    │
-└──────────────────────────── └─────────────────┘ ───────────────────┘
-```
-
 ## Contrast Rule (product frame context)
 
 **Light shell default:** shell and client-app zone are both light-toned; differentiate via

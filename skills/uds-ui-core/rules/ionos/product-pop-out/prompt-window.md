@@ -5,7 +5,7 @@ styles: [product-pop-out]
 ## Style: product-pop-out — IONOS values for the designed prompt window
 
 **These values now live in code**, in
-`uds-wireframe/templates/product-pop-out/promptWindow.brands.ts`, and the window itself is
+`uds-ui-core/templates/product-pop-out/promptWindow.brands.ts`, and the window itself is
 `templates/product-pop-out/PromptWindow.tsx`. When the MUST-contract tells you to import
 the template you need none of them — the component applies them. See
 `shared/product-pop-out/highlight-and-ai.md` §4(b).

@@ -10,11 +10,11 @@ on:
   # reason — to exercise it on demand rather than by contriving a template edit.
   push:
     paths:
-      - 'skills/uds-wireframe/templates/**'
+      - 'skills/uds-ui-core/templates/**'
       - '.github/workflows/templates-ci.yml'
   pull_request:
     paths:
-      - 'skills/uds-wireframe/templates/**'
+      - 'skills/uds-ui-core/templates/**'
       - '.github/workflows/templates-ci.yml'
   workflow_dispatch:
 jobs:
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: skills/uds-wireframe/templates
+        working-directory: skills/uds-ui-core/templates
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
