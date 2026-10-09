@@ -58,7 +58,7 @@ as a distinct layer from the shell:
   <div style={{ background: '#436977', height: 44, /* nav bar */ }} />
   {/* Hero: real catalog image, object-fit cover */}
   <Img src={staticFile(`${imageSlug}.png`)} style={{ width: '100%', height: 140, objectFit: 'cover' }} />
-  {/* Headline — real text, 24–36px Overpass or brand font */}
+  {/* Headline — real text, 24–36px in the brand title font (`var(--font-title)`) */}
   {/* Content rows — real labels and values from the brief's context, in text colors that read on the light panel */}
 </div>
 ```

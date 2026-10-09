@@ -14,8 +14,8 @@ feature is placeholder structure.
   large and legible (border, radius, padding from tokens; typed text; blinking caret) beside the
   AI button. It is never omitted.
 - **Demonstration layer**: a floating highlight card, connector line or pop-out as the brief
-  asks (`shared/floating-card.md`, `shared/connector-line.md`, `ionos/feature-pop-out.md`), and
-  motion per `ionos/ai-animations.md` / `ionos/micro-animations.md`.
+  asks (`shared/floating-card.md`, `shared/connector-line.md`, `ionos/feature-pop-out.md`);
+  in an animation, also follow the AI-animations and micro-animations rules for the motion.
 
 ## Composition Rule — One Frame, One Highlight
 
@@ -39,7 +39,7 @@ Low-fidelity only (a realistic interface shows real labels and values instead).
 
 **Text placeholder bars in the client app**: `#BCC8D4` (cool-grey-300), NOT white or dark —
 fixed, part of the client-app's own light theme in both shell branches.
-**AI selection target inside client app**: `border: 2px dashed #8212C2` — the text-selection marquee ONLY. The floating highlight card itself has NO border; it uses a plain neutral drop shadow (no AI glow — the AI glow is on the CTA button only) (see `shared/floating-card.md`).
+**AI selection target inside client app**: `border: 2px dashed <the brand's AI-generating accent>` (the purple-600 AI accent — resolve the concrete value from the brand's AI-feature colour rule, `uds-style-guide` `ionos-ai-features.md`; never hardcode it here) — the text-selection marquee ONLY. The floating highlight card itself has NO border; it uses a plain neutral drop shadow (no AI glow — the AI glow is on the CTA button only) (see `shared/floating-card.md`).
 
 ### Frame diagram rows that drew placeholder bars (original ASCII rows)
 
