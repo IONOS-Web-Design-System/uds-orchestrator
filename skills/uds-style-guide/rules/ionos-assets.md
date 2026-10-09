@@ -87,7 +87,7 @@ missing as of this writing): use a semantic neighbor. For "filter" reach for
 
 ## Feature-highlight composition
 
-The IONOS pop-out pattern (INPUT pops out from OUTPUT) is a demonstration-wireframe rule: see `uds-wireframe/rules/ionos/feature-pop-out.md`.
+In a demonstration wireframe, the IONOS pop-out pattern (INPUT pops out from OUTPUT) applies — see the feature-pop-out rule of the uds-wireframe skill.
 
 ## Reserved for future rules
 

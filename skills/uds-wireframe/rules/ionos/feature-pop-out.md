@@ -62,7 +62,7 @@ control*).
      — pull from the brief when it includes example user input).
    - Up to 3 small affordance icons below or beside the content (send,
      attach, microphone). These are affordances, so they are `system/` tier —
-     `@ionos-web-design-system/icon/system/<name>`; see *Icon usage* above.
+     `@ionos-web-design-system/icon/system/<name>`; see *Icon usage* in the uds-style-guide ionos-assets rule.
    - No extensive chrome. The pop-out is one focused affordance, not a
      mini-screen.
 

@@ -1,6 +1,6 @@
 # Text Placeholder Bars
 
-All text in decorative mode is replaced by visual bars — rounded rectangles that suggest text height, width, and opacity hierarchy. Define these two helpers near the top of the `.tsx` file:
+In a demonstration wireframe, the content around the one real feature is replaced by visual bars — rounded rectangles that suggest text height, width, and opacity hierarchy. The one real feature, the navigation labels (3–4 short labels, see `demonstration-frame.md`) and the featured prompt carry real text. Define these two helpers near the top of the `.tsx` file:
 
 ```tsx
 // Single placeholder bar
@@ -37,7 +37,7 @@ Reference table:
 | Table cell | `<Bar w="75%" h={8} op={0.16} />` | |
 | Tag / badge, status chip | `<KitBadge label={…} />` / `<KitPill label={…} />` | A kit element with a 1–2 word label, not a bar |
 
-**Rule:** Never use free-standing real text in decorative mode. Even one-word labels must be bars. Two exceptions: kit elements (a `KitButton` CTA, a `KitPill` chip, a `KitBadge` tag) carry their own short real label, and a proper brand name that must be visually recognisable — in that case use real text with `var(--text-base-invert)` (see the brand's decorative rule, e.g. `ionos/decorative-mode.md` "Brand Logos", for which name to use).
+**Rule:** Placeholder bars stand in for all non-feature content in a demonstration wireframe; do not use free-standing real text for it, and even one-word labels there must be bars. Real text is for the one real feature, the navigation labels (3–4 short labels per `demonstration-frame.md`) and the featured prompt. Two further exceptions: kit elements (a `KitButton` CTA, a `KitPill` chip, a `KitBadge` tag) carry their own short real label, and a proper brand name that must be visually recognisable — in that case use real text with `var(--text-base-invert)` (see the brand's decorative rule, e.g. `ionos/decorative-mode.md` "Brand Logos", for which name to use).
 
 **Buttons are not placeholders.** A CTA is a kit button with a short real label; the kit draws
 its fill, radius and label colour from the brand tokens:
