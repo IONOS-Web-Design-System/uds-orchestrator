@@ -80,10 +80,10 @@ expressed as `interpolate(frame, ...)`. Detailed fade / typing / text-stability 
 ## Colors & design tokens — use `@ionos-web-design-system/core`, never Figma token paths
 
 The composition renders inside `<ThemeProvider>` under a `data-brand` root, so the brand's
-**semantic CSS custom properties resolve live**. Hand-built layout uses UDS tokens inline — see KIT.md.
+**semantic CSS custom properties resolve live**. Hand-built layout uses UDS tokens inline — see the prompt section "# UDS kit".
 
 **NEVER write a Figma token path as a CSS variable.** `var(--brand/ionos-blue-600)`,
-`var(--brand-ionos-blue-600)`, `var(--neutral/white)` do not exist: the `/` is a parse error, the
+`var(--brand-ionos-blue-600)` do not exist: the `/` is a parse error, the
 declaration is dropped (the hex fallback is NOT applied) and the element renders unstyled. The
 `/`-paths in `uds-style-guide` are Figma reference notation only.
 
@@ -92,15 +92,14 @@ Two correct options:
 1. **Semantic core tokens.** Pair each `--surface-*` background with its matching `--text-*`
    foreground (contrast-checked):
    `--surface-base` / `--surface-subtle` / `--surface-subtlest` → `--text-base`;
-   `--surface-base-invert` → `--text-base-invert` (inverted dark plate / drawn panel);
+   `--surface-base-invert` → `--text-base-invert`;
    `--surface-semantic-ai` → `--text-semantic-ai`; success / danger / promo / caution:
    `--surface-semantic-<role>` → `--text-semantic-<role>`.
 
 2. **Literal brand hex** from `uds-style-guide` for a brand-scale colour (no core var exists):
    `background: '#003D8F'` (IONOS Blue), `color: '#fff'` — set the foreground explicitly too.
 
-A drawn icon's or text's colour must contrast against what actually paints behind it (kit
-components pair their own).
+A drawn icon's or text's colour must contrast with what paints behind it.
 
 ## Images & assets
 

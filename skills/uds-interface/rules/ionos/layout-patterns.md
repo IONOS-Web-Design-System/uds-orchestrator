@@ -56,7 +56,7 @@ A white card on the plane; fields are drawn as `surface-subtle` fills with no st
   <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 448 }}>
     <KitText variant="headingXl" weight="bold">{texts.formTitle ?? ''}</KitText>
     <KitText variant="bodySm" weight="bold">{texts.emailLabel ?? ''}</KitText>
-    <div style={{ borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-subtle)' }}><KitText tone="subtle">{texts.emailHint ?? ''}</KitText></div>
+    <div style={{ borderRadius: 'var(--rounded-md)', padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-subtle)' }}><KitText tone="subtle">{texts.emailHint ?? ''}</KitText></div>
     <KitButton label={texts.submit ?? ''} />
   </div>
 </KitCard>
