@@ -11,9 +11,8 @@ tokens resolve dark themselves.
   **no border, no shadow**. `KitCard` already draws exactly this on ionos.
 - **Inside a white container** a group, a selected row or a band is `surface-subtle` again, radius
   8–16. Alternate the two tiers; never a third.
-- **No structural lines.** Header, sidebar, tables, lists, grids and calendars separate by fill
-  and spacing: rows by gap or alternating `surface-subtle` bands, columns and cells as tiles with
-  gaps, the header by its white fill on the plane. No divider rules, no accent edge bars.
+- **No structural lines** (see IONOS STYLE in the hard constraints): rows separate by gap or
+  alternating `surface-subtle` bands, cells and events are tiles with gaps.
 - **A line only highlights an interaction:** the field being typed in (`1px solid
   var(--border-input-active, #095BB1)`), the selected item, the active tab indicator, and the
   wireframe's selection marquee / connector.
