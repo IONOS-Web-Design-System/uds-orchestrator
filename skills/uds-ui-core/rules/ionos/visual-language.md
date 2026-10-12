@@ -42,10 +42,6 @@ Emphasis is weight or `tone="accent"` (links), never weight + colour + size at o
 One primary `KitButton` per view (the sky pill), `variant="secondary"` (outline pill) beside it,
 `variant="tertiary"` for "No, thanks"-level actions.
 
-**A floating AI prompt is ALWAYS the shipped template**: `import { PromptWindow } from
-'./uds/PromptWindow'`, `brand="ionos"`, `variant` `'prompt-simple'` (≤ 40 chars) or `'prompt-full'`,
-rendered as a direct child of the root (no wrapper; it sets its own position and z-index). This
-replaces every hand-built floating prompt bubble, bar or card in the direction rules. Animate it
-only through its props: `bottom` for the rise-in (whole px, settled before typing) and
-`promptText={(texts.promptText ?? '').slice(0, n)}` for typing. A prompt INSIDE the interface stays
-a drawn field + `KitButton concept="ai"`.
+A floating AI prompt is the shipped `PromptWindow` (`brand="ionos"`, `'prompt-simple'` ≤ 40 chars
+else `'prompt-full'`; root child; animate only `bottom` and the `promptText` slice). A prompt INSIDE
+the interface stays a drawn field + `KitButton concept="ai"`.
