@@ -28,8 +28,8 @@ control*).
    user-side of the interaction, never a zoomed-in detail of the output.
    Common shapes:
    - A chat input with typed prompt text (canonical IONOS form for AI
-     features — Tab 2 reference); in code a drawn prompt field with a frame-driven
-     `caret`, beside a `KitButton concept="ai"`.
+     features — Tab 2 reference); in code the shipped `PromptWindow` (root
+     child, `left`/`bottom` placed on the frame's edge — see `ai-animations.md`).
    - A small control panel with one highlighted button mid-click (`KitButton`,
      press feedback as a transform on its parent).
    - A toggle / switch mid-action (`KitSwitch`), or a drawn slider.
@@ -71,8 +71,8 @@ control*).
 The pop-out is the FIRST thing visible — it represents the user's action
 that drives the rest. Sequence:
 
-1. **Pop-out enters first** — slide up + fade in + subtle scale; the
-   typed/spoken text reveals character-by-character if applicable.
+1. **Pop-out enters first** — slides up (a `PromptWindow` by its `bottom` prop);
+   the typed/spoken text reveals character-by-character if applicable.
 2. **Main frame materializes second** — the result manifests behind /
    around the pop-out, with staggered springs on its inner elements.
 

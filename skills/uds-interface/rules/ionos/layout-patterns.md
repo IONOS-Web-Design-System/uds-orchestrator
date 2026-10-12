@@ -13,7 +13,7 @@ import search from '@ionos-web-design-system/icon/system/search';
 import bell from '@ionos-web-design-system/icon/system/bell';
 import { KitIcon, KitIconButton, KitText } from './kit';
 
-<div style={{ display: 'flex', alignItems: 'center', gap: 32, padding: '12px 32px', background: 'var(--surface-base)', borderBottom: '1px solid var(--border-base)' }}>
+<div style={{ display: 'flex', alignItems: 'center', gap: 32, padding: '12px 32px', background: 'var(--surface-base)' }}>
   <img src={ionosLogo} alt="IONOS" style={{ height: 22, width: 'auto', display: 'block' }} />
   <div style={{ flex: 1, maxWidth: 420, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', borderRadius: 999, background: 'var(--surface-subtle)' }}>
     <KitIcon icon={search} size="small" />
@@ -39,7 +39,7 @@ import { KitButton, KitCard, KitText } from './kit';
   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
     {[1, 2, 3].map((n) => (
       <KitCard key={n}>
-        <KitText variant="headingLg" weight="semibold">{texts[`card${n}Title`] ?? ''}</KitText>
+        <KitText variant="headingLg" weight="bold">{texts[`card${n}Title`] ?? ''}</KitText>
         <KitText tone="subtle">{texts[`card${n}Body`] ?? ''}</KitText>
       </KitCard>
     ))}
@@ -49,14 +49,14 @@ import { KitButton, KitCard, KitText } from './kit';
 
 ### Form
 
-A white card on the plane; fields are drawn (the only stroked element), labels `bodySm` semibold.
+A white card on the plane; fields are drawn as `surface-subtle` fills with no stroke, labels `bodySm` bold.
 
 ```tsx
 <KitCard>
   <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 448 }}>
-    <KitText variant="headingXl" weight="semibold">{texts.formTitle ?? ''}</KitText>
-    <KitText variant="bodySm" weight="semibold">{texts.emailLabel ?? ''}</KitText>
-    <div style={{ border: '1px solid var(--border-input-default, #718095)', borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-input-default)' }}><KitText>{texts.emailHint ?? ''}</KitText></div>
+    <KitText variant="headingXl" weight="bold">{texts.formTitle ?? ''}</KitText>
+    <KitText variant="bodySm" weight="bold">{texts.emailLabel ?? ''}</KitText>
+    <div style={{ borderRadius: 8, padding: 'var(--space-2) var(--space-3)', background: 'var(--surface-subtle)' }}><KitText tone="subtle">{texts.emailHint ?? ''}</KitText></div>
     <KitButton label={texts.submit ?? ''} />
   </div>
 </KitCard>
@@ -65,8 +65,9 @@ A white card on the plane; fields are drawn (the only stroked element), labels `
 ### Dashboard / data
 
 Stat tiles are `KitCard`s on the plane (gap 8): label `bodySm` `tone="subtle"`, value
-`heading2xl` `weight="semibold"`. A list or table sits in ONE white card; its rows are separated by
-spacing or a hairline divider, and a selected row is a `surface-subtle` band.
+`heading2xl` `weight="bold"`. A list or table sits in ONE white card; its rows are separated by
+spacing or alternating `surface-subtle` bands (no divider lines), and a selected row is a band
+with the active accent.
 
 Other kit elements fill the same roles: tab strips are `KitTabs`, toggles `KitSwitch`, checkboxes
 `KitCheckbox`, initials circles `KitAvatar`, progress bars/rings `KitProgress`, loading rows

@@ -33,7 +33,7 @@ Tiers follow `ionos/visual-language.md`: the plane is `surface-subtle`, everythi
 | Zone | Background | Icon / text color |
 |---|---|---|
 | Outer frame / content plane | `var(--surface-subtle, #F4F7FA)` | `var(--text-base)` |
-| Top header bar | `var(--surface-base, #FFFFFF)` + 1px bottom `var(--border-base)` | `var(--text-base)` |
+| Top header bar | `var(--surface-base, #FFFFFF)`, no divider line | `var(--text-base)` |
 | Left tool sidebar, right properties panel (rails) | `var(--surface-base, #FFFFFF)`, no stroke | `var(--text-base)`, 0.8 opacity idle / 1.0 active; `var(--text-subtle)` for data |
 | Cards, rows, panels on the plane | `var(--surface-base, #FFFFFF)`, no stroke | `var(--text-base)` |
 | Active sidebar item | `var(--surface-subtle, #F4F7FA)` pill | `var(--text-base)` |

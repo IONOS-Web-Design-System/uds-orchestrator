@@ -4,8 +4,6 @@
 
 A wireframe illustration is a **composed snapshot** of a UI layout. Your job is to select the right UDS components, arrange them as the user described, and fill them with plausible placeholder content — so anyone looking at the output immediately understands the intended layout and hierarchy.
 
-This is not a pixel-perfect reproduction. Make reasonable spatial decisions where the user hasn't specified details.
-
 ---
 
 ## Setup — Always Required
@@ -48,10 +46,6 @@ import { svgData as cloudMigrationSvg } from '@ionos-web-design-system/icon/iono
 }} />
 ```
 
-Icon names are chosen at codegen time from the `# Icon name index` prompt section — there is
-no runtime icon-name lookup in this one-shot pipeline, so `useDynamicIcon`'s premise (a name
-known only at render time) never applies here.
-
 **Brandmark icons**: never the `<Icon>` component (it distorts logo proportions) — the logo's
 `svgData` as an `<img src>`, per `ionos/product-frame-color.md` "IONOS Brandmark Import". The package
 ships **no `.svg` files**; never point an `<img>` at a `/node_modules/…` path.
@@ -78,22 +72,8 @@ Avoid: "Lorem ipsum", "Item 1 / Item 2", "Click here", "Test text".
 
 ## Semantic Status Colors
 
-Status badges (Running, Maintenance, Offline/Error, Warning) in dashboards and server lists are
-`KitPill` status chips. The kit maps each variant to the scheme-aware semantic tokens — never
-hand-roll a status badge, its colours or its radius.
-
-```tsx
-import { KitPill } from './kit';
-
-const STATUS_VARIANT = {
-  Running: 'success',
-  Maintenance: 'caution',
-  Offline: 'danger',
-  Warning: 'caution',
-} as const;
-
-<KitPill label={texts.statusRunning ?? ''} variant={STATUS_VARIANT.Running} />
-```
+Status badges (Running, Maintenance, Offline) are `KitPill` status chips (`success`/`caution`/`danger`)
+— never hand-rolled; see "Semantic roles" in `ionos/product-frame-color.md`.
 
 ---
 
