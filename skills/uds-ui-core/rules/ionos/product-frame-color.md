@@ -44,6 +44,10 @@ Tiers follow `ionos/visual-language.md`: the plane is `surface-subtle`, everythi
 returns to `surface-subtle` (the frame-separation rule in `shared/frame-anatomy.md` is met by the
 tier change, so no border). Never a third tier.
 
+**IONOS canvas.** The IONOS canvas (outside the interface) is `var(--surface-subtlest, #DBEDF8)`;
+an AI-showroom render paints it with the IONOS blue gradient instead, given as the render's
+`CANVAS BACKGROUND` line. Both are IONOS-only — no other brand uses them.
+
 **`surface-subtlest` is never a chrome surface.** It belongs to the asset canvas outside the
 interface (see `shared/surface-theme.md`). Using it on a panel makes that panel dissolve into
 the canvas wherever the two meet.

@@ -15,8 +15,8 @@ them here (`ionos/composition.md`, `shared/frame-anatomy.md`).
 What THIS rule adds:
 
 1. **The illustration owns the canvas and paints its own background** — the standard Background
-   rule (`var(--surface-subtlest, #DBEDF8)`, or the AI-showroom gradient when this render's
-   non-negotiables carry a `CANVAS BACKGROUND:` line). The image is never that background: it
+   rule (the `CANVAS BACKGROUND:` line when this render's non-negotiables carry one, else the
+   brand rule's canvas default — see `shared/surface-theme.md`). The image is never that background: it
    is NEVER full-bleed and NEVER the canvas backdrop (that is `background-full`'s job, not
    this style's).
 2. **The image is a contained media/hero asset INSIDE the interface, panel or card** the brief
