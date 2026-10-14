@@ -17,8 +17,9 @@ import {
   AiIcon, FlatIcon, AI_SVG, SEND_SVG, ACTION_SVG,
   type AiIconName, type PromptAction, type SendGlyph,
 } from './promptWindow.icons';
+import { StratoPromptWindow, type StratoMotion } from './promptWindow.strato';
 
-export interface PromptWindowProps {
+export interface PromptWindowProps extends StratoMotion {
   variant: 'prompt-simple' | 'prompt-full';
   brand: PromptWindowBrand;
   /** The window's copy. Comes from `texts.promptText` so market re-renders can translate it. */
@@ -28,8 +29,12 @@ export interface PromptWindowProps {
    * is fixed and only the glyphs are open — that keeps the control row's width closed.
    */
   actions?: readonly [PromptAction, PromptAction];
-  /** The AI marker. Gradient-filled. A star is not expressible here, by design. */
+  /** The AI marker. Gradient-filled. A star is not expressible here, by design. On STRATO it is
+   *  the glyph inside the gradient badge (full) or the round AI button (simple). */
   leadingIcon?: AiIconName | 'none';
+  /** STRATO `prompt-full` only: the short uppercase context line beside the AI badge
+   *  (e.g. "Anforderung KI Website-Generator"). Ignored on IONOS. */
+  label?: string;
   sendGlyph?: SendGlyph;
   /** px, from the contract rect (or the floating window's own rect). */
   width: number;
@@ -163,6 +168,16 @@ export function RingButton({ action, size, brand, ink, surface }: {
 }
 
 export function PromptWindow(p: PromptWindowProps) {
+  // STRATO is its own design (glow + glass + text glow; badge/label or pill + AI button), not a
+  // recolour of the IONOS window. The motion props (StratoMotion) only exist there.
+  if (p.brand === 'strato') {
+    return (
+      <StratoPromptWindow variant={p.variant} promptText={p.promptText} label={p.label}
+        icon={p.leadingIcon && p.leadingIcon !== 'none' ? p.leadingIcon : 'filled-sparkles'}
+        width={p.width} left={p.left} bottom={p.bottom}
+        glow={p.glow} caret={p.caret} pulse={p.pulse} glowAngleDeg={p.glowAngleDeg} />
+    );
+  }
   const b = PROMPT_WINDOW_BRANDS[p.brand];
   const sendGlyph = p.sendGlyph ?? 'arrow';
   const marker = p.leadingIcon ?? 'filled-sparkles';

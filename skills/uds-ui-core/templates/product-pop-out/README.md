@@ -4,6 +4,14 @@ The measured Figma prompt window — the template for a FLOATING AI prompt windo
 `corporate_stage` product-pop-out highlight (from the contract rect) or any floating AI window, always
 absolute and a direct child of the root, never inside an interface (a prompt inside an interface is
 a drawn field + an AI button). Brands: `ionos`, `strato`.
+
+**STRATO is its own design** (`promptWindow.strato.tsx`, Figma 587:6893 / 587:6992): a
+hard-light AI-gradient glow behind 56% white glass, a plus-lighter text glow, Poppins `#29294D`.
+`prompt-full` = AI badge + uppercase `label` + prompt (≤ 3 lines); `prompt-simple` = pill with the
+prompt (≤ 2 lines) and a round AI button. STRATO adds the optional motion props `glow`, `caret`,
+`pulse` and `glowAngleDeg` (see `rules/strato/prompt-window.md`); `actions` and
+`sendGlyph` do not apply. Its wrapper deliberately carries no z-index so the glow blends with the
+canvas; only the glass card stacks at 100.
 `agent-svc` copies this directory into every render workspace as `src/uds/`, where it is
 **protected** from codegen overwrite (`agent-svc/src/storage.ts`, `PROTECTED_PREFIXES`).
 
