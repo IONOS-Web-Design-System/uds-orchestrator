@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.0.1...v3.1.0) (2026-10-14)
+
+
+### Features
+
+* **prompt-window:** STRATO floating AI prompt design + rule + prompting animation ([d6198a5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d6198a5ddc550cf7a7deb478817794b777806811))
+
 ## [3.0.1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.0.0...v3.0.1) (2026-10-09)
 
 
