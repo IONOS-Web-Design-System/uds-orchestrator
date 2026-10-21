@@ -16,6 +16,6 @@
 The persona and the Feature own DIFFERENT fields. There is no overlap and no exception:
 - IDENTITY (from the persona, always): face, age, gender, ethnicity, hair, build, personal style and wardrobe.
 - SCENE (from the Feature, always): action, pose, expression, setting, props, framing context.
-On any conflict, identity fields resolve to the persona and scene fields resolve to the Feature. If the persona text also describes an activity or a location, that is SCENE — ignore it and use the Feature's. If the Feature describes clothing, that is IDENTITY — ignore it and use the persona's.
+On any conflict, identity fields resolve to the persona and scene fields resolve to the Feature. If the persona text also describes an activity or a location, that is SCENE — ignore it and use the Feature's. If the Feature describes clothing, that is IDENTITY — ignore it and use the persona's. The persona's wardrobe, including its exact colours, also overrides the brand's general wardrobe guidance (for example "neutral colours" or "nothing that competes with the brand colour"): keep the persona's garments and colours exactly as written.
 
 {{persona}}
