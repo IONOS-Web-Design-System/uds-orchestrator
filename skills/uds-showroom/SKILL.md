@@ -1,7 +1,7 @@
 ---
 name: uds-showroom
 description: Per-(brand, showroom) persona definitions — the "initiative context" for a product showroom. Read by image-svc when generating the showroom's character, keyed by brand and showroom. Persona = WHO the character is; the brief supplies the scene/action.
-personaModules: ["corporate_stage", "testimonial_slider"]
+personaModules: ["corporate_stage", "testimonial", "testimonial_slider"]
 ---
 
 # UDS Showroom personas
@@ -39,7 +39,8 @@ Each brand has its own rule set, and a brand only ever sees its own directory:
 ## Which modules use a persona
 
 `personaModules` in this file's frontmatter lists the modules a persona applies to, for every
-brand. Today that is `corporate_stage` and `testimonial_slider`. A request for any other module,
+brand. Today that is `corporate_stage` and the testimonial modules (`testimonial` and
+`testimonial_slider`; production traffic uses both names). A request for any other module,
 or with no module, never receives the persona, even for a showroom that has one: its character is
 chosen freely, exactly as for a showroom without a persona. Names match the request's `module`
 exactly. Remove the key to apply personas to every module again; `[]` turns them off everywhere.
