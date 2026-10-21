@@ -10,6 +10,12 @@ stageType: "Klassische Stage"
 stageScene: "Lächelnder Mann mit Brille und Jeanshemd vor einem Laptop in einem hellen Raum"
 stageImage: "https://www.strato.de/img/NQA7f8Bwuy-1060.webp"
 ---
-A man in his late 20s with fair skin and blue eyes. Short light-brown hair, longer and combed
-up on top, a short, full ginger-brown beard and dark rectangular glasses. Slim build. He
-wears a light-wash denim shirt, top buttons open, over a white t-shirt. Cheerful and relaxed.
+Signature: dark tortoiseshell rectangular glasses, a short full ginger-brown beard, short light-brown hair combed up, and a light denim shirt.
+Who: a man in his late 20s; slim build.
+Face: oval face with a straight nose and a wide, cheerful smile.
+Eyes: blue, behind the glasses.
+Skin: fair.
+Hair: light-brown, short at the sides with a combed-up quiff on top.
+Facial hair: a short, full ginger-brown beard.
+Accessories: dark brown tortoiseshell rectangular plastic-frame glasses.
+Wardrobe: a light-wash denim shirt, top buttons open, over a white t-shirt.

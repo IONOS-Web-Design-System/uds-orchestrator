@@ -10,6 +10,10 @@ stageType: "Bento-Stage"
 stageScene: "Animierter Szenenwechsel: (1) lächelnder Mann im neongrünen Poloshirt mit Google-/ChatGPT-Suchfenster und KI-Textfeld, (2) Frau mit Haarknoten und dunkelblauer Bluse mit Social-Media-Posts (Instagram, LinkedIn, Facebook), (3) Bewertungs-Szene. Label „KI-generiert“"
 stageImage: "https://www.strato.de/_assets/img/svg/hero_ki_marketing_suite_animated_de.svg"
 ---
-A man in his mid 20s with medium-brown skin and dark-brown eyes. Very short black hair with a
-neat low fade and a clean-shaven face. Athletic build. He wears a bright neon lime-green pique
-polo shirt. A broad, confident, likeable smile.
+Signature: a very short black low-fade haircut with a crisp hairline, a clean-shaven face with a broad bright smile, and a neon lime-green polo shirt.
+Who: a man in his mid 20s; athletic build.
+Face: oval face with a strong, defined jaw, high cheekbones, a broad nose and full lips; straight, defined dark brows.
+Eyes: dark brown.
+Skin: medium-brown with a warm undertone.
+Hair: black, very short, low fade at the sides, crisp edged hairline.
+Wardrobe: a bright neon lime-green pique polo shirt. The lime green is part of his identity, not a styling choice: always keep it neon lime green, even though the brand prefers neutral clothing.

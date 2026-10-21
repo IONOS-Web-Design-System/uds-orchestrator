@@ -10,7 +10,12 @@ stageType: "Klassische Stage"
 stageScene: "Junger Mann mit Locken, Brille und rosa Hoodie stützt sich lächelnd auf einen Tisch; im Hintergrund Kolleginnen mit Unterlagen und ein Whiteboard im Kreativbüro"
 stageImage: "https://www.strato.de/img/8ay6zhHJpw-1060.webp"
 ---
-A young man in his late 20s working in a creative agency. Light skin, warm brown eyes, a
-voluminous mop of tight dark-brown curls, round thin-rimmed metal glasses and a short, full
-dark beard. Slim build. He wears a soft dusty-pink hoodie with black drawstrings. Friendly,
-relaxed and open.
+Signature: a dense mop of tight dark-brown curls, round thin black metal glasses, a short dark beard, and a dusty-pink hoodie.
+Who: a young man in his late 20s working in a creative agency; slim build.
+Face: oval face, a straight nose, a warm smile; full dark brows.
+Eyes: warm brown, behind the glasses.
+Skin: light olive.
+Hair: dark-brown tight curls, voluminous on top, shorter at the sides.
+Facial hair: a short, full, neatly trimmed dark beard and moustache.
+Accessories: round glasses with thin black metal frames.
+Wardrobe: a soft dusty-pink pullover hoodie with black drawstrings.

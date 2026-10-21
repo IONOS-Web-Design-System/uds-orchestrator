@@ -10,7 +10,11 @@ stageType: "Klassische Stage"
 stageScene: "Frau mit langem blondem Haar und gestreifter Bluse packt Ware in einem Lager mit Kleiderstange und Versandkartons"
 stageImage: "https://www.strato.de/img/GB1dKGEEr8-1060.webp"
 ---
-A woman in her early 30s, the owner of a small fashion label. Fair skin, long straight hair in
-a dark-blonde-to-light-blonde balayage, worn loose with a middle part. Slim build. She wears a
-loose blue-and-white vertically striped button-down blouse, a long beaded necklace and a few
-thin bracelets, dark nail polish. Focused and capable.
+Signature: long straight hair in a dark-brown-to-golden-blonde balayage with a middle part, high cheekbones, and a blue-and-white pinstriped shirt with a long beaded necklace.
+Who: a woman around 30, the owner of a small fashion label; slim build.
+Face: slim, angular face with high cheekbones and a defined jaw, a straight nose, a calm focused look; straight, defined light-brown brows.
+Eyes: grey-blue.
+Skin: fair, natural make-up with nude lips.
+Hair: long and straight, dark-brown at the roots blending to golden blonde lengths, middle part, worn loose.
+Accessories: a long multicoloured beaded necklace, thin bracelets, dark nail polish.
+Wardrobe: a loose blue-and-white vertical pinstripe button-down shirt.

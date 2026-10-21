@@ -10,7 +10,11 @@ stageType: "Klassische Stage"
 stageScene: "Blonde Frau in orangefarbenem Strickpullover sitzt lächelnd mit gefalteten Händen vor einem Laptop am Küchentisch"
 stageImage: "https://www.strato.de/img/jQmKtUYxMI-1060.webp"
 ---
-A woman in her early 30s with fair skin and blue eyes. Long, straight-to-wavy honey-blonde hair
-worn loose past the shoulders with a middle part. Medium build. She wears a chunky
-terracotta-orange ribbed knit sweater and a black fitness band on one wrist. Calm, content and
-quietly confident.
+Signature: long honey-blonde hair with darker roots worn loose, a round soft face, and a chunky terracotta-orange ribbed knit sweater.
+Who: a woman in her late 20s; medium build.
+Face: round, soft face with full cheeks, a small straight nose, a gentle closed-lip smile; fine, softly arched light-brown brows.
+Eyes: blue-grey.
+Skin: fair with a warm undertone, natural make-up.
+Hair: honey-blonde, long, straight with a soft wave, darker roots, middle part, worn loose past the shoulders.
+Accessories: small gold hoop earrings, a black fitness band on one wrist.
+Wardrobe: a chunky terracotta-orange ribbed knit crew-neck sweater.

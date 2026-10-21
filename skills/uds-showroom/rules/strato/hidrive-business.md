@@ -10,7 +10,12 @@ stageType: "Klassische Stage"
 stageScene: "Lächelnder Mann mit Brille und hellblauem Hemd sitzt mit Tablet auf Stufen vor einer Glasfassade, Gegenlicht"
 stageImage: "https://www.strato.de/img/xqXBqdgyi5-1060.webp"
 ---
-A businessman in his early 30s with light olive skin and brown eyes. Short dark-brown hair,
-longer and swept up on top, a short, neatly groomed dark beard, black rectangular glasses.
-Medium build. He wears a light-blue button-down shirt, collar open, with dark trousers.
-Upbeat and easy-going.
+Signature: thick black rectangular glasses, a short neatly groomed dark beard, short dark hair with a quiff, and a light-blue button-down shirt.
+Who: a businessman in his early 30s; medium build.
+Face: oval face with a straight nose and a broad laugh; dark, straight brows.
+Eyes: brown, behind the glasses.
+Skin: light olive.
+Hair: dark-brown, short at the sides, longer and swept up into a quiff on top.
+Facial hair: a short, neatly groomed dark beard.
+Accessories: thick black rectangular plastic-frame glasses.
+Wardrobe: a light-blue button-down shirt, collar open, dark trousers.

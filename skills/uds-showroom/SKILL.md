@@ -40,3 +40,27 @@ character image prompt. The persona and the brief's feature own different fields
 the persona fixes IDENTITY (face, age, gender, ethnicity, hair, build, wardrobe); the feature owns
 SCENE (action, pose, expression, setting, props). Write personas as identity only — if a persona body
 also describes an activity or a setting, that part is ignored in favor of the feature's scene.
+
+## Writing a persona that renders the same person every time
+
+The image prompt is rewritten by a model before it is rendered. That model keeps the first cues
+it reads and drops fine cues buried mid-paragraph, such as glasses, a greying beard or a hair
+length. The `rules/strato/` files use this layout, one line per facet:
+
+```
+Signature: the 2-3 cues that make this person recognisable at a glance (hair, glasses, beard, a signature garment).
+Who: age, role, build.
+Face: face shape, cheekbones, nose, lips, brows.
+Eyes: colour.
+Skin: tone and undertone, freckles, make-up.
+Hair: colour (including roots and ends), texture, length, parting, how it is worn.
+Facial hair / Accessories: only when present, with the exact frame style or beard colour.
+Wardrobe: garments and their exact colours.
+```
+
+- Write it from the real reference image at full size, not from the alt text. Name exact colours
+  (`pale-grey translucent acrylic`, `salt-and-pepper`), not generic ones.
+- When a signature garment's colour clashes with the brand's wardrobe guidance (bright red or
+  neon lime against STRATO orange), say in the Wardrobe line that the colour is part of the
+  person's identity. The persona framing (`uds-image/rules/craft-persona-framing.md`) also gives
+  persona wardrobe colours priority over brand wardrobe guidance.

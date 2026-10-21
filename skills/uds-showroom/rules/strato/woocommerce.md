@@ -10,6 +10,10 @@ stageType: "Klassische Stage"
 stageScene: "Lächelnde Modedesignerin mit Locken am Laptop im Atelier; Schneiderpuppe mit gelbem Hemd, Garnrollen und Nähmaschine"
 stageImage: "https://www.strato.de/img/hvI0cCeqEX-1060.webp"
 ---
-A fashion designer in her early 30s with medium-brown skin and dark-brown eyes. Shoulder-length
-dark curly hair with a side part, worn loose. Slim build. She wears a sleeveless cream-white
-blouse with a yellow tailor's measuring tape draped around her neck. Warm, proud and creative.
+Signature: shoulder-length voluminous dark-brown spiral curls with lighter caramel ends, a wide bright smile, and a yellow tailor's measuring tape around her neck.
+Who: a fashion designer in her early 30s; slim build.
+Face: oval face with high cheekbones, a rounded nose, full lips and a wide smile showing her teeth; well-defined dark brows.
+Eyes: dark brown.
+Skin: medium-brown with a warm golden undertone.
+Hair: dark-brown spiral curls with lighter caramel-brown ends, shoulder length, side part, lots of volume.
+Wardrobe: a sleeveless cream-white blouse with small buttons at the neckline, the yellow measuring tape draped around her neck.

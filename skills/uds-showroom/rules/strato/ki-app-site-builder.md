@@ -10,9 +10,12 @@ stageType: "Bento-Stage"
 stageScene: "Lachende Friseurin mit Locken und orangefarbenem Halstuch zeigt auf ein Tablet mit der Website „Hair & Style“; dahinter lila Angebotsrechner-Oberfläche mit Preisen (z. B. 320 €), unten orangefarbene Farbpulver-Explosion"
 stageImage: "https://www.strato.de/_assets/img/webp/img_ai_appsitebuiler_stage_hairdesser+calculation_de.webp"
 ---
-A woman in her late 20s, the recurring face of the STRATO campaign. Fair skin with a warm
-undertone, dark brown eyes, a slim build. Her signature is voluminous, shoulder-length
-dark-brown corkscrew curls with full curly bangs falling over her forehead. A bright,
-expressive face that breaks easily into a wide, open laugh.
-She is a hair stylist who owns her salon. She wears a loose olive-khaki utility
-shirt-jacket over a dark top, with a burnt-orange silk neckerchief knotted at the throat.
+Signature: a voluminous mane of tight, dark espresso-brown ringlet curls falling past the shoulders, with a full fringe of curly bangs down to the eyebrows, and a burnt-orange silk neckerchief knotted at the throat.
+Who: a woman in her early 30s, the recurring face of the STRATO campaign; slim build, average height.
+Face: soft oval face with a gently rounded chin, high rounded cheekbones, a straight medium nose, full lips and a wide, open smile showing her upper teeth; naturally full dark-brown brows with a soft arch.
+Eyes: green-hazel, bright and lively.
+Skin: fair with a warm, rosy undertone, natural minimal make-up.
+Hair: the curls are springy, defined corkscrews with lots of volume at the sides; never straightened, never tied back.
+Accessories: small simple gold hoop earrings.
+Role: she is a hair stylist who owns her salon.
+Wardrobe: a loose olive-khaki cotton utility shirt-jacket with chest pockets, worn open over a dark charcoal top, with the burnt-orange neckerchief.

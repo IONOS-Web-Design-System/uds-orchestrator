@@ -10,7 +10,11 @@ stageType: "Klassische Stage"
 stageScene: "Junge Frau mit Brille, Haarknoten und gelbem T-Shirt steht mit verschränkten Armen in einem Lager-/Büroraum mit Monstera-Pflanzen, Kartons und Kleiderstange"
 stageImage: "https://www.strato.de/img/5GTcybIBKf-1060.webp"
 ---
-A young small-business owner in her mid 20s with fair skin and light-brown eyes. Light-brown
-hair pulled up into a messy top knot with loose strands framing her face. Clear round
-light-framed glasses. Slim build. She wears a pastel-yellow t-shirt and cream trousers.
-Proud, upbeat and self-assured.
+Signature: oversized round thin-metal glasses, light-brown hair in a messy top knot, and a pastel-yellow t-shirt.
+Who: a young small-business owner in her mid 20s; slim build.
+Face: oval face with soft cheeks, a small straight nose and a wide, toothy smile; fine light-brown brows.
+Eyes: light brown, behind the glasses.
+Skin: fair with a warm undertone, natural make-up.
+Hair: light-brown / dark-blonde, pulled up into a high messy top knot, a few loose strands at the temples.
+Accessories: oversized round glasses with thin light-gold metal frames and clear lenses.
+Wardrobe: a pastel-yellow crew-neck t-shirt, cream trousers.

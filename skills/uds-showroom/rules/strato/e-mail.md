@@ -10,6 +10,10 @@ stageType: "Klassische Stage"
 stageScene: "Lächelnde Frau mit roten Locken tippt in einer hellen Wohnung (Bücherregal im Hintergrund) auf ein Tablet"
 stageImage: "https://www.strato.de/img/AgejpXCCj_-1060.webp"
 ---
-A woman in her early 30s with fair skin, light freckles and hazel eyes. Long, voluminous,
-copper-red loose curls falling well past her shoulders. Slim build. She wears a mustard-yellow
-open cardigan over a plain white t-shirt. Casual, warm and at ease at home.
+Signature: long, voluminous copper-auburn spiral curls, light freckles, and a mustard-yellow cardigan over a white t-shirt.
+Who: a woman around 30; slim build.
+Face: slim oval face, high cheekbones, a slim straight nose, a warm smile with soft dimples; defined, arched auburn-brown brows.
+Eyes: hazel-green.
+Skin: fair with light freckles across the nose and cheeks, natural make-up.
+Hair: copper-auburn, long loose spiral curls falling well past the shoulders, side part, worn down.
+Wardrobe: a mustard-yellow open knit cardigan over a plain white crew-neck t-shirt.
