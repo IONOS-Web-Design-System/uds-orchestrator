@@ -16,4 +16,4 @@ Face: oval face with a strong, defined jaw, high cheekbones, a broad nose and fu
 Eyes: dark brown.
 Skin: medium-brown with a warm undertone.
 Hair: black, very short, low fade at the sides, crisp edged hairline.
-Wardrobe: a bright neon lime-green pique polo shirt. The lime green is part of his identity, not a styling choice: always keep it neon lime green, even though the brand prefers neutral clothing.
+Wardrobe: a bright neon lime-green pique polo shirt.

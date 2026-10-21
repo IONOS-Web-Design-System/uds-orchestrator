@@ -1,6 +1,7 @@
 ---
 name: uds-showroom
 description: Per-(brand, showroom) persona definitions — the "initiative context" for a product showroom. Read by image-svc when generating the showroom's character, keyed by brand and showroom. Persona = WHO the character is; the brief supplies the scene/action.
+personaModules: ["corporate_stage", "testimonial_slider"]
 ---
 
 # UDS Showroom personas
@@ -35,6 +36,14 @@ Each brand has its own rule set, and a brand only ever sees its own directory:
   KI App & Site Builder, Homepage-Baukasten and Hosting. Those four describe the same person and
   differ only in wardrobe.
 
+## Which modules use a persona
+
+`personaModules` in this file's frontmatter lists the modules a persona applies to, for every
+brand. Today that is `corporate_stage` and `testimonial_slider`. A request for any other module,
+or with no module, never receives the persona, even for a showroom that has one: its character is
+chosen freely, exactly as for a showroom without a persona. Names match the request's `module`
+exactly. Remove the key to apply personas to every module again; `[]` turns them off everywhere.
+
 image-svc reads the rule for the request's `(brand, showroom)` and prepends the persona to the
 character image prompt. The persona and the brief's feature own different fields, with no overlap:
 the persona fixes IDENTITY (face, age, gender, ethnicity, hair, build, wardrobe); the feature owns
@@ -58,9 +67,5 @@ Facial hair / Accessories: only when present, with the exact frame style or bear
 Wardrobe: garments and their exact colours.
 ```
 
-- Write it from the real reference image at full size, not from the alt text. Name exact colours
-  (`pale-grey translucent acrylic`, `salt-and-pepper`), not generic ones.
-- When a signature garment's colour clashes with the brand's wardrobe guidance (bright red or
-  neon lime against STRATO orange), say in the Wardrobe line that the colour is part of the
-  person's identity. The persona framing (`uds-image/rules/craft-persona-framing.md`) also gives
-  persona wardrobe colours priority over brand wardrobe guidance.
+Write it from the real reference image at full size, not from the alt text. Name exact colours
+(`pale-grey translucent acrylic`, `salt-and-pepper`), not generic ones.

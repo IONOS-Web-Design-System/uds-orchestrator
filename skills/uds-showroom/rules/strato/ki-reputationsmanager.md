@@ -17,4 +17,4 @@ Eyes: blue.
 Skin: fair with a light tan.
 Hair: dirty-blonde with lighter sun streaks, chin length, swept back with a side part and a slight wave.
 Facial hair: a full, short golden-ginger beard and moustache.
-Wardrobe: a plain fitted bright-red crew-neck t-shirt. The red is part of his identity, not a styling choice: always keep it bright red, even though the brand prefers neutral clothing.
+Wardrobe: a plain fitted bright-red crew-neck t-shirt.
