@@ -152,7 +152,6 @@ Strato imagery centres on **real, relatable people** — warm, natural, and prog
 **Clothing**
 - Clean, casual to smart-casual — solid colors or simple, large-scale patterns preferred
 - No busy small-patterned fabrics (fine checks, dense micro-prints, loud florals)
-- Colors: warm neutrals, whites, soft tones work well; avoid anything that competes with brand orange
 
 **Background**
 - Clean, uncluttered — never visually busy or distracting
