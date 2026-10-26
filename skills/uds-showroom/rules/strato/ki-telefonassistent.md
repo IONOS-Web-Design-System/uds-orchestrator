@@ -4,17 +4,30 @@ category: ai
 aiTier: 1
 aliases: ["ki-telefonassistent", "telefonassistent", "ki telefon-assistent", "ai phone assistant", "phone assistant", "ai receptionist", "receptionist"]
 figmaRefs: []
+personaRefs: ["strato-ki-telefonassistent-persona-1", "strato-ki-telefonassistent-persona-2", "strato-ki-telefonassistent-persona-3"]
 pageUrl: "https://www.strato.de/ki-agenten/ki-telefonassistent/"
 tagline: "Nie wieder einen Anruf verpassen – auch nachts, am Wochenende, im Urlaub"
 stageType: "Bento-Stage"
 stageScene: "Lachende Frau mit Locken hält ein Smartphone, umgeben von orangefarbener Farbpulver-Explosion und konzentrischen Signalkreisen mit Telefon-Icon (eingehender Anruf)"
 stageImage: "https://www.strato.de/img/TSC8MsQvxY-688.webp"
 ---
-Signature: a voluminous mane of tight, dark espresso-brown ringlet curls falling past the shoulders, with a full fringe of curly bangs down to the eyebrows, and a burnt-orange silk neckerchief knotted at the throat.
-Who: a woman in her early 30s, the recurring face of the STRATO campaign; slim build, average height.
-Face: soft oval face with a gently rounded chin, high rounded cheekbones, a straight medium nose, full lips and a wide, open smile showing her upper teeth; naturally full dark-brown brows with a soft arch.
-Eyes: green-hazel, bright and lively.
-Skin: fair with a warm, rosy undertone, natural minimal make-up.
-Hair: the curls are springy, defined corkscrews with lots of volume at the sides; never straightened, never tied back.
-Accessories: small simple gold hoop earrings.
-Wardrobe: a loose olive-khaki cotton utility shirt-jacket with chest pockets, worn open over a dark charcoal top, with the burnt-orange neckerchief.
+## strato-ki-telefonassistent-persona-1
+Signature: straight, platinum-blonde shoulder-length hair.
+Who: Woman in her mid-30s; slim build; fair skin.
+Hair: Straight, platinum-blonde, shoulder-length.
+Face: Broad smile.
+Wardrobe: Petrol-teal crewneck sweater over a white T-shirt, navy slim trousers, white sneakers.
+
+## strato-ki-telefonassistent-persona-2
+Signature: wavy, platinum-blonde shoulder-length hair.
+Who: Woman in her mid-30s; fuller build.
+Hair: Wavy, platinum-blonde, shoulder-length.
+Face: Rosy round cheeks.
+Wardrobe: Petrol-teal cable-knit V-neck sweater over a white T-shirt, grey jeans, grey-and-white sneakers.
+
+## strato-ki-telefonassistent-persona-3
+Signature: straight, blunt platinum-blonde bob.
+Who: Woman around 40; slim build; fair skin.
+Hair: Straight, blunt platinum-blonde bob.
+Face: Confident smile.
+Wardrobe: Petrol-teal half-zip knit pullover over a white T-shirt, dark jeans, white canvas sneakers.

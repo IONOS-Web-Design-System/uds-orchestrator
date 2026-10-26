@@ -46,10 +46,11 @@ Each brand has its own rule set, and a brand only ever sees its own directory:
 - `rules/strato/` — the 37 STRATO products from the STRATO main navigation, one file per product.
   `displayName` is the German product name as STRATO sells it (`KI Telefonassistent`,
   `Homepage-Baukasten`); the aliases add the URL slug spellings and the English names callers send
-  (`STRATO AI App Builder`). Each persona is written from that product's stage image on
-  strato.de (`stageScene`, `stageImage`). All 37 strato showrooms have character turnaround sheets
+  (`STRATO AI App Builder`). All 37 strato showrooms have character turnaround sheets
   on the Figma page `persona/strato`; a strato persona's text is written from its sheet, one
-  `## <slug>` section per sheet (see "Persona sheets" below).
+  `## <slug>` section per sheet (see "Persona sheets" below). `stageScene` and `stageImage` record
+  which strato.de stage image the product is shown with; they are provenance only, not the source
+  of the persona text.
 
 ## Persona sheets
 
