@@ -15,12 +15,30 @@ generated for its stage assets. Personas live in `rules/<brand>/<showroom>.md`:
   - `aiTier` — `1` for AI showrooms (top), `2` otherwise.
   - `aliases` — inline list of extra match terms, e.g. `["website builder", "site builder"]`.
   - `figmaRefs` — Figma node references to curated example images (empty for now).
+  - `personaRefs` — inline list of the persona options' Figma slugs, option 1 first, e.g.
+    `["strato-ai-app-builder-persona-1", "strato-ai-app-builder-persona-2"]`. Each slug is the name of
+    a character turnaround sheet in the Figma catalog (see "Persona sheets" below) and has exactly
+    one matching `## <slug>` section in the body. Absent key = no sheets.
   - Optional provenance keys (read by no service; they record where the persona came from):
     `pageUrl`, `tagline`, `stageType`, `stageScene` (the source stage description, verbatim),
     `stageImage`.
 - The **body** is a plain-language description of the character's identity ONLY: face, age, gender,
   ethnicity, hair, build, and wardrobe/personal style. A frontmatter-only file (empty body) is a
-  *registered* showroom that resolves but injects no persona.
+  *registered* showroom that resolves but injects no persona. The body has one section per
+  persona option:
+
+  ```
+  ## strato-ai-app-builder-persona-1
+  Signature: ...
+  Who: ...
+
+  ## strato-ai-app-builder-persona-2
+  Signature: ...
+  ```
+
+  A section heading matches `^## (\S+)\s*$` and its text is the slug, which must be one of
+  `personaRefs`; the section runs to the next such heading or the end of the file. A body with NO
+  `## ` heading is a legacy single persona (one option, no sheet) and keeps working unchanged.
 
 Each brand has its own rule set, and a brand only ever sees its own directory:
 
@@ -31,10 +49,42 @@ Each brand has its own rule set, and a brand only ever sees its own directory:
   (`STRATO AI App Builder`). Each persona is written from that product's stage image on
   strato.de (`stageScene`, `stageImage`). Products whose stage shows no person (servers,
   STRATO GPT, KI Chat-Assistent, Domain-Umzug, Domain Guard, Cyber Protect, Cyber Protect
-  Defender) are registered without a persona. One campaign face (a woman with dark corkscrew
-  curls and an orange neckerchief) recurs on four stages: KI Telefonassistent,
-  KI App & Site Builder, Homepage-Baukasten and Hosting. Those four describe the same person and
-  differ only in wardrobe.
+  Defender) are registered without a persona. The strato personas are being rewritten from the
+  character turnaround sheets on the Figma page `persona/strato`; the md rewrite lands in a later
+  change, and until then the files above keep their current single-persona bodies.
+
+## Persona sheets
+
+Each persona option is a character TURNAROUND SHEET: one person in repeated views (front, side,
+back, details) on a white studio background. It is made in Figma and read by the moderator's
+catalog, then sent to the image model as a labelled reference image next to the identity text.
+
+- The Figma page is named `persona/<brand>`, e.g. `persona/strato`.
+- Each sheet is a component named `<brand>-<showroom>-persona-<n>`, e.g.
+  `strato-ai-app-builder-persona-1`. That name is the slug listed in `personaRefs` and used as the
+  `## <slug>` heading in the body, so the three always agree.
+- The component description starts with the prefix `[persona]`, which is how the catalog tells a
+  persona sheet apart from an ordinary asset.
+
+The sheet owns what the person looks like; the `## <slug>` text states the same identity in words
+and is what a request without a sheet falls back to.
+
+## Which persona option a request gets
+
+For a showroom with several options the planner picks, from the module, brief and showroom, which
+option is the MAIN character. Contract:
+
+- The pick is a slug from `personaRefs`. With no pick, an invalid pick, or a showroom the planner
+  inferred rather than the caller named, the default is option 1 (`personaRefs[0]`).
+- The planner may add an optional `personaSecondary` for a scene with two people. There is at most
+  one second persona, it is a different option from the main one, and a character cutout never gets
+  one. Two identical people never appear: the same slug cannot be main and second.
+- The testimonial modules (`testimonial`, `testimonial_slider`) may answer `none`, meaning no persona
+  for this request; no other module may.
+- A request carrying a `condition` reference photograph gets no persona sheets (that photograph
+  owns the person). A `screen-content` reference is unaffected and is sent alongside the sheets.
+- Every other person in the frame is a different individual from the persona; the image gate fails
+  a run where the same person, or two lookalikes, appear.
 
 ## Which modules use a persona
 

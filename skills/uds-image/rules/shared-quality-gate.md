@@ -60,6 +60,10 @@ next craft attempt and any preference stated here becomes a convergence pressure
 - The device's screen shows a crisp, legible, detailed interface — clearly the focal on-screen
   content, not blank, generic, placeholder, cropped-off or garbled.
 
+## When a showroom persona was supplied
+- FAIL if the same individual appears more than once.
+- FAIL if two people in the image look like the same person (same face, hair and outfit).
+
 ## When a display is in frame
 
 The pipeline does not always ask for on-screen content, and where it does not, a blank screen is the
