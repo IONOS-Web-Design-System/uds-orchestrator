@@ -19,14 +19,14 @@ Wardrobe: White short-sleeve blouse, full-length navy denim dungarees, white can
 
 ## strato-domain-guard-persona-2
 Signature: shoulder-length curly auburn hair with light freckles.
-Who: Woman around 30; fair skin.
+Who: Woman around 30.
 Hair: Shoulder-length curly auburn.
 Face: Light freckles; wide, laughing smile.
 Wardrobe: White puff-sleeve blouse, wide-leg navy denim dungarees, navy canvas sneakers.
 
 ## strato-domain-guard-persona-3
 Signature: shoulder-length ash-blonde to silver hair, tanned skin.
-Who: Woman in her early 40s; tanned skin.
+Who: Woman in her early 40s.
 Hair: Shoulder-length ash-blonde to silver.
 Face: Confident smile.
 Wardrobe: White linen shirt with rolled sleeves, short navy denim dungarees, grey tights, white leather ankle boots.
