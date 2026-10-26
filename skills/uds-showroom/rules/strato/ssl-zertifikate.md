@@ -5,7 +5,6 @@ aiTier: 2
 aliases: ["ssl-zertifikat", "ssl zertifikat", "ssl certificate", "ssl certificates", "ssl"]
 figmaRefs: []
 personaRefs: ["strato-ssl-zertifikate-persona-1", "strato-ssl-zertifikate-persona-2", "strato-ssl-zertifikate-persona-3"]
-secondPersona: false
 pageUrl: "https://www.strato.de/ssl-zertifikat/"
 tagline: "Website durch optimale Verschlüsselung schützen"
 stageType: "Klassische Stage"

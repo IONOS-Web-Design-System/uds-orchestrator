@@ -5,7 +5,6 @@ aiTier: 1
 aliases: ["e-mail-assistent", "email assistent", "ki email assistent", "ai email assistant", "email assistant", "e-mail assistant"]
 figmaRefs: []
 personaRefs: ["strato-ki-email-assistent-persona-1", "strato-ki-email-assistent-persona-2", "strato-ki-email-assistent-persona-3"]
-secondPersona: false
 pageUrl: "https://www.strato.de/ki-agenten/ki-email-assistent/"
 tagline: "Schnelle, konsistente E-Mails – automatisch richtig priorisiert"
 stageType: "Bento-Stage"

@@ -5,7 +5,6 @@ aiTier: 2
 aliases: ["cyber protect defender", "acronis defender", "virenschutz", "antivirus"]
 figmaRefs: []
 personaRefs: ["strato-cyber-protect-defender-persona-1", "strato-cyber-protect-defender-persona-2"]
-secondPersona: false
 pageUrl: "https://www.strato.de/cyber-protect-defender/"
 tagline: "Die Lösung für Viren, Malware und Ransomware mit zusätzlicher Backup-Funktionalität"
 stageType: "Klassische Stage"

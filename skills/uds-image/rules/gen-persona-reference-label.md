@@ -2,7 +2,7 @@
      the sheet so the image model reads it as a reference and not as a layout to copy.
 
      READ BY image-svc's attachPersonaSheets (src/craft/craft.ts) through loadOptionalCraftContext,
-     with {{role}} = `MAIN CHARACTER` or `SECOND CHARACTER`. The text BEFORE the `## Closing`
+     with {{role}} = `MAIN CHARACTER` (one persona per image, so there is no other role). The text BEFORE the `## Closing`
      heading is the label (one per sheet). The body of `## Closing` is emitted ONCE, after the last
      sheet, as a plain text part: it is what stops a bystander inheriting a persona's face. Keep
      the heading spelled exactly `## Closing` on a line of its own.

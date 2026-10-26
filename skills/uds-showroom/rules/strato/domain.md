@@ -5,7 +5,6 @@ aiTier: 2
 aliases: ["domains", "domain registration", "de-domain", "internetadresse"]
 figmaRefs: []
 personaRefs: ["strato-domain-persona-1", "strato-domain-persona-2"]
-secondPersona: false
 pageUrl: "https://www.strato.de/domains/"
 tagline: "Persönliche Internetadresse mit Top-Endungen wie .de & .com"
 stageType: "Klassische Stage"

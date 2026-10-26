@@ -5,7 +5,6 @@ aiTier: 2
 aliases: ["baukasten", "homepage baukasten", "homepage builder", "website builder", "ki website-generator", "website-generator", "ki website generator"]
 figmaRefs: []
 personaRefs: ["strato-homepage-baukasten-persona-1", "strato-homepage-baukasten-persona-2", "strato-homepage-baukasten-persona-3"]
-secondPersona: false
 pageUrl: "https://www.strato.de/homepage-baukasten/"
 tagline: "Ohne Vorkenntnisse zur eigenen Website"
 stageType: "Bento-Stage"

@@ -23,6 +23,6 @@ The persona and the Feature own DIFFERENT fields. There is no overlap and no exc
 - SCENE (from the Feature, always): action, pose, expression, setting, props, framing context.
 On any conflict, identity fields resolve to the persona and scene fields resolve to the Feature. If the persona text also describes an activity or a location, that is SCENE — ignore it and use the Feature's. If the Feature describes clothing, that is IDENTITY — ignore it and use the persona's.
 
-The persona describes the MAIN character only. If a SECOND CHARACTER section follows it, that is the second person. Every other person in the frame is a different individual cast from the scene, visibly different in face, hair, age or build, and in wardrobe colour. Never write two people who look alike.
+The persona is ONE person, and only that one person: the main character. It appears in the image exactly once. Every other person in the frame is a different individual cast from the scene — never a second persona, never a sibling, colleague or twin of the persona — and is visibly different in face, hair colour and style, age or build, and in what they wear. Never write two people who look alike.
 
 {{persona}}

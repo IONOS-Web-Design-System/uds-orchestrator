@@ -5,7 +5,6 @@ aiTier: 2
 aliases: ["e-mail-marketing", "email marketing", "email marketing tool", "newsletter tool", "newsletter"]
 figmaRefs: []
 personaRefs: ["strato-e-mail-marketing-tool-persona-1", "strato-e-mail-marketing-tool-persona-2"]
-secondPersona: false
 pageUrl: "https://www.strato.de/mail/e-mail-marketing-tool/"
 tagline: "Schnell & einfach Newsletter versenden"
 stageType: "Klassische Stage"
