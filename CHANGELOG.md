@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.2.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.1.0...v3.2.0) (2026-10-26)
+
+
+### Features
+
+* **persona:** persona reference fragments, no-twins gate section, personaRefs docs ([d9d892a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d9d892ab978eabfe1a0c5f5972f533d160b189a9))
+* **persona:** supporting-cast catalogs for the invented people beside a persona ([a9bbb05](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a9bbb05325278dc6f1f448a52ca3aae106229b29))
+* **showroom:** strato personas rewritten from turnaround sheets with personaRefs ([4391cbf](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/4391cbfc021f0008279ee3cc511853012e98808d))
+
+
+### Bug Fixes
+
+* **gate:** judge persona duplicates by face and hair, never by clothing ([1da8c46](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1da8c46bcb98c2b878dfcadba72d7b51f57a5dfe))
+* **persona:** look-alike showrooms opt out of a second persona; gate flags duplicates and never faults a viewpoint ([357d645](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/357d6456c037c6ca2aa11128582133b5be5e637d))
+* **persona:** one persona per image — never two personas in one frame ([834bbee](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/834bbee77b3b720aa8e2b9f9619c3268c0ef6dd5))
+* **persona:** scope the once-only rule to the sheet's person, allow restating identity text, drop stale strato list ([49f98a2](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/49f98a20069d9f7f3b01a32d6f5ab9aa354420ac))
+* **showroom:** drop unstated skin from domain-guard persona identities ([d3e9eda](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d3e9edaa826a4db3eb0b435220ee537fa0857efc))
+
 ## [3.1.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.0.1...v3.1.0) (2026-10-14)
 
 
