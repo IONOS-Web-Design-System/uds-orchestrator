@@ -61,8 +61,13 @@ next craft attempt and any preference stated here becomes a convergence pressure
   content, not blank, generic, placeholder, cropped-off or garbled.
 
 ## When a showroom persona was supplied
-- FAIL if the same individual appears more than once.
-- FAIL if two people in the image look like the same person (same face, hair and outfit).
+- FIRST count the people in the frame and say how many. Tell people apart by their face, hairstyle
+  and hair colour, and build — never by their clothes.
+- FAIL if the same individual appears more than once: a duplicated or mirrored figure, or the same
+  face and hairstyle on two bodies.
+- Matching or similar clothing is NOT a duplicate. People in one scene may wear the same colour or
+  the same kind of garment — a team hoodie, a shop apron. Two people with different faces or
+  different hair are different people even when they are dressed alike; do not fail for that.
 
 ## When a display is in frame
 
