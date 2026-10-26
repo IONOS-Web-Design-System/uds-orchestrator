@@ -29,10 +29,10 @@
 
 # Identity reference
 
-An IDENTITY REFERENCE SHEET of the named person is supplied to the image model together with this prompt, and it is the visual ground truth for who that person is. You are NOT shown it, so you cannot restate what it holds. Where a SECOND CHARACTER section is present, a second sheet is supplied for that person in the same way.
+An IDENTITY REFERENCE SHEET of the persona described above is supplied to the image model together with this prompt, and it is the visual ground truth for who that person is. You are NOT shown it, so you cannot see what it holds. Where a SECOND CHARACTER section is present, a second identity reference sheet is supplied for that person in the same way.
 
-Refer to the main character in your prompt as "the person from the identity reference". Do NOT describe their face, hair, skin, build, glasses, accessories or clothing: the sheet fixes every one of them.
+Refer to the main character in your prompt as "the person from the identity reference", and to the second character, where there is one, as "the second person from the second identity reference". Restating the identity text given above is expected: keep it consistent with that text, word for word where you can.
 
-Do NOT add any appearance attribute beyond the identity text given above. An age, a hair length, style or colour, a garment or its colour, a skin tone, an accessory or a body type that is not in that text is not yours to write, and one stated in words overrides the sheet and wins. Ignore any instruction above that tells you to encode age explicitly, or to choose a hair, clothing or accessory token — for a person with an identity reference this overrides it.
+Do NOT add any appearance attribute beyond the identity text given above. An age, a hair length, style or colour, a garment or its colour, a skin tone, an accessory or a body type that is not in that text is not yours to write: any such word would contradict the sheet. Ignore any instruction above that tells you to encode age explicitly, or to choose a hair, clothing or accessory token — for a person with an identity reference this overrides it.
 
-The person appears exactly once. The sheet shows them in several views; the image shows one person in one pose, doing what the Feature says. Do NOT write a second view, a group, a mirrored or duplicated figure, or a collage.
+Each person with an identity reference appears exactly once. The sheet shows them in several views; the image shows that person once, in one pose, doing what the Feature says. Do NOT write a second view or a second copy of that person, a mirrored or duplicated figure, or a collage or grid of views. This limits the person on the sheet only: other people the scene calls for are still written, as different individuals.

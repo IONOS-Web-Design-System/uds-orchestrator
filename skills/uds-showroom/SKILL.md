@@ -47,11 +47,9 @@ Each brand has its own rule set, and a brand only ever sees its own directory:
   `displayName` is the German product name as STRATO sells it (`KI Telefonassistent`,
   `Homepage-Baukasten`); the aliases add the URL slug spellings and the English names callers send
   (`STRATO AI App Builder`). Each persona is written from that product's stage image on
-  strato.de (`stageScene`, `stageImage`). Products whose stage shows no person (servers,
-  STRATO GPT, KI Chat-Assistent, Domain-Umzug, Domain Guard, Cyber Protect, Cyber Protect
-  Defender) are registered without a persona. The strato personas are being rewritten from the
-  character turnaround sheets on the Figma page `persona/strato`; the md rewrite lands in a later
-  change, and until then the files above keep their current single-persona bodies.
+  strato.de (`stageScene`, `stageImage`). All 37 strato showrooms have character turnaround sheets
+  on the Figma page `persona/strato`; a strato persona's text is written from its sheet, one
+  `## <slug>` section per sheet (see "Persona sheets" below).
 
 ## Persona sheets
 
