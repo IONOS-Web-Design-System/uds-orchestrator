@@ -4,17 +4,16 @@ category: ecommerce
 aiTier: 2
 aliases: ["online shop", "onlineshop", "web shop", "online-shop"]
 figmaRefs: []
+personaRefs: ["strato-webshop-persona-1"]
 pageUrl: "https://www.strato.de/webshop/"
 tagline: "Schnell & ohne Vorwissen online verkaufen"
 stageType: "Klassische Stage"
 stageScene: "Frau mit langem blondem Haar und gestreifter Bluse packt Ware in einem Lager mit Kleiderstange und Versandkartons"
 stageImage: "https://www.strato.de/img/GB1dKGEEr8-1060.webp"
 ---
-Signature: long straight hair in a dark-brown-to-golden-blonde balayage with a middle part, high cheekbones, and a blue-and-white pinstriped shirt with a long beaded necklace.
-Who: a woman around 30, the owner of a small fashion label; slim build.
-Face: slim, angular face with high cheekbones and a defined jaw, a straight nose, a calm focused look; straight, defined light-brown brows.
-Eyes: grey-blue.
-Skin: fair, natural make-up with nude lips.
-Hair: long and straight, dark-brown at the roots blending to golden blonde lengths, middle part, worn loose.
-Accessories: a long multicoloured beaded necklace, thin bracelets, dark nail polish.
-Wardrobe: a loose blue-and-white vertical pinstripe button-down shirt.
+## strato-webshop-persona-1
+Signature: short, swept-back brown hair with a full trimmed beard.
+Who: Man in his late 30s; stocky build.
+Hair: Short, swept-back brown.
+Face: Full trimmed beard.
+Wardrobe: Forest-green work shirt with rolled sleeves under a tan canvas bib apron, grey trousers, brown leather boots.

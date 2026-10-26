@@ -7,6 +7,11 @@
      this file owns is the CONTRACT between the persona and the brief — which fields each one
      wins — and that is the part a designer would change without a deploy.
 
+     THE MULTI-PERSON PARAGRAPH (the last one before {{persona}}) makes the persona the MAIN
+     character only, and says every other person is a different individual. The persona is a
+     reference for ONE face; without the paragraph a bystander in the scene inherits it, which
+     is the twins failure the vision gate's `When a showroom persona was supplied` section checks.
+
      DELIVERED VERBATIM: the two bullets and the paragraph breaks below are real line breaks, and
      everything within a line is one long line. This comment is stripped before delivery on every
      profile, so it is author-only and must never carry instruction. -->
@@ -17,5 +22,7 @@ The persona and the Feature own DIFFERENT fields. There is no overlap and no exc
 - IDENTITY (from the persona, always): face, age, gender, ethnicity, hair, build, personal style and wardrobe.
 - SCENE (from the Feature, always): action, pose, expression, setting, props, framing context.
 On any conflict, identity fields resolve to the persona and scene fields resolve to the Feature. If the persona text also describes an activity or a location, that is SCENE — ignore it and use the Feature's. If the Feature describes clothing, that is IDENTITY — ignore it and use the persona's.
+
+The persona is ONE person, and only that one person: the main character. It appears in the image exactly once. Every other person in the frame is a different individual cast from the scene — never a second persona, never a sibling, colleague or twin of the persona — and is visibly different in face, hair colour and style, age or build, and in what they wear. Never write two people who look alike.
 
 {{persona}}

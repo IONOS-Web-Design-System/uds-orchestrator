@@ -4,18 +4,30 @@ category: website-tools
 aiTier: 2
 aliases: ["baukasten", "homepage baukasten", "homepage builder", "website builder", "ki website-generator", "website-generator", "ki website generator"]
 figmaRefs: []
+personaRefs: ["strato-homepage-baukasten-persona-1", "strato-homepage-baukasten-persona-2", "strato-homepage-baukasten-persona-3"]
 pageUrl: "https://www.strato.de/homepage-baukasten/"
 tagline: "Ohne Vorkenntnisse zur eigenen Website"
 stageType: "Bento-Stage"
 stageScene: "Lachende Frau mit Locken und orangefarbenem Halstuch vor einem Website-Editor; Laptop zeigt Website „Studio Cobre – Dein Haar. Dein Moment.“, Prompt-Box „Anforderung KI Website-Generator: Schlichte, moderne Website für meinen Frisörsalon.“, orangefarbene Farbpulver-Explosion"
 stageImage: "https://www.strato.de/img/f87-JzpFe3-688.webp"
 ---
-Signature: a voluminous mane of tight, dark espresso-brown ringlet curls falling past the shoulders, with a full fringe of curly bangs down to the eyebrows, and a burnt-orange silk neckerchief knotted at the throat.
-Who: a woman in her early 30s, the recurring face of the STRATO campaign; slim build, average height.
-Face: soft oval face with a gently rounded chin, high rounded cheekbones, a straight medium nose, full lips and a wide, open smile showing her upper teeth; naturally full dark-brown brows with a soft arch.
-Eyes: green-hazel, bright and lively.
-Skin: fair with a warm, rosy undertone, natural minimal make-up.
-Hair: the curls are springy, defined corkscrews with lots of volume at the sides; never straightened, never tied back.
-Accessories: small simple gold hoop earrings.
-Role: she is a hair stylist who owns her salon.
-Wardrobe: a mid-blue chambray denim shirt with the sleeves rolled, with the burnt-orange neckerchief.
+## strato-homepage-baukasten-persona-1
+Signature: very long, straight light-brown hair with a thin braid along one side.
+Who: Woman around 30; fair skin.
+Hair: Very long, straight light-brown, with a thin braid along one side.
+Face: Big open laugh.
+Wardrobe: Royal-blue linen shirt worn open over a white T-shirt, beige chinos, white sneakers.
+
+## strato-homepage-baukasten-persona-2
+Signature: very long, straight light-brown hair with a side braid.
+Who: Young woman in her mid-20s; fair skin.
+Hair: Very long, straight light-brown, with a side braid.
+Face: Round face.
+Wardrobe: Royal-blue linen shirt over a white tank top, white jeans, grey suede sneakers.
+
+## strato-homepage-baukasten-persona-3
+Signature: very long, straight light-brown hair with a side braid and a black pendant necklace.
+Who: Woman around 30; athletic build.
+Hair: Very long, straight light-brown, with a side braid.
+Accessories: Black pendant necklace.
+Wardrobe: Royal-blue linen shirt with rolled sleeves over a white T-shirt, navy cargo trousers, white high-top canvas sneakers.
