@@ -5,6 +5,7 @@ aiTier: 2
 aliases: ["openclaw", "openclaw hosting"]
 figmaRefs: []
 personaRefs: ["strato-openclaw-vps-hosting-persona-1", "strato-openclaw-vps-hosting-persona-2"]
+secondPersona: false
 pageUrl: "https://www.strato.de/server/openclaw-hosting/"
 tagline: "Der persönliche KI-Agent auf Ihrem eigenen VPS"
 stageType: "Klassische Stage"

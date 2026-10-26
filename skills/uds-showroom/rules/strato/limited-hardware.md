@@ -5,6 +5,7 @@ aiTier: 2
 aliases: ["limited hardware server"]
 figmaRefs: []
 personaRefs: ["strato-limited-hardware-persona-1", "strato-limited-hardware-persona-2"]
+secondPersona: false
 pageUrl: "https://www.strato.de/server/limited-hardware/"
 tagline: "Server zu günstigen Preisen & in limitierter Stückzahl"
 stageType: "Klassische Stage"

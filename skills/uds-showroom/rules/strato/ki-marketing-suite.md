@@ -5,6 +5,7 @@ aiTier: 1
 aliases: ["marketing-suite", "marketing suite", "ki marketing suite", "ai marketing suite"]
 figmaRefs: []
 personaRefs: ["strato-ki-marketing-suite-persona-1", "strato-ki-marketing-suite-persona-2"]
+secondPersona: false
 pageUrl: "https://www.strato.de/ki-agenten/ki-marketing-suite/"
 tagline: "Alle Disziplinen, ein Auftritt: Reputation, Marketing, Sichtbarkeit"
 stageType: "Bento-Stage"

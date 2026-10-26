@@ -5,6 +5,7 @@ aiTier: 2
 aliases: ["n8n", "n8n self-hosted", "n8n hosting"]
 figmaRefs: []
 personaRefs: ["strato-n8n-server-persona-1", "strato-n8n-server-persona-2"]
+secondPersona: false
 pageUrl: "https://www.strato.de/server/n8n-self-hosted/"
 tagline: "Workflow-Automatisierungen selbst hosten mit kostenlosem n8n Image"
 stageType: "Klassische Stage"

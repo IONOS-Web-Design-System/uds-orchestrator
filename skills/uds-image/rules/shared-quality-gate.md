@@ -68,6 +68,9 @@ next craft attempt and any preference stated here becomes a convergence pressure
 - Matching or similar clothing is NOT a duplicate. People in one scene may wear the same colour or
   the same kind of garment — a team hoodie, a shop apron. Two people with different faces or
   different hair are different people even when they are dressed alike; do not fail for that.
+- Whenever you fail the image because one person appears twice or two people look like the same
+  person, ALSO add `"duplicatePerson": true` to the verdict JSON. Leave it out for every other
+  failure.
 
 ## When a display is in frame
 
@@ -87,6 +90,9 @@ intended result — so settle which case this frame is before judging the screen
   content the brief described but the viewpoint cannot show was suppressed deliberately, it is not a
   mismatch with the brief, and it must not be reported as one or lower the score. Everything else
   the brief asks for is still judged as usual.
+- The VIEWPOINT is never a fault either. How a device is turned is the photographer's choice: do not
+  fail or mark down an image because the camera angle hides a screen the brief mentions, and do not
+  call the angle a "mismatch" with the brief.
 - Where the camera CAN see the face, the screen must carry what the brief named and must read as
   that thing: a discernible LAYOUT, meaning distinct regions, panels or controls separated at
   ordinary contrast. Abstraction is expected and is not a fault — an unbranded, text-free,

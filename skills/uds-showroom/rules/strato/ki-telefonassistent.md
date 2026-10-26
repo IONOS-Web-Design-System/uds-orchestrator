@@ -5,6 +5,7 @@ aiTier: 1
 aliases: ["ki-telefonassistent", "telefonassistent", "ki telefon-assistent", "ai phone assistant", "phone assistant", "ai receptionist", "receptionist"]
 figmaRefs: []
 personaRefs: ["strato-ki-telefonassistent-persona-1", "strato-ki-telefonassistent-persona-2", "strato-ki-telefonassistent-persona-3"]
+secondPersona: false
 pageUrl: "https://www.strato.de/ki-agenten/ki-telefonassistent/"
 tagline: "Nie wieder einen Anruf verpassen – auch nachts, am Wochenende, im Urlaub"
 stageType: "Bento-Stage"

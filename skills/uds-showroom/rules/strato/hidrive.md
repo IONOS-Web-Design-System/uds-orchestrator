@@ -5,6 +5,7 @@ aiTier: 2
 aliases: ["hidrive cloud-speicher", "cloud-speicher", "cloud speicher", "cloud storage"]
 figmaRefs: []
 personaRefs: ["strato-hidrive-persona-1", "strato-hidrive-persona-2"]
+secondPersona: false
 pageUrl: "https://www.strato.de/cloud-speicher/"
 tagline: "Daten sicher in deutscher Cloud speichern"
 stageType: "Klassische Stage"

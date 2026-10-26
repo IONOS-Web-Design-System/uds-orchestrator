@@ -5,6 +5,7 @@ aiTier: 1
 aliases: ["reputationsmanager", "ki reputationsmanager", "reputation manager", "ai reputation manager", "ki reputation manager"]
 figmaRefs: []
 personaRefs: ["strato-ki-reputationsmanager-persona-1", "strato-ki-reputationsmanager-persona-2"]
+secondPersona: false
 pageUrl: "https://www.strato.de/ki-agenten/ki-reputationsmanager/"
 tagline: "Volle Kontrolle, in Echtzeit: Bewertungen proaktiv in positives Feedback verwandeln"
 stageType: "Bento-Stage"

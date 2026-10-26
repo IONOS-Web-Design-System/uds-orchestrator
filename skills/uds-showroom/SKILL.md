@@ -19,6 +19,10 @@ generated for its stage assets. Personas live in `rules/<brand>/<showroom>.md`:
     `["strato-ai-app-builder-persona-1", "strato-ai-app-builder-persona-2"]`. Each slug is the name of
     a character turnaround sheet in the Figma catalog (see "Persona sheets" below) and has exactly
     one matching `## <slug>` section in the body. Absent key = no sheets.
+  - `secondPersona` — `false` when the options are look-alikes (same hair, same face type, same
+    outfit concept), so no two of them may appear in one image: the moderator then never offers a
+    second persona and any other person in the scene is invented. Absent = `true`. Set it from the
+    SHEETS, not the text: two options that differ only in age or build still read as twins.
   - Optional provenance keys (read by no service; they record where the persona came from):
     `pageUrl`, `tagline`, `stageType`, `stageScene` (the source stage description, verbatim),
     `stageImage`.
@@ -77,7 +81,9 @@ option is the MAIN character. Contract:
   inferred rather than the caller named, the default is option 1 (`personaRefs[0]`).
 - The planner may add an optional `personaSecondary` for a scene with two people. There is at most
   one second persona, it is a different option from the main one, and a character cutout never gets
-  one. Two identical people never appear: the same slug cannot be main and second.
+  one. Two identical people never appear: the same slug cannot be main and second, a showroom with
+  `secondPersona: false` never gets a second persona, and when the image gate still reports a
+  duplicated person, image-svc's next attempt drops the second persona and invents that person.
 - The testimonial modules (`testimonial`, `testimonial_slider`) may answer `none`, meaning no persona
   for this request; no other module may.
 - A request carrying a `condition` reference photograph gets no persona sheets (that photograph
