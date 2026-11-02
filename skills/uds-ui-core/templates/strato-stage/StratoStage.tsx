@@ -88,8 +88,9 @@ export const StratoStage: FC<StratoStageProps> = ({ interfaceNode, interfaceDura
           const { legW, legH } = input.iface;
           return (
             <div key={l.id} style={placed(l)}>
-              {/* The leg is `legW` x `legH` CSS px; the rect is that at half scale, so scale it down. */}
-              <div style={{ position: 'absolute', left: 0, top: 0, width: legW, height: legH, transform: `scale(${l.rect.w / legW})`, transformOrigin: '0 0' }}>
+              {/* The leg is `legW` x `legH` CSS px; the rect is that at half scale, so scale it down.
+                  It is a canvas, so it crops: overflow is clipped here, before the scale, as in its own render. */}
+              <div style={{ position: 'absolute', left: 0, top: 0, width: legW, height: legH, overflow: 'hidden', transform: `scale(${l.rect.w / legW})`, transformOrigin: '0 0' }}>
                 {mountInterface(interfaceNode, input.iface, frame, interfaceDurationInFrames)}
               </div>
             </div>
