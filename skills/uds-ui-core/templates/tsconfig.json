@@ -11,5 +11,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["product-pop-out/**/*.ts", "product-pop-out/**/*.tsx"]
+  "include": ["product-pop-out/**/*.ts", "product-pop-out/**/*.tsx", "strato-stage/**/*.ts", "strato-stage/**/*.tsx"]
 }
