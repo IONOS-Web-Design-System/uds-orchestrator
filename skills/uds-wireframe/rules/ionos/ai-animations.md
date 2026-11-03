@@ -20,8 +20,12 @@ import { KitButton, KitCard, KitIcon, KitSkeleton, KitText } from './kit';
 
 ## Template 1 — AI CTA button
 
-`glow` pulses from the frame. `loading` covers the generating moment. Press feedback is a
-transform on the parent, never on the button.
+`glow` is the RESTING emphasis: it pulses from the frame before the click and is held, not
+animated, while loading (the kit fades it out under the loading flow). `loading` covers the
+generating moment: on an AI button it is the moving UDS AI flow. `loading` and `loadingSince` come
+from the SAME threshold frame, computed in the same component (the flow fades in over 0.4 s from
+it; inside a `<Sequence>`, the sequence-local frame). Press feedback is a transform on the parent,
+never on the button.
 
 ```tsx
 export const AIPillButton: React.FC<{
@@ -29,13 +33,15 @@ export const AIPillButton: React.FC<{
 }> = ({ fps, label = '', loadingLabel, triggerFrame = 0, loadingEndFrame }) => {
   const frame = useCurrentFrame();
   const loading = triggerFrame > 0 && frame >= triggerFrame && (loadingEndFrame === undefined || frame < loadingEndFrame);
-  const glow = 0.55 + 0.45 * Math.sin(((frame % 72) / 72) * Math.PI * 2);
+  const pulse = (f: number) => 0.55 + 0.45 * Math.sin(((f % 72) / 72) * Math.PI * 2);
+  const glow = loading ? pulse(triggerFrame) : pulse(frame); // resting emphasis only: never animated while loading
   const raw = spring({ frame: frame - triggerFrame, fps, config: { damping: 18, stiffness: 180, overshootClamping: true } });
   const press = raw > 0.995 ? 1 : raw;
   const scale = triggerFrame > 0 ? interpolate(press, [0, 0.45, 1], [1, 0.93, 1]) : 1;
   return (
     <div style={{ display: 'inline-flex', transform: `scale(${scale})` }}>
-      <KitButton label={label} loadingLabel={loadingLabel} concept="ai" icon={sparkles} loading={loading} glow={glow} />
+      <KitButton label={label} loadingLabel={loadingLabel} concept="ai" icon={sparkles}
+        loading={loading} loadingSince={triggerFrame} glow={glow} />
     </div>
   );
 };

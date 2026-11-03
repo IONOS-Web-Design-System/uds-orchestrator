@@ -43,12 +43,12 @@ describe('icon provenance', () => {
     expect(AI_ICON_NAMES).not.toContain('filled-star');
   });
 
-  it('lists only the five AI icons that actually ship (filled-ai-phone does not)', () => {
+  it('lists only the six AI icons that actually ship (UDS icon 0.43 added filled-ai-phone)', () => {
     expect([...AI_ICON_NAMES]).toEqual([
       'filled-sparkles', 'filled-generative-write', 'filled-generative-wand',
-      'filled-chat-ai', 'filled-envelope-ai',
+      'filled-chat-ai', 'filled-envelope-ai', 'filled-ai-phone',
     ]);
-    expect(SYSTEM.has('filled-ai-phone')).toBe(false);
+    expect(SYSTEM.has('filled-ai-phone')).toBe(true);
   });
 });
 

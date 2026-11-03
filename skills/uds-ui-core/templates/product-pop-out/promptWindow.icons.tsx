@@ -14,6 +14,7 @@ import { svgData as filledGenerativeWrite } from '@ionos-web-design-system/icon/
 import { svgData as filledGenerativeWand } from '@ionos-web-design-system/icon/system/filled-generative-wand';
 import { svgData as filledChatAi } from '@ionos-web-design-system/icon/system/filled-chat-ai';
 import { svgData as filledEnvelopeAi } from '@ionos-web-design-system/icon/system/filled-envelope-ai';
+import { svgData as filledAiPhone } from '@ionos-web-design-system/icon/system/filled-ai-phone';
 import { svgData as arrowRight } from '@ionos-web-design-system/icon/system/arrow-right';
 import { svgData as filledPaperPlane } from '@ionos-web-design-system/icon/system/filled-paper-plane';
 import { svgData as editSquare } from '@ionos-web-design-system/icon/system/edit-square';
@@ -23,9 +24,8 @@ import { svgData as mic } from '@ionos-web-design-system/icon/system/mic';
 import { aiGradient, type PromptWindowBrand } from './promptWindow.brands';
 
 /**
- * The AI icons that EXIST in the package. `filled-ai-phone` is documented for AI
- * receptionist / phone scenarios but is not shipped (verified against icon-names.json);
- * its documented fallback is `filled-sparkles`, which is this list's first entry.
+ * The AI icons that EXIST in the package (UDS icon >= 0.43, which added `filled-ai-phone`
+ * for AI receptionist / phone scenarios). `filled-sparkles` is the general default.
  *
  * `star` and `filled-star` exist in the package but are NEVER AI icons. Because
  * `leadingIcon` is typed as `AiIconName`, passing one is a compile error.
@@ -36,6 +36,7 @@ export const AI_ICON_NAMES = [
   'filled-generative-wand',
   'filled-chat-ai',
   'filled-envelope-ai',
+  'filled-ai-phone',
 ] as const;
 
 export type AiIconName = (typeof AI_ICON_NAMES)[number];
@@ -48,6 +49,7 @@ export const AI_SVG: Record<AiIconName, string> = {
   'filled-generative-wand': filledGenerativeWand,
   'filled-chat-ai': filledChatAi,
   'filled-envelope-ai': filledEnvelopeAi,
+  'filled-ai-phone': filledAiPhone,
 };
 
 /** Send-glyph key -> the real `system` glyph name. Paired with SEND_SVG below; kept as a

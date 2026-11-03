@@ -1,6 +1,6 @@
 ---
 name: strato-visual-language
-description: STRATO-only illustration style — the brand-gradient canvas, the orange accent header or sidebar logo tile (dark scheme inside), the dark browser bar on a floating web window, logo sizing for the padded STRATO SVG, and filled-only system icons.
+description: STRATO-only illustration style — the brand-gradient canvas, the orange accent header or sidebar logo tile (dark scheme inside), the dark browser bar on a floating web window, logo sizing for the tight (unpadded) STRATO SVG, and filled-only system icons.
 metadata:
   tags: strato, wireframe, product-frame, canvas, header, sidebar, browser, logo, icon
 ---
@@ -66,25 +66,37 @@ whatever the scheme of the rest of the render:
 - No coloured traffic-light dots, no tabs, no light-grey bar.
 - The page below the bar is the site itself (see the CLIENT SITE rule when present).
 
-## STRATO logo sizing — the SVG is padded
+## STRATO logo sizing — the SVG is tight
 
-The STRATO brandmark SVGs carry built-in padding: `strato-*` has a 156×60 viewBox but its ink
-is only ~120×25 (centred), and `strato-lite-*` (the cube) has a 60×60 viewBox with ~24×24 ink.
-Sized like other brands' logos, the STRATO wordmark renders far too small. Crop the padding
-with `backgroundSize` so the box is the ink:
+The STRATO header brandmark SVGs are unpadded: the viewBox is the ink.
+- Wordmark: `strato-light`, `strato-dark`, `strato-mono-light`, `strato-mono-dark` — viewBox
+  122×26 (aspect 122:26 ≈ 4.7:1).
+- Cube: `strato-lite-light`, `strato-lite-dark`, `strato-lite-mono-light`,
+  `strato-lite-mono-dark` — viewBox 26×26.
+
+So, unlike a padded logo, there is nothing to crop: the box takes the brandmark's own aspect
+ratio and the SVG fills it. Never crop or zoom it (`backgroundSize` of `130%`, `245%` or any
+value over `100%` clips the logo). The 122:26 ratio belongs to the four wordmark names only,
+never to a `strato-*` glob.
 
 ```tsx
-// Wordmark: the box IS the visible logo. Height H = the visible wordmark height.
-<div style={{ width: H * 4.9, height: H, backgroundImage: `url(${stratoLogo})`,
-              backgroundSize: '130% auto', backgroundPosition: 'center',
+// Wordmark: width = height × 122/26. Height H = the visible wordmark height.
+<div style={{ width: Math.round(H * 122 / 26), height: H, backgroundImage: `url(${stratoLogo})`,
+              backgroundSize: 'contain', backgroundPosition: 'left center',
               backgroundRepeat: 'no-repeat' }} />
-// Cube only (strato-lite-*): square box, backgroundSize: '245% auto'.
+// Cube only (the four strato-lite-* names): square box, width = height = H, same backgroundSize: 'contain'.
 ```
 
 - Visible wordmark height H: 20–24px in a 1280px-wide header, 16–18px in a sidebar tile or a
-  small (≤512px) canvas. Never size the raw 156×60 box to the header height.
+  small (≤512px) canvas. Wordmark width follows from H (24px → 113px wide, 18px → 84px wide);
+  never a square or free-form box for the wordmark.
 - Import from `@ionos-web-design-system/icon/brandmark/strato-light` on light surfaces,
   `strato-mono-dark` (white) on the orange accent or any dark surface.
+- Cube: `strato-lite-light` on a light surface, `strato-lite-mono-dark` (white) on the orange
+  accent tile or any dark surface.
+- The `strato-smart-*` marks (`-ai`, `-ia`, `-ki`, and the `-powered-by-wortmarke` variants,
+  light/dark) are 300×118 and are NOT the header logo. Never use one for the header, tile or
+  sidebar logo; if one is ever used, size its box to its own 300:118 aspect.
 
 ## System icons — filled only
 

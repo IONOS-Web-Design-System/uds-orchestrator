@@ -11,7 +11,7 @@
     "react": "^19.0.0"
   },
   "devDependencies": {
-    "@ionos-web-design-system/icon": "^0.30.0",
+    "@ionos-web-design-system/icon": "^0.43.0",
     "@types/node": "^20.0.0",
     "@types/react": "^19.0.0",
     "typescript": "^5.4.0",

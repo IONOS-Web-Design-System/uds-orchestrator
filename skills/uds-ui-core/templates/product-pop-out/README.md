@@ -75,5 +75,6 @@ flat (`backgroundColor` + mask). The send button is the trap: the *circle* carri
 gradient, so its *glyph* is flat white. `star` / `filled-star` are never AI icons — and
 because `leadingIcon` is typed `AiIconName`, passing one will not compile.
 
-`filled-ai-phone` is documented but absent from the package; `filled-sparkles` is its
-fallback.
+`filled-ai-phone` ships from UDS icon 0.43 (a handset with a sparkle) and is the AI marker for
+call / receptionist / phone-assistant scenarios; use `filled-sparkles` for general AI.
+`filled-envelope-ai` was redrawn in 0.43 (the sparkle sits smaller at the lower right); same name, same use.
