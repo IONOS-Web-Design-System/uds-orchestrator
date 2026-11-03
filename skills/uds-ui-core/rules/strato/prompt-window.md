@@ -32,7 +32,7 @@ drawn field beside the AI button.
 - `label`: `prompt-full` only — 2–5 words naming the AI tool or task, in the market's language.
   Omit it rather than invent one.
 - `leadingIcon`: the glyph in the badge / button — `filled-sparkles` (default),
-  `filled-generative-write`, `filled-generative-wand`, `filled-chat-ai`, `filled-envelope-ai`.
+  `filled-generative-write`, `filled-generative-wand`, `filled-chat-ai`, `filled-envelope-ai`, `filled-ai-phone` (call / receptionist scenarios).
 - `width` 420–520px for `prompt-full`, 380–480px for `prompt-simple` on a 1280px canvas;
   there is no `height` prop. No `actions`, no `sendGlyph` on STRATO — the design has none.
 - `brand="strato"` is a LITERAL, never the composition's `brand` variable.

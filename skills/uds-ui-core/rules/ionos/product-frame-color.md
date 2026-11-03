@@ -157,7 +157,7 @@ use `ai` on a non-AI feature.
 | `filled-generative-wand` | Non-text generation, image AI, advanced products | `icon/system/filled-generative-wand` |
 | `filled-chat-ai` | AI chat, assistant, conversational products | `icon/system/filled-chat-ai` |
 | `filled-envelope-ai` | Email generation, AI email products | `icon/system/filled-envelope-ai` |
-| `filled-ai-phone` | AI receptionist, call / phone scenarios | **Not yet in package — use `filled-sparkles` as fallback** |
+| `filled-ai-phone` | AI receptionist, call / phone scenarios | `icon/system/filled-ai-phone` (UDS icon 0.43+) — prefer it over `filled-sparkles` for call / receptionist / phone-assistant scenarios |
 
 > `star`, `filled-star` are **not AI icons**. Never use them for AI affordances.
 

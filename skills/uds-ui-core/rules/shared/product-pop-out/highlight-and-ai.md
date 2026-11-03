@@ -42,7 +42,7 @@ hero) is in `product-pop-out/character.md`.
    | `brand` | a brand-name string literal | Pass the **literal** the contract gives you — NOT the composition's `brand` prop or variable. The prop is typed `'ionos' \| 'strato'` (STRATO is its own design — `strato/prompt-window.md`), so `brand={brand}` does not compile |
    | `promptText` | `string` | Put the contract's copy into `texts.promptText` and pass that — never a literal |
    | `actions` | 2 of `'edit' \| 'regenerate' \| 'attach' \| 'voice'` | `prompt-full` only |
-   | `leadingIcon` | one of `filled-sparkles`, `filled-generative-write`, `filled-generative-wand`, `filled-chat-ai`, `filled-envelope-ai`, or `'none'` | Gradient-filled AI marker |
+   | `leadingIcon` | one of `filled-sparkles`, `filled-generative-write`, `filled-generative-wand`, `filled-chat-ai`, `filled-envelope-ai`, `filled-ai-phone`, or `'none'` | Gradient-filled AI marker |
    | `sendGlyph` | `'arrow' \| 'paper-plane'` | |
    | `width` `left` `bottom` | px | From the contract rect. There is deliberately **no `height`** — the component derives it, and `prompt-full` grows from its own line count |
 

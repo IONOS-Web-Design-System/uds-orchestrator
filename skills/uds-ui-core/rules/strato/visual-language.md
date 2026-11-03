@@ -68,25 +68,35 @@ whatever the scheme of the rest of the render:
 
 ## STRATO logo sizing — the SVG is tight
 
-The STRATO brandmark SVGs are unpadded: the viewBox is the ink. `strato-*` (the wordmark) is
-122×26 (aspect 122:26 ≈ 4.7:1) and `strato-lite-*` (the cube) is 26×26. So, unlike a padded
-logo, there is nothing to crop: the box takes the brandmark's own aspect ratio and the SVG
-fills it. Never crop or zoom it (`backgroundSize` of `130%`, `245%` or any value over `100%`
-clips the logo).
+The STRATO header brandmark SVGs are unpadded: the viewBox is the ink.
+- Wordmark: `strato-light`, `strato-dark`, `strato-mono-light`, `strato-mono-dark` — viewBox
+  122×26 (aspect 122:26 ≈ 4.7:1).
+- Cube: `strato-lite-light`, `strato-lite-dark`, `strato-lite-mono-light`,
+  `strato-lite-mono-dark` — viewBox 26×26.
+
+So, unlike a padded logo, there is nothing to crop: the box takes the brandmark's own aspect
+ratio and the SVG fills it. Never crop or zoom it (`backgroundSize` of `130%`, `245%` or any
+value over `100%` clips the logo). The 122:26 ratio belongs to the four wordmark names only,
+never to a `strato-*` glob.
 
 ```tsx
 // Wordmark: width = height × 122/26. Height H = the visible wordmark height.
 <div style={{ width: Math.round(H * 122 / 26), height: H, backgroundImage: `url(${stratoLogo})`,
               backgroundSize: 'contain', backgroundPosition: 'left center',
               backgroundRepeat: 'no-repeat' }} />
-// Cube only (strato-lite-*): square box, width = height = H, same backgroundSize: 'contain'.
+// Cube only (the four strato-lite-* names): square box, width = height = H, same backgroundSize: 'contain'.
 ```
 
 - Visible wordmark height H: 20–24px in a 1280px-wide header, 16–18px in a sidebar tile or a
-  small (≤512px) canvas. Wordmark width follows from H (24px → 113px wide, 18px → 85px wide);
+  small (≤512px) canvas. Wordmark width follows from H (24px → 113px wide, 18px → 84px wide);
   never a square or free-form box for the wordmark.
 - Import from `@ionos-web-design-system/icon/brandmark/strato-light` on light surfaces,
   `strato-mono-dark` (white) on the orange accent or any dark surface.
+- Cube: `strato-lite-light` on a light surface, `strato-lite-mono-dark` (white) on the orange
+  accent tile or any dark surface.
+- The `strato-smart-*` marks (`-ai`, `-ia`, `-ki`, and the `-powered-by-wortmarke` variants,
+  light/dark) are 300×118 and are NOT the header logo. Never use one for the header, tile or
+  sidebar logo; if one is ever used, size its box to its own 300:118 aspect.
 
 ## System icons — filled only
 
