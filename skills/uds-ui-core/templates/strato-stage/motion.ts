@@ -100,3 +100,33 @@ export function stageDurationSec(iface: 'none' | 'still' | 'animated'): 4 | 5 {
 export function msToFrame(ms: number): number {
   return Math.ceil((ms * FPS) / 1000);
 }
+
+/** How the interface leg was rendered: a still (its own still gate validated its LAST frame) or animated. */
+export type InterfaceMotion = 'still' | 'animated';
+
+/**
+ * Which of its OWN frames the interface shows at stage frame `frame`.
+ *  pop-in   animated, before `startFrame`: held at its frame 0 while the layer pops in.
+ *  playing  animated, from `startFrame`: its frame `frame - startFrame`.
+ *  held     animated, after its last frame: held at `durationInFrames - 1`.
+ *  still    a still interface: its LAST frame (`durationInFrames - 1`, the frame its own still
+ *           gate validated) at every stage frame, pop-in included (ruling R23); frame 0 when
+ *           its length is unknown.
+ * With `durationInFrames` unknown an animated interface plays on, unbounded.
+ *
+ * Nothing here knows the composite's length: in a 4 s composite (120 frames) an animated
+ * 90-frame interface starting at 41 is still `playing` (frame 78) on the composite's last frame.
+ */
+export function interfacePhase(
+  frame: number,
+  startFrame: number,
+  durationInFrames: number | undefined,
+  motion: InterfaceMotion,
+): { phase: 'pop-in' | 'playing' | 'held' | 'still'; frame: number } {
+  const last = durationInFrames === undefined ? undefined : durationInFrames - 1;
+  if (motion === 'still') return { phase: 'still', frame: last ?? 0 };
+  if (frame < startFrame) return { phase: 'pop-in', frame: 0 };
+  const own = frame - startFrame;
+  if (last !== undefined && own > last) return { phase: 'held', frame: last };
+  return { phase: 'playing', frame: own };
+}
