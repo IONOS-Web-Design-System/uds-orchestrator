@@ -4,12 +4,12 @@ import { interfaceLegStyle, layerStyle } from '../styles';
 
 // styles.test.ts — the inline styles StratoStage puts on every layer, built purely so they can be
 // pinned: the compose workspace imports Tailwind, whose preflight `img { max-width: 100%;
-// height: auto }` squeezed every powder x1.6-2.3 in the first smoke render (final review O-C1).
+// height: auto }` squeezed the (since removed) powders x1.6-2.3 in the first smoke render (final review O-C1).
 describe('strato-stage styles', () => {
   const base = {
     canvas: { w: 1280, h: 960 },
     safeArea: { right: 0.32, bottom: 0.22 },
-    srcs: { box: 'b.png', powder: 'p.png', character: 'c.png' },
+    srcs: { character: 'c.png' },
     iface: { kind: 'feature-highlight' as const, legW: 769, legH: 180 },
   };
   const layers = buildStageLayers(base, 2000);
@@ -40,12 +40,6 @@ describe('strato-stage styles', () => {
 
   it('the character is contained, top-anchored, never stretched (DEFAULT_METRICS on a non-3:4 cutout)', () => {
     expect(layerStyle(byId.character)).toMatchObject({ objectFit: 'contain', objectPosition: '50% 0' });
-  });
-
-  it('boxes and powders keep their exact export aspect (no object-fit)', () => {
-    for (const id of ['boxBack', 'boxFore', 'powderBack', 'powderFore']) {
-      expect(layerStyle(byId[id]).objectFit, id).toBeUndefined();
-    }
   });
 
   it('the interface leg box is the leg canvas: clipped, scaled down onto its rect from the top-left', () => {

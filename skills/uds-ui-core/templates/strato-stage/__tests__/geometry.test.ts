@@ -1,19 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import {
-  POSES, INTERFACE_SLOTS, fitStage, characterRect, faceSafeRect, interfaceSlot,
+  INTERFACE_SLOTS, fitStage, characterRect, faceSafeRect, interfaceSlot,
   interfaceLegDims, interfaceMountRect, type Rect, type StageMetrics,
 } from '../geometry';
 
-// geometry.test.ts — values measured from Figma 663:8787 / 663:9864 / 663:8718 (see README table)
+// geometry.test.ts — values measured from Figma 663:8787 / 663:9864 (see README table)
 describe('strato-stage geometry', () => {
-  it('poses match Figma', () => {
-    expect(POSES.boxBack).toEqual({ cx: 564.002, cy: 315.415, rotateDeg: -173, mirror: false });
-    expect(POSES.boxFore).toEqual({ cx: 563.78, cy: 340.414, rotateDeg: -15, mirror: false });
-    // powder component export = raw image mirrored, so poses are relative to the EXPORT:
-    expect(POSES.powderBack).toEqual({ cx: 822.994, cy: 370.458, rotateDeg: 8.934, mirror: false });
-    expect(POSES.powderFore).toEqual({ cx: 705.323, cy: 600.561, rotateDeg: -18, mirror: true });
-  });
-
   it('fits 1280x960 into the content box', () => {
     const f = fitStage({ w: 1280, h: 960 }, { right: 0.32, bottom: 0.22 });
     expect(f.content).toEqual({ x: 0, y: 0, w: 870.4, h: 748.8 });

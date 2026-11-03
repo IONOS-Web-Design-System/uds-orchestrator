@@ -1,10 +1,10 @@
 /**
- * The STRATO corporate stage — a fixed, Figma-measured template: two boxes, two powders and the
- * character, entering with the option-B motion, plus an optional interface over the character.
+ * The STRATO corporate stage — a fixed, Figma-measured template: the character, entering with the
+ * option-B slide-up, plus an optional floating interface over it.
  *
- * GEOMETRY IS CLOSED. Poses, the fit into the canvas, the paint order and the motion are all
+ * GEOMETRY IS CLOSED. The fit into the canvas, the paint order and the motion are all
  * internal (geometry.ts, motion.ts, layers.ts) and none of them is a prop. CONTENT IS OPEN: the
- * three image paths, the measured character, and the interface — a React node. PLACEMENT IS
+ * character path, the measured character, and the interface — a React node. PLACEMENT IS
  * EXTERNAL: the caller supplies the canvas and `safeArea`; this decides where things land in it.
  *
  * Only DOM and `<Img>` are rendered (no canvas, WebGL or video), so a later SVG capture of the
@@ -31,7 +31,7 @@ export type StratoStageProps = StageInput & {
   /**
    * How the interface leg was rendered. `'still'`: shown at its LAST frame (the one its own still
    * gate validated) for the whole stage. `'animated'` (default): frozen at its frame 0 while it
-   * pops in, played from frame 41, then held on its last frame.
+   * pops in, played from frame 27, then held on its last frame.
    */
   interfaceMotion?: InterfaceMotion;
 };
@@ -45,8 +45,8 @@ export type StratoStageProps = StageInput & {
  *    `useVideoConfig()` inside returns them (use-unsafe-video-config.js), so the node sees the
  *    LEG's size, not the canvas's;
  *  - the Sequence's context duration is `max(0, min(videoConfig.durationInFrames - from,
- *    durationInFrames))` (Sequence.js). With `from={41}` a 90-frame interface in the 120-frame
- *    (4 s) composite would see 79; with `from` 0 it sees its own 90 whenever the composite is at
+ *    durationInFrames))` (Sequence.js). With `from={27}` a 90-frame interface in the 120-frame
+ *    (4 s) composite would see 93; with `from` 0 it sees its own 90 whenever the composite is at
  *    least that long (120 / 150);
  *  - `<Freeze frame>` sets the timeline to `frame` (+ the enclosing sequence's offset) and zeroes
  *    `cumulatedFrom` (freeze.js), so `useCurrentFrame()` inside is exactly `frame`, and the

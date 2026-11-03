@@ -1,5 +1,5 @@
 /**
- * strato-stage geometry — the pure numbers of the fixed STRATO corporate-stage template.
+ * strato-stage geometry — the pure numbers of the fixed STRATO corporate-stage template (character + optional floating interface).
  * No React, no DOM, no `remotion`: everything here is arithmetic, so it is testable without a
  * renderer and importable by the component, the tests and (by copy) agent-svc alike.
  *
@@ -8,10 +8,8 @@
  *   663:4371  library component `strato-stage-visual` (the 672 x 610 frame)
  *   663:9864  target stage with an AI-prompt interface over the character
  *   663:9895  the feature-highlight interface inside 663:9864
- *   663:8966  box component `strato-box-fore` (page `asset/strato`)
- *   663:8718  powder component `powder-mid` (page `asset/strato`)
  *
- * Units: every `Rect`, pose and offset below is in VISUAL units (the 672 x 610 frame), except
+ * Units: every `Rect` and offset below is in VISUAL units (the 672 x 610 frame), except
  * `StageFit.content`, which is in canvas pixels. The component scales visual units to canvas
  * pixels with `fitStage`, so nothing here knows the canvas size.
  *
@@ -22,38 +20,6 @@ export type Rect = { x: number; y: number; w: number; h: number };
 
 /** The Figma visual frame the whole stage is designed in. Node 663:4371 (placed in 663:8787). */
 export const VISUAL = { w: 672, h: 610 } as const;
-
-/**
- * Box component, node 663:8966 (`strato-box-fore`).
- *  side       558     the rounded square itself (radius 32).
- *  exportSide 638     its export, which includes the drop-shadow glow.
- *  stageSide  559.19  the box's rendered side on the stage, measured in 663:8787.
- */
-export const BOX = { side: 558, exportSide: 638, stageSide: 559.19 } as const;
-
-/** Powder component, node 663:8718 (`powder-mid`): the image fill's size in its export. */
-export const POWDER = { w: 1548.856, h: 885.223 } as const;
-
-/**
- * Where one layer's export image sits in the visual frame.
- *  cx, cy     centre of the layer's export, in visual units (may lie outside 0..672 / 0..610:
- *             boxes and powders overflow the frame and are clipped by the content box).
- *  rotateDeg  CSS `rotate()` degrees, clockwise-positive.
- *  mirror     horizontal flip (`scaleX(-1)`), applied about the centre.
- */
-export type LayerPose = { cx: number; cy: number; rotateDeg: number; mirror: boolean };
-
-/**
- * Poses measured in Figma 663:8787 (stage) from the two components 663:8966 and 663:8718.
- * Figma reports the powder component as the raw image mirrored, so the powder poses are
- * relative to the EXPORT: the Figma 171.066 deg mirrored back-powder is 8.934 deg unmirrored.
- */
-export const POSES: Record<'boxBack' | 'boxFore' | 'powderBack' | 'powderFore', LayerPose> = {
-  boxBack: { cx: 564.002, cy: 315.415, rotateDeg: -173, mirror: false }, // 663:8787 -> 663:8966 (173 deg)
-  boxFore: { cx: 563.78, cy: 340.414, rotateDeg: -15, mirror: false }, //   663:8787 -> 663:8966 (15 deg)
-  powderBack: { cx: 822.994, cy: 370.458, rotateDeg: 8.934, mirror: false }, // 663:8787 -> 663:8718
-  powderFore: { cx: 705.323, cy: 600.561, rotateDeg: -18, mirror: true }, //    663:8787 -> 663:8718
-};
 
 /**
  * Where the character lands, from 663:8787: the head top is `headTopY` from the frame top, the

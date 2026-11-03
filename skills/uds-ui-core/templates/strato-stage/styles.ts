@@ -15,13 +15,12 @@ import type { StageLayer } from './layers';
  * `maxWidth` / `maxHeight: 'none'` are load-bearing. The compose workspace's `src/index.css`
  * imports Tailwind, whose preflight sets `img, video { max-width: 100%; height: auto; }` on every
  * `<img>`. An inline `width` cannot beat `max-width`, while the inline `height` does beat
- * `height: auto`, so without these each powder (wider than the content box) is squeezed
- * horizontally x1.6-2.3 and pulled left, and a wide cutout's character is stretched.
+ * `height: auto`, so without these a wide cutout's character is squeezed or stretched (the first smoke render
+ * squeezed the then-present powders x1.6-2.3).
  *
  * The character is also `object-fit: contain`, top-centred: with correct metrics the rect has
  * the cutout's own aspect and this changes nothing, but a cutout placed with DEFAULT_METRICS
- * (a 3:4 guess) is letterboxed instead of stretched. Boxes and powders keep their exact export
- * aspect, so they need none.
+ * (a 3:4 guess) is letterboxed instead of stretched.
  */
 export function layerStyle(l: StageLayer): CSSProperties {
   return {

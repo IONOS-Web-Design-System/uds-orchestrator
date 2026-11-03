@@ -1,26 +1,29 @@
 import { describe, it, expect } from 'vitest';
 import { buildStageLayers } from '../layers';
-import { DEFAULT_METRICS, fitStage } from '../geometry';
+import { DEFAULT_METRICS, characterRect, fitStage } from '../geometry';
 
 // layers.test.ts — the pure layer list StratoStage maps onto <Img>s
 describe('strato-stage layers', () => {
-  const base = { canvas: { w: 1280, h: 960 }, safeArea: { right: 0.32, bottom: 0.22 }, srcs: { box: 'b.png', powder: 'p.png', character: 'c.png' } };
-  it('orders layers bottom→top, interface only when given', () => {
-    expect(buildStageLayers(base, 2000).map((l) => l.id)).toEqual(['boxBack','boxFore','powderBack','character','powderFore']);
-    expect(buildStageLayers({ ...base, iface: { kind: 'feature-highlight', legW: 769, legH: 180 } }, 2000).at(-1)!.id).toBe('interface');
+  const base = { canvas: { w: 1280, h: 960 }, safeArea: { right: 0.32, bottom: 0.22 }, srcs: { character: 'c.png' } };
+  it('is just the character, plus the interface over it only when given', () => {
+    expect(buildStageLayers(base, 2000).map((l) => l.id)).toEqual(['character']);
+    expect(buildStageLayers({ ...base, iface: { kind: 'feature-highlight', legW: 769, legH: 180 } }, 2000).map((l) => l.id)).toEqual(['character', 'interface']);
   });
-  it('settled transforms carry the Figma pose', () => {
-    const L = Object.fromEntries(buildStageLayers(base, 2000).map((l) => [l.id, l]));
-    expect(L.boxBack.transform).toContain('rotate(-173deg)'); expect(L.powderFore.transform).toContain('scaleX(-1)');
-    expect(L.powderBack.transform).not.toContain('scaleX(-1)');
+  it('settled character sits on the Figma anchor with an identity-motion transform', () => {
+    const c = buildStageLayers(base, 2000)[0];
     const f = fitStage(base.canvas, base.safeArea);
-    expect(L.boxBack.rect.w).toBeCloseTo(638 * (559.19 / 558) * f.scale, 3);
-    expect(L.boxBack.rect.x + L.boxBack.rect.w / 2).toBeCloseTo(f.originX + 564.002 * f.scale, 3);
+    expect(c.src).toBe('c.png');
+    expect(c.transform).toBe('translateY(0px) scale(1)');
+    expect(c.rect.w).toBeCloseTo(characterRect(DEFAULT_METRICS).w * f.scale, 3);
+    expect(c.rect.x).toBeCloseTo(f.originX + characterRect(DEFAULT_METRICS).x * f.scale, 3);
   });
-  it('frame 0 paints nothing', () => { expect(buildStageLayers(base, 0).every((l) => l.opacity === 0)).toBe(true); });
-  it('default metrics when metrics absent', () => {                         // Review Focus 2
-    const a = buildStageLayers(base, 2000).find((l) => l.id === 'character')!;
-    const b = buildStageLayers({ ...base, metrics: DEFAULT_METRICS }, 2000).find((l) => l.id === 'character')!;
+  it('frame 0 paints nothing', () => {
+    const withIface = { ...base, iface: { kind: 'feature-highlight' as const, legW: 769, legH: 180 } };
+    expect(buildStageLayers(withIface, 0).every((l) => l.opacity === 0)).toBe(true);
+  });
+  it('default metrics when metrics absent', () => {
+    const a = buildStageLayers(base, 2000)[0];
+    const b = buildStageLayers({ ...base, metrics: DEFAULT_METRICS }, 2000)[0];
     expect(a.rect).toEqual(b.rect);
   });
 });
