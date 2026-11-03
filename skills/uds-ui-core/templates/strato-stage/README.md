@@ -11,7 +11,7 @@ that one places a floating prompt over a photo, this one owns the whole stage.
 | `motion.ts` | The option-B motion as pure functions of time (`layerMotion`), the timeline, `FPS`. |
 | `layers.ts` | `buildStageLayers(input, tMs)`: geometry + motion in canvas px, bottom to top. Pure. |
 | `styles.ts` | `layerStyle(layer)`, `interfaceLegStyle(rect, leg)`: the inline styles of the layers. Pure (a React type only). |
-| `StratoStage.tsx` | The Remotion component: maps the layer list onto an `<Img>` and the interface and mounts the interface. |
+| `StratoStage.tsx` | The Remotion component: maps the layer list onto `<Img>`s and mounts the interface. |
 
 None of the first four imports the DOM or `remotion` (`styles.ts` imports one React type), so they
 are tested without a renderer (`__tests__/`). `StratoStage.tsx` renders only DOM and `<Img>` (no canvas, WebGL or
@@ -112,9 +112,9 @@ It is ONE element tree in every phase, so the node never remounts:
   (`use-unsafe-video-config.js`). So the node sees the leg's size and no wrapper is needed. With
   `layout="none"` the Sequence adds no `AbsoluteFill` of its own.
 * The Sequence's context duration (what `useVideoConfig().durationInFrames` returns inside) is
-  `max(0, min(composition duration - from, durationInFrames))` (`Sequence.js`). A Sequence
-  `from={27}` would therefore report 93, not 90, for a 90-frame interface in the 120-frame stage.
-  So the Sequence starts at 0 (it reports d whenever the stage is at least d long), and the
+  `max(0, min(composition duration - from, durationInFrames))` (`Sequence.js`).
+  A Sequence from the pop-in offset (27) would unmount the interface during the pop-in. So the
+  Sequence starts at 0 (it reports d whenever the stage is at least d long), and the
   stage frame is mapped onto the interface's own frame by the always-active `<Freeze>`, which
   sets the timeline to `shown` and zeroes the cumulated offset (`freeze.js`): `useCurrentFrame()`
   inside is exactly `shown`, always within the Sequence's 0 .. d - 1, so it stays mounted.

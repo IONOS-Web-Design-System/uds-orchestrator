@@ -45,9 +45,10 @@ export type StratoStageProps = StageInput & {
  *    `useVideoConfig()` inside returns them (use-unsafe-video-config.js), so the node sees the
  *    LEG's size, not the canvas's;
  *  - the Sequence's context duration is `max(0, min(videoConfig.durationInFrames - from,
- *    durationInFrames))` (Sequence.js). With `from={27}` a 90-frame interface in the 120-frame
- *    (4 s) composite would see 93; with `from` 0 it sees its own 90 whenever the composite is at
- *    least that long (120 / 150);
+ *    durationInFrames))` (Sequence.js); it reports the interface's own d whenever the composite is
+ *    at least that long (120 / 150). The Sequence starts at 0 and never at the pop-in offset: a
+ *    Sequence `from` 27 would unmount the node during the pop-in (frames 0..26). The always-on
+ *    `<Freeze>` below keeps ONE stable tree through pop-in, play and hold;
  *  - `<Freeze frame>` sets the timeline to `frame` (+ the enclosing sequence's offset) and zeroes
  *    `cumulatedFrom` (freeze.js), so `useCurrentFrame()` inside is exactly `frame`, and the
  *    Sequence's own bounds check (frame 0 .. duration - 1) always keeps the node mounted.
