@@ -1,8 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import {
   INTERFACE_SLOTS, fitStage, characterRect, faceSafeRect, interfaceSlot,
-  interfaceLegDims, interfaceMountRect, type Rect, type StageMetrics,
+  interfaceLegDims, interfaceMountRect, promptWindowLeg, STRATO_SIMPLE_ASPECT, PROMPT_WINDOW_GLOW_PAD_OF_W,
+  type Rect, type StageMetrics,
 } from '../geometry';
+// Test-only: the stage's shipped files may not import across directories (see selfContained.test.ts).
+import { STRATO_SIMPLE } from '../../product-pop-out/promptWindow.strato';
 
 // geometry.test.ts — values measured from Figma 663:8787 / 663:9864 (see README table)
 describe('strato-stage geometry', () => {
@@ -49,5 +52,96 @@ describe('strato-stage geometry', () => {
       for (const p of [head, ifc]) { expect(p.x).toBeGreaterThanOrEqual(0); expect(p.y).toBeGreaterThanOrEqual(0);
         expect(p.x + p.w).toBeLessThanOrEqual(f.content.w + 1e-6); expect(p.y + p.h).toBeLessThanOrEqual(f.content.h + 1e-6); }
     }
+  });
+});
+
+// The AI prompt highlight leg (ruling R33): the canvas IS the floating STRATO prompt-simple pill,
+// padded on every side so its glow (the pill blurred by 0.13 x width) is not clipped by the leg.
+describe('strato-stage prompt-window leg', () => {
+  const FH = INTERFACE_SLOTS['feature-highlight'];
+  /** The pill's own rect in leg px: PromptWindow is absolute, bottom-anchored at (left, bottom). */
+  const pillInLeg = (l: ReturnType<typeof promptWindowLeg>) => {
+    const ph = l.promptWindow.width / STRATO_SIMPLE_ASPECT;
+    return { x: l.promptWindow.left, y: l.canvas.h - l.promptWindow.bottom - ph, w: l.promptWindow.width, h: ph };
+  };
+  /** Every leg must keep the pill centred and its props consistent with the canvas. */
+  const expectCentred = (l: ReturnType<typeof promptWindowLeg>) => {
+    const p = pillInLeg(l);
+    expect(p.x + p.w / 2).toBeCloseTo(l.canvas.w / 2, 9);
+    expect(p.y + p.h / 2).toBeCloseTo(l.canvas.h / 2, 9);
+    expect(p.x).toBeGreaterThanOrEqual(0); expect(p.y).toBeGreaterThanOrEqual(0);
+  };
+
+  it('the pill aspect is the shipped STRATO_SIMPLE.aspect; the pad is 0.3 of the pill width', () => {
+    expect(STRATO_SIMPLE_ASPECT).toBe(STRATO_SIMPLE.aspect);
+    expect(STRATO_SIMPLE_ASPECT).toBe(4.8404);
+    expect(PROMPT_WINDOW_GLOW_PAD_OF_W).toBe(0.3);
+  });
+
+  it('feature-highlight slot: pill 769 wide, pad 231, canvas 1231 x 621, PromptWindow at (231, 231.06)', () => {
+    const l = promptWindowLeg(FH);
+    expect(l.canvas).toEqual({ w: 1231, h: 621 });
+    expect(l.promptWindow).toEqual({ variant: 'prompt-simple', width: 769, left: 231, bottom: (621 - 769 / 4.8404) / 2 });
+    expect(l.promptWindow.bottom).toBeCloseTo(231.0644, 4);
+    expectCentred(l);
+  });
+
+  it('mounted at half scale on the slot, the pill lands on the slot (Figma 663:9895)', () => {
+    const l = promptWindowLeg(FH);
+    const m = interfaceMountRect(FH, l.canvas);
+    const p = pillInLeg(l);
+    const pill = { x: m.x + p.x / 2, y: m.y + p.y / 2, w: p.w / 2, h: p.h / 2 };
+    // Width: within 1 px (2 x 384.7 rounds to 769, so 384.5 vs 384.7).
+    expect(Math.abs(pill.x - FH.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(pill.w - FH.w)).toBeLessThanOrEqual(1);
+    expect(Math.abs(pill.x + pill.w - (FH.x + FH.w))).toBeLessThanOrEqual(1);
+    // Height: the pill's own aspect (4.8404) is not the slot's (4.913), so it may differ by that much
+    // (1.18 visual units), centred on the slot.
+    expect(Math.abs(pill.h - FH.h)).toBeLessThanOrEqual(Math.abs(FH.w / STRATO_SIMPLE_ASPECT - FH.h));
+    expect(pill.y + pill.h / 2).toBeCloseTo(FH.y + FH.h / 2, 9);
+    expect(pill).toEqual({ x: expect.closeTo(90.3, 9), y: expect.closeTo(327.73, 2), w: 384.5, h: expect.closeTo(79.436, 3) });
+  });
+
+  it('raised canvas (min 320 x 180, then out of the <= 512 band): the pill keeps its size, centred', () => {
+    // natural 320 x 161 -> 320 x 180 -> both <= 512 -> long side 513
+    const l = promptWindowLeg({ w: 100, h: 20 });
+    expect(l.canvas).toEqual({ w: 513, h: 289 });
+    expect(l.promptWindow).toMatchObject({ variant: 'prompt-simple', width: 200, left: 156.5 });
+    expect(l.promptWindow.bottom).toBeCloseTo((289 - 200 / 4.8404) / 2, 9);
+    expectCentred(l);
+    // natural 512 x 258 is inside the band too: only the canvas grows.
+    const edge = promptWindowLeg({ w: 160, h: 10 });
+    expect(edge.canvas).toEqual({ w: 513, h: 259 });
+    expect(edge.promptWindow).toMatchObject({ width: 320, left: 96.5 });
+    expectCentred(edge);
+    // natural 516 x 261 is already out of the band: unchanged, left = pad.
+    expect(promptWindowLeg({ w: 161, h: 10 }).canvas).toEqual({ w: 516, h: 261 });
+    expect(promptWindowLeg({ w: 161, h: 10 }).promptWindow).toMatchObject({ width: 322, left: 97 });
+  });
+
+  it('capped canvas (max 1920 x 1080): the pill and its pad shrink together, centred', () => {
+    // 2 x 700 = 1400 would need a 2240-wide canvas; the largest pill that fits is 1200 (pad 360).
+    const l = promptWindowLeg({ w: 700, h: 100 });
+    expect(l.canvas).toEqual({ w: 1920, h: 968 });
+    expect(l.promptWindow).toMatchObject({ variant: 'prompt-simple', width: 1200, left: 360 });
+    expect(l.promptWindow.bottom).toBeCloseTo((968 - 1200 / 4.8404) / 2, 9);
+    expectCentred(l);
+    // One more px of pill would not fit.
+    expect(1201 + 2 * Math.round(0.3 * 1201)).toBeGreaterThan(1920);
+  });
+
+  it('every slot width gives a canvas inside agent-svc\'s range, out of the small band, with the pill centred', () => {
+    for (let w = 1; w <= 1000; w += 7.3) {
+      const l = promptWindowLeg({ w, h: 50 });
+      expect(Number.isInteger(l.canvas.w) && Number.isInteger(l.canvas.h)).toBe(true);
+      expect(l.canvas.w).toBeGreaterThanOrEqual(320); expect(l.canvas.w).toBeLessThanOrEqual(1920);
+      expect(l.canvas.h).toBeGreaterThanOrEqual(180); expect(l.canvas.h).toBeLessThanOrEqual(1080);
+      expect(l.canvas.w > 512 || l.canvas.h > 512).toBe(true);
+      expectCentred(l);
+    }
+  });
+
+  it('the slot height plays no part: the pill height comes from its own aspect', () => {
+    expect(promptWindowLeg({ w: FH.w, h: 1 })).toEqual(promptWindowLeg(FH));
   });
 });

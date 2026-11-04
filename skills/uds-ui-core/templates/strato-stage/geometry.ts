@@ -146,23 +146,96 @@ export function interfaceSlot(kind: InterfaceKind, faceSafe: Rect): Rect {
 
 const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v));
 
+/** agent-svc's canvas range for a `/generate` run (its `DimensionsSchema`). */
+const LEG_MIN = { w: 320, h: 180 } as const;
+const LEG_MAX = { w: 1920, h: 1080 } as const;
+
 /**
- * Canvas size of the interface leg: 2x the slot, raised to 320 x 180, capped at 1920 x 1080,
- * and never with both sides <= 512 (image-svc's small-format band): then scaled up so the long
- * side is 513. The composite mounts it at half scale, centred on the slot.
+ * The leg-canvas clamps: raised to 320 x 180, capped at 1920 x 1080, and never with both sides
+ * <= 512 (agent-svc's small-format band): then scaled up so the long side is 513.
  */
-export function interfaceLegDims(slot: Rect): { w: number; h: number } {
-  let w = clamp(Math.round(2 * slot.w), 320, 1920);
-  let h = clamp(Math.round(2 * slot.h), 180, 1080);
+function fitLegCanvas(w0: number, h0: number): { w: number; h: number } {
+  let w = clamp(w0, LEG_MIN.w, LEG_MAX.w);
+  let h = clamp(h0, LEG_MIN.h, LEG_MAX.h);
   if (w <= 512 && h <= 512) {
     const long = Math.max(w, h);
     // multiply before dividing so an exact multiple (320 * 513 / 320) stays exact before `ceil`
     w = Math.ceil((w * 513) / long);
     h = Math.ceil((h * 513) / long);
-    w = Math.min(w, 1920);
-    h = Math.min(h, 1080);
+    w = Math.min(w, LEG_MAX.w);
+    h = Math.min(h, LEG_MAX.h);
   }
   return { w, h };
+}
+
+/**
+ * Canvas size of the interface leg: 2x the slot, raised to 320 x 180, capped at 1920 x 1080,
+ * and never with both sides <= 512 (image-svc's small-format band): then scaled up so the long
+ * side is 513. The composite mounts it at half scale, centred on the slot.
+ * MIRROR: the moderator's `legDimsForSlot` (src/orchestrate/stagePayloads.ts) decides the size the
+ * leg is actually requested at; this copy documents and tests the rule. Change both.
+ */
+export function interfaceLegDims(slot: Rect): { w: number; h: number } {
+  return fitLegCanvas(Math.round(2 * slot.w), Math.round(2 * slot.h));
+}
+
+/**
+ * The STRATO `prompt-simple` pill's width / height. MIRRORS `STRATO_SIMPLE.aspect` in
+ * `product-pop-out/promptWindow.strato.tsx` (Figma 587:6992); geometry.test.ts asserts the two
+ * are equal. Not imported from there: this directory is copied ALONE into the compose workspace
+ * (`src/uds/strato-stage/`, while product-pop-out lands flat in `src/uds/`), so a
+ * `../product-pop-out/...` import cannot resolve there, and it would pull React and the icon
+ * package into this pure module (selfContained.test.ts).
+ */
+export const STRATO_SIMPLE_ASPECT = 4.8404;
+
+/**
+ * Transparent room on every side of the pill, as a fraction of the pill's width. The pill's glow
+ * is the pill itself blurred by 0.13 x width (`STRATO_SIMPLE.glowBlurOfW`) and scaled up to 1.06
+ * at the send pulse; the leg canvas clips it (`interfaceLegStyle`), so a canvas the size of the
+ * pill would cut the glow off in a hard edge. 0.3 x width is ~2.3 blur radii.
+ */
+export const PROMPT_WINDOW_GLOW_PAD_OF_W = 0.3;
+
+/** The AI prompt highlight leg: its canvas, and the literal props of the ONE shipped
+ *  `<PromptWindow>` drawn on it (leg-canvas px; `left`/`bottom` anchor the pill's bottom-left). */
+export type PromptWindowLeg = {
+  canvas: { w: number; h: number };
+  promptWindow: { variant: 'prompt-simple'; width: number; left: number; bottom: number };
+};
+
+/**
+ * The leg of a `feature-highlight` interface that IS the AI prompt (Figma 663:9864: the floating
+ * STRATO prompt-simple pill over the character's chest). The pill is 2x the slot wide (as every
+ * leg is 2x its slot) at its own aspect, padded by `PROMPT_WINDOW_GLOW_PAD_OF_W` of its width on
+ * every side for the glow, and CENTRED in its canvas, so `interfaceMountRect` (half scale,
+ * centred on the slot) puts the pill on the slot. The slot's height plays no part: the pill's
+ * height is its width / `STRATO_SIMPLE_ASPECT`.
+ *
+ * The same clamps as `interfaceLegDims`. Over 1920 x 1080 the pill and its pad shrink together
+ * (the largest pill whose padded canvas fits); under 320 x 180 or inside the small band only the
+ * canvas grows, around the pill. Either way the pill stays centred and the props match the canvas.
+ * MIRROR: the moderator's `promptWindowLeg` (src/orchestrate/stagePayloads.ts). Change both.
+ */
+export function promptWindowLeg(slot: { w: number; h: number }): PromptWindowLeg {
+  const padded = (pw: number): { w: number; h: number } => {
+    const pad = Math.round(PROMPT_WINDOW_GLOW_PAD_OF_W * pw);
+    return { w: pw + 2 * pad, h: Math.round(pw / STRATO_SIMPLE_ASPECT + 2 * pad) };
+  };
+  // Both sides of the padded canvas only grow with the pill, so walking down finds the largest fit.
+  let pw = Math.round(2 * slot.w);
+  while (padded(pw).w > LEG_MAX.w || padded(pw).h > LEG_MAX.h) pw -= 1;
+  const natural = padded(pw);
+  const canvas = fitLegCanvas(natural.w, natural.h); // within the cap now, so it can only grow
+  return {
+    canvas,
+    promptWindow: {
+      variant: 'prompt-simple',
+      width: pw,
+      left: (canvas.w - pw) / 2,
+      bottom: (canvas.h - pw / STRATO_SIMPLE_ASPECT) / 2,
+    },
+  };
 }
 
 /** The rect the interface leg occupies in the frame: the leg at half scale, centred on `slot`. */

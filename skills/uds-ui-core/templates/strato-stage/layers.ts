@@ -21,7 +21,7 @@ export type StageInput = {
   metrics?: StageMetrics;
   /** Path for `staticFile()`: the character cutout. */
   srcs: { character: string };
-  /** The interface leg (its canvas, `interfaceLegDims`), mounted at half scale on its slot. */
+  /** The interface leg (the canvas the moderator rendered it at), mounted at half scale on its slot. */
   iface?: { kind: InterfaceKind; legW: number; legH: number };
 };
 

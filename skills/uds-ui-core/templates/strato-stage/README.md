@@ -7,7 +7,7 @@ that one places a floating prompt over a photo, this one owns the whole stage.
 
 | File | What it is |
 |---|---|
-| `geometry.ts` | The pure numbers: the Figma visual frame, the fit into the canvas, the character anchor, the interface slots. |
+| `geometry.ts` | The pure numbers: the Figma visual frame, the fit into the canvas, the character anchor, the interface slots, the interface leg sizes (mirrors of the moderator's). |
 | `motion.ts` | The option-B motion as pure functions of time (`layerMotion`), the timeline, `FPS`. |
 | `layers.ts` | `buildStageLayers(input, tMs)`: geometry + motion in canvas px, bottom to top. Pure. |
 | `styles.ts` | `layerStyle(layer)`, `interfaceLegStyle(rect, leg)`: the inline styles of the layers. Pure (a React type only). |
@@ -32,7 +32,7 @@ enforced tree-wide by `product-pop-out/__tests__/importSpecifiers.test.ts`).
 | `safeArea` | `{ right, bottom }` | Transparent margin as canvas fractions; `{ right: 0.32, bottom: 0.22 }` as product-pop-out. Default: none |
 | `metrics` | `StageMetrics` | Measured alpha bbox of the character cutout (the moderator's `CutoutMetrics`). Default: `DEFAULT_METRICS`, a plausible 3:4 portrait, not a Figma measurement |
 | `srcs` | `{ character }` | `staticFile()` path of the character cutout |
-| `iface` | `{ kind, legW, legH }` | Omit for no interface. `kind` is `'live-app'` or `'feature-highlight'`; `legW` x `legH` is the interface leg's canvas (`interfaceLegDims`) |
+| `iface` | `{ kind, legW, legH }` | Omit for no interface. `kind` is `'live-app'` or `'feature-highlight'`; `legW` x `legH` is the canvas the interface leg was rendered at, as the moderator requested it (see "Interface leg sizes") |
 | `interfaceNode` | `ReactNode` | The interface content, laid out at `legW` x `legH` CSS px. With `iface` but no node, nothing is painted for it |
 | `interfaceDurationInFrames` | `number` | The interface's own length in frames, what its own composition had (90 for its 3 s), for a still leg too. Inside the node `useVideoConfig().durationInFrames` is this in every phase. Must not exceed the stage's own length (120 / 150) |
 | `interfaceMotion` | `'still'` \| `'animated'` | How the interface leg was rendered. Default `'animated'`. See "The interface layer" |
@@ -61,10 +61,43 @@ frame); only `fitStage` knows the canvas.
 | `safeArea` `{ right: 0.32, bottom: 0.22 }` | as `product-pop-out` |
 | Motion curves, offsets (0.28 x 610, 0.043 x 610) | the picked mockup `stage-b-transparent.html`, option B; the timings are the 2026-11-03 amendment (controller's call) |
 | `DEFAULT_METRICS`, the `live-app` slot | **not Figma**: see the note below |
+| `STRATO_SIMPLE_ASPECT` 4.8404 | `STRATO_SIMPLE.aspect` of `product-pop-out/promptWindow.strato.tsx` (`587:6992`, 455 x 94), mirrored, not imported (see "Interface leg sizes") |
+| `PROMPT_WINDOW_GLOW_PAD_OF_W` 0.3 | not Figma: the room the pill's glow needs (`STRATO_SIMPLE.glowBlurOfW` 0.13, see "Interface leg sizes") |
 
-The interface leg is 2x its slot, raised to 320 x 180, never with both sides at or under 512, and
-capped at 1920 x 1080 (`interfaceLegDims`). The composite mounts it at half scale centred on the
-slot (`interfaceMountRect`), nudged below the face-safe band when it would cover the face.
+## Interface leg sizes
+
+Only the moderator decides how big an interface leg is: it requests the leg at that size and sends
+the same `legW` x `legH` to `/compose` (src/orchestrate/stagePayloads.ts). The template never computes
+it; `interfaceLegDims` and `promptWindowLeg` here are MIRRORS of the moderator's rule, kept to
+document and test it (the moderator's tests import this file and assert the two agree). Whatever
+the size, the composite mounts the leg at half scale centred on the slot (`interfaceMountRect`),
+nudged below the face-safe band when it would cover the face.
+
+| Interface | Leg canvas | Rule |
+|---|---|---|
+| `live-app`, and `feature-highlight` that is not the AI prompt | 2x the slot (`feature-highlight` 769 x 180, `live-app` 760 x 570) | `interfaceLegDims` |
+| `feature-highlight` that IS the AI prompt (moderator: `ai: true`, illustration mode) | 1231 x 621: the pill 769 x 158.87 plus a 231 px pad on every side | `promptWindowLeg` |
+
+Clamps, for every leg: raised to 320 x 180, never with both sides at or under 512 (then the long
+side becomes 513), capped at 1920 x 1080 (agent-svc's canvas range and small-format band).
+
+The AI prompt leg's canvas IS the floating STRATO `prompt-simple` PromptWindow (Figma `663:9864`:
+the pill over the character's chest): one pill 2x the slot wide (`width` 769) at its own aspect
+(`STRATO_SIMPLE_ASPECT`, height 769 / 4.8404), centred, with `left` 231 and `bottom` 231.06 (the
+literal props the moderator sends agent-svc as `stagePromptWindow`). Why the pad: the pill's glow
+is the pill itself blurred by 0.13 x its width (100 px at 769; `STRATO_SIMPLE.glowBlurOfW`), and
+grows to 1.06x at the send pulse, while the stage clips the leg to its canvas
+(`interfaceLegStyle`). A canvas the size of the pill would cut the glow off in a hard edge; 0.3 x
+the width (231 px, ~2.3 blur radii) leaves it to fade out. Because the pill is centred, the
+half-scale mount puts it on the slot: 90.3, 384.5 wide vs the slot's 90.2, 384.7, and 79.44 tall
+vs 78.3, the difference between the pill's aspect and the slot's, centred on the slot
+(`geometry.test.ts`). Over 1920 x 1080 the pill and its pad shrink together; under the minimum or
+in the small band only the canvas grows around the pill: it stays centred either way.
+
+`STRATO_SIMPLE_ASPECT` is mirrored, not imported: agent-svc copies this directory alone into the
+compose workspace (`src/uds/strato-stage/`, while product-pop-out lands flat in `src/uds/`), so an
+import of `../product-pop-out/...` cannot resolve there (`selfContained.test.ts` fails on one);
+`geometry.test.ts` asserts it equals `STRATO_SIMPLE.aspect`.
 
 ## Motion
 
