@@ -170,7 +170,7 @@ function fitLegCanvas(w0: number, h0: number): { w: number; h: number } {
 
 /**
  * Canvas size of the interface leg: 2x the slot, raised to 320 x 180, capped at 1920 x 1080,
- * and never with both sides <= 512 (image-svc's small-format band): then scaled up so the long
+ * and never with both sides <= 512 (agent-svc's small-format band): then scaled up so the long
  * side is 513. The composite mounts it at half scale, centred on the slot.
  * MIRROR: the moderator's `legDimsForSlot` (src/orchestrate/stagePayloads.ts) decides the size the
  * leg is actually requested at; this copy documents and tests the rule. Change both.
@@ -218,12 +218,18 @@ export type PromptWindowLeg = {
  * MIRROR: the moderator's `promptWindowLeg` (src/orchestrate/stagePayloads.ts). Change both.
  */
 export function promptWindowLeg(slot: { w: number; h: number }): PromptWindowLeg {
+  if (!(Number.isFinite(slot.w) && Number.isFinite(slot.h) && slot.h > 0 && Math.round(2 * slot.w) >= 1)) {
+    throw new RangeError(
+      `promptWindowLeg: the slot needs a finite, positive width and height and room for a pill at least 1 px wide; got ${slot.w} x ${slot.h}`,
+    );
+  }
   const padded = (pw: number): { w: number; h: number } => {
     const pad = Math.round(PROMPT_WINDOW_GLOW_PAD_OF_W * pw);
     return { w: pw + 2 * pad, h: Math.round(pw / STRATO_SIMPLE_ASPECT + 2 * pad) };
   };
   // Both sides of the padded canvas only grow with the pill, so walking down finds the largest fit.
-  let pw = Math.round(2 * slot.w);
+  // A pill as wide as the cap already overflows it, so the walk starts there (fewer than 720 steps).
+  let pw = Math.min(Math.round(2 * slot.w), LEG_MAX.w);
   while (padded(pw).w > LEG_MAX.w || padded(pw).h > LEG_MAX.h) pw -= 1;
   const natural = padded(pw);
   const canvas = fitLegCanvas(natural.w, natural.h); // within the cap now, so it can only grow

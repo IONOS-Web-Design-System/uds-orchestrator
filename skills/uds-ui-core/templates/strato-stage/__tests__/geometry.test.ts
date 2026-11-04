@@ -144,4 +144,23 @@ describe('strato-stage prompt-window leg', () => {
   it('the slot height plays no part: the pill height comes from its own aspect', () => {
     expect(promptWindowLeg({ w: FH.w, h: 1 })).toEqual(promptWindowLeg(FH));
   });
+
+  it('rejects a slot it cannot draw a pill for: non-finite or non-positive sizes, or a pill under 1 px', () => {
+    // Infinity last: before R37 the cap walk never ended on it.
+    const bad = [
+      { w: 0, h: 50 }, { w: -1, h: 50 }, { w: NaN, h: 50 }, { w: 0.2, h: 50 },
+      { w: 100, h: 0 }, { w: 100, h: -5 }, { w: 100, h: NaN }, { w: 100, h: Infinity }, { w: Infinity, h: 50 },
+    ];
+    for (const slot of bad) {
+      expect(() => promptWindowLeg(slot), JSON.stringify(slot)).toThrow(RangeError);
+      expect(() => promptWindowLeg(slot)).toThrow(/promptWindowLeg: the slot needs/);
+    }
+    // The smallest slot that draws a 1 px pill is accepted.
+    expect(promptWindowLeg({ w: 0.25, h: 50 }).promptWindow.width).toBe(1);
+  });
+
+  it('the cap walk is bounded: a huge slot width gives the capped leg at once', () => {
+    expect(promptWindowLeg({ w: 1e12, h: 50 })).toEqual(promptWindowLeg({ w: 700, h: 100 }));
+    expect(promptWindowLeg({ w: 1e12, h: 50 }).canvas).toEqual({ w: 1920, h: 968 });
+  });
 });
