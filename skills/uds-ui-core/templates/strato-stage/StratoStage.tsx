@@ -8,7 +8,9 @@
  * EXTERNAL: the caller supplies the canvas and `safeArea`; this decides where things land in it.
  *
  * Only DOM and `<Img>` are rendered (no canvas, WebGL or video), so a later SVG capture of the
- * DOM sees every layer. The root is transparent; the layers are clipped to the content box.
+ * DOM sees every layer. The root is transparent. The character is never cut but by the canvas
+ * (and, below the waist, by the bottom edge: `placeStage`, `stageRootStyle`); the interface is cut
+ * by its own leg canvas (`interfaceLegStyle`), then by the canvas.
  *
  * Import specifiers carry NO file extension (see geometry.ts).
  */
@@ -17,7 +19,7 @@ import { AbsoluteFill, Freeze, Img, Sequence, staticFile, useCurrentFrame, useVi
 import { fitStage } from './geometry';
 import { buildStageLayers, type StageInput } from './layers';
 import { INTERFACE_ANIM_START_MS, interfacePhase, msToFrame, type InterfaceMotion } from './motion';
-import { interfaceLegStyle, layerStyle } from './styles';
+import { interfaceLegStyle, layerStyle, stageRootStyle } from './styles';
 
 export type StratoStageProps = StageInput & {
   /** The interface content, rendered at its leg's own size (`iface.legW` x `iface.legH` CSS px). */
@@ -83,7 +85,7 @@ export const StratoStage: FC<StratoStageProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
-      <div style={{ position: 'absolute', left: content.x, top: content.y, width: content.w, height: content.h, overflow: 'hidden' }}>
+      <div style={stageRootStyle(input.canvas, content)}>
         {layers.map((l) => {
           if (l.id !== 'interface') {
             return <Img key={l.id} src={staticFile(l.src!)} style={layerStyle(l)} />;

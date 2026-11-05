@@ -7,10 +7,10 @@ that one places a floating prompt over a photo, this one owns the whole stage.
 
 | File | What it is |
 |---|---|
-| `geometry.ts` | The pure numbers: the Figma visual frame, the fit into the canvas, the character anchor, the interface slots, the interface leg sizes (mirrors of the moderator's). |
+| `geometry.ts` | The pure numbers: the Figma visual frame, the fit into the canvas, the character anchor, the placement on the canvas (`placeStage`), the interface slots, the interface leg sizes (mirrors of the moderator's). |
 | `motion.ts` | The option-B motion as pure functions of time (`layerMotion`), the timeline, `FPS`. |
 | `layers.ts` | `buildStageLayers(input, tMs)`: geometry + motion in canvas px, bottom to top. Pure. |
-| `styles.ts` | `layerStyle(layer)`, `interfaceLegStyle(rect, leg)`: the inline styles of the layers. Pure (a React type only). |
+| `styles.ts` | `stageRootStyle(canvas, content)`, `layerStyle(layer)`, `interfaceLegStyle(rect, leg)`: the inline styles of the root and the layers. Pure (a React type only). |
 | `StratoStage.tsx` | The Remotion component: maps the layer list onto `<Img>`s and mounts the interface. |
 
 None of the first four imports the DOM or `remotion` (`styles.ts` imports one React type), so they
@@ -29,23 +29,79 @@ enforced tree-wide by `product-pop-out/__tests__/importSpecifiers.test.ts`).
 | Prop | Type | Notes |
 |---|---|---|
 | `canvas` | `{ w, h }` | The caller's `dimensions` (hybrid range 320-2048 x 256-2048) |
-| `safeArea` | `{ right, bottom }` | Transparent margin as canvas fractions; `{ right: 0.32, bottom: 0.22 }` as product-pop-out. Default: none |
-| `metrics` | `StageMetrics` | Measured alpha bbox of the character cutout (the moderator's `CutoutMetrics`). Default: `DEFAULT_METRICS`, a plausible 3:4 portrait, not a Figma measurement |
+| `safeArea` | `{ right, bottom }` | Transparent margin as canvas fractions. The moderator's `STRATO_STAGE` pattern sends `{ right: 0.16, bottom: 0 }` (see "Placement"). Default: none |
+| `metrics` | `StageMetrics` | Measured alpha bbox of the character cutout, plus its waist row `waistFrac` (the moderator's `CutoutMetrics`). Default: `DEFAULT_METRICS`, a plausible 3:4 portrait, not a Figma measurement. `waistFrac` is optional: without it the subject bbox is scaled as before |
 | `srcs` | `{ character }` | `staticFile()` path of the character cutout |
 | `iface` | `{ kind, legW, legH }` | Omit for no interface. `kind` is `'live-app'` or `'feature-highlight'`; `legW` x `legH` is the canvas the interface leg was rendered at, as the moderator requested it (see "Interface leg sizes") |
 | `interfaceNode` | `ReactNode` | The interface content, laid out at `legW` x `legH` CSS px. With `iface` but no node, nothing is painted for it |
 | `interfaceDurationInFrames` | `number` | The interface's own length in frames, what its own composition had (90 for its 3 s), for a still leg too. Inside the node `useVideoConfig().durationInFrames` is this in every phase. Must not exceed the stage's own length (120 / 150) |
 | `interfaceMotion` | `'still'` \| `'animated'` | How the interface leg was rendered. Default `'animated'`. See "The interface layer" |
 
-The layers are clipped to the content box: the canvas minus the `safeArea` margin on the right and
-bottom. The 672 x 610 visual frame is fitted with contain into it, bottom-anchored and
-horizontally centred (`fitStage`). Paint order, bottom to top: `character`, then `interface`.
+The 672 x 610 visual frame is fitted with contain into the content box (the canvas minus the
+`safeArea` margin on the right and bottom), bottom-anchored and horizontally centred (`fitStage`).
+`placeStage` then places the character and the interface on the canvas (see "Placement"). Paint
+order, bottom to top: `character`, then `interface`.
 
 Every layer is styled `max-width: none; max-height: none` (`layerStyle`). The compose workspace
 imports Tailwind, whose preflight `img, video { max-width: 100%; height: auto; }` otherwise caps
 each `<Img>` at the content box's width: an inline `width` cannot beat `max-width`, so a wide
 cutout's character is squeezed or stretched. The character is also `object-fit: contain` at
 `50% 0`, so a cutout placed with `DEFAULT_METRICS` is letterboxed rather than stretched.
+
+## Placement
+
+Spec 2026-11-05 §4.1, decisions 1-4 (`uds-moderator/docs/superpowers/specs/2026-11-05-strato-stage-framing-svg-2k-design.md`).
+**Ruling R14 ("keep the safe area for now") is superseded on 2026-11-05.** `placeStage(input)`
+(geometry.ts) returns every rect in canvas px; `buildStageLayers` uses it as is.
+
+* **Margins live in the moderator pattern.** The template takes `safeArea` as given. The
+  moderator's `STRATO_STAGE` pattern sends `{ right: 0.16, bottom: 0 }`; it sent
+  `{ right: 0.32, bottom: 0.22 }` (product-pop-out's, which keeps it) before 2026-11-05. The frame's
+  fit scale into the content box is `s`.
+* **The waist rule.** `CHARACTER_ANCHOR.subjectHeight` (661) is head top to WAIST
+  (`metrics.waistFrac`, which the moderator measures off the alpha mask), not the subject bbox. The
+  waist then lands 22 + 661 - 610 = 73 visual units below the frame bottom: the bottom edge cuts
+  just above the waist and nothing below it is ever visible. Without `waistFrac` (a moderator older
+  than 2026-11-05), or with one at or above the head top, the whole subject bbox is 661 tall, as
+  before.
+* **Portrait growth.** The portraitness `p` is 0 while the content box is at least as wide as
+  672:610, 1 at 3:4 and narrower, linear between. The character scale is `c = lerp(s, c1, p)`, where
+  `c1 = 0.75 x content height / 588` puts the head top 25 % down the content height (the waist 73 c1
+  below its bottom). The head top sits at `content bottom - 588 c` and the centre x at
+  `originX + 480 s`; at `p = 0` that is exactly the Figma placement.
+* **Never clipped.** The character's measured extent (`leftFrac` / `rightFrac` / `headTopFrac`,
+  which include outstretched and raised arms) must lie inside the CANVAS: the right margin
+  positions the character, but an arm may reach into it. When it does not fit: if `p > 0`, slide it
+  inward by `p` x the shift that would fit it (when it is wider than the canvas, the shift to where
+  the least shrink fits it), so nothing jumps as `p` leaves 0; then shrink it about the centre of its
+  waist line until it fits, so the waist stays at or below the bottom edge. Landscape (`p = 0`)
+  keeps the Figma anchor and only shrinks. The top cannot cross: the head top is at
+  `originY + 22 s` at `p = 0` and 25 % down at `p = 1`, and shrinking about the waist only lowers it.
+  Never clipped beats every size and position target, the portrait "25 % down" included.
+* **The interface** keeps the frame's scale `s` (its landscape, width-fit size). Its centre keeps the
+  slot's offset from the character, per kind: `(character centre x - (480 - slot centre x) s,
+  head top + (slot centre y - 22) charScale)`, the slot from `interfaceSlot(kind, faceSafe)`. Then
+  it is clamped so the whole mounted leg lies inside the canvas.
+* **Clipping.** The character is cut by nothing but the canvas: the stage root
+  (`stageRootStyle`) is the canvas and clips nothing while `safeArea.bottom` is 0. With a bottom
+  margin (an older moderator) the root still cuts at the content bottom, as before, so nothing
+  below it shows, but never at the right margin. The interface is cut by its own leg canvas
+  (`interfaceLegStyle`), then by the canvas.
+* **At `p = 0`** every rect equals the pre-2026-11-05 layout (`fitStage` + the visual rect) except
+  where that layout was clipped: a pose too wide for the canvas shrinks, and a leg that would cross
+  the canvas edge moves inside (the AI prompt leg's glow pad, 31 px past the left edge at
+  1280 x 960, moves in by those 31 px).
+
+| Canvas (`{ 0.16, 0 }`) | `p` | `s` | Narrow pose: scale, head top | Pose 2 %-99 % wide: scale, head top |
+|---|---|---|---|---|
+| 1280 x 960 | 0 | 1.574 | 1.574, 34.6 | 1.180, 295.0 (shrunk) |
+| 1600 x 900 | 0 | 1.475 | 1.475, 32.5 | 1.475, 32.5 |
+| 1024 x 1024 | 0.744 | 1.280 | 1.299, 259.9 | 1.111, 384.3 (slid, shrunk) |
+| 1536 x 2048 | 1 | 1.920 | 2.612, 512.0 | 1.757, 1077.5 (slid, shrunk) |
+| 2048 x 2048 | 0.744 | 2.560 | 2.599, 519.9 | 2.222, 768.7 (slid, shrunk) |
+
+(The poses are the test fixtures in `geometry.test.ts`: head top 0.05 or 0, waist 0.55, of a
+1536 x 2048 cutout.)
 
 ## Where every number came from
 
@@ -58,7 +114,9 @@ frame); only `fitStage` knows the canvas.
 | Character anchor: head top 22, subject 661 tall, centre x 480 | `663:8787` (the character, waist-cropped) |
 | `feature-highlight` slot (90.2, 328.3, 384.7 x 78.3) | `663:9895`, the prompt slot inside `663:9864` (the stage with an AI prompt over the character) |
 | Face-safe band (0.34 x 610 tall, 0.02 x 672 pad) | the moderator's `popOutGeometry.ts` (`FACE_SAFE_H`, `FACE_SAFE_PAD`) applied to this frame |
-| `safeArea` `{ right: 0.32, bottom: 0.22 }` | as `product-pop-out` |
+| `safeArea` `{ right: 0.16, bottom: 0 }` (sent by the moderator) | spec 2026-11-05 decision 1 (mockup option C); it was `{ right: 0.32, bottom: 0.22 }` as `product-pop-out` (R14, superseded 2026-11-05) |
+| The waist 73 below the frame bottom | 22 + 661 - 610: the waist-cropped character of `663:8787` |
+| Portrait: 3:4, head top 25 % down | spec 2026-11-05 decision 4 (mockup B); the blend between 672:610 and 3:4 is the builder's call (linear) |
 | Motion curves, offsets (0.28 x 610, 0.043 x 610) | the picked mockup `stage-b-transparent.html`, option B; the timings are the 2026-11-03 amendment (controller's call) |
 | `DEFAULT_METRICS`, the `live-app` slot | **not Figma**: see the note below |
 | `STRATO_SIMPLE_ASPECT` 4.8404 | `STRATO_SIMPLE.aspect` of `product-pop-out/promptWindow.strato.tsx` (`587:6992`, 455 x 94), mirrored, not imported (see "Interface leg sizes") |
@@ -71,7 +129,8 @@ the same `legW` x `legH` to `/compose` (src/orchestrate/stagePayloads.ts). The t
 it; `interfaceLegDims` and `promptWindowLeg` here are MIRRORS of the moderator's rule, kept to
 document and test it (the moderator's tests import this file and assert the two agree). Whatever
 the size, the composite mounts the leg at half scale centred on the slot (`interfaceMountRect`),
-nudged below the face-safe band when it would cover the face.
+nudged below the face-safe band when it would cover the face, and `placeStage` keeps it at the
+slot's offset from the character (see "Placement").
 
 | Interface | Leg canvas | Rule |
 |---|---|---|

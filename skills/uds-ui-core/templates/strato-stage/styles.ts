@@ -9,7 +9,21 @@ import type { Rect } from './geometry';
 import type { StageLayer } from './layers';
 
 /**
- * One placed layer: its rect (canvas px, relative to the content box), its motion transform
+ * The box StratoStage mounts its layers in: the canvas, from its top-left. While the content box
+ * reaches the canvas bottom (the STRATO stage's `safeArea.bottom` is 0, spec 2026-11-05 §4.1) it
+ * clips nothing: the character is clipped by nothing but the canvas, and the right margin only
+ * positions it (an outstretched arm may reach into it). With a bottom margin (a moderator older
+ * than 2026-11-05 sends 0.22) it cuts at the content bottom, as before, so nothing below that line
+ * shows, and still never at the right margin.
+ */
+export function stageRootStyle(canvas: { w: number; h: number }, content: Rect): CSSProperties {
+  const height = content.y + content.h;
+  const root: CSSProperties = { position: 'absolute', left: 0, top: 0, width: canvas.w, height };
+  return height < canvas.h ? { ...root, overflow: 'hidden' } : root;
+}
+
+/**
+ * One placed layer: its rect (canvas px), its motion transform
  * about the rect's centre, its opacity.
  *
  * `maxWidth` / `maxHeight: 'none'` are load-bearing. The compose workspace's `src/index.css`

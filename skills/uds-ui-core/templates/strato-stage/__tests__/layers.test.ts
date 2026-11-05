@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { buildStageLayers } from '../layers';
-import { DEFAULT_METRICS, characterRect, fitStage } from '../geometry';
+import { DEFAULT_METRICS, characterRect, fitStage, placeStage, type StageMetrics } from '../geometry';
 
 // layers.test.ts — the pure layer list StratoStage maps onto <Img>s
 describe('strato-stage layers', () => {
@@ -25,5 +25,28 @@ describe('strato-stage layers', () => {
     const a = buildStageLayers(base, 2000)[0];
     const b = buildStageLayers({ ...base, metrics: DEFAULT_METRICS }, 2000)[0];
     expect(a.rect).toEqual(b.rect);
+  });
+  it('every rect comes from placeStage, bottom to top: the character, then the interface', () => {
+    const SA = { right: 0.16, bottom: 0 };
+    const srcs = { character: 'c.png' };
+    const NARROW: StageMetrics = {
+      headTopFrac: 0.05, waistFrac: 0.55, leftFrac: 0.3, rightFrac: 0.7, subjectHeightFrac: 0.9, bottomFrac: 0.95,
+      centerXFrac: 0.5, upperBodyLeftFrac: 0.3, upperBodyRightFrac: 0.7, imgW: 1536, imgH: 2048,
+    };
+    const WIDE: StageMetrics = { ...NARROW, leftFrac: 0.02, rightFrac: 0.99, headTopFrac: 0, subjectHeightFrac: 0.95, centerXFrac: 0.505 };
+    const cases = [
+      { canvas: { w: 1280, h: 960 }, safeArea: SA, srcs, iface: { kind: 'feature-highlight' as const, legW: 1231, legH: 621 } },
+      { canvas: { w: 1536, h: 2048 }, safeArea: SA, metrics: NARROW, srcs, iface: { kind: 'feature-highlight' as const, legW: 769, legH: 180 } },
+      { canvas: { w: 1024, h: 1024 }, safeArea: SA, metrics: WIDE, srcs, iface: { kind: 'live-app' as const, legW: 760, legH: 570 } },
+    ];
+    for (const input of cases) {
+      const pl = placeStage(input);
+      const layers = buildStageLayers(input, 2000);
+      expect(layers.map((l) => l.id)).toEqual(['character', 'interface']);
+      expect(layers[0].rect).toEqual(pl.character);
+      expect(layers[1].rect).toEqual(pl.iface);
+      const { iface: _none, ...bare } = input;
+      expect(buildStageLayers(bare, 2000).map((l) => l.rect)).toEqual([placeStage(bare).character]);
+    }
   });
 });
