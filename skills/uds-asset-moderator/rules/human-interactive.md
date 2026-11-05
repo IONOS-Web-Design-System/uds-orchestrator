@@ -40,8 +40,8 @@ catalog asset), an optional `role` (`screen-content | reconstruct | style | keyf
 auto-classify), and an optional `note` (free-text intent, e.g. "the dashboard on the laptop
 screen"). Order matters. Cap 12. Keep links out of the `brief` text.
 
-**Dimension ranges by mode:** image 256–2048 × 256–2048; illustration 320–1920 × 180–1080;
-hybrid is the intersection 320–1920 × 256–1080.
+**Dimension ranges by mode:** image 256–2048 × 256–2048; illustration 320–2048 × 180–2048;
+hybrid is the intersection 320–2048 × 256–2048.
 
 **`module` (OPTIONAL, ≤64 chars):** set it only when the user names a specific downstream
 component the asset embeds into — `columns`, `customer_testimonial`, `textmedia`, or

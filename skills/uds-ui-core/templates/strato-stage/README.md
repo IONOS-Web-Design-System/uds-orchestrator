@@ -28,7 +28,7 @@ enforced tree-wide by `product-pop-out/__tests__/importSpecifiers.test.ts`).
 
 | Prop | Type | Notes |
 |---|---|---|
-| `canvas` | `{ w, h }` | The caller's `dimensions` (hybrid range 320-1920 x 256-1080) |
+| `canvas` | `{ w, h }` | The caller's `dimensions` (hybrid range 320-2048 x 256-2048) |
 | `safeArea` | `{ right, bottom }` | Transparent margin as canvas fractions; `{ right: 0.32, bottom: 0.22 }` as product-pop-out. Default: none |
 | `metrics` | `StageMetrics` | Measured alpha bbox of the character cutout (the moderator's `CutoutMetrics`). Default: `DEFAULT_METRICS`, a plausible 3:4 portrait, not a Figma measurement |
 | `srcs` | `{ character }` | `staticFile()` path of the character cutout |
