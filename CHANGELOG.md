@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.3.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.2.0...v3.3.0) (2026-11-05)
+
+
+### Features
+
+* **strato-stage:** Figma-sourced stage geometry, fit and interface slots ([2bab03c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/2bab03c3d981606169916a808f4e655fead1c3c8))
+* **strato-stage:** option-B motion, layer list and StratoStage component ([5b05611](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/5b05611c2b97be5f5db23efbc27d7a471f069e6d))
+* **strato-stage:** prompt-window leg canvas with glow room ([93024f6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/93024f62f8e2563779f0827c2cb49976f707ddcb))
+
+
+### Bug Fixes
+
+* **ai-animations:** the AI CTA template follows KIT.md (glow resting, loading + loadingSince) ([93c6c12](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/93c6c12b3d4db579076c15f51053e8d35fb70250))
+* **strato-stage:** bound the prompt-window walk, reject bad slots, resolve escaping imports (R37) ([1d13b24](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1d13b24cdd09a4fc9baf80a65e83a117755c075f))
+* **strato-stage:** clip the interface to its leg canvas ([ac96a21](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ac96a212b34dd95cd5f21b8bd180c38a7a9d0768))
+* **strato-stage:** escape Tailwind preflight; one stable interface tree with still/animated phases ([c032d7d](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/c032d7d4ebf7c70a29ede75aae392ad18d0c7cba))
+* **strato:** logo rule for the unpadded UDS 0.43 brandmarks ([ead9c72](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ead9c72d732ff7f5a2d236ecd8fe7b2f4f232785))
+* **strato:** name the wordmark/cube SVGs, bump templates to UDS icon 0.43 ([31c1cc4](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/31c1cc41c4994950581e94e39c7f7ae220679d0b))
+
+
+### Documentation
+
+* **strato-stage:** correct the frozen-tree rationale ([d7f4de1](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d7f4de11b5534779872420da058edd9b4861f6a7))
+
+
+### Code Refactoring
+
+* **strato-stage:** two layers — character + floating interface ([de8dcfe](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/de8dcfe0a09f55d83c975221a39031dafde8bfd5))
+
 ## [3.2.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.1.0...v3.2.0) (2026-10-26)
 
 
