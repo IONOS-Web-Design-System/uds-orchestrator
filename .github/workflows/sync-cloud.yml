@@ -1,6 +1,6 @@
-# Cloud skills sync — push-based, github-hosted. Companion to sync-sideload.yml
-# (self-hosted, sandbox targets, retained). The cloud moderator is public; the two
-# generators are private and reached by SSH ProxyJump THROUGH the moderator. Each VM
+# Cloud skills sync — push-based, github-hosted. The only skills sync: the self-hosted
+# sandbox syncs (sync-sideload, sync-to-pipeline-host) are retired. The cloud moderator is
+# public; the two generators are private and reached by SSH ProxyJump THROUGH the moderator. Each VM
 # bind-mounts ~/pipeline/uds-orchestrator read-only into the service container.
 # Clear-in-place keeps the bind-mount dir inode stable.
 name: sync-cloud
