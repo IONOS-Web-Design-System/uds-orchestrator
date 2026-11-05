@@ -214,6 +214,21 @@ describe('strato-stage placement (placeStage)', () => {
   };
   const slotOf = (leg: Leg, m: StageMetrics) => interfaceSlot(leg.kind, faceSafeRect(m));
   const mountOf = (leg: Leg, m: StageMetrics) => interfaceMountRect(slotOf(leg, m), { w: leg.legW, h: leg.legH });
+  /** The visible content of a placed leg (canvas px): for the AI prompt leg the pill, read off the
+   *  shipped PromptWindow props (bottom-anchored at left/bottom in leg px), else the whole leg. */
+  const visibleOf = (r: Rect, leg: Leg): Rect => {
+    if (leg !== AI) return r;
+    const pw = promptWindowLeg(INTERFACE_SLOTS['feature-highlight']);
+    const k = r.w / leg.legW;
+    const ph = pw.promptWindow.width / STRATO_SIMPLE_ASPECT;
+    return { x: r.x + pw.promptWindow.left * k, y: r.y + (leg.legH - pw.promptWindow.bottom - ph) * k, w: pw.promptWindow.width * k, h: ph * k };
+  };
+  const expectInside = (r: Rect, canvas: { w: number; h: number }, at: string) => {
+    expect(r.x, at).toBeGreaterThanOrEqual(-1e-9);
+    expect(r.y, at).toBeGreaterThanOrEqual(-1e-9);
+    expect(r.x + r.w, at).toBeLessThanOrEqual(canvas.w + 1e-9);
+    expect(r.y + r.h, at).toBeLessThanOrEqual(canvas.h + 1e-9);
+  };
 
   it('the AI leg fixture is the shipped promptWindowLeg canvas', () => {
     expect(promptWindowLeg(INTERFACE_SLOTS['feature-highlight']).canvas).toEqual({ w: AI.legW, h: AI.legH });
@@ -244,7 +259,7 @@ describe('strato-stage placement (placeStage)', () => {
     for (const canvas of [{ w: 1280, h: 960 }, { w: 1600, h: 900 }]) {
       const f = fitStage(canvas, SA);
       for (const m of [NARROW, DEFAULT_METRICS]) {
-        for (const leg of [HIGHLIGHT, LIVE_APP]) {
+        for (const leg of [HIGHLIGHT, AI, LIVE_APP]) {
           const pl = placeStage({ canvas, safeArea: SA, metrics: m, iface: leg });
           expect(pl.portraitness).toBe(0);
           expect(pl.charScale).toBeCloseTo(f.scale, 12);
@@ -264,14 +279,51 @@ describe('strato-stage placement (placeStage)', () => {
     expect(pl.iface).toBeNull();
   });
 
-  it('landscape: the AI prompt leg is today\'s rect, clamped inside only where its glow pad crosses the edge', () => {
-    const f = fitStage({ w: 1280, h: 960 }, SA);
-    const t = today(mountOf(AI, NARROW), f);
-    expect(t.x).toBeLessThan(-30); // the pad crosses the left edge by ~31 px (the content box clipped it before)
-    expectRect(placeStage({ canvas: { w: 1280, h: 960 }, safeArea: SA, metrics: NARROW, iface: AI }).iface, { ...t, x: 0 });
-    // At 1600x900 the frame is centred with room on the left: exactly today's.
-    const f2 = fitStage({ w: 1600, h: 900 }, SA);
-    expectRect(placeStage({ canvas: { w: 1600, h: 900 }, safeArea: SA, metrics: NARROW, iface: AI }).iface, today(mountOf(AI, NARROW), f2));
+  it('landscape: the AI prompt leg is exactly today\'s; its glow pad may cross the edge as before, its pill is inside', () => {
+    for (const canvas of [{ w: 1280, h: 960 }, { w: 1600, h: 900 }]) {
+      const t = today(mountOf(AI, NARROW), fitStage(canvas, SA));
+      const r = placeStage({ canvas, safeArea: SA, metrics: NARROW, iface: AI }).iface!;
+      expectRect(r, t);
+      expect(Math.abs(r.x - t.x) + Math.abs(r.y - t.y)).toBeLessThanOrEqual(1); // the ruling's +-1 px, as a sum
+      expectInside(visibleOf(r, AI), canvas, `${canvas.w}x${canvas.h} pill`);
+    }
+    // At 1280x960 the transparent pad runs ~31 px past the left edge (the content box cut it before).
+    expect(today(mountOf(AI, NARROW), fitStage({ w: 1280, h: 960 }, SA)).x).toBeLessThan(-30);
+  });
+
+  it('the visible interface is clamped inside the canvas, not the AI prompt leg\'s glow pad', () => {
+    // A card (live-app: the mount is the slot) beside a wide pose slid to the centre: the rule puts
+    // it past the left edge, so it is clamped to touch the edge; its height follows the rule.
+    {
+      const canvas = { w: 1536, h: 2048 };
+      const f = fitStage(canvas, SA);
+      const pl = placeStage({ canvas, safeArea: SA, metrics: WIDE, iface: LIVE_APP });
+      const e = extent(pl.character, WIDE);
+      const slot = slotOf(LIVE_APP, WIDE);
+      const w = (LIVE_APP.legW / 2) * f.scale;
+      const h = (LIVE_APP.legH / 2) * f.scale;
+      const cx = e.centreX - (480 - (slot.x + slot.w / 2)) * f.scale;
+      const cy = e.top + (slot.y + slot.h / 2 - 22) * pl.charScale;
+      expect(cx - w / 2).toBeLessThan(-50); // the guard can fail: unclamped it crosses (-76.8)
+      expectRect(pl.iface, { x: 0, y: cy - h / 2, w, h });
+    }
+    // The AI prompt leg with no right margin (s = W / 672): the rule puts the PILL past the left
+    // edge. The pill is clamped to touch it; the leg runs past it by exactly its glow pad.
+    {
+      const canvas = { w: 1536, h: 2048 };
+      const sa = { right: 0, bottom: 0 };
+      const s = fitStage(canvas, sa).scale;
+      const pl = placeStage({ canvas, safeArea: sa, metrics: WIDE, iface: AI });
+      const e = extent(pl.character, WIDE);
+      const pw = promptWindowLeg(INTERFACE_SLOTS['feature-highlight']);
+      const pillW = (pw.promptWindow.width / 2) * s;
+      const cx = e.centreX - (480 - (slotOf(AI, WIDE).x + slotOf(AI, WIDE).w / 2)) * s;
+      expect(cx - pillW / 2).toBeLessThan(-100); // the guard can fail: unclamped the pill crosses (-122.8)
+      const pill = visibleOf(pl.iface!, AI);
+      expect(pill.x).toBeCloseTo(0, 9);
+      expect(pl.iface!.x).toBeCloseTo(-(pw.promptWindow.left / 2) * s, 9); // the pad, 231 leg px at half scale
+      expect(pl.iface!.w).toBeCloseTo((AI.legW / 2) * s, 9);
+    }
   });
 
   it('portrait 1536x2048: p = 1, head top 25 % down (512 +- 20), waist below the bottom edge, interface at the width-fit scale', () => {
@@ -279,7 +331,7 @@ describe('strato-stage placement (placeStage)', () => {
     const { f, p, x0 } = rules(canvas);
     expect(p).toBe(1); // content 1290.24 x 2048 is narrower than 3:4
     const c1 = (0.75 * 2048) / 588; // 2.612, grown from the width-fit 1.92
-    for (const leg of [HIGHLIGHT, LIVE_APP]) {
+    for (const leg of [HIGHLIGHT, AI, LIVE_APP]) {
       const pl = placeStage({ canvas, safeArea: SA, metrics: NARROW, iface: leg });
       expect(pl.portraitness).toBe(1);
       expect(pl.charScale).toBeCloseTo(c1, 12);
@@ -421,16 +473,12 @@ describe('strato-stage placement (placeStage)', () => {
     expect(r.y + r.h).toBeLessThanOrEqual(960 + 1e-9);
   });
 
-  it('the interface stays inside the canvas for every case above', () => {
+  it('the visible interface (the card, or the AI prompt\'s pill) stays inside the canvas for every case above', () => {
     for (const canvas of [...CANVASES, ...SWEEP]) {
       for (const m of [NARROW, WIDE, DEFAULT_METRICS]) {
         for (const leg of [HIGHLIGHT, AI, LIVE_APP]) {
           const r = placeStage({ canvas, safeArea: SA, metrics: m, iface: leg }).iface!;
-          const at = `${canvas.w}x${canvas.h} ${leg.legW}x${leg.legH}`;
-          expect(r.x, at).toBeGreaterThanOrEqual(0);
-          expect(r.y, at).toBeGreaterThanOrEqual(0);
-          expect(r.x + r.w, at).toBeLessThanOrEqual(canvas.w + 1e-9);
-          expect(r.y + r.h, at).toBeLessThanOrEqual(canvas.h + 1e-9);
+          expectInside(visibleOf(r, leg), canvas, `${canvas.w}x${canvas.h} ${leg.legW}x${leg.legH}`);
         }
       }
     }

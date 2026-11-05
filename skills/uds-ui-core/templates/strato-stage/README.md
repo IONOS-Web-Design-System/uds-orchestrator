@@ -81,16 +81,20 @@ Spec 2026-11-05 §4.1, decisions 1-4 (`uds-moderator/docs/superpowers/specs/2026
 * **The interface** keeps the frame's scale `s` (its landscape, width-fit size). Its centre keeps the
   slot's offset from the character, per kind: `(character centre x - (480 - slot centre x) s,
   head top + (slot centre y - 22) charScale)`, the slot from `interfaceSlot(kind, faceSafe)`. Then
-  it is clamped so the whole mounted leg lies inside the canvas.
+  it is clamped so its VISIBLE part lies inside the canvas: the card (a `live-app` or
+  `feature-highlight` leg, whose mount is the slot), or for the AI prompt leg (its canvas is
+  `promptWindowLeg(slot).canvas`) the pill. The AI prompt leg's transparent glow pad (edge alpha
+  at most 4/255) may run past the canvas edge, as it always could (controller ruling, 2026-11-05).
 * **Clipping.** The character is cut by nothing but the canvas: the stage root
   (`stageRootStyle`) is the canvas and clips nothing while `safeArea.bottom` is 0. With a bottom
   margin (an older moderator) the root still cuts at the content bottom, as before, so nothing
   below it shows, but never at the right margin. The interface is cut by its own leg canvas
   (`interfaceLegStyle`), then by the canvas.
 * **At `p = 0`** every rect equals the pre-2026-11-05 layout (`fitStage` + the visual rect) except
-  where that layout was clipped: a pose too wide for the canvas shrinks, and a leg that would cross
-  the canvas edge moves inside (the AI prompt leg's glow pad, 31 px past the left edge at
-  1280 x 960, moves in by those 31 px).
+  where that layout was clipped: a pose too wide for the canvas shrinks, and a card or pill that
+  would cross the canvas edge moves inside. The AI prompt leg is exactly where it was at 1280 x 960
+  and 1600 x 900: its pill is inside; its glow pad runs 31 px past the left edge at 1280 x 960, as
+  before.
 
 | Canvas (`{ 0.16, 0 }`) | `p` | `s` | Narrow pose: scale, head top | Pose 2 %-99 % wide: scale, head top |
 |---|---|---|---|---|

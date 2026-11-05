@@ -319,6 +319,23 @@ function fitShift(x: number, a: number, b: number, W: number): number {
   return 0;
 }
 
+/**
+ * The visible part of an interface leg mounted at half scale, in visual units; it shares the
+ * mount's centre. For the AI prompt leg (a `feature-highlight` leg whose canvas is
+ * `promptWindowLeg(slot).canvas`, the size the moderator requests it at) that is the pill: the
+ * glow pad around it is transparent (edge alpha <= 4/255) and is not content. For every other
+ * leg (a card) it is the whole mounted leg, which is the slot.
+ */
+function visibleInterfaceSize(kind: InterfaceKind, slot: Rect, leg: { w: number; h: number }): { w: number; h: number } {
+  if (kind === 'feature-highlight') {
+    const pw = promptWindowLeg(slot);
+    if (pw.canvas.w === leg.w && pw.canvas.h === leg.h) {
+      return { w: pw.promptWindow.width / 2, h: pw.promptWindow.width / STRATO_SIMPLE_ASPECT / 2 };
+    }
+  }
+  return { w: leg.w / 2, h: leg.h / 2 };
+}
+
 /** Centre `v` of a box `size` long, clamped so the box lies in `[0, extent]` (centred if it cannot). */
 const clampCentre = (v: number, size: number, extent: number): number =>
   size >= extent ? extent / 2 : clamp(v, size / 2, extent - size / 2);
@@ -341,11 +358,13 @@ const clampCentre = (v: number, size: number, extent: number): number =>
  * Interface. Its leg at half scale (`interfaceMountRect`) at the frame's scale `s`, its centre at
  * the slot's offset from the anchor: horizontally `(slotCentreX - 480) s` from the character's
  * centre, vertically `(slotCentreY - 22)` x the character's final scale below its head top (the
- * slot of `interfaceSlot(kind, faceSafe)`, per kind). Then clamped so the whole leg lies inside
- * the canvas.
+ * slot of `interfaceSlot(kind, faceSafe)`, per kind). Then clamped so its VISIBLE part lies inside
+ * the canvas (`visibleInterfaceSize`: the card, or the AI prompt's pill); the AI prompt leg's
+ * transparent glow pad may run past the edge, as it always could (controller ruling, 2026-11-05).
  *
- * At `p = 0`, with a pose that fits and a leg inside the canvas, every rect is exactly today's
- * (`fitStage` + the visual rect); the only differences are where today's would have been clipped.
+ * At `p = 0`, with a pose that fits and the visible interface inside the canvas, every rect is
+ * exactly today's (`fitStage` + the visual rect); the only differences are where today's would
+ * have been clipped.
  */
 export function placeStage(input: StagePlacementInput): StagePlacement {
   const { canvas } = input;
@@ -383,7 +402,8 @@ export function placeStage(input: StagePlacementInput): StagePlacement {
     const h = mount.h * s;
     const cx = x - (CHARACTER_ANCHOR.centerX - (slot.x + slot.w / 2)) * s;
     const cy = headTop + (slot.y + slot.h / 2 - CHARACTER_ANCHOR.headTopY) * charScale;
-    iface = { x: clampCentre(cx, w, canvas.w) - w / 2, y: clampCentre(cy, h, canvas.h) - h / 2, w, h };
+    const vis = visibleInterfaceSize(input.iface.kind, slot, { w: input.iface.legW, h: input.iface.legH });
+    iface = { x: clampCentre(cx, vis.w * s, canvas.w) - w / 2, y: clampCentre(cy, vis.h * s, canvas.h) - h / 2, w, h };
   }
   return { character, iface, portraitness: p, charScale, ifaceScale: s };
 }
