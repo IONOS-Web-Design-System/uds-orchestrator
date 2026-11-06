@@ -29,7 +29,7 @@ enforced tree-wide by `product-pop-out/__tests__/importSpecifiers.test.ts`).
 | Prop | Type | Notes |
 |---|---|---|
 | `canvas` | `{ w, h }` | The caller's `dimensions` (hybrid range 320-2048 x 256-2048) |
-| `safeArea` | `{ right, bottom }` | Transparent margin as canvas fractions. The moderator's `STRATO_STAGE` pattern sends `{ right: 0.16, bottom: 0 }` (see "Placement"). Default: none |
+| `safeArea` | `{ right, bottom }` | Transparent margin as canvas fractions. The moderator's `STRATO_STAGE` pattern sends `{ right: 0.16, bottom: 0.08 }` (see "Placement"). Default: none |
 | `metrics` | `StageMetrics` | Measured alpha bbox of the character cutout, plus its waist row `waistFrac` (the moderator's `CutoutMetrics`). Default: `DEFAULT_METRICS`, a plausible 3:4 portrait, not a Figma measurement. `waistFrac` is optional: without it the subject bbox is scaled as before |
 | `srcs` | `{ character }` | `staticFile()` path of the character cutout |
 | `iface` | `{ kind, legW, legH }` | Omit for no interface. `kind` is `'live-app'` or `'feature-highlight'`; `legW` x `legH` is the canvas the interface leg was rendered at, as the moderator requested it (see "Interface leg sizes") |
@@ -50,31 +50,36 @@ cutout's character is squeezed or stretched. The character is also `object-fit: 
 
 ## Placement
 
-Spec 2026-11-05 §4.1, decisions 1-4 (`uds-moderator/docs/superpowers/specs/2026-11-05-strato-stage-framing-svg-2k-design.md`).
+Spec 2026-11-05 §4.1, decisions 1-4 (`uds-moderator/docs/superpowers/specs/2026-11-05-strato-stage-framing-svg-2k-design.md`),
+amended by task C6 on 2026-11-06 (the 8 % bottom margin and the waist on it).
 **Ruling R14 ("keep the safe area for now") is superseded on 2026-11-05.** `placeStage(input)`
 (geometry.ts) returns every rect in canvas px; `buildStageLayers` uses it as is.
 
 * **Margins live in the moderator pattern.** The template takes `safeArea` as given. The
-  moderator's `STRATO_STAGE` pattern sends `{ right: 0.16, bottom: 0 }`; it sent
-  `{ right: 0.32, bottom: 0.22 }` (product-pop-out's, which keeps it) before 2026-11-05. The frame's
-  fit scale into the content box is `s`.
-* **The waist rule.** `CHARACTER_ANCHOR.subjectHeight` (661) is head top to WAIST
-  (`metrics.waistFrac`, which the moderator measures off the alpha mask), not the subject bbox. The
-  waist then lands 22 + 661 - 610 = 73 visual units below the frame bottom: the bottom edge cuts
-  just above the waist and nothing below it is ever visible. Without `waistFrac` (a moderator older
-  than 2026-11-05), or with one at or above the head top, the whole subject bbox is 661 tall, as
-  before.
+  moderator's `STRATO_STAGE` pattern sends `{ right: 0.16, bottom: 0.08 }` since 2026-11-06. **The
+  8 % bottom margin supersedes the 2026-11-05 rule of no bottom margin (`bottom: 0`).** Before
+  2026-11-05 it sent `{ right: 0.32, bottom: 0.22 }` (product-pop-out's, which keeps it). The
+  frame's fit scale into the content box is `s`.
+* **The waist rule.** Head top to WAIST (`metrics.waistFrac`, which the moderator measures off the
+  alpha mask) is `WAIST_SUBJECT_HEIGHT` = 610 - 22 = **588** visual units, so the waist lands
+  exactly on the frame bottom, i.e. on the content bottom: the 8 % margin line. The stage root cuts
+  there (see "Clipping"), so nothing below the waist is ever visible and the 8 % strip under it stays
+  empty. This supersedes the 2026-11-05 rule (661, the Figma's subject height, with the waist 73
+  units below the frame bottom): at the same scale the character is 588/661 the size (about 11 %
+  smaller) with the same head top, so less of it is cropped. Without `waistFrac` (a moderator older
+  than 2026-11-05), or with one at or above the head top, the whole subject bbox is 661 tall and its
+  bottom 73 units below the frame bottom, as before.
 * **Portrait growth.** The portraitness `p` is 0 while the content box is at least as wide as
   672:610, 1 at 3:4 and narrower, linear between. The character scale is `c = lerp(s, c1, p)`, where
-  `c1 = 0.75 x content height / 588` puts the head top 25 % down the content height (the waist 73 c1
-  below its bottom). The head top sits at `content bottom - 588 c` and the centre x at
+  `c1 = 0.75 x content height / 588` puts the head top 25 % down the content height (the waist on
+  its bottom). The head top sits at `content bottom - 588 c` and the centre x at
   `originX + 480 s`; at `p = 0` that is exactly the Figma placement.
 * **Never clipped.** The character's measured extent (`leftFrac` / `rightFrac` / `headTopFrac`,
   which include outstretched and raised arms) must lie inside the CANVAS: the right margin
   positions the character, but an arm may reach into it. When it does not fit: if `p > 0`, slide it
   inward by `p` x the shift that would fit it (when it is wider than the canvas, the shift to where
   the least shrink fits it), so nothing jumps as `p` leaves 0; then shrink it about the centre of its
-  waist line until it fits, so the waist stays at or below the bottom edge. Landscape (`p = 0`)
+  waist line until it fits, so the waist stays on the content bottom. Landscape (`p = 0`)
   keeps the Figma anchor and only shrinks. The top cannot cross: the head top is at
   `originY + 22 s` at `p = 0` and 25 % down at `p = 1`, and shrinking about the waist only lowers it.
   Never clipped beats every size and position target, the portrait "25 % down" included.
@@ -85,27 +90,31 @@ Spec 2026-11-05 §4.1, decisions 1-4 (`uds-moderator/docs/superpowers/specs/2026
   `feature-highlight` leg, whose mount is the slot), or for the AI prompt leg (its canvas is
   `promptWindowLeg(slot).canvas`) the pill. The AI prompt leg's transparent glow pad (edge alpha
   at most 4/255) may run past the canvas edge, as it always could (controller ruling, 2026-11-05).
-* **Clipping.** The character is cut by nothing but the canvas: the stage root
-  (`stageRootStyle`) is the canvas and clips nothing while `safeArea.bottom` is 0. With a bottom
-  margin (an older moderator) the root still cuts at the content bottom, as before, so nothing
-  below it shows, but never at the right margin. The interface is cut by its own leg canvas
-  (`interfaceLegStyle`), then by the canvas.
-* **At `p = 0`** every rect equals the pre-2026-11-05 layout (`fitStage` + the visual rect) except
-  where that layout was clipped: a pose too wide for the canvas shrinks, and a card or pill that
-  would cross the canvas edge moves inside. The AI prompt leg is exactly where it was at 1280 x 960
-  and 1600 x 900: its pill is inside; its glow pad runs 31 px past the left edge at 1280 x 960, as
-  before.
+* **Clipping.** The stage root (`stageRootStyle`) is the canvas from its top-left down to the
+  content bottom. With the 8 % bottom margin it cuts there: exactly at the waist, so nothing of the
+  character below the waist shows (the cutout itself runs on below it) and the strip stays empty.
+  It never cuts at the right margin. The character is otherwise cut by nothing but the canvas.
+  With no bottom margin the root clips nothing; an older moderator's 22 % is cut the same way. The
+  interface is cut by its own leg canvas (`interfaceLegStyle`), then by the canvas (its clamp is to
+  the canvas, not the content bottom; for the poses below it stays above the margin line).
+* **At `p = 0`** every interface rect equals the frame's fit (`fitStage` + `interfaceMountRect`),
+  and the character keeps the Figma head top (`originY + 22 s`) and centre at 588/661 the size of
+  the 2026-11-05 rule, its waist on the content bottom (without `waistFrac`: the subject bbox
+  exactly as before). The exceptions are where that would be clipped: a pose too wide for the
+  canvas shrinks, and a card or pill that would cross the canvas edge moves inside. The AI prompt
+  leg is exactly where the fit puts it at 1280 x 960, 1600 x 900 and 1280 x 1024: its pill is
+  inside; at 1280 x 1024 its glow pad runs 20 px past the left edge, as such a pad always could.
 
-| Canvas (`{ 0.16, 0 }`) | `p` | `s` | Narrow pose: scale, head top | Pose 2 %-99 % wide: scale, head top |
-|---|---|---|---|---|
-| 1280 x 960 | 0 | 1.574 | 1.574, 34.6 | 1.180, 295.0 (shrunk) |
-| 1600 x 900 | 0 | 1.475 | 1.475, 32.5 | 1.475, 32.5 |
-| 1024 x 1024 | 0.744 | 1.280 | 1.299, 259.9 | 1.111, 384.3 (slid, shrunk) |
-| 1536 x 2048 | 1 | 1.920 | 2.612, 512.0 | 1.757, 1077.5 (slid, shrunk) |
-| 2048 x 2048 | 0.744 | 2.560 | 2.599, 519.9 | 2.222, 768.7 (slid, shrunk) |
+| Canvas (`{ 0.16, 0.08 }`) | Content height | `p` | `s` | Narrow pose: scale, head top | Pose 2 %-99 % wide: scale, head top |
+|---|---|---|---|---|---|
+| 1280 x 960 | 883.2 | 0 | 1.448 | 1.448, 31.9 | 1.373, 75.9 (shrunk) |
+| 1600 x 900 | 828.0 | 0 | 1.357 | 1.357, 29.9 | 1.357, 29.9 |
+| 1024 x 1024 | 942.1 | 0.536 | 1.280 | 1.238, 214.2 | 1.152, 264.5 (slid, shrunk) |
+| 1536 x 2048 | 1884.2 | 1 | 1.920 | 2.403, 471.0 | 1.975, 722.9 (slid, shrunk) |
+| 2048 x 2048 | 1884.2 | 0.536 | 2.560 | 2.476, 428.3 | 2.305, 529.0 (slid, shrunk) |
 
-(The poses are the test fixtures in `geometry.test.ts`: head top 0.05 or 0, waist 0.55, of a
-1536 x 2048 cutout.)
+In every row both poses have the waist exactly on the content bottom. (The poses are the test
+fixtures in `geometry.test.ts`: head top 0.05 or 0, waist 0.55, of a 1536 x 2048 cutout.)
 
 ## Where every number came from
 
@@ -115,11 +124,11 @@ frame); only `fitStage` knows the canvas.
 | Value | Source |
 |---|---|
 | Visual frame 672 x 610 | component `663:4371` (`strato-stage-visual`), placed in `663:8787` as instance `I663:8787;8762:18733` |
-| Character anchor: head top 22, subject 661 tall, centre x 480 | `663:8787` (the character, waist-cropped) |
+| Character anchor: head top 22, subject 661 tall, centre x 480 | `663:8787` (the character, waist-cropped). Since 2026-11-06 the 661 sizes only a cutout with no measured waist |
 | `feature-highlight` slot (90.2, 328.3, 384.7 x 78.3) | `663:9895`, the prompt slot inside `663:9864` (the stage with an AI prompt over the character) |
 | Face-safe band (0.34 x 610 tall, 0.02 x 672 pad) | the moderator's `popOutGeometry.ts` (`FACE_SAFE_H`, `FACE_SAFE_PAD`) applied to this frame |
-| `safeArea` `{ right: 0.16, bottom: 0 }` (sent by the moderator) | spec 2026-11-05 decision 1 (mockup option C); it was `{ right: 0.32, bottom: 0.22 }` as `product-pop-out` (R14, superseded 2026-11-05) |
-| The waist 73 below the frame bottom | 22 + 661 - 610: the waist-cropped character of `663:8787` |
+| `safeArea` `{ right: 0.16, bottom: 0.08 }` (sent by the moderator) | right: spec 2026-11-05 decision 1 (mockup option C); bottom 8 %: the user's ask after the live test, task C6 (2026-11-06), superseding `bottom: 0`. It was `{ right: 0.32, bottom: 0.22 }` as `product-pop-out` (R14, superseded 2026-11-05) |
+| Head top to waist 588 (`WAIST_SUBJECT_HEIGHT`), the waist on the frame bottom | 610 - 22, task C6 (2026-11-06): the user's "less cropped, moved up a bit, shown slightly smaller". It was 661 (the waist 73 below the frame bottom, 22 + 661 - 610, as the waist-cropped character of `663:8787`) on 2026-11-05 |
 | Portrait: 3:4, head top 25 % down | spec 2026-11-05 decision 4 (mockup B); the blend between 672:610 and 3:4 is the builder's call (linear) |
 | Motion curves, offsets (0.28 x 610, 0.043 x 610) | the picked mockup `stage-b-transparent.html`, option B; the timings are the 2026-11-03 amendment (controller's call) |
 | `DEFAULT_METRICS`, the `live-app` slot | **not Figma**: see the note below |

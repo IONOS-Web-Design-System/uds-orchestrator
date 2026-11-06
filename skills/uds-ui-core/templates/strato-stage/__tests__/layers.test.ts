@@ -27,7 +27,7 @@ describe('strato-stage layers', () => {
     expect(a.rect).toEqual(b.rect);
   });
   it('every rect comes from placeStage, bottom to top: the character, then the interface', () => {
-    const SA = { right: 0.16, bottom: 0 };
+    const SA = { right: 0.16, bottom: 0.08 }; // the moderator's STRATO_STAGE safe area
     const srcs = { character: 'c.png' };
     const NARROW: StageMetrics = {
       headTopFrac: 0.05, waistFrac: 0.55, leftFrac: 0.3, rightFrac: 0.7, subjectHeightFrac: 0.9, bottomFrac: 0.95,

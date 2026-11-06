@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { fitStage } from '../geometry';
+import { fitStage, type StageMetrics } from '../geometry';
 import { buildStageLayers } from '../layers';
 import { interfaceLegStyle, layerStyle, stageRootStyle } from '../styles';
 
@@ -59,13 +59,38 @@ describe('strato-stage styles', () => {
   });
 
   // Spec 2026-11-05 §4.1: the character is clipped only by the canvas (never at the right margin),
-  // except that nothing below the content bottom shows: with the STRATO stage's `bottom: 0` that is
-  // the canvas bottom, so the root clips nothing.
+  // except that nothing below the content bottom shows: with no bottom margin that is the canvas
+  // bottom, so the root clips nothing.
   it('the stage root has no content-box clip: with no bottom margin it is the canvas and clips nothing', () => {
     const canvas = { w: 1280, h: 960 };
     const root = stageRootStyle(canvas, fitStage(canvas, { right: 0.16, bottom: 0 }).content);
     expect(root).toEqual({ position: 'absolute', left: 0, top: 0, width: 1280, height: 960 });
     expect(root.overflow).toBeUndefined();
+  });
+
+  // Task C6 (2026-11-06): the STRATO stage's 8 % bottom margin. The waist lands on the content
+  // bottom and the cutout runs on below it, so the root's clip there is what hides everything below
+  // the waist: nothing of the character renders below the content bottom and the strip stays empty.
+  it('with the STRATO stage\'s 8 % bottom margin the root cuts exactly at the waist: nothing of the character renders below the content bottom', () => {
+    const NARROW: StageMetrics = {
+      headTopFrac: 0.05, waistFrac: 0.55, leftFrac: 0.3, rightFrac: 0.7, subjectHeightFrac: 0.9, bottomFrac: 0.95,
+      centerXFrac: 0.5, upperBodyLeftFrac: 0.3, upperBodyRightFrac: 0.7, imgW: 1536, imgH: 2048,
+    };
+    const sa = { right: 0.16, bottom: 0.08 };
+    for (const canvas of [{ w: 1280, h: 960 }, { w: 1600, h: 900 }, { w: 1536, h: 2048 }, { w: 2048, h: 2048 }]) {
+      const at = `${canvas.w}x${canvas.h}`;
+      const { content } = fitStage(canvas, sa);
+      expect(content.h, at).toBeCloseTo(0.92 * canvas.h, 9);
+      expect(stageRootStyle(canvas, content), at).toEqual({
+        position: 'absolute', left: 0, top: 0, width: canvas.w, height: content.h, overflow: 'hidden',
+      });
+      const [character] = buildStageLayers({ canvas, safeArea: sa, metrics: NARROW, srcs: { character: 'c.png' } }, 2000);
+      expect(character.transform, at).toBe('translateY(0px) scale(1)'); // settled
+      // The cut is the waist ...
+      expect(Math.abs(character.rect.y + NARROW.waistFrac! * character.rect.h - content.h), at).toBeLessThanOrEqual(1);
+      // ... and the clip is load-bearing: the image itself runs on below it.
+      expect(character.rect.y + character.rect.h, at).toBeGreaterThan(content.h);
+    }
   });
 
   it('with a bottom margin (an older moderator) it cuts at the content bottom only, never at the right margin', () => {

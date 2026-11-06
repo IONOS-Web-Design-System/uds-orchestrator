@@ -9,8 +9,9 @@
  *
  * Only DOM and `<Img>` are rendered (no canvas, WebGL or video), so a later SVG capture of the
  * DOM sees every layer. The root is transparent. The character is never cut but by the canvas
- * (and, below the waist, by the bottom edge: `placeStage`, `stageRootStyle`); the interface is cut
- * by its own leg canvas (`interfaceLegStyle`), then by the canvas.
+ * (and, below the waist, by the content bottom, the 8 % margin line: `placeStage`,
+ * `stageRootStyle`); the interface is cut by its own leg canvas (`interfaceLegStyle`), then by the
+ * canvas.
  *
  * Import specifiers carry NO file extension (see geometry.ts).
  */

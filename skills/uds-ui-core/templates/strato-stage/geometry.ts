@@ -24,9 +24,18 @@ export const VISUAL = { w: 672, h: 610 } as const;
 /**
  * Where the character lands, from 663:8787: the head top is `headTopY` from the frame top, the
  * subject is `subjectHeight` tall (the body runs off the bottom, waist-cropped), and its
- * horizontal centre is `centerX`.
+ * horizontal centre is `centerX`. Since 2026-11-06 `subjectHeight` sizes only an unmeasured waist
+ * (the subject bbox); a measured one is sized by `WAIST_SUBJECT_HEIGHT`.
  */
 export const CHARACTER_ANCHOR = { headTopY: 22, subjectHeight: 661, centerX: 480 } as const;
+
+/**
+ * Head top to WAIST, in visual units: 610 - 22 = 588, so the waist lands exactly on the frame
+ * bottom, which `placeStage` puts on the content bottom (the moderator's 8 % bottom-margin line).
+ * Task C6, 2026-11-06 (the user's "less cropped, moved up, slightly smaller"): it replaces the
+ * Figma's 661, whose waist ran 73 units past the frame bottom. The head top stays on 22.
+ */
+export const WAIST_SUBJECT_HEIGHT = VISUAL.h - CHARACTER_ANCHOR.headTopY;
 
 /**
  * The measured alpha bounding box of the character cutout. Field-for-field the moderator's
@@ -108,23 +117,28 @@ export function fitStage(
 }
 
 /**
- * The share of the image height that `CHARACTER_ANCHOR.subjectHeight` stands for: head top to
- * waist when the waist is known and below the head top, else (an older moderator, or an empty or
- * head-only mask) the whole subject bbox, as before 2026-11-05.
+ * The span the character is sized by: `frac` of the image height stands for `visual` units.
+ * Head top to waist is `WAIST_SUBJECT_HEIGHT` (588) when the waist is known and below the head
+ * top; else (an older moderator, or an empty or head-only mask) the whole subject bbox is
+ * `CHARACTER_ANCHOR.subjectHeight` (661), as before 2026-11-05.
  */
-function anchoredHeightFrac(m: StageMetrics): number {
+function anchoredSpan(m: StageMetrics): { frac: number; visual: number } {
   const waist = m.waistFrac;
-  return waist !== undefined && Number.isFinite(waist) && waist > m.headTopFrac ? waist - m.headTopFrac : m.subjectHeightFrac;
+  return waist !== undefined && Number.isFinite(waist) && waist > m.headTopFrac
+    ? { frac: waist - m.headTopFrac, visual: WAIST_SUBJECT_HEIGHT }
+    : { frac: m.subjectHeightFrac, visual: CHARACTER_ANCHOR.subjectHeight };
 }
 
 /**
- * The character's <Img> box in visual units: sized so head top to waist (`waistFrac`; without
- * it, the whole subject bbox) is `subjectHeight` tall at its native aspect, with its head top and
- * horizontal centre on `CHARACTER_ANCHOR` (663:8787). The waist then lands 22 + 661 - 610 = 73
- * below the frame bottom, as in the Figma's waist-cropped character.
+ * The character's <Img> box in visual units, at its native aspect with its head top and
+ * horizontal centre on `CHARACTER_ANCHOR` (663:8787). Sized so head top to waist (`waistFrac`) is
+ * `WAIST_SUBJECT_HEIGHT` (588) tall: the waist lands exactly on the frame bottom (610). Without a
+ * usable waist the whole subject bbox is `subjectHeight` (661) tall, as before: its bottom lands
+ * 22 + 661 - 610 = 73 below the frame bottom.
  */
 export function characterRect(m: StageMetrics): Rect {
-  const s = CHARACTER_ANCHOR.subjectHeight / (anchoredHeightFrac(m) * m.imgH);
+  const span = anchoredSpan(m);
+  const s = span.visual / (span.frac * m.imgH);
   const w = m.imgW * s;
   const h = m.imgH * s;
   return { x: CHARACTER_ANCHOR.centerX - m.centerXFrac * w, y: CHARACTER_ANCHOR.headTopY - m.headTopFrac * h, w, h };
@@ -297,8 +311,6 @@ const PORTRAIT_ASPECT = 3 / 4;
 const PORTRAIT_HEAD_TOP_OF_H = 0.25;
 /** Head top to the frame bottom, 610 - 22 = 588 visual units. */
 const HEAD_TO_FRAME_BOTTOM = VISUAL.h - CHARACTER_ANCHOR.headTopY;
-/** The waist below the frame bottom, 22 + 661 - 610 = 73 visual units (the Figma's waist crop). */
-const WAIST_BELOW_FRAME = CHARACTER_ANCHOR.headTopY + CHARACTER_ANCHOR.subjectHeight - VISUAL.h;
 
 /** 0 while the content box is at least as wide as the 672:610 frame, 1 at 3:4 and narrower, linear between. */
 function portraitness(content: Rect): number {
@@ -344,14 +356,17 @@ const clampCentre = (v: number, size: number, extent: number): number =>
  * The stage on the canvas (spec 2026-11-05 §4.1, decisions 1-4).
  *
  * Character. Scale `c = lerp(s, c1, p)`: `s` is the frame's fit (`fitStage`), `c1` puts the head
- * top 25 % down the content height with the waist 73 visual units below the content bottom, `p`
- * is the portraitness. The head top sits at `content bottom - 588 c` (at `c = s` that is
- * `originY + 22 s`, today's), the centre x at `originX + 480 s`. Then never clipped: the measured
- * extent (`leftFrac` / `rightFrac`, which include outstretched arms) must lie inside the canvas
- * width. When `p > 0` the character first slides inward by `p` x the shift that would fit it (so
- * nothing jumps as `p` leaves 0), then it shrinks about the centre of its waist line until it fits,
- * so the waist stays where it was, at or below the bottom edge. Landscape (`p = 0`) only shrinks.
- * The top cannot cross: the head top (`headTopFrac`, raised arms included) is at
+ * top 25 % down the content height with the waist on the content bottom, `p` is the portraitness.
+ * The head top sits at `content bottom - 588 c` (at `c = s` that is `originY + 22 s`, the Figma's),
+ * the centre x at `originX + 480 s`, and head-to-waist is `WAIST_SUBJECT_HEIGHT` (588) x the scale,
+ * so the waist lies exactly on the content bottom: with the moderator's 8 % bottom margin the stage
+ * root clips there (`stageRootStyle`), so nothing below the waist shows (task C6). Without a waist
+ * the subject bbox is 661 tall and its bottom 73 c below the content bottom, as before. Then never
+ * clipped: the measured extent (`leftFrac` / `rightFrac`, which include outstretched arms) must
+ * lie inside the canvas width. When `p > 0` the character first slides inward by `p` x the shift
+ * that would fit it (so nothing jumps as `p` leaves 0), then it shrinks about the centre of its
+ * waist line until it fits, so the waist stays on the content bottom. Landscape (`p = 0`) only
+ * shrinks. The top cannot cross: the head top (`headTopFrac`, raised arms included) is at
  * `content bottom - 588 c`, which is `originY + 22 s > 0` at `c = s` and a quarter of the content
  * height at `c = c1`, so positive in between, and shrinking about the waist only lowers it.
  *
@@ -363,8 +378,8 @@ const clampCentre = (v: number, size: number, extent: number): number =>
  * transparent glow pad may run past the edge, as it always could (controller ruling, 2026-11-05).
  *
  * At `p = 0`, with a pose that fits and the visible interface inside the canvas, every rect is
- * exactly today's (`fitStage` + the visual rect); the only differences are where today's would
- * have been clipped.
+ * exactly the frame's fit applied to the visual rect (`fitStage` + `characterRect` /
+ * `interfaceMountRect`); the only differences are where that would have been clipped.
  */
 export function placeStage(input: StagePlacementInput): StagePlacement {
   const { canvas } = input;
@@ -374,7 +389,10 @@ export function placeStage(input: StagePlacementInput): StagePlacement {
   const p = portraitness(f.content);
   const c1 = ((1 - PORTRAIT_HEAD_TOP_OF_H) * f.content.h) / HEAD_TO_FRAME_BOTTOM;
   const c = s + (c1 - s) * p;
-  const waistY = f.content.y + f.content.h + WAIST_BELOW_FRAME * c;
+  // The bottom of the sized span (the waist; without one, the bbox bottom) lies `22 + span - 610`
+  // below the content bottom: 0 for the waist, so the head top is `content bottom - 588 c` either way.
+  const span = anchoredSpan(m);
+  const waistY = f.content.y + f.content.h + (CHARACTER_ANCHOR.headTopY + span.visual - VISUAL.h) * c;
   const x0 = f.content.x + f.originX + CHARACTER_ANCHOR.centerX * s;
 
   // The measured extent as offsets from the centre x, in canvas px at scale `c`.
@@ -386,7 +404,7 @@ export function placeStage(input: StagePlacementInput): StagePlacement {
   if (a < 0) k = Math.min(k, x / -a);
   if (b > 0) k = Math.min(k, (canvas.w - x) / b);
   const charScale = c * k;
-  const headTop = waistY - CHARACTER_ANCHOR.subjectHeight * charScale;
+  const headTop = waistY - span.visual * charScale;
   const character: Rect = {
     x: x + (r.x - CHARACTER_ANCHOR.centerX) * charScale,
     y: headTop + (r.y - CHARACTER_ANCHOR.headTopY) * charScale,

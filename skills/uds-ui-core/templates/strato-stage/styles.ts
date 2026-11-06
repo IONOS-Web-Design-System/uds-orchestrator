@@ -9,12 +9,13 @@ import type { Rect } from './geometry';
 import type { StageLayer } from './layers';
 
 /**
- * The box StratoStage mounts its layers in: the canvas, from its top-left. While the content box
- * reaches the canvas bottom (the STRATO stage's `safeArea.bottom` is 0, spec 2026-11-05 §4.1) it
- * clips nothing: the character is clipped by nothing but the canvas, and the right margin only
- * positions it (an outstretched arm may reach into it). With a bottom margin (a moderator older
- * than 2026-11-05 sends 0.22) it cuts at the content bottom, as before, so nothing below that line
- * shows, and still never at the right margin.
+ * The box StratoStage mounts its layers in: the canvas, from its top-left. With a bottom margin
+ * it cuts at the content bottom, so nothing below that line shows: the STRATO stage's 8 %
+ * (`safeArea.bottom` 0.08, task C6, 2026-11-06) puts the character's waist exactly there, so this
+ * is the cut below the waist and the strip under it stays empty (a moderator older than 2026-11-05
+ * sends 0.22, cut the same way). It never cuts at the right margin, which only positions the
+ * character (an outstretched arm may reach into it). While the content box reaches the canvas
+ * bottom (`safeArea.bottom` 0) it clips nothing: then only the canvas does.
  */
 export function stageRootStyle(canvas: { w: number; h: number }, content: Rect): CSSProperties {
   const height = content.y + content.h;
