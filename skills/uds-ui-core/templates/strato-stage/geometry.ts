@@ -375,11 +375,13 @@ const clampCentre = (v: number, size: number, extent: number): number =>
  * centre, vertically `(slotCentreY - 22)` x the character's final scale x `588 / 661` below its
  * head top (x 1 without a waist), so it keeps its share of head-to-waist, the chest height, on the
  * 588 body (the slot of `interfaceSlot(kind, faceSafe)`, per kind). Its VISIBLE part
- * (`visibleInterfaceSize`: the card, or the AI prompt's pill) is then kept inside the canvas width,
- * nudged below the face-safe rect placed with the character (+ 8, `interfaceSlot`'s rule) when it
- * would cover it, and kept between the canvas top and the line the stage root clips at (the content
- * bottom with a bottom margin, else the canvas bottom), centred when taller; that last clamp wins
- * over the face nudge. The AI prompt leg's transparent glow pad may run past the edge, as it always
+ * (`visibleInterfaceSize`: the card, or the AI prompt's pill) is then kept inside the canvas width;
+ * where it reaches over the width of the face-safe rect placed with the character, its top is
+ * clamped to at least 8 below that rect (`interfaceSlot`'s + 8), the push ramping in over the 8
+ * units beside the rect's width, so the card always moves continuously; then it is kept between
+ * the canvas top and the line the stage root clips at
+ * (the content bottom with a bottom margin, else the canvas bottom), centred when taller; that
+ * last clamp wins over the face push. The AI prompt leg's transparent glow pad may run past the edge, as it always
  * could (controller ruling, 2026-11-05). Rulings on the C6 concerns, 2026-11-06.
  *
  * At `p = 0`, with a pose that fits, the character is exactly the frame's fit applied to
@@ -432,8 +434,11 @@ export function placeStage(input: StagePlacementInput): StagePlacement {
     // times 588/661, so it keeps its share of head-to-waist (chest height) on the smaller body.
     const bodyRatio = span.visual / CHARACTER_ANCHOR.subjectHeight;
     let cy = headTop + (slot.y + slot.h / 2 - CHARACTER_ANCHOR.headTopY) * charScale * bodyRatio;
-    // Never over the face: interfaceSlot's nudge (below the face-safe rect, + 8), re-applied to the
-    // placed visible part and the face-safe rect placed with the character.
+    // Never over the face: where the visible part reaches over the width of the face-safe rect placed
+    // with the character, its top is held at least 8 below the rect's bottom (interfaceSlot's + 8).
+    // A clamp, not a jump (review C6 fix round 1): `max` where the rule meets the band, and the push
+    // ramps in linearly over the 8 units beside the rect's width, so nothing jumps where a card
+    // starts to reach over it either. Any overlap of the width gets the full push.
     const fs = faceSafeRect(m);
     const face: Rect = {
       x: x + (fs.x - CHARACTER_ANCHOR.centerX) * charScale,
@@ -441,7 +446,9 @@ export function placeStage(input: StagePlacementInput): StagePlacement {
       w: fs.w * charScale,
       h: fs.h * charScale,
     };
-    if (intersects({ x: cx - vw / 2, y: cy - vh / 2, w: vw, h: vh }, face)) cy = face.y + face.h + 8 * charScale + vh / 2;
+    const reach = Math.min(cx + vw / 2, face.x + face.w) - Math.max(cx - vw / 2, face.x);
+    const push = clamp(reach / (8 * charScale) + 1, 0, 1);
+    cy += push * Math.max(0, face.y + face.h + 8 * charScale + vh / 2 - cy);
     // Then kept above the line the stage root clips at (`stageRootStyle`: the content bottom when
     // there is a bottom margin, else the canvas bottom); this wins over the face nudge.
     const clipBottom = Math.min(canvas.h, f.content.y + f.content.h);

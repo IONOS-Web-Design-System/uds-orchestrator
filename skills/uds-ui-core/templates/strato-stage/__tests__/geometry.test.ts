@@ -185,6 +185,11 @@ describe('strato-stage placement (placeStage)', () => {
     ...NARROW, imgW: 2048, imgH: 2048, headTopFrac: 0.1, waistFrac: 0.4, leftFrac: 0, rightFrac: 1,
     subjectHeightFrac: 0.9, bottomFrac: 1, centerXFrac: 0.5,
   };
+  /** One arm flung out to the left: the bbox centre (the anchor) sits left of the upper body, so the
+   *  live-app card's right edge meets the face-safe band's left edge as the aspect changes. */
+  const ONE_ARM: StageMetrics = { ...NARROW, leftFrac: 0.1, centerXFrac: 0.4, upperBodyLeftFrac: 0.35, upperBodyRightFrac: 0.6 };
+  /** The same with the upper body further right: the live-app card sits clearly beside the face. */
+  const FACE_RIGHT: StageMetrics = { ...ONE_ARM, upperBodyLeftFrac: 0.4, upperBodyRightFrac: 0.65 };
   /** The interface's vertical offset from the head top scales by the waist span on the waist path
    *  (ruling on C6 concern 3): head-to-waist 588 stands where the Figma's 661 stood. */
   const WAIST_RATIO = 588 / 661;
@@ -535,12 +540,17 @@ describe('strato-stage placement (placeStage)', () => {
     }
   });
 
-  it('placement is continuous across aspects: no jump at 672:610 (2048 -> 1024 wide at 1280 high)', () => {
-    for (const m of [NARROW, WIDE]) {
+  // 2 px steps, so a jump shows: a smooth 2 px step moves anything by at most ~0.22 % here, while a
+  // switch like the face push's former `if` (8 x charScale = 0.94 % of H) stands out against the bound.
+  const k_ = (c: { w: number; h: number }) => `${c.w + 2} -> ${c.w}`;
+  it('placement is continuous across aspects: no jump at 672:610 or anywhere else (2048 -> 1024 wide at 1280 high, 2 px steps, every leg)', () => {
+    const FINE: { w: number; h: number }[] = [];
+    for (let w = 2048; w >= 1024; w -= 2) FINE.push({ w, h: 1280 });
+    for (const m of [NARROW, WIDE, ONE_ARM]) for (const leg of [AI, HIGHLIGHT, LIVE_APP]) {
       let prev: ReturnType<typeof placeStage> | undefined;
       let crossed = false;
-      for (const canvas of SWEEP) {
-        const pl = placeStage({ canvas, safeArea: SA, metrics: m, iface: AI });
+      for (const canvas of FINE) {
+        const pl = placeStage({ canvas, safeArea: SA, metrics: m, iface: leg });
         if (prev) {
           const a = prev.character;
           const b = pl.character;
@@ -556,7 +566,8 @@ describe('strato-stage placement (placeStage)', () => {
             ifaceY: Math.abs(ib.y - ia.y) / canvas.h,
             ifaceW: Math.abs(ib.w / ia.w - 1),
           };
-          for (const [k, v] of Object.entries(steps)) expect(v, `${k} at ${canvas.w + 16} -> ${canvas.w}`).toBeLessThan(0.02);
+          const at = `${m === NARROW ? 'narrow' : m === WIDE ? 'wide' : 'one arm'} ${leg.legW}x${leg.legH} ${k_(canvas)}`;
+          for (const [k, v] of Object.entries(steps)) expect(v, `${k} ${at}`).toBeLessThan(0.005);
           if (prev.portraitness === 0 && pl.portraitness > 0) crossed = true;
         }
         prev = pl;
@@ -619,7 +630,7 @@ describe('strato-stage placement (placeStage)', () => {
     expect(pill.y + pill.h / 2).toBeCloseTo(extent(pl.character, DEFAULT_METRICS).top + slotDrop(AI, DEFAULT_METRICS) * pl.charScale, 9);
   });
 
-  it('the visible interface never covers the face-safe band (narrow and wide poses): a card the chest-height rule lifts into it is nudged below it (+ 8)', () => {
+  it('the visible interface never covers the face-safe band (narrow and wide poses): a card the chest-height rule lifts into it is pushed down to 8 below it', () => {
     // Pinned: the live-app card beside the narrow pose at 1280x960. The rule would put its top inside the band.
     {
       const canvas = { w: 1280, h: 960 };
@@ -633,13 +644,18 @@ describe('strato-stage placement (placeStage)', () => {
       expect(ruleTop).toBeLessThan(band.y + band.h - 20); // the guard can fail: 302.7 inside the band's 332.1
       expect(pl.iface!.y).toBeCloseTo(band.y + band.h + 8 * s, 9); // 343.7
     }
-    // Every leg, canvas and the two fixture poses: no overlap; the highlight card and the AI pill never need the nudge.
+    // Every leg, canvas and the two fixture poses: no overlap, and a card under the face keeps a clear
+    // 8 units below the band (a card the rule leaves within those 8 is pushed too); the highlight card
+    // and the AI pill never need the push.
     for (const canvas of [...CANVASES, ...SWEEP]) {
       for (const m of [NARROW, WIDE]) {
         for (const leg of [HIGHLIGHT, AI, LIVE_APP]) {
           const pl = placeStage({ canvas, safeArea: SA, metrics: m, iface: leg });
           const at = `${canvas.w}x${canvas.h} ${m === NARROW ? 'narrow' : 'wide'} ${leg.legW}x${leg.legH}`;
-          expect(overlaps(visibleOf(pl.iface!, leg), placedFaceSafe(pl, m)), at).toBe(false);
+          const v = visibleOf(pl.iface!, leg);
+          const band = placedFaceSafe(pl, m);
+          expect(overlaps(v, band), at).toBe(false);
+          if (v.x < band.x + band.w && band.x < v.x + v.w) expect(v.y, at).toBeGreaterThanOrEqual(band.y + band.h + 8 * pl.charScale - 1e-9);
           if (leg !== LIVE_APP) {
             const v = visibleOf(pl.iface!, leg);
             expect(v.y + v.h / 2, at).toBeCloseTo(extent(pl.character, m).top + slotDrop(leg, m) * pl.charScale * WAIST_RATIO, 9);
@@ -647,6 +663,74 @@ describe('strato-stage placement (placeStage)', () => {
         }
       }
     }
+  });
+
+  it('the face push is a clamp: continuous where the rule meets the band and where the push lets go (narrow live-app card, content aspect ~0.736 -> ~0.687 at 1280 high)', () => {
+    const h = 1280;
+    const rows: { w: number; ruleTop: number; bandBottom: number; floor: number; top: number }[] = [];
+    for (let w = 1040; w >= 950; w -= 2) {
+      const canvas = { w, h };
+      const s = fitStage(canvas, SA).scale;
+      const pl = placeStage({ canvas, safeArea: SA, metrics: NARROW, iface: LIVE_APP });
+      expect(pl.portraitness).toBe(1);
+      const e = extent(pl.character, NARROW);
+      const band = placedFaceSafe(pl, NARROW);
+      const ruleTop = e.top + slotDrop(LIVE_APP, NARROW) * pl.charScale * WAIST_RATIO - (LIVE_APP.legH / 4) * s;
+      const floor = band.y + band.h + 8 * pl.charScale;
+      expect(pl.iface!.y, `${w}`).toBeCloseTo(Math.max(ruleTop, floor), 9); // max(rule, band + 8), never a jump between them
+      rows.push({ w, ruleTop, bandBottom: band.y + band.h, floor, top: pl.iface!.y });
+    }
+    const at = (w: number) => rows.find((r) => r.w === w)!;
+    // 1032 -> 1030 (content aspect 0.736): the rule's top crosses the band bottom. An `if (overlaps)` push
+    // jumped here by 8 x charScale (12 px, 0.94 % of H); the clamp holds the card on band + 8 on both sides.
+    expect(0.84 * 1032 / (0.92 * h)).toBeCloseTo(0.736, 3);
+    expect(at(1032).ruleTop).toBeLessThan(at(1032).bandBottom);
+    expect(at(1030).ruleTop).toBeGreaterThan(at(1030).bandBottom);
+    expect(at(1032).top).toBeCloseTo(at(1032).floor, 9);
+    expect(at(1030).top).toBeCloseTo(at(1030).floor, 9);
+    // 964 -> 962 (~0.687): the push lets go. Active on the wider side, the rule on the narrower side.
+    expect(at(964).floor).toBeGreaterThan(at(964).ruleTop);
+    expect(at(962).ruleTop).toBeGreaterThan(at(962).floor);
+    expect(at(962).top).toBeCloseTo(at(962).ruleTop, 9);
+    // And the card is continuous through the whole window: every 2 px step is under 0.1 % of H.
+    for (let i = 1; i < rows.length; i++) expect(Math.abs(rows[i].top - rows[i - 1].top) / h, `${rows[i - 1].w} -> ${rows[i].w}`).toBeLessThan(0.001);
+  });
+
+  it('the face push ramps in over the 8 units beside the face band, so it never jumps where a card starts to reach over it (one arm out)', () => {
+    /** The live-app card against the band: how far it reaches over the band's width (< 0: beside it). */
+    const probe = (m: StageMetrics, canvas: { w: number; h: number }) => {
+      const s = fitStage(canvas, SA).scale;
+      const pl = placeStage({ canvas, safeArea: SA, metrics: m, iface: LIVE_APP });
+      const e = extent(pl.character, m);
+      const band = placedFaceSafe(pl, m);
+      const v = pl.iface!;
+      const reach = Math.min(v.x + v.w, band.x + band.w) - Math.max(v.x, band.x);
+      const ruleTop = e.top + slotDrop(LIVE_APP, m) * pl.charScale * WAIST_RATIO - (LIVE_APP.legH / 4) * s;
+      const floor = band.y + band.h + 8 * pl.charScale;
+      return { pl, band, reach, ruleTop, floor, cs: pl.charScale, top: v.y };
+    };
+    // 1280 high, 1200 -> 1080: the card goes from just beside the band (the ramp) to reaching over it at 1140.
+    const h = 1280;
+    let partial = 0;
+    let prevTop: number | undefined;
+    for (let w = 1200; w >= 1080; w -= 2) {
+      const q = probe(ONE_ARM, { w, h });
+      const weight = Math.min(1, Math.max(0, q.reach / (8 * q.cs) + 1));
+      expect(q.top, `${w}`).toBeCloseTo(q.ruleTop + weight * Math.max(0, q.floor - q.ruleTop), 9);
+      if (weight > 0 && weight < 1 && q.floor > q.ruleTop) partial++;
+      expect(overlaps(q.pl.iface!, q.band), `${w}`).toBe(false);
+      if (prevTop !== undefined) expect(Math.abs(q.top - prevTop) / h, `${w + 2} -> ${w}`).toBeLessThan(0.001);
+      prevTop = q.top;
+    }
+    expect(partial).toBeGreaterThan(10); // the window does run through the ramp ...
+    expect(probe(ONE_ARM, { w: 1142, h }).reach).toBeLessThan(0); // ... and the card starts to reach over the band here,
+    expect(probe(ONE_ARM, { w: 1140, h }).reach).toBeGreaterThanOrEqual(0); // where an on/off overlap test would jump
+    expect(probe(ONE_ARM, { w: 1140, h }).top).toBeCloseTo(probe(ONE_ARM, { w: 1140, h }).floor, 9);
+    // Clearly beside the face (more than 8 units off its width) it is not pushed, though its top is level with the band.
+    const far = probe(FACE_RIGHT, { w: 1280, h: 960 });
+    expect(far.reach).toBeLessThan(-8 * far.cs - 50);
+    expect(far.ruleTop).toBeLessThan(far.band.y + far.band.h); // a push would move it (302.7 vs the band's 332.1)
+    expect(far.top).toBeCloseTo(far.ruleTop, 9);
   });
 
   it('the visible interface is clamped to the content bottom where the stage root clips (a very wide pose\'s live-app card)', () => {

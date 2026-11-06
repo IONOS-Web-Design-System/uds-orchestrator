@@ -93,9 +93,15 @@ amended by task C6 on 2026-11-06 (the 8 % bottom margin and the waist on it).
   whose mount is the slot), or the pill for the AI prompt leg (its canvas is
   `promptWindowLeg(slot).canvas`). That visible part is then:
   1. kept inside the canvas width;
-  2. nudged below the face-safe rect placed with the character (+ 8 at its scale) when it would
-     cover it, `interfaceSlot`'s own rule re-applied on the canvas. For the fixture poses only the
-     provisional `live-app` card ever needs it; the highlight card and the AI pill sit lower;
+  2. kept off the face. The face-safe rect is placed with the character. Where the visible part
+     reaches over that rect's width, its top is clamped to at least 8 below the rect's bottom (at
+     the character's scale; `interfaceSlot`'s + 8). The push ramps in linearly over the 8 units
+     beside the rect's width.
+     * The rule is a clamp (`max`), not an on/off nudge, so the card moves continuously where the
+       rule meets the band, where the push lets go and where a card starts to reach over the band.
+       An on/off version jumped by 8 x the scale, 0.94 % of the height (review C6 fix round 1).
+     * For the fixture poses only the provisional `live-app` card ever needs the push; the highlight
+       card and the AI pill sit lower;
   3. kept between the canvas top and the line the stage root clips at: the content bottom with a
      bottom margin, else the canvas bottom. It is centred when it is taller than that box. This
      clamp wins over the face nudge, so never clipped beats face-safe, as in `interfaceSlot`.
