@@ -372,14 +372,19 @@ const clampCentre = (v: number, size: number, extent: number): number =>
  *
  * Interface. Its leg at half scale (`interfaceMountRect`) at the frame's scale `s`, its centre at
  * the slot's offset from the anchor: horizontally `(slotCentreX - 480) s` from the character's
- * centre, vertically `(slotCentreY - 22)` x the character's final scale below its head top (the
- * slot of `interfaceSlot(kind, faceSafe)`, per kind). Then clamped so its VISIBLE part lies inside
- * the canvas (`visibleInterfaceSize`: the card, or the AI prompt's pill); the AI prompt leg's
- * transparent glow pad may run past the edge, as it always could (controller ruling, 2026-11-05).
+ * centre, vertically `(slotCentreY - 22)` x the character's final scale x `588 / 661` below its
+ * head top (x 1 without a waist), so it keeps its share of head-to-waist, the chest height, on the
+ * 588 body (the slot of `interfaceSlot(kind, faceSafe)`, per kind). Its VISIBLE part
+ * (`visibleInterfaceSize`: the card, or the AI prompt's pill) is then kept inside the canvas width,
+ * nudged below the face-safe rect placed with the character (+ 8, `interfaceSlot`'s rule) when it
+ * would cover it, and kept between the canvas top and the line the stage root clips at (the content
+ * bottom with a bottom margin, else the canvas bottom), centred when taller; that last clamp wins
+ * over the face nudge. The AI prompt leg's transparent glow pad may run past the edge, as it always
+ * could (controller ruling, 2026-11-05). Rulings on the C6 concerns, 2026-11-06.
  *
- * At `p = 0`, with a pose that fits and the visible interface inside the canvas, every rect is
- * exactly the frame's fit applied to the visual rect (`fitStage` + `characterRect` /
- * `interfaceMountRect`); the only differences are where that would have been clipped.
+ * At `p = 0`, with a pose that fits, the character is exactly the frame's fit applied to
+ * `characterRect`, and so is the interface's x and size; its y is the fit's raised by the 588/661
+ * offset rule (exactly the fit's without a waist), unless the face nudge or a clamp moves it.
  */
 export function placeStage(input: StagePlacementInput): StagePlacement {
   const { canvas } = input;
@@ -418,10 +423,29 @@ export function placeStage(input: StagePlacementInput): StagePlacement {
     const mount = interfaceMountRect(slot, { w: input.iface.legW, h: input.iface.legH });
     const w = mount.w * s;
     const h = mount.h * s;
-    const cx = x - (CHARACTER_ANCHOR.centerX - (slot.x + slot.w / 2)) * s;
-    const cy = headTop + (slot.y + slot.h / 2 - CHARACTER_ANCHOR.headTopY) * charScale;
     const vis = visibleInterfaceSize(input.iface.kind, slot, { w: input.iface.legW, h: input.iface.legH });
-    iface = { x: clampCentre(cx, vis.w * s, canvas.w) - w / 2, y: clampCentre(cy, vis.h * s, canvas.h) - h / 2, w, h };
+    const vw = vis.w * s;
+    const vh = vis.h * s;
+    // x: the slot's offset from the character centre at `s`, the visible part kept in the canvas width.
+    const cx = clampCentre(x - (CHARACTER_ANCHOR.centerX - (slot.x + slot.w / 2)) * s, vw, canvas.w);
+    // y: the slot's drop below the head top, at the character's final scale and, on the waist path,
+    // times 588/661, so it keeps its share of head-to-waist (chest height) on the smaller body.
+    const bodyRatio = span.visual / CHARACTER_ANCHOR.subjectHeight;
+    let cy = headTop + (slot.y + slot.h / 2 - CHARACTER_ANCHOR.headTopY) * charScale * bodyRatio;
+    // Never over the face: interfaceSlot's nudge (below the face-safe rect, + 8), re-applied to the
+    // placed visible part and the face-safe rect placed with the character.
+    const fs = faceSafeRect(m);
+    const face: Rect = {
+      x: x + (fs.x - CHARACTER_ANCHOR.centerX) * charScale,
+      y: headTop + (fs.y - CHARACTER_ANCHOR.headTopY) * charScale,
+      w: fs.w * charScale,
+      h: fs.h * charScale,
+    };
+    if (intersects({ x: cx - vw / 2, y: cy - vh / 2, w: vw, h: vh }, face)) cy = face.y + face.h + 8 * charScale + vh / 2;
+    // Then kept above the line the stage root clips at (`stageRootStyle`: the content bottom when
+    // there is a bottom margin, else the canvas bottom); this wins over the face nudge.
+    const clipBottom = Math.min(canvas.h, f.content.y + f.content.h);
+    iface = { x: cx - w / 2, y: clampCentre(cy, vh, clipBottom) - h / 2, w, h };
   }
   return { character, iface, portraitness: p, charScale, ifaceScale: s };
 }

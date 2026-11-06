@@ -179,6 +179,15 @@ describe('strato-stage placement (placeStage)', () => {
   };
   /** Arms flung wide (2 % to 99 % of the width) and raised to the image top (ruling C3b). */
   const WIDE: StageMetrics = { ...NARROW, leftFrac: 0.02, rightFrac: 0.99, headTopFrac: 0, subjectHeightFrac: 0.95, centerXFrac: 0.505 };
+  /** A very wide pose: a square cutout, head-to-waist only 30 % of it, arms across the whole width.
+   *  It shrinks hard, so the rule would put its live-app card into the 8 % strip (C6 fix). */
+  const VERY_WIDE: StageMetrics = {
+    ...NARROW, imgW: 2048, imgH: 2048, headTopFrac: 0.1, waistFrac: 0.4, leftFrac: 0, rightFrac: 1,
+    subjectHeightFrac: 0.9, bottomFrac: 1, centerXFrac: 0.5,
+  };
+  /** The interface's vertical offset from the head top scales by the waist span on the waist path
+   *  (ruling on C6 concern 3): head-to-waist 588 stands where the Figma's 661 stood. */
+  const WAIST_RATIO = 588 / 661;
   type Leg = { kind: InterfaceKind; legW: number; legH: number };
   const HIGHLIGHT: Leg = { kind: 'feature-highlight', legW: 769, legH: 180 };
   const AI: Leg = { kind: 'feature-highlight', legW: 1231, legH: 621 }; // the AI prompt leg (promptWindowLeg)
@@ -223,6 +232,15 @@ describe('strato-stage placement (placeStage)', () => {
     return { dl: r.x + m.leftFrac * r.w - 480, dr: r.x + m.rightFrac * r.w - 480 };
   };
   const slotOf = (leg: Leg, m: StageMetrics) => interfaceSlot(leg.kind, faceSafeRect(m));
+  /** The slot centre's offset below the head top, in visual units (feature-highlight: 345.45). */
+  const slotDrop = (leg: Leg, m: StageMetrics) => slotOf(leg, m).y + slotOf(leg, m).h / 2 - 22;
+  /** The face-safe band (faceSafeRect) placed with the character: its centre x, head top and final scale. */
+  const placedFaceSafe = (pl: ReturnType<typeof placeStage>, m: StageMetrics): Rect => {
+    const e = extent(pl.character, m);
+    const fs = faceSafeRect(m);
+    return { x: e.centreX + (fs.x - 480) * pl.charScale, y: e.top + (fs.y - 22) * pl.charScale, w: fs.w * pl.charScale, h: fs.h * pl.charScale };
+  };
+  const overlaps = (a: Rect, b: Rect) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
   const mountOf = (leg: Leg, m: StageMetrics) => interfaceMountRect(slotOf(leg, m), { w: leg.legW, h: leg.legH });
   /** The visible content of a placed leg (canvas px): for the AI prompt leg the pill, read off the
    *  shipped PromptWindow props (bottom-anchored at left/bottom in leg px), else the whole leg. */
@@ -280,7 +298,7 @@ describe('strato-stage placement (placeStage)', () => {
     }
   });
 
-  it('landscape 1280x960 and 1600x900 with {0.16, 0.08}: p = 0, every interface is today\'s; the character keeps today\'s head top and centre at 588/661 the size', () => {
+  it('landscape 1280x960 and 1600x900 with {0.16, 0.08}: p = 0; the character keeps today\'s head top and centre at 588/661 the size, the interface today\'s x and size at its chest height', () => {
     for (const canvas of [{ w: 1280, h: 960 }, { w: 1600, h: 900 }]) {
       const f = fitStage(canvas, SA);
       for (const m of [NARROW, DEFAULT_METRICS]) {
@@ -291,7 +309,16 @@ describe('strato-stage placement (placeStage)', () => {
           expect(pl.ifaceScale).toBeCloseTo(f.scale, 12);
           // A measured waist: the 588 rule. None (an older moderator): the subject bbox, as before.
           expectRect(pl.character, today(m === NARROW ? waistRule(m, 588) : characterRect(m), f));
-          expectRect(pl.iface, today(mountOf(leg, m), f));
+          const t = today(mountOf(leg, m), f);
+          if (m === DEFAULT_METRICS) {
+            expectRect(pl.iface, t); // no waist: today's offset, exactly
+          } else if (leg !== LIVE_APP) {
+            // The offset from the head top scales by 588/661: up by (slotDrop - 22 ...) x s x 73/661.
+            expectRect(pl.iface, { ...t, y: t.y - slotDrop(leg, m) * f.scale * (1 - WAIST_RATIO) });
+          } else {
+            // The live-app card is nudged below the face-safe band (see the face-safe test); x and size are today's.
+            for (const k of ['x', 'w', 'h'] as const) expect(pl.iface![k], k).toBeCloseTo(t[k], 9);
+          }
         }
       }
       // Against C3's 661 rule: 588/661 the size, the head top and centre unchanged.
@@ -334,14 +361,16 @@ describe('strato-stage placement (placeStage)', () => {
     }
   });
 
-  it('landscape: the AI prompt leg is exactly today\'s; its glow pad may cross the edge as before, its pill is inside', () => {
+  it('landscape: the AI prompt leg keeps today\'s x and size, raised to chest height; its glow pad may cross the edge as before, its pill is inside', () => {
     for (const canvas of [{ w: 1280, h: 960 }, { w: 1600, h: 900 }, { w: 1280, h: 1024 }]) {
-      const t = today(mountOf(AI, NARROW), fitStage(canvas, SA));
+      const f = fitStage(canvas, SA);
+      const t = today(mountOf(AI, NARROW), f);
       const pl = placeStage({ canvas, safeArea: SA, metrics: NARROW, iface: AI });
       expect(pl.portraitness).toBe(0);
       const r = pl.iface!;
-      expectRect(r, t);
-      expect(Math.abs(r.x - t.x) + Math.abs(r.y - t.y)).toBeLessThanOrEqual(1); // the ruling's +-1 px, as a sum
+      const raised = { ...t, y: t.y - slotDrop(AI, NARROW) * f.scale * (1 - WAIST_RATIO) };
+      expectRect(r, raised);
+      expect(Math.abs(r.x - t.x)).toBeLessThanOrEqual(1); // the ruling's +-1 px horizontally (C3)
       expectInside(visibleOf(r, AI), canvas, `${canvas.w}x${canvas.h} pill`);
     }
     // At 1280x1024 the transparent pad runs ~20 px past the left edge (a content box would have cut it).
@@ -360,9 +389,9 @@ describe('strato-stage placement (placeStage)', () => {
       const w = (LIVE_APP.legW / 2) * f.scale;
       const h = (LIVE_APP.legH / 2) * f.scale;
       const cx = e.centreX - (480 - (slot.x + slot.w / 2)) * f.scale;
-      const cy = e.top + (slot.y + slot.h / 2 - 22) * pl.charScale;
       expect(cx - w / 2).toBeLessThan(-50); // the guard can fail: unclamped it crosses (-76.8)
-      expectRect(pl.iface, { x: 0, y: cy - h / 2, w, h });
+      // Its height: below the face-safe band (+ 8), where the chest-height rule would overlap it (face-safe test).
+      expectRect(pl.iface, { x: 0, y: e.top + (207.4 + 8) * pl.charScale, w, h });
     }
     // The AI prompt leg with no right margin (s = W / 672): the rule puts the PILL past the left
     // edge. The pill is clamped to touch it; the leg runs past it by exactly its glow pad.
@@ -400,12 +429,12 @@ describe('strato-stage placement (placeStage)', () => {
       expect(e.waist).toBeCloseTo(Hc, 9); // on the 8 % margin line (C3's rule: Hc + 73 c1, below the canvas)
       expect(e.centreX).toBeCloseTo(x0, 9); // a narrow pose fits where it is: no slide
       expect(pl.character.w).toBeCloseTo(waistRule(NARROW, 588).w * c1, 9);
-      // Centre (charCentreX - (480 - slotCentreX) * s, headTop + (slotCentreY - 22) * c), size at s.
+      // Centre (charCentreX - (480 - slotCentreX) * s, headTop + (slotCentreY - 22) * c * 588/661), size at s.
       const slot = slotOf(leg, NARROW);
       const w = (leg.legW / 2) * f.scale;
       const h = (leg.legH / 2) * f.scale;
       const cx = x0 - (480 - (slot.x + slot.w / 2)) * f.scale;
-      const cy = 0.25 * Hc + (slot.y + slot.h / 2 - 22) * c1;
+      const cy = 0.25 * Hc + slotDrop(leg, NARROW) * c1 * WAIST_RATIO;
       expectRect(pl.iface, { x: cx - w / 2, y: cy - h / 2, w, h });
     }
   });
@@ -446,7 +475,7 @@ describe('strato-stage placement (placeStage)', () => {
       const w = (HIGHLIGHT.legW / 2) * f.scale;
       const h = (HIGHLIGHT.legH / 2) * f.scale;
       const cx = e.centreX - (480 - (slot.x + slot.w / 2)) * f.scale;
-      const cy = e.top + (slot.y + slot.h / 2 - 22) * pl.charScale;
+      const cy = e.top + slotDrop(HIGHLIGHT, WIDE) * pl.charScale * WAIST_RATIO;
       expect(cx - w / 2).toBeGreaterThan(0); // inside: no clamp in play, so this is the offset rule itself
       expect(cy + h / 2).toBeLessThan(f.content.h);
       expectRect(hl.iface, { x: cx - w / 2, y: cy - h / 2, w, h });
@@ -543,22 +572,103 @@ describe('strato-stage placement (placeStage)', () => {
     const r = placeStage({ canvas, safeArea: SA, metrics: NARROW, iface: { kind: 'live-app', legW: 1920, legH: 1080 } }).iface!;
     expect(r.w).toBeCloseTo(960 * s, 9); // 1511 > 1280
     expect(r.x + r.w / 2).toBeCloseTo(1280 / 2, 9);
-    expect(r.y).toBeGreaterThanOrEqual(0); // 540 * s = 850 fits the height: clamped, not centred
-    expect(r.y + r.h).toBeLessThanOrEqual(960 + 1e-9);
+    expect(r.y).toBeGreaterThanOrEqual(0); // 540 * s = 782 fits the content height: clamped, not centred
+    expect(r.y + r.h).toBeLessThanOrEqual(883.2 + 1e-9);
+    // Taller than the content box (650 * s = 941 > 883.2): centred in the content box, not the canvas.
+    const tall = placeStage({ canvas, safeArea: SA, metrics: NARROW, iface: { kind: 'live-app', legW: 760, legH: 1300 } }).iface!;
+    expect(tall.h).toBeGreaterThan(883.2);
+    expect(tall.y + tall.h / 2).toBeCloseTo(883.2 / 2, 9); // the canvas centre would be 480
   });
 
   it('the visible interface (the card, or the AI prompt\'s pill) stays inside the canvas, and above the 8 % margin line, for every case above', () => {
     for (const canvas of [...CANVASES, ...SWEEP]) {
       const content = fitStage(canvas, SA).content;
-      for (const m of [NARROW, WIDE, DEFAULT_METRICS]) {
+      for (const m of [NARROW, WIDE, DEFAULT_METRICS, VERY_WIDE]) {
         for (const leg of [HIGHLIGHT, AI, LIVE_APP]) {
           const r = placeStage({ canvas, safeArea: SA, metrics: m, iface: leg }).iface!;
           const at = `${canvas.w}x${canvas.h} ${leg.legW}x${leg.legH}`;
           expectInside(visibleOf(r, leg), canvas, at);
-          // The clamp is to the canvas; for these poses the root's clip at the content bottom never cuts it.
+          // The root clips at the content bottom, so the clamp is to it: nothing lands in the 8 % strip.
           expect(visibleOf(r, leg).y + visibleOf(r, leg).h, at).toBeLessThanOrEqual(content.y + content.h + 1e-9);
         }
       }
     }
+  });
+
+  it('the AI prompt pill keeps its body-relative chest height on the waist path (1280x960, 1536x2048)', () => {
+    const drop = slotDrop(AI, NARROW); // 345.45: the slot centre below the head top
+    expect(drop).toBeCloseTo(345.45, 9);
+    for (const canvas of [{ w: 1280, h: 960 }, { w: 1536, h: 2048 }]) {
+      for (const m of [NARROW, WIDE]) {
+        const at = `${canvas.w}x${canvas.h} ${m === NARROW ? 'narrow' : 'wide'}`;
+        const pl = placeStage({ canvas, safeArea: SA, metrics: m, iface: AI });
+        const e = extent(pl.character, m);
+        const pill = visibleOf(pl.iface!, AI);
+        const pillCy = pill.y + pill.h / 2;
+        expect(pillCy, at).toBeCloseTo(e.top + drop * pl.charScale * WAIST_RATIO, 9);
+        // As far down head-to-waist as the Figma's 661 character had it (52.3 %), not 59 %.
+        const share = (pillCy - e.top) / (e.waist - e.top);
+        expect(share, at).toBeCloseTo(drop / 661, 9);
+        expect(Math.abs(share - drop / 588), at).toBeGreaterThan(0.05); // the guard can fail: without the ratio 58.7 %
+      }
+    }
+    // No waist (an older moderator): today's offset, unscaled.
+    const canvas = { w: 1280, h: 960 };
+    const pl = placeStage({ canvas, safeArea: SA, iface: AI });
+    const pill = visibleOf(pl.iface!, AI);
+    expect(pill.y + pill.h / 2).toBeCloseTo(extent(pl.character, DEFAULT_METRICS).top + slotDrop(AI, DEFAULT_METRICS) * pl.charScale, 9);
+  });
+
+  it('the visible interface never covers the face-safe band (narrow and wide poses): a card the chest-height rule lifts into it is nudged below it (+ 8)', () => {
+    // Pinned: the live-app card beside the narrow pose at 1280x960. The rule would put its top inside the band.
+    {
+      const canvas = { w: 1280, h: 960 };
+      const s = fitStage(canvas, SA).scale;
+      const pl = placeStage({ canvas, safeArea: SA, metrics: NARROW, iface: LIVE_APP });
+      const e = extent(pl.character, NARROW);
+      const band = placedFaceSafe(pl, NARROW);
+      expect(band.y).toBeCloseTo(e.top, 9);
+      expect(band.h).toBeCloseTo(207.4 * s, 9);
+      const ruleTop = e.top + slotDrop(LIVE_APP, NARROW) * s * WAIST_RATIO - (LIVE_APP.legH / 4) * s;
+      expect(ruleTop).toBeLessThan(band.y + band.h - 20); // the guard can fail: 302.7 inside the band's 332.1
+      expect(pl.iface!.y).toBeCloseTo(band.y + band.h + 8 * s, 9); // 343.7
+    }
+    // Every leg, canvas and the two fixture poses: no overlap; the highlight card and the AI pill never need the nudge.
+    for (const canvas of [...CANVASES, ...SWEEP]) {
+      for (const m of [NARROW, WIDE]) {
+        for (const leg of [HIGHLIGHT, AI, LIVE_APP]) {
+          const pl = placeStage({ canvas, safeArea: SA, metrics: m, iface: leg });
+          const at = `${canvas.w}x${canvas.h} ${m === NARROW ? 'narrow' : 'wide'} ${leg.legW}x${leg.legH}`;
+          expect(overlaps(visibleOf(pl.iface!, leg), placedFaceSafe(pl, m)), at).toBe(false);
+          if (leg !== LIVE_APP) {
+            const v = visibleOf(pl.iface!, leg);
+            expect(v.y + v.h / 2, at).toBeCloseTo(extent(pl.character, m).top + slotDrop(leg, m) * pl.charScale * WAIST_RATIO, 9);
+          }
+        }
+      }
+    }
+  });
+
+  it('the visible interface is clamped to the content bottom where the stage root clips (a very wide pose\'s live-app card)', () => {
+    const canvas = { w: 1280, h: 960 };
+    const f = fitStage(canvas, SA);
+    const s = f.scale;
+    const pl = placeStage({ canvas, safeArea: SA, metrics: VERY_WIDE, iface: LIVE_APP });
+    const e = extent(pl.character, VERY_WIDE);
+    expect(pl.charScale / s).toBeLessThan(0.4); // shrunk hard to fit the canvas width
+    // The guard can fail: the chest-height rule ends the card inside the canvas but in the 8 % strip,
+    // where a clamp to the canvas would leave it (948.7 between 883.2 and 960) ...
+    const ruleBottom = e.top + slotDrop(LIVE_APP, VERY_WIDE) * pl.charScale * WAIST_RATIO + (LIVE_APP.legH / 4) * s;
+    expect(ruleBottom).toBeGreaterThan(f.content.h + 50);
+    expect(ruleBottom).toBeLessThan(canvas.h);
+    // ... it ends exactly on the content bottom instead, at its own size and x.
+    expect(pl.iface!.y + pl.iface!.h).toBeCloseTo(f.content.h, 9);
+    expect(pl.iface!.h).toBeCloseTo((LIVE_APP.legH / 2) * s, 9);
+    // Never clipped beats face-safe (as interfaceSlot's frame clamp beats its nudge): with no room below
+    // the band, the card keeps to the content box and overlaps it.
+    expect(overlaps(pl.iface!, placedFaceSafe(pl, VERY_WIDE))).toBe(true);
+    // With no bottom margin the root clips nothing and the content bottom is the canvas bottom.
+    const flush = placeStage({ canvas, safeArea: { right: 0.16, bottom: 0 }, metrics: VERY_WIDE, iface: LIVE_APP }).iface!;
+    expect(flush.y + flush.h).toBeLessThanOrEqual(canvas.h + 1e-9);
   });
 });

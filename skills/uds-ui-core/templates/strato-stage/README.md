@@ -85,25 +85,40 @@ amended by task C6 on 2026-11-06 (the 8 % bottom margin and the waist on it).
   Never clipped beats every size and position target, the portrait "25 % down" included.
 * **The interface** keeps the frame's scale `s` (its landscape, width-fit size). Its centre keeps the
   slot's offset from the character, per kind: `(character centre x - (480 - slot centre x) s,
-  head top + (slot centre y - 22) charScale)`, the slot from `interfaceSlot(kind, faceSafe)`. Then
-  it is clamped so its VISIBLE part lies inside the canvas: the card (a `live-app` or
-  `feature-highlight` leg, whose mount is the slot), or for the AI prompt leg (its canvas is
-  `promptWindowLeg(slot).canvas`) the pill. The AI prompt leg's transparent glow pad (edge alpha
-  at most 4/255) may run past the canvas edge, as it always could (controller ruling, 2026-11-05).
+  head top + (slot centre y - 22) charScale r)`, the slot from `interfaceSlot(kind, faceSafe)`.
+  `r` is 588/661 with a measured waist and 1 without (ruling 2026-11-06): the vertical offset scales
+  with the body, so the interface keeps its share of head-to-waist. The AI prompt pill stays at
+  chest height (52 % of head-to-waist, as on the Figma's 661 character) instead of sliding to 59 %
+  on the smaller 588 body. Its VISIBLE part is the card (a `live-app` or `feature-highlight` leg,
+  whose mount is the slot), or the pill for the AI prompt leg (its canvas is
+  `promptWindowLeg(slot).canvas`). That visible part is then:
+  1. kept inside the canvas width;
+  2. nudged below the face-safe rect placed with the character (+ 8 at its scale) when it would
+     cover it, `interfaceSlot`'s own rule re-applied on the canvas. For the fixture poses only the
+     provisional `live-app` card ever needs it; the highlight card and the AI pill sit lower;
+  3. kept between the canvas top and the line the stage root clips at: the content bottom with a
+     bottom margin, else the canvas bottom. It is centred when it is taller than that box. This
+     clamp wins over the face nudge, so never clipped beats face-safe, as in `interfaceSlot`.
+  The AI prompt leg's transparent glow pad (edge alpha at most 4/255) may run past the canvas
+  edge, as it always could (controller ruling, 2026-11-05).
 * **Clipping.** The stage root (`stageRootStyle`) is the canvas from its top-left down to the
   content bottom. With the 8 % bottom margin it cuts there: exactly at the waist, so nothing of the
   character below the waist shows (the cutout itself runs on below it) and the strip stays empty.
   It never cuts at the right margin. The character is otherwise cut by nothing but the canvas.
   With no bottom margin the root clips nothing; an older moderator's 22 % is cut the same way. The
-  interface is cut by its own leg canvas (`interfaceLegStyle`), then by the canvas (its clamp is to
-  the canvas, not the content bottom; for the poses below it stays above the margin line).
-* **At `p = 0`** every interface rect equals the frame's fit (`fitStage` + `interfaceMountRect`),
-  and the character keeps the Figma head top (`originY + 22 s`) and centre at 588/661 the size of
-  the 2026-11-05 rule, its waist on the content bottom (without `waistFrac`: the subject bbox
-  exactly as before). The exceptions are where that would be clipped: a pose too wide for the
-  canvas shrinks, and a card or pill that would cross the canvas edge moves inside. The AI prompt
-  leg is exactly where the fit puts it at 1280 x 960, 1600 x 900 and 1280 x 1024: its pill is
-  inside; at 1280 x 1024 its glow pad runs 20 px past the left edge, as such a pad always could.
+  interface is cut by its own leg canvas (`interfaceLegStyle`); its visible part is clamped above the
+  root's clip line, so no interface content lands in the 8 % strip.
+* **At `p = 0`** the character keeps the Figma head top (`originY + 22 s`) and centre at 588/661
+  the size of the 2026-11-05 rule, with its waist on the content bottom. Every interface keeps the
+  frame fit's x and size (`fitStage` + `interfaceMountRect`), and its y is raised by
+  `(slot centre y - 22) s 73/661` (55 px for the AI prompt at 1280 x 960). Without `waistFrac`,
+  both the character and the interface are exactly as before. The exceptions are:
+  * a pose too wide for the canvas shrinks;
+  * a card or pill that would cross the canvas edge, or the clip line, moves inside;
+  * the `live-app` card is nudged below the face.
+
+  The AI prompt leg keeps the fit's x at 1280 x 960, 1600 x 900 and 1280 x 1024, and its pill is
+  inside. At 1280 x 1024 its glow pad runs 20 px past the left edge, as such a pad always could.
 
 | Canvas (`{ 0.16, 0.08 }`) | Content height | `p` | `s` | Narrow pose: scale, head top | Pose 2 %-99 % wide: scale, head top |
 |---|---|---|---|---|---|
