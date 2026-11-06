@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.4.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.3.0...v3.4.0) (2026-11-06)
+
+
+### Features
+
+* **strato-stage:** the waist sits on the content bottom (8 % margin), head-to-waist 588 ([ace7913](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ace7913fc624eeb738adebfe84e8035e3e070469))
+* **strato-stage:** waist-up placement, never clipped, portrait growth ([214edfa](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/214edfa97f67bf52e2c637f4c89d55b55b442170))
+
+
+### Bug Fixes
+
+* **strato-stage:** clamp the visible interface, not its glow pad ([42ef7c5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/42ef7c599ea789f7f9f7e36245aeecb2711ddaa3))
+* **strato-stage:** keep the interface above the bottom margin and at chest height ([7bae9b6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/7bae9b6ceb1350bb8a7975a2a05f541198b10c34))
+* **strato-stage:** the face-safe push is continuous ([4830ebc](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/4830ebcf3f58df59c1efbe793f37d8223abe117a))
+
+
+### Documentation
+
+* **skills:** illustration canvases up to 2048 × 2048 ([2922880](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/2922880c753c2e53d8675bb4e9eff075fa2c5fc1))
+
 ## [3.3.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.2.0...v3.3.0) (2026-11-05)
 
 
