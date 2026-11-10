@@ -15,8 +15,7 @@ feature is placeholder structure.
   AI button. It is never omitted.
 - **Demonstration layer**: a floating highlight card, connector line or pop-out as the brief
   asks (`shared/floating-card.md`, `shared/connector-line.md`, `ionos/feature-pop-out.md`);
-  in an animation, also follow the motion-choreography rule (and the brand's AI-animation rule
-  where one exists) for the motion.
+  in an animation, also follow the motion-choreography and AI-animation rules for the motion.
 
 ## Composition Rule — One Frame, One Highlight
 
