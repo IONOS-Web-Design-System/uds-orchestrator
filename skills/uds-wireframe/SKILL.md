@@ -22,7 +22,8 @@ Spacing uses `var(--space-N)` tokens.
 | `shared/constrained-viewport.md` | Cropping: bottom bleed, zoom-to-highlight, square, counterbalance |
 | `shared/connector-line.md` | Pop-out with an axis-aligned connector |
 | `ionos/feature-pop-out.md` | INPUT pops out from OUTPUT |
-| `ionos/ai-animations.md`, `ionos/micro-animations.md` | AI moments and micro-motion |
+| `shared/motion-choreography.md` | Every animation: the beats, one timing vocabulary, the pattern menu, export-safe motion |
+| `ionos/ai-animations.md` | IONOS AI moments |
 | `ionos/small-format.md`, `strato/small-format.md` | Small canvases (both sides ≤ 512px): crop, not shrink — each brand's own canvas, shell and colours |
 | `ionos/decorative-mode.md` + decorative primitives | Decorative mode (not reachable today) |
 
