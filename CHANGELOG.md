@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.5.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.4.0...v3.5.0) (2026-11-10)
+
+
+### Features
+
+* **wireframe:** one shared motion-choreography rule for every animation ([6a32a84](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/6a32a84467fbdc74fc45184aba2a3dfabb301732))
+* **wireframe:** STRATO small-format rule ([f6469ad](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f6469ad771591e94a84b353330fa5718ef7886a5))
+
 ## [3.4.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.3.0...v3.4.0) (2026-11-06)
 
 
