@@ -23,7 +23,7 @@ Spacing uses `var(--space-N)` tokens.
 | `shared/connector-line.md` | Pop-out with an axis-aligned connector |
 | `ionos/feature-pop-out.md` | INPUT pops out from OUTPUT |
 | `ionos/ai-animations.md`, `ionos/micro-animations.md` | AI moments and micro-motion |
-| `ionos/small-format.md` | Small canvases (both sides ≤ 512px): crop, not shrink |
+| `ionos/small-format.md`, `strato/small-format.md` | Small canvases (both sides ≤ 512px): crop, not shrink — each brand's own canvas, shell and colours |
 | `ionos/decorative-mode.md` + decorative primitives | Decorative mode (not reachable today) |
 
 When `dimensions.w <= 512 AND dimensions.h <= 512` and no `Composition pattern:` is set,
