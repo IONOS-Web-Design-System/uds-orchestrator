@@ -43,7 +43,7 @@ export const MyComposition: React.FC<VariantProps> = ({ brand, platform, colorSc
 | `shared/surface-theme.md`, `shared/no-marketing-heading.md` | Canvas surface, no marketing headline in UI |
 | `ionos/asset-integration.md` | Local/Figma/catalog asset selection and placement |
 | `shared/embed-preamble.md` + `shared/embed-*.md`, `ionos/image-backdrop.md`, `shared/product-pop-out/*.md`, `ionos/product-pop-out/*.md` | Hybrid embed contracts and the product-pop-out module |
-| `ionos/wide-format.md` | Extended-landscape canvases (≥ 2.2:1) |
+| `shared/wide-format.md` | Extended-landscape canvases (≥ 2.2:1), every brand |
 
 When the brief contains `[HYBRID EMBED CONTRACT]`, load `shared/embed-preamble.md` first, then the
 file(s) for the contract's `Style:` line (or every `shared/product-pop-out/` file for

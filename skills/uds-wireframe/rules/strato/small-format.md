@@ -109,12 +109,21 @@ fit. The visible region carries the meaning; the off-canvas remainder implies "t
 product".
 
 Grammar:
-- **Anchor & bleed.** Pin the white frame to the **top-left** (or top corner): give it a fixed
-  large size (its natural ~700–900px width) positioned so its left/top sit at a small inset
-  (~20–32px, the orange canvas showing around that corner) and its right/bottom extend **past
-  the canvas**. Set `overflow: 'hidden'` on the root `AbsoluteFill` so the bleed clips to a clean
+- **Anchor with air, then bleed.** Pin the white frame to one corner — **top-left** by default —
+  at a fixed large size (its natural ~700–900px width), leaving real **air on the anchored
+  sides**: ~10–15% of the canvas width beside it and ~12–20% of the canvas height above it, the
+  orange canvas showing there. Its other two edges extend **past the canvas**. Set
+  `overflow: 'hidden'` on the root `AbsoluteFill` so the bleed clips to a clean
   edge — UNLESS this is a `product-pop-out` composite, where the root must stay unclipped. Only
   the shell anchor + a few rows + the highlighted feature stay in view; the far edge is cut off.
+- **The pivot stays in view.** Choose the corner and the frame's layout around the feature:
+  the control it acts on (the button pressed, the field typed into, the toggle), everything
+  that animates or changes state (progress, status badges, counts, the result), and the
+  floating highlight sit fully inside the canvas, at least ~8% from every canvas edge. Only
+  static chrome and placeholder rows run off. If the feature lives on the frame's right side
+  (a primary button, a status column), anchor the frame **top-right** and bleed left and bottom,
+  or lay that element out inside the visible region — a canvas edge never cuts through a pivot
+  element or its label.
 - **Show the navigational anchor — ONE of the two STRATO shells** (`strato/visual-language.md`):
   - the **light sidebar with the orange logo tile** at its top (white `strato-lite-mono-dark`
     cube on `#FF8800`) and 3–4 large filled nav icons in `#8493B3`, the active one on a filled

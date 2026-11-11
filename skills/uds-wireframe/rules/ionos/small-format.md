@@ -104,12 +104,21 @@ visible region carries the meaning; the off-canvas remainder just implies "this 
 product".
 
 Grammar (mirrors the reference assets):
-- **Anchor & bleed.** Pin the frame to the **top-left** (or top corner): give it a fixed
-  large size (its natural ~700–900px width) positioned so its left/top sit at a small inset
-  and its right/bottom extend **past the canvas**. Set `overflow: 'hidden'` on the root
+- **Anchor with air, then bleed.** Pin the frame to one corner — **top-left** by default — at
+  a fixed large size (its natural ~700–900px width), leaving real **air on the anchored sides**:
+  ~10–15% of the canvas width beside it and ~12–20% of the canvas height above it, where the
+  canvas background shows. Its other two edges extend **past the canvas**. Set `overflow: 'hidden'` on the root
   `AbsoluteFill` so the bleed clips to a clean edge — UNLESS this is a `product-pop-out`
   composite, where the root must stay unclipped (see `product-pop-out/composition.md`). Only
   the sidebar + a few rows + the highlighted feature stay in view; the far edge is cut off.
+- **The pivot stays in view.** Choose the corner and the frame's layout around the feature:
+  the control it acts on (the button pressed, the field typed into, the toggle), everything
+  that animates or changes state (progress, status badges, counts, the result), and the
+  floating highlight sit fully inside the canvas, at least ~8% from every canvas edge. Only
+  static chrome and placeholder rows run off. If the feature lives on the frame's right side
+  (a primary button, a status column), anchor the frame **top-right** and bleed left and bottom,
+  or lay that element out inside the visible region — a canvas edge never cuts through a pivot
+  element or its label.
 - **Show the navigational anchor.** Keep the brand's dark navy **sidebar/nav rail** (with the
   IONOS wordmark and 3–4 large nav icons) in frame on the left — it's what reads as "a real
   product". Then a few content rows / list items / a chart in the main pane.

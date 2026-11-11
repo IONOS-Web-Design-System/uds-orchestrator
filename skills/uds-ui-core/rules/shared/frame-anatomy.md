@@ -45,6 +45,36 @@ brand-specific asset name in this shared file.
 - Never use the sky accent color in the product shell — that is a CTA colour; use `DARK_SHELL_ACCENT` for shell decorative elements (concrete value in the brand's color rule, e.g. `ionos/product-frame-color.md`)
 - AI feature affordances: the AI CTA is `KitButton concept="ai"` and an AI icon action `KitIconButton ai`; see `uds-style-guide/ionos-ai-features` for the generating state and animation rules
 
+## Frame shape and cropping — the canvas crops a real window
+
+The product frame is a real window with a real shape: a desktop app or browser about **16:10**
+(between 3:2 and 16:9), a tablet 4:3, a phone about 9:19.5. **Never derive the frame's width or
+height from the canvas** — a window three times wider than tall, or a desktop window taller than
+wide, reads as fake. Size the window in its own shape; where it does not fit, the canvas crops
+it: it runs off one or two canvas edges (`overflow: 'hidden'` on the root).
+
+**Choose the crop around the pivot.** These stay fully inside the canvas, at least ~6% of the
+canvas side from every edge: the control the feature acts on (the button pressed, the field
+typed into, the toggle), every element that animates or changes state (progress, status
+badges, counts, the result), and the floating highlight. Only static chrome and placeholder
+content — nav rows, lower list rows, the far end of a header, filler bars — may be cut by a
+canvas edge. When the UI's natural layout puts a pivot element on the side that bleeds (a
+right-aligned button or status column in a frame bleeding right), move the crop so that side is
+in view and bleed the other, or lay that element out inside the visible part. Never let a canvas
+edge cut through a pivot element or its label.
+
+- **Wide canvas** (≥ 2.2:1): the window keeps 16:10 at the band's width and runs off the bottom
+  (`wide-format.md`).
+- **Portrait canvas** (height ≥ 1.25 × width): the desktop window stays landscape, about 1.2–1.4×
+  the canvas width so most of it stays in view. Anchor it with air above and to one side (at
+  least ~8% of the canvas width), let it run off the opposite side and the bottom, keep the pivot in
+  the visible upper part, and use the space below for the floating highlight. For a mobile
+  scenario use a phone-shaped frame instead.
+- **Small canvas** (both sides ≤ 512px): the brand's small-format rule.
+
+This section does not apply to a bare-interface (device screen) render, which fills its canvas
+edge to edge, or to a composite whose non-negotiables give the frame a fixed rect.
+
 ## Opaque base plate (transparent-root composite styles)
 
 For `product-pop-out` / `device-mockup` the composition root is TRANSPARENT, so any interface

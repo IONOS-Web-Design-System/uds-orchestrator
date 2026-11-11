@@ -1,16 +1,17 @@
 # Constrained Viewport — Frame Cropping and Highlight Placement
 
-When the canvas is **wide and short** (landscape marketing banner, 3:1 card) or the product frame is taller/wider than the available display area, do not squeeze or scale the frame to fit. Use these cropping patterns instead.
+When the canvas is **wide and short** (landscape marketing banner, 3:1 card), **tall** (portrait), or the product frame is taller/wider than the available display area, do not squeeze or scale the frame to fit. The frame keeps its real window shape and the canvas crops it, with the pivot — the control acted on, everything that changes state, the highlight — kept inside the canvas (`frame-anatomy.md` "Frame shape and cropping"). Use these cropping patterns.
 
 ## 1 — Harmonized Side Margins
 
-Center the product frame optically within the viewport. Leave equal breathing room on the left and right. Do not stretch the frame to fill horizontal space — unused canvas margin is intentional and gives the composition air.
+Center the product frame optically within the viewport. Leave equal breathing room on the left and right. Do not stretch the frame to fill horizontal space — unused canvas margin is intentional and gives the composition air. Give the frame a width and **derive its height from its own shape (~16:10)**; when that height does not fit the canvas, use Pattern 2 — never shorten the window to the canvas height.
 
 ```tsx
-// ✅ Frame narrower than canvas — centered with equal side margins
+// ✅ Frame narrower than canvas — centered with equal side margins, its own 16:10 shape
 <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center' }}>
   <div style={{
     width: 820,           // narrower than the 1280px canvas
+    height: 512,          // 820 / 1.6 — from the window's shape, never from the canvas
     position: 'relative',
     overflow: 'hidden', borderRadius: 12,
   }}>
@@ -19,11 +20,11 @@ Center the product frame optically within the viewport. Leave equal breathing ro
 </AbsoluteFill>
 ```
 
-## 2 — Bottom Bleed (height-insufficient landscape canvas)
+## 2 — Bottom Bleed (height-insufficient canvas)
 
-When the canvas is too short to show the full frame height, **let the frame's bottom extend beyond the viewport**. Never shrink the frame to fit — the crop signals depth ("there's more below") and makes the product feel real and full-size.
+When the canvas is too short to show the full frame height, **let the frame's bottom extend beyond the viewport**. Never shrink the frame to fit — the crop signals depth ("there's more below") and makes the product feel real and full-size. Place it vertically so the feature's region is in view: the bleed cuts lower rows, never the control or its result.
 
-This pattern applies to **landscape/widescreen canvases** (e.g. 1280×720). For **square canvases** see Pattern 6.
+This pattern applies whenever the window's natural height exceeds the canvas — every wide canvas (≥ 2.2:1, see `wide-format.md`) and most landscape banners (e.g. 1280×720). For **square canvases** see Pattern 6, for **portrait canvases** Pattern 7.
 
 **Pattern (Figma node 64:320 — WordPress editor, landscape):** Editor UI anchored near top of canvas; bottom ~30% is cropped. The AI highlight card appears inside the viewport near the bottom edge.
 
@@ -130,6 +131,7 @@ Place the AI highlight on the **opposite side** from where the frame bleeds most
 | Landscape | Right + bottom (zoom-to-highlight) | Left of center, may extend slightly past left canvas edge |
 | Landscape | Right only | Left of center |
 | **Square** | **Right** (always for square) | **Left-anchored, ~8% from left edge — fully within canvas** |
+| **Portrait** | **Right + bottom** (desktop window stays landscape) | **Below the window's visible part, fully within canvas** (Pattern 7) |
 
 > **Square canvas override:** For 1:1 canvases (w ≈ h), the product frame always bleeds right and the highlight is always left-anchored. See Pattern 6 for the exact layout.
 
@@ -223,3 +225,30 @@ width: 200   // use canvas_width × 0.62 minimum
 - Highlight card: bottom-anchored, enters from **below** (`translateY` from +50–70px → 0) with slight scale (0.92 → 1.0), arrives ~10–15 frames after the frame. Because the card uses `bottom` positioning, a positive `translateY` offset pushes it downward off-screen — interpolate toward 0 for the entry.
 - **Card entrance must terminate exactly** at `translateY(0) scale(1)` before any typing/text beat starts. Use `Easing.bezier(0.34, 1.56, 0.64, 1)` with clamp (terminates exactly), or snap the spring: `raw > 0.995 ? 1 : raw`. An unsettled spring keeps the text re-rasterizing → shimmer.
 - After both elements settle, **the frame only** may drift very slowly right (~1–2px/frame) to reinforce depth — never the highlight card (text shimmers under sub-pixel drift; the frame's image content does not)
+
+## 7 — Portrait Canvas (height ≥ 1.25 × width)
+
+A desktop window never turns portrait: keep it 16:10 at about 1.2–1.4× the canvas width, with
+air top and left (≥ ~8%), running off the right and bottom; the pivot sits in its visible upper-left and the
+highlight below it, fully inside the canvas (`frame-anatomy.md` "Frame shape and cropping"). For
+a mobile scenario use a phone-shaped frame (~9:19.5) instead.
+
+```tsx
+// Portrait canvas (600×800) — 16:10 window bleeds right + bottom, pivot top-left, highlight below
+<AbsoluteFill style={{ overflow: 'hidden' }}>
+  <div style={{
+    position: 'absolute',
+    left: Math.round(W * 0.10),   // air on the left
+    top: Math.round(H * 0.12),    // air on top
+    width: Math.round(W * 1.3),   // wider than the canvas — runs off the right edge
+    height: Math.round(W * 1.3 / 1.6),
+    overflow: 'hidden', borderRadius: 16,
+  }}>
+    {/* product UI — the feature lives in its left ~60% */}
+  </div>
+  <div style={{ position: 'absolute', left: Math.round(W * 0.08), bottom: Math.round(H * 0.12), zIndex: 100 }}>
+    {/* floating highlight — fully inside the canvas */}
+  </div>
+</AbsoluteFill>
+```
+

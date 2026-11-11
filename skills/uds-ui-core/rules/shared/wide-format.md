@@ -6,10 +6,11 @@ wide: true
 # Wide-format illustrations — centre the focus, leave the sides empty
 
 **When this applies:** the canvas is an extended landscape — **width ÷ height ≥ 2.2**
-(e.g. 1344×487, 1600×600, 970×250). Below that ratio, ignore this rule and use the standard
-composition guidance. If the canvas is *also* ≤ 512px on **both** sides, the small-format rule (when the direction skill ships one)
-governs instead — that rule wins, because at that size there is no width to spare for empty
-side margins.
+(e.g. 1344×487, 1080×360, 1600×600, 970×250). Below that ratio, ignore this rule and use the
+standard composition guidance. If the canvas is *also* ≤ 512px on **both** sides, the
+small-format rule (when the direction skill ships one) governs instead — that rule wins, because
+at that size there is no width to spare for empty side margins. Every brand: the canvas colours
+come from the brand's own rules.
 
 This rule does **not** apply to a `bare-interface` (screen-content) render — that leg is
 full-bleed by definition (the UI fills the entire frame before being placed onto a device
@@ -28,11 +29,18 @@ edges produces stretched panels, padded gaps, and invented filler cards. Treat t
 - The **side margins carry the canvas background ONLY**: no content, no decorative filler, no
   panel stretched to reach an edge, no second cluster of cards.
 - "Empty" means **no content**, not transparent. The background is still painted per the
-  standard Background rule (`var(--surface-subtlest, #DBEDF8)`, or the AI-showroom gradient
-  when this render's non-negotiables carry a `CANVAS BACKGROUND:` line).
+  brand's canvas rule (or the `CANVAS BACKGROUND:` line in this render's non-negotiables).
 - Do **not** widen, stretch, or pad the composition to fill the canvas, and do **not** add
   extra cards / panels / segments to occupy the sides. Prefer **fewer elements at a legible
   scale** over more elements spread thin.
+
+## The window keeps its own shape
+
+The product window in the band is a real window — a desktop app or browser at about **16:10**
+(between 3:2 and 16:9). Give it the band's width and **derive its height from that shape, not
+from the canvas**: on a short canvas the window is taller than the canvas and runs off the
+bottom. Never flatten it to the canvas height — a window three times wider than tall reads as
+fake.
 
 ## Bleed vertically, not horizontally
 
@@ -40,6 +48,10 @@ The focus block may run **off the bottom** (and/or top) edge — that is the int
 a tall subject room on a short canvas. Set `overflow: 'hidden'` on the root `AbsoluteFill` so
 the bleed clips to a clean edge, UNLESS this is a `product-pop-out` composite, where the root
 must stay unclipped (see `product-pop-out/composition.md`).
+
+Position the window vertically so the part where the feature happens is **inside** the canvas:
+the bleed cuts lower rows and placeholder content, never the control that is acted on, an
+element that changes state, or its result (see `frame-anatomy.md` "Frame shape and cropping").
 
 Do not bleed horizontally to justify a full-width layout — that reintroduces exactly the
 spread-out composition this rule exists to prevent.
@@ -73,7 +85,7 @@ Never spread across the full width in either case. Absent an explicit instructio
 ## Reference
 
 Figma `StkUOHcGRMDXOZWT0E2nft` node `64-320` ("Wordpress Productview 23"), 1344×487 (2.76:1):
-a flat deep-blue canvas; the editor UI sits in the middle ~57% of the width (left margin ~24%,
+a flat brand canvas; the editor UI sits in the middle ~57% of the width (left margin ~24%,
 right margin ~19%) and bleeds off the **bottom** edge; a photo sits inline inside the website
-preview; a single AI-gradient prompt card overlaps the UI block's right edge and reaches into
-the right margin. That is the default composition this rule describes — not the exception.
+preview; a single prompt card overlaps the UI block's right edge and reaches into the right
+margin. That is the default composition this rule describes — not the exception.
