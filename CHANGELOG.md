@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.6.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.5.0...v3.6.0) (2026-11-11)
+
+
+### Features
+
+* **ui-core,wireframe:** frames keep their real shape, the canvas crops them around the pivot ([6c42da3](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/6c42da3b3e0974cdc9962fe1a27e18cb2aa732f9))
+
+
+### Bug Fixes
+
+* **wireframe:** shorten the motion pointer in demonstration-frame ([fa8b1f6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/fa8b1f603d7ea4a02f25f37a01a355e84dbfc0b1))
+
 ## [3.5.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.4.0...v3.5.0) (2026-11-10)
 
 
