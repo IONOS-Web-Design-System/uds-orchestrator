@@ -27,6 +27,7 @@ Spacing uses `var(--space-N)` tokens.
 | `shared/motion-choreography.md` | Every animation: the beats, one timing vocabulary, the pattern menu, export-safe motion |
 | `ionos/ai-animations.md` | IONOS AI moments |
 | `shared/small-format.md` | Small canvases (both sides ≤ 512px): the highlight moment — one central object, scattered satellites, one glowing highlight, colours from tokens |
+| `shared/small-format-motion.md` | Animated small canvases: the three highlight-moment types (story with a climax, UI interaction, icon story with background motion) |
 | `ionos/decorative-mode.md` + decorative primitives | Decorative mode (not reachable today) |
 
 When `dimensions.w <= 512 AND dimensions.h <= 512` and no `Composition pattern:` is set,

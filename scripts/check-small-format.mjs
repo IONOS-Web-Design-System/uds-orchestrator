@@ -25,6 +25,15 @@
  *       that a small canvas can read.
  *   (e) all four hybrid embed rules (ui-core) that can reach a small canvas carry the sentence
  *       that makes the generated photo the central object of the highlight moment there.
+ *   (f) the motion rule `shared/small-format-motion.md` exists and opens with exactly the
+ *       `small: true` + `motion: [animation]` scope (agent-svc ANDs the keys: animated small
+ *       canvases only), stays at or under 8,000 characters with no hex, carries its headings,
+ *       the type-test line verbatim on a line of its own (the same line `small-format.md` gives
+ *       the planner, so codegen can infer a type the brief does not name), the snap curve, the
+ *       five morph moves and five background devices (each as a bold defined term), "icon
+ *       story", the no-recoil sentence for text and "one blurred glow". Phrases are matched
+ *       with whitespace collapsed, so a line wrap cannot hide one; the type-test line must
+ *       match a whole line exactly.
  *
  * Exit codes: 0 green, 1 violation, 2 cannot determine ("read nothing" is never "clean").
  *
@@ -65,6 +74,40 @@ const REQUIRED = [
   '--text-base',
   '--surface-subtle',
   '--text-semantic-skeleton',
+];
+
+/** The type test — one line, byte-identical in the motion rule (codegen) and `small-format.md`
+ *  (planner). */
+const TYPE_TEST =
+  'Type: a process — something arrives, is forwarded, is sent, or turns into something else — ' +
+  'is a **story**; the user doing something to the product — upload, connect, add, drag, click — ' +
+  'is an **interaction**; a lasting claim — secure, compliant, included, every night — is a ' +
+  '**state**. A user action wins over a process, a process over a claim.';
+
+const MOTION_RULE = join(WIREFRAME_RULES, 'shared', 'small-format-motion.md');
+const MOTION_FRONTMATTER = '---\nsmall: true\nmotion: [animation]\n---';
+const MOTION_MAX_CHARS = 8000;
+const MOTION_HEADINGS = [
+  '# Small-format motion — three highlight-moment types',
+  '## Type test',
+  '## Story — a morph with a climax',
+  '## Interaction — a UI animation',
+  '## State — an icon story with background motion',
+  '## Shared rules',
+  '## Still renders',
+];
+const MOTION_REQUIRED = [
+  'bezier(0.2, 1.8, 0.4, 1)',
+  'icon story',
+  'Text-bearing satellites and labels never recoil.',
+  'one blurred glow',
+];
+/** The five morph moves and the five background devices, each required as a bold defined term:
+ *  a bare substring would survive deleting its definition ("unfolds", "press ripples" occur
+ *  elsewhere in the rule). */
+const MOTION_TERMS = [
+  'unfold', 'stretch', 'split', 'settle in', 'launch',
+  'ripples', 'particles', 'dot field', 'orbit', 'light sweep',
 ];
 
 /** The retired layouts and their pattern names; `\s+` so a line wrap cannot hide a phrase,
@@ -166,13 +209,46 @@ for (const name of ['embed-floating-intersect.md', 'embed-inline-asset.md', 'emb
   }
 }
 
+// ── (f): the motion rule ────────────────────────────────────────────────────
+let motionChars = null;
+if (!existsSync(MOTION_RULE)) {
+  fail('f', `${rel(MOTION_RULE)} is missing`);
+} else {
+  const text = readFileSync(MOTION_RULE, 'utf8');
+  motionChars = text.length;
+  if (!text.startsWith(`${MOTION_FRONTMATTER}\n`)) {
+    fail('f', `${rel(MOTION_RULE)} does not open with exactly ${JSON.stringify(MOTION_FRONTMATTER)}`);
+  }
+  if (text.length > MOTION_MAX_CHARS) {
+    fail('f', `${rel(MOTION_RULE)} is ${text.length} chars (limit: ${MOTION_MAX_CHARS})`);
+  }
+  for (const m of text.matchAll(HEX)) {
+    const line = text.slice(0, m.index).split('\n').length;
+    fail('f', `${rel(MOTION_RULE)}:${line} carries hex ${m[0]} (colours are token roles or white)`);
+  }
+  const lines = text.split('\n');
+  for (const heading of MOTION_HEADINGS) {
+    if (!lines.includes(heading)) fail('f', `${rel(MOTION_RULE)} lacks the heading ${JSON.stringify(heading)}`);
+  }
+  if (!lines.includes(TYPE_TEST)) {
+    fail('f', `${rel(MOTION_RULE)} lacks the type-test line verbatim, on a line of its own`);
+  }
+  const flat = text.replace(/\s+/g, ' ');
+  for (const needle of MOTION_REQUIRED) {
+    if (!flat.includes(needle)) fail('f', `${rel(MOTION_RULE)} lacks ${JSON.stringify(needle)}`);
+  }
+  for (const term of MOTION_TERMS) {
+    if (!flat.includes(`**${term}**`)) fail('f', `${rel(MOTION_RULE)} does not define ${JSON.stringify(term)} (as **${term}**)`);
+  }
+}
+
 // ── report ──────────────────────────────────────────────────────────────────
 if (VERBOSE) {
-  console.log(`rule: ${ruleChars === null ? 'missing' : `${ruleChars} chars`}; scanned ${scanned} files (${markdown} .md) under ${rel(SKILLS)}`);
+  console.log(`rule: ${ruleChars === null ? 'missing' : `${ruleChars} chars`}; motion rule: ${motionChars === null ? 'missing' : `${motionChars} chars`}; scanned ${scanned} files (${markdown} .md) under ${rel(SKILLS)}`);
 }
 if (failures.length > 0) {
   for (const f of failures) console.log(f);
   console.log(`\n${failures.length} violation(s).`);
   process.exit(1);
 }
-console.log(`OK — (a)–(e) green: rule ${ruleChars} chars, no hex; ${scanned} files under skills/ clean.`);
+console.log(`OK — (a)–(f) green: rule ${ruleChars} chars, motion rule ${motionChars} chars, no hex; ${scanned} files under skills/ clean.`);
