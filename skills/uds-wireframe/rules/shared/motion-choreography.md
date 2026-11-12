@@ -14,6 +14,9 @@ exists). Typing, fades and text stability: remotion-best-practices `shared-motio
 (always in effect). All motion is driven by `useCurrentFrame()`; CSS transitions/keyframes fail
 the eslint gate, and no animation library is available (no GSAP, Framer Motion or Lottie player).
 
+On a small canvas (both sides ≤ 512px), `shared/small-format-motion.md` governs the beats and
+devices; this file's timing table and export-safe properties still apply.
+
 ## 1. One story, told in beats
 
 An animation shows ONE thing happening: the feature from the brief acting. Plan the beats, write

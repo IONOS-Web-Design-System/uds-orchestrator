@@ -13,7 +13,7 @@
  *       13,000 characters (the prompt budget; each deleted brand file was 13.7–14.3k), and
  *       carries NO hex. Fallback hex lives in agent-svc keyed by the render brand; a hex in a
  *       shared rule reaches every brand's prompt, and a negated literal gets copied.
- *   (b) it names the opening "Highlight moment:" sentence (verbatim, so the moderator line
+ *   (b) it names the opening typed "Highlight moment (story|interaction|state):" sentence (verbatim, so the moderator line
  *       that copies it cannot drift unseen) and the runtime token roles.
  *   (c) the two per-brand small-format files are gone.
  *   (d) no file under `skills/` still teaches the retired layouts or their pattern names.
@@ -61,12 +61,11 @@ const HEX = /#[0-9A-Fa-f]{6}\b/g;
 
 /** The opening sentence the planner must write — copied verbatim by the moderator's line. */
 const PLANNER_SENTENCE =
-  'Highlight moment: <central object> [in halo rings | on ghost cards], with <0–3 satellites> ' +
+  'Highlight moment (story|interaction|state): <central object> [in halo rings | on ghost cards], with <0–3 satellites> ' +
   '[linked by dashed connectors <from → to>]; the moment: <what acts> (AI|brand); labels: ' +
   '<0–3 real nouns from the body, or none>.';
 
 const REQUIRED = [
-  'Highlight moment:',
   PLANNER_SENTENCE,
   '--private-gradient-start',
   '--private-ai-primary-start',
@@ -152,6 +151,16 @@ if (!existsSync(RULE)) {
   for (const needle of REQUIRED) {
     if (!text.includes(needle)) {
       fail('b', `${rel(RULE)} lacks ${JSON.stringify(needle)}`);
+    }
+  }
+  const typeLines = text.split('\n').filter((l) => l.startsWith('Type: '));
+  if (!text.split('\n').includes(TYPE_TEST)) {
+    fail('b', `${rel(RULE)} lacks the type-test line verbatim, on a line of its own`);
+  }
+  if (existsSync(MOTION_RULE)) {
+    const motionTypeLines = readFileSync(MOTION_RULE, 'utf8').split('\n').filter((l) => l.startsWith('Type: '));
+    if (typeLines.length !== 1 || motionTypeLines.length !== 1 || typeLines[0] !== motionTypeLines[0]) {
+      fail('b', 'the type-test line in small-format.md and small-format-motion.md differ (or are not exactly one each)');
     }
   }
 }
