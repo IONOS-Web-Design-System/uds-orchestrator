@@ -42,7 +42,7 @@ Per-brand fonts/markets: see `rules/shared-brand-overview.md` (authoritative) an
 2. **Brand-specific rule files** — Navigate via the table above for colors and typography.
 3. **AI feature color language**: read the active brand's file when building any AI affordance.
    - ionos: **`rules/ionos-ai-features.md`** (blue→magenta gradient, AI tokens, Button `ai` concept).
-   - strato: **`rules/strato-ai-features.md`** (cyan→pink gradient with dark label text, blue text-gradient for secondary AI actions, yellow→orange thinking state). AI CTAs and AI icon actions come from the UDS kit (`KitButton concept="ai"`, `KitIconButton ai`); the hex values are for shapes you draw yourself.
+   - strato: **`rules/strato-ai-features.md`** (blue→cyan gradient with white label text, dark-blue text-gradient for secondary AI actions, yellow→orange thinking state). AI CTAs and AI icon actions come from the UDS kit (`KitButton concept="ai"`, `KitIconButton ai`); the hex values are for shapes you draw yourself.
 
 ## Quick Reference — IONOS Brand
 
@@ -86,7 +86,7 @@ Strato signature gradients:
 - **Brand Orange**: `#FF8800` → `#FFC700` (warm/sunny hero)
 - **Dark Orange**: `#FF5C00` → `#FF8800` (high-energy CTA)
 - **Blue**: `#272CB2` → `#2F2F70` (dark/premium sections)
-- **AI (AI features only)**: `#1FD7FF` → `#E498FF` with dark `#29294D` label (never white). See `rules/strato-ai-features.md`.
+- **AI (AI features only)**: `#0000FF` → `#00FFFF` with white label text. See `rules/strato-ai-features.md`.
 
 See `rules/strato.md` for the full palette, usage rules, and contrast-approved combinations.
 

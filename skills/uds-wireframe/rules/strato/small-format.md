@@ -165,7 +165,7 @@ against its own `# Icon name index`.
 - Avoid sub-20px icons at this scale. The central motif of an icon-story can be very large
   (up to ~40% of the shorter canvas edge).
 
-## AI features — one kit AI mark (cyan→pink, never orange)
+## AI features — one kit AI mark (blue→cyan, never orange)
 
 When the brief is a **genuine AI feature** (`aiFeature` / `aiStyled`), the composition MUST
 carry the STRATO AI signature (`uds-style-guide/rules/strato-ai-features.md`) on ONE element —
@@ -178,8 +178,8 @@ never the panel chrome, the shell, connector lines or a plain icon:
   action, or `<KitButton label={texts.cta ?? ''} concept="ai" icon={sparkles} size="small" />`
   when the brief has a short AI action label.
 
-The kit and the template take the cyan→pink `#1FD7FF → #E498FF` from the tokens with dark
-`#29294D` text — never white text on it, never the orange brand gradient as an AI signal, never
+The kit and the template take the blue→cyan `#0000FF → #00FFFF` from the tokens with white
+text — never dark text on it, never the orange brand gradient as an AI signal, never
 an IONOS colour. Size it as an accent, not the hero. A non-AI brief uses no AI element at all.
 
 ## Motion

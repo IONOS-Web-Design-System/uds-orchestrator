@@ -24,10 +24,12 @@ import type { ReactNode } from 'react';
 import { PROMPT_WINDOW_BRANDS, aiGradient } from './promptWindow.brands';
 import { AI_SVG, FlatIcon, type AiIconName } from './promptWindow.icons';
 
-/** STRATO literals (Figma variables: strato/blue-700, white, private/ai/primary-*). */
+/** STRATO literals (Figma variables: strato/blue-700, white, private/ai/primary-*). The glyph ON
+ *  the AI gradient is the brand table's on-gradient colour (UDS text-semantic-ai), so the two
+ *  cannot drift apart again. */
 export const STRATO_PROMPT = {
   ink: '#29294D',
-  onGradient: '#29294D',
+  onGradient: PROMPT_WINDOW_BRANDS.strato.onGradient,
   glass: 'rgba(255,255,255,0.56)',
   rim: 'inset 0 0 0 1px rgba(255,255,255,0.55), inset 0 1px 1px rgba(255,255,255,0.85)',
   face: 'Poppins',
@@ -98,6 +100,13 @@ export interface StratoPromptProps extends StratoMotion {
 const clamp01 = (v: number | undefined, fallback: number) =>
   v === undefined || Number.isNaN(v) ? fallback : Math.min(1, Math.max(0, v));
 
+/** '#RRGGBB' + alpha → 'rgba(r,g,b,a)'. The send-pulse flare derives from the brand gradient so a
+ *  UDS colour change cannot leave a stale literal behind. */
+function rgba(hex: string, alpha: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
+}
+
 /** Crisp text over a blurred white copy blended with plus-lighter (Figma LINEAR_DODGE). */
 function GlowText({ children, style, blurPx, alpha, caret }: {
   children: ReactNode; style: Record<string, string | number>; blurPx: number; alpha: number; caret?: boolean;
@@ -151,7 +160,7 @@ export function StratoPromptWindow(p: StratoPromptProps) {
       transform: pulse > 0 ? `scale(${1 + 0.08 * pulse})` : undefined,
       boxShadow: full
         ? `0 ${w * 0.02}px ${w * 0.03}px -${w * 0.006}px rgba(0,0,0,0.10), 0 ${w * 0.008}px ${w * 0.012}px -${w * 0.008}px rgba(0,0,0,0.10)`
-        : `0 0 ${w * 0.025}px rgba(0,0,0,${0.52 * (1 - 0.4 * pulse)})${pulse > 0 ? `, 0 0 ${w * 0.06 * pulse}px rgba(228,152,255,${0.8 * pulse})` : ''}`,
+        : `0 0 ${w * 0.025}px rgba(0,0,0,${0.52 * (1 - 0.4 * pulse)})${pulse > 0 ? `, 0 0 ${w * 0.06 * pulse}px ${rgba(PROMPT_WINDOW_BRANDS.strato.gradient[1], 0.8 * pulse)}` : ''}`,
     }}>
       <FlatIcon svg={AI_SVG[p.icon]} size={glyph} colour={STRATO_PROMPT.onGradient} />
     </div>

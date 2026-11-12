@@ -18,9 +18,9 @@ export interface BrandValues {
   simple: { surface: string; blurPx: number; face: string };
   full: { surface: string; blurPx: number; face: string };
   text: string;
-  /** [start, end] of the brand's AI gradient (IONOS blue→magenta, STRATO cyan→pink). */
+  /** [start, end] of the brand's AI gradient (IONOS blue→magenta, STRATO blue→cyan). */
   gradient: readonly [string, string];
-  /** Glyph/label colour ON the gradient: white on IONOS, the dark AI label on STRATO. */
+  /** Glyph/label colour ON the gradient (UDS `text-semantic-ai`): white on both brands. */
   onGradient: string;
   shadow: string;
 }
@@ -50,15 +50,16 @@ export const PROMPT_WINDOW_BRANDS = {
     onGradient: '#FFFFFF',
     shadow: '0 8px 24px rgba(0,27,65,0.10)',
   },
-  // STRATO AI concept (uds-style-guide/rules/strato-ai-features.md): cyan→pink with the DARK
-  // #29294D label — never white on the AI gradient. Body text Blu1100, face Poppins. The glass
-  // material is the IONOS template's, unchanged.
+  // STRATO AI concept (uds-style-guide/rules/strato-ai-features.md; UDS core 0.42
+  // --private-ai-primary-start/end = oklch(0.452 0.3132 264.05) / oklch(0.9054 0.1546 194.77),
+  // exactly #0000FF / #00FFFF): blue→cyan with a WHITE label (--text-semantic-ai = white).
+  // Body text Blu1100, face Poppins. The glass material is the IONOS template's, unchanged.
   strato: {
     simple: { surface: 'rgba(255,255,255,0.88)', blurPx: 14, face: 'Poppins' },
     full: { surface: 'rgba(255,255,255,0.88)', blurPx: 14, face: 'Poppins' },
     text: '#2F2F70',
-    gradient: ['#1FD7FF', '#E498FF'],
-    onGradient: '#29294D',
+    gradient: ['#0000FF', '#00FFFF'],
+    onGradient: '#FFFFFF',
     shadow: '0 8px 24px rgba(47,47,112,0.10)',
   },
 } as const satisfies Record<string, BrandValues>;

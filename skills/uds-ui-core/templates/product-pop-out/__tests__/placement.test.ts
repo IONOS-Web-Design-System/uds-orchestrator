@@ -26,25 +26,29 @@ describe('PromptWindow is floating only', () => {
 });
 
 describe('PromptWindow strato', () => {
-  it('uses the STRATO AI concept: cyan→pink gradient, dark label, Poppins, strato body text', () => {
-    expect(aiGradient('strato')).toBe('linear-gradient(45deg, #1FD7FF, #E498FF)');
+  it('uses the STRATO AI concept (UDS core 0.42): blue→cyan gradient, white label, Poppins, strato body text', () => {
+    expect(aiGradient('strato')).toBe('linear-gradient(45deg, #0000FF, #00FFFF)');
     const b = PROMPT_WINDOW_BRANDS.strato;
-    expect(b.onGradient).toBe('#29294D');
+    expect(b.onGradient).toBe('#FFFFFF');
     expect(b.text).toBe('#2F2F70');
     expect(b.simple.face).toBe('Poppins');
     expect(b.full.face).toBe('Poppins');
   });
 
-  it('the send glyph takes the brand on-gradient colour — dark on strato, white on ionos', () => {
+  it('the send glyph takes the brand on-gradient colour — white on both brands', () => {
     const glyph = (brand: 'ionos' | 'strato') => {
       const btn = SendButton({ size: 40, brand, glyph: 'arrow', glyphRatio: 0.44 }) as StyledEl;
       return (btn.props.children as ReactElement<{ colour: string }>).props.colour;
     };
     expect(glyph('ionos')).toBe('#FFFFFF');
-    expect(glyph('strato')).toBe('#29294D');
+    expect(glyph('strato')).toBe('#FFFFFF');
   });
 
   it('never paints the IONOS gradient on strato', () => {
     expect(JSON.stringify(PROMPT_WINDOW_BRANDS.strato)).not.toMatch(/#095BB1|#D746F5/i);
+  });
+
+  it('carries none of the retired STRATO AI colours (pre-0.42 cyan→pink, dark label)', () => {
+    expect(JSON.stringify(PROMPT_WINDOW_BRANDS.strato)).not.toMatch(/#1FD7FF|#E498FF|#29294D/i);
   });
 });

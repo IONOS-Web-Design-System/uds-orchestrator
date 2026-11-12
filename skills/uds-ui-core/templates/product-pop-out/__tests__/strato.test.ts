@@ -73,7 +73,20 @@ describe('STRATO PromptWindow', () => {
     const s = styles(render({ glowAngleDeg: 300 }));
     expect(s.find((x) => x.mixBlendMode === 'hard-light')!.background).toContain('linear-gradient(300deg');
     expect(s.filter((x) => String(x.background ?? '').includes('300deg'))).toHaveLength(1);
-    expect(s.some((x) => x.background === 'linear-gradient(45deg, #1FD7FF, #E498FF)')).toBe(true);
+    expect(s.some((x) => x.background === 'linear-gradient(45deg, #0000FF, #00FFFF)')).toBe(true);
+  });
+  it('the AI badge / button glyph is white on the blue→cyan gradient (UDS text-semantic-ai)', () => {
+    for (const variant of ['prompt-full', 'prompt-simple'] as const) {
+      // FlatIcon renders a masked div whose fill is the glyph colour.
+      const glyphs = styles(render({ variant })).filter((x) => x.maskImage !== undefined);
+      expect(glyphs.length, variant).toBeGreaterThan(0);
+      for (const g of glyphs) expect(g.backgroundColor, variant).toBe('#FFFFFF');
+    }
+  });
+  it('the send-pulse flare uses the new AI end colour, never a retired one', () => {
+    const shadows = styles(render({ variant: 'prompt-simple', pulse: 1 })).map((x) => String(x.boxShadow ?? '')).join(' ');
+    expect(shadows).toMatch(/rgba\(0,255,255,0\.8\)/);
+    expect(shadows).not.toMatch(/228,\s*152,\s*255/);
   });
   it('an IONOS window is unchanged by the strato branch', () => {
     const ionos = PromptWindow({ variant: 'prompt-simple', brand: 'ionos', ...base, width: 451 } as Parameters<typeof PromptWindow>[0]) as El;

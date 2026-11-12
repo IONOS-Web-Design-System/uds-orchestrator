@@ -24,7 +24,7 @@ enumerated, so an attempt to reach inside is a compile error.
 | Prop | Type | Notes |
 |---|---|---|
 | `variant` | `'prompt-simple' \| 'prompt-full'` | The moderator picks this from the copy's measured length |
-| `brand` | `PromptWindowBrand` | Keys `promptWindow.brands.ts`: `ionos` (blue→magenta, white glyph), `strato` (cyan→pink, dark `#29294D` glyph, Poppins) |
+| `brand` | `PromptWindowBrand` | Keys `promptWindow.brands.ts`: `ionos` (blue→magenta, white glyph), `strato` (blue→cyan, white glyph, Poppins) |
 | `promptText` | `string` | From `texts.promptText`, so market re-renders can translate it |
 | `actions` | `readonly [PromptAction, PromptAction]` | `prompt-full` only; defaults to `['edit','regenerate']` |
 | `leadingIcon` | `AiIconName \| 'none'` | The gradient-filled AI marker |

@@ -39,7 +39,7 @@ drawn field beside the AI button.
 
 ## What the component paints (do not rebuild it)
 
-- A **glow**: the STRATO AI gradient (`#1FD7FF → #E498FF`) behind the card,
+- A **glow**: the STRATO AI gradient (`#0000FF → #00FFFF`) behind the card,
   `mix-blend-mode: hard-light` and heavily blurred, so it tints whatever lies under the window.
   Place the window over the brand canvas and the frame's edge, never inside a wrapper with its
   own `zIndex`, `opacity` or `transform` — that isolates the blend and kills the glow.
