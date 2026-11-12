@@ -59,10 +59,10 @@ the embed style, you don't set it):**
 - **Large canvas (w ≥ 800 AND h ≥ 450):** the design-tool "pointer" look (headline selection
   marquee + connector + feature panel over a backdrop card) is available. Use a large landscape
   canvas when the user wants that "AI acting on the user's content" treatment.
-- **Small canvas (≤ 512px on both sides):** the moderator builds a compact composition — a
-  contained **image-card with edge chips**, or the **highlight moment** (uds-wireframe
-  `shared/small-format.md`), never a whole UI shrunk to fit. The pointer look is unavailable here
-  (it auto-demotes). So for square/banner/badge sizes, expect a card or highlight-moment result.
+- **Small canvas (≤ 512px on both sides):** the photo becomes the central object of the
+  **highlight moment** (uds-wireframe `shared/small-format.md`), never a whole UI shrunk to fit
+  and no image-card-with-chips alternative. The pointer look is unavailable here (it
+  auto-demotes). So for square/banner/badge sizes, expect a highlight-moment result.
 
 **Aspect-ratio safety (images):** image-svc renders natively at the target aspect ratio — no
 centering step. For non-square images, position the focal subject within the frame bounds to
