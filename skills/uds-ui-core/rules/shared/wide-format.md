@@ -8,7 +8,7 @@ wide: true
 **When this applies:** the canvas is an extended landscape — **width ÷ height ≥ 2.2**
 (e.g. 1344×487, 1080×360, 1600×600, 970×250). Below that ratio, ignore this rule and use the
 standard composition guidance. If the canvas is *also* ≤ 512px on **both** sides, the
-small-format rule (when the direction skill ships one) governs instead — that rule wins, because
+highlight moment (uds-wireframe `shared/small-format.md`, when the direction skill ships it) governs instead — that rule wins, because
 at that size there is no width to spare for empty side margins. Every brand: the canvas colours
 come from the brand's own rules.
 

@@ -70,7 +70,7 @@ edge cut through a pivot element or its label.
   least ~8% of the canvas width), let it run off the opposite side and the bottom, keep the pivot in
   the visible upper part, and use the space below for the floating highlight. For a mobile
   scenario use a phone-shaped frame instead.
-- **Small canvas** (both sides ≤ 512px): the brand's small-format rule.
+- **Small canvas** (both sides ≤ 512px): the highlight moment (uds-wireframe `shared/small-format.md`).
 
 This section does not apply to a bare-interface (device screen) render, which fills its canvas
 edge to edge, or to a composite whose non-negotiables give the frame a fixed rect.

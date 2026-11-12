@@ -38,8 +38,8 @@ instead of in place of it.
     ✓ "the brand product icon for automated cloud backups"
 
 **This governs WHICH graphic fills a slot — never whether the composition is icon-only.**
-It does not decide composition shape. The icon may be the central motif of an icon-story or
-one small element inside a content card, whichever the composition already called for. It
+It does not decide composition shape. The icon may be the central object of the highlight moment (uds-wireframe
+`shared/small-format.md`) or one small element inside a content card, whichever the composition already called for. It
 therefore does NOT override `shared-brief-enrichment.md` (which may require a content card
 carrying a message), the small-format grammar, or the no-marketing-heading rule.
 

@@ -26,3 +26,4 @@ What THIS rule adds:
 3. **Reference it via `staticFile('<slug>.<format>')` on an `<Img>`**, `objectFit: 'cover'` inside
    its slot, corners matching the surrounding card/panel.
 
+On a small canvas (both sides ≤ 512px) the generated photo is the central object of the highlight moment (uds-wireframe shared/small-format.md).

@@ -60,9 +60,9 @@ the embed style, you don't set it):**
   marquee + connector + feature panel over a backdrop card) is available. Use a large landscape
   canvas when the user wants that "AI acting on the user's content" treatment.
 - **Small canvas (≤ 512px on both sides):** the moderator builds a compact composition — a
-  contained **image-card with edge chips**, or a **cropped product frame** (the UI bleeds off
-  the canvas, large icons), never a whole UI shrunk to fit. The pointer look is unavailable here
-  (it auto-demotes). So for square/banner/badge sizes, expect a card or cropped-frame result.
+  contained **image-card with edge chips**, or the **highlight moment** (uds-wireframe
+  `shared/small-format.md`), never a whole UI shrunk to fit. The pointer look is unavailable here
+  (it auto-demotes). So for square/banner/badge sizes, expect a card or highlight-moment result.
 
 **Aspect-ratio safety (images):** image-svc renders natively at the target aspect ratio — no
 centering step. For non-square images, position the focal subject within the frame bounds to
@@ -114,7 +114,7 @@ avoid unexpected cropping at the edges; anchor key details to the center-to-midp
    | `mode=illustration`, brief says "point to / highlight a specific feature inside the app" | `product-frame-connector-line` |
    | `mode=illustration`, landscape canvas too short for a full UI (w > 2×h) | `product-frame-bottom-bleed` |
    | `mode=illustration`, square canvas (w ≈ h, large) | `product-frame-square` |
-   | `mode=illustration`, square canvas (w ≈ h, small: ≤ 512px on both sides) | `small-cropped-frame` (or `small-icon-story` for abstract concept) |
+   | `mode=illustration`, square canvas (w ≈ h, small: ≤ 512px on both sides) | `small-highlight-moment` |
    | `mode=illustration`, no special condition above | `product-frame-full` |
    | `mode=hybrid`, `embedStyle` set by moderator | map embedStyle → pattern name (see `shared-brief-enrichment.md`) |
 

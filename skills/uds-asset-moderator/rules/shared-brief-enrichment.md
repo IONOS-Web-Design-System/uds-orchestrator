@@ -109,9 +109,10 @@ Per-generator hazards to OMIT:
   ONE product frame, the single feature to highlight and its floating element, placeholder
   structure around it — never enumerate navigation items, KPI cards, data rows or panels. High: a
   believable real screen — layout, realistic labels and sample data, the one interaction to show.
-  On a SMALL canvas the small-format rule's context decision decides the layout instead: a
-  product feature → a cropped product frame bleeding off-canvas with the feature popping out
-  as a floating highlight; anything else → an icon-story. Never a whole frame centred to fit.
+  On a SMALL canvas the highlight moment decides the layout instead (uds-wireframe
+  `shared/small-format.md`). On a SMALL canvas the feature opens with the "Highlight moment:"
+  sentence from that rule, and nothing describes a product window. Never a whole frame centred
+  to fit.
   Never pixel coordinates.
   Never reuse the brief's own heading, subheading or description text, which the host component
   already renders (see `rules/shared-brief-parsing.md`).

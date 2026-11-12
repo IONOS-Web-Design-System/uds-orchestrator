@@ -19,6 +19,8 @@
  *   (d) no file under `skills/` still teaches the retired layouts or their pattern names.
  *       Matched with any whitespace between words, so a phrase split across a line wrap is
  *       still found. node_modules is skipped (vendored, never inlined).
+ *   (e) both hybrid embed rules (ui-core) carry the sentence that makes the generated photo the
+ *       central object of the highlight moment on a small canvas.
  *
  * Exit codes: 0 green, 1 violation, 2 cannot determine ("read nothing" is never "clean").
  *
@@ -128,6 +130,19 @@ for (const file of walk(SKILLS)) {
 }
 if (markdown === 0) cannotDetermine(`scanned ${scanned} files under ${rel(SKILLS)} but no Markdown — wrong root?`);
 
+// ── (e): the embed rules name the photo as the central object ───────────────
+const EMBED_SENTENCE =
+  'On a small canvas (both sides ≤ 512px) the generated photo is the central object of the ' +
+  'highlight moment (uds-wireframe shared/small-format.md)';
+for (const name of ['embed-floating-intersect.md', 'embed-inline-asset.md']) {
+  const file = join(SKILLS, 'uds-ui-core', 'rules', 'shared', name);
+  if (!existsSync(file)) {
+    fail('e', `${rel(file)} is missing`);
+  } else if (!readFileSync(file, 'utf8').replace(/\s+/g, ' ').includes(EMBED_SENTENCE)) {
+    fail('e', `${rel(file)} lacks the small-canvas central-object sentence`);
+  }
+}
+
 // ── report ──────────────────────────────────────────────────────────────────
 if (VERBOSE) {
   console.log(`rule: ${ruleChars === null ? 'missing' : `${ruleChars} chars`}; scanned ${scanned} files (${markdown} .md) under ${rel(SKILLS)}`);
@@ -137,4 +152,4 @@ if (failures.length > 0) {
   console.log(`\n${failures.length} violation(s).`);
   process.exit(1);
 }
-console.log(`OK — (a)–(d) green: rule ${ruleChars} chars, no hex; ${scanned} files under skills/ clean.`);
+console.log(`OK — (a)–(e) green: rule ${ruleChars} chars, no hex; ${scanned} files under skills/ clean.`);

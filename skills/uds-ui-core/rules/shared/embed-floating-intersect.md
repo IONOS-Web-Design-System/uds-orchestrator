@@ -27,3 +27,4 @@ No connector lines and no selection marquee — the elements simply float over a
 card and each other. Reference frames: Figma `82:202` (info panel + KI badge + tags + AI CTA) and
 `162:306` (edge chip + a brand-blue icon pill resting on the image).
 
+On a small canvas (both sides ≤ 512px) the generated photo is the central object of the highlight moment (uds-wireframe shared/small-format.md).
