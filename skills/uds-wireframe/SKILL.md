@@ -3,9 +3,9 @@ name: uds-wireframe
 description: >
   Low-fidelity direction (the default): a demonstration wireframe that shows the key feature
   from the brief — one product frame, skeleton structure around ONE real feature, a floating
-  highlight / prompt / connector, and motion. Small canvases (both sides ≤ 512px) use the
-  small-format layouts (cropped frame bleeding off-canvas, or icon story). Inlined by agent-svc
-  together with uds-ui-core; never together with uds-interface.
+  highlight / prompt / connector, and motion. Small canvases (both sides ≤ 512px) draw a
+  highlight moment (shared/small-format.md). Inlined by agent-svc together with uds-ui-core;
+  never together with uds-interface.
 ---
 
 # UDS Wireframe (low fidelity)
@@ -24,8 +24,8 @@ Spacing uses `var(--space-N)` tokens.
 | `ionos/feature-pop-out.md` | INPUT pops out from OUTPUT |
 | `shared/motion-choreography.md` | Every animation: the beats, one timing vocabulary, the pattern menu, export-safe motion |
 | `ionos/ai-animations.md` | IONOS AI moments |
-| `ionos/small-format.md`, `strato/small-format.md` | Small canvases (both sides ≤ 512px): crop, not shrink — each brand's own canvas, shell and colours |
+| `shared/small-format.md` | Small canvases (both sides ≤ 512px): the highlight moment — one central object, scattered satellites, one glowing highlight, colours from tokens |
 | `ionos/decorative-mode.md` + decorative primitives | Decorative mode (not reachable today) |
 
 When `dimensions.w <= 512 AND dimensions.h <= 512` and no `Composition pattern:` is set,
-default to `small-cropped-frame` for product briefs and `small-icon-story` for abstract briefs.
+default to `small-highlight-moment` for every small illustration, product or abstract.

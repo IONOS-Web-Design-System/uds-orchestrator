@@ -1,0 +1,140 @@
+#!/usr/bin/env node
+/**
+ * Guard — small canvases (both sides ≤ 512px) have ONE grammar: the highlight moment.
+ *
+ * The rule lives in `skills/uds-wireframe/rules/shared/small-format.md` and is inlined verbatim
+ * into two prompts: the moderator planner (which writes the brief) and agent-svc codegen (which
+ * writes the composition). It replaced two per-brand rules that each taught two layouts — a
+ * product frame cropped at the canvas edge, and a disc-motif "story" — and both of those
+ * survived for weeks in prose that nothing deleted. This guard keeps them dead:
+ *
+ *   (a) the shared rule exists, opens with the `small: true` scope (agent-svc's `ruleScope`
+ *       key — any other frontmatter fails OPEN and inlines it on every canvas), stays under
+ *       13,000 characters (the prompt budget; each deleted brand file was 13.7–14.3k), and
+ *       carries NO hex. Fallback hex lives in agent-svc keyed by the render brand; a hex in a
+ *       shared rule reaches every brand's prompt, and a negated literal gets copied.
+ *   (b) it names the opening "Highlight moment:" sentence (verbatim, so the moderator line
+ *       that copies it cannot drift unseen) and the runtime token roles.
+ *   (c) the two per-brand small-format files are gone.
+ *   (d) no file under `skills/` still teaches the retired layouts or their pattern names.
+ *       Matched with any whitespace between words, so a phrase split across a line wrap is
+ *       still found. node_modules is skipped (vendored, never inlined).
+ *
+ * Exit codes: 0 green, 1 violation, 2 cannot determine ("read nothing" is never "clean").
+ *
+ * Usage:
+ *   node scripts/check-small-format.mjs
+ *   node scripts/check-small-format.mjs --verbose
+ */
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { dirname, extname, join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const VERBOSE = process.argv.includes('--verbose');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const SKILLS = join(ROOT, 'skills');
+const WIREFRAME_RULES = join(SKILLS, 'uds-wireframe', 'rules');
+const RULE = join(WIREFRAME_RULES, 'shared', 'small-format.md');
+const DELETED = [
+  join(WIREFRAME_RULES, 'ionos', 'small-format.md'),
+  join(WIREFRAME_RULES, 'strato', 'small-format.md'),
+];
+
+const FRONTMATTER = '---\nsmall: true\n---';
+const MAX_CHARS = 13000;
+const HEX = /#[0-9A-Fa-f]{6}\b/g;
+
+/** The opening sentence the planner must write — copied verbatim by the moderator's line. */
+const PLANNER_SENTENCE =
+  'Highlight moment: <central object> [in halo rings | on ghost cards], with <0–3 satellites> ' +
+  '[linked by dashed connectors <from → to>]; the moment: <what acts> (AI|brand); labels: ' +
+  '<0–3 real nouns from the body, or none>.';
+
+const REQUIRED = [
+  'Highlight moment:',
+  PLANNER_SENTENCE,
+  '--private-gradient-start',
+  '--private-ai-primary-start',
+  '--text-link-default',
+  '--text-base',
+  '--surface-subtle',
+  '--text-semantic-skeleton',
+];
+
+/** The retired layouts and their pattern names; `\s+` so a line wrap cannot hide a phrase. */
+const RETIRED = /icon-story|cropped\s+product\s+frame|small-cropped-frame|small-icon-story|CROP,\s+not/gi;
+const TEXT_EXT = new Set(['.md', '.ts', '.tsx', '.js', '.mjs', '.cjs', '.json', '.yml', '.yaml', '.txt', '.css']);
+
+const rel = (p) => relative(ROOT, p);
+const failures = [];
+const fail = (check, msg) => failures.push(`FAIL (${check}) ${msg}`);
+
+function cannotDetermine(why) {
+  console.error(`CANNOT DETERMINE — ${why}`);
+  process.exit(2);
+}
+
+// ── (a) + (b): the shared rule ──────────────────────────────────────────────
+let ruleChars = null;
+if (!existsSync(RULE)) {
+  fail('a', `${rel(RULE)} is missing`);
+} else {
+  const text = readFileSync(RULE, 'utf8');
+  ruleChars = text.length;
+  if (!text.startsWith(FRONTMATTER)) {
+    fail('a', `${rel(RULE)} does not start with ${JSON.stringify(FRONTMATTER)}`);
+  }
+  if (text.length >= MAX_CHARS) {
+    fail('a', `${rel(RULE)} is ${text.length} chars (limit: under ${MAX_CHARS})`);
+  }
+  for (const m of text.matchAll(HEX)) {
+    const line = text.slice(0, m.index).split('\n').length;
+    fail('a', `${rel(RULE)}:${line} carries hex ${m[0]} (fallback hex belongs in agent-svc)`);
+  }
+  for (const needle of REQUIRED) {
+    if (!text.includes(needle)) {
+      fail('b', `${rel(RULE)} lacks ${JSON.stringify(needle)}`);
+    }
+  }
+}
+
+// ── (c): the per-brand files are gone ───────────────────────────────────────
+for (const file of DELETED) {
+  if (existsSync(file)) fail('c', `${rel(file)} still exists`);
+}
+
+// ── (d): no retired layout anywhere under skills/ ───────────────────────────
+if (!existsSync(SKILLS)) cannotDetermine(`${rel(SKILLS)} not found`);
+
+function* walk(dir) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === 'node_modules' || entry.name.startsWith('.')) continue;
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) yield* walk(full);
+    else if (entry.isFile() && TEXT_EXT.has(extname(entry.name))) yield full;
+  }
+}
+
+let scanned = 0;
+let markdown = 0;
+for (const file of walk(SKILLS)) {
+  scanned += 1;
+  if (file.endsWith('.md')) markdown += 1;
+  const text = readFileSync(file, 'utf8');
+  for (const m of text.matchAll(RETIRED)) {
+    const line = text.slice(0, m.index).split('\n').length;
+    fail('d', `${rel(file)}:${line} names a retired layout: ${JSON.stringify(m[0].replace(/\s+/g, ' '))}`);
+  }
+}
+if (markdown === 0) cannotDetermine(`scanned ${scanned} files under ${rel(SKILLS)} but no Markdown — wrong root?`);
+
+// ── report ──────────────────────────────────────────────────────────────────
+if (VERBOSE) {
+  console.log(`rule: ${ruleChars === null ? 'missing' : `${ruleChars} chars`}; scanned ${scanned} files (${markdown} .md) under ${rel(SKILLS)}`);
+}
+if (failures.length > 0) {
+  for (const f of failures) console.log(f);
+  console.log(`\n${failures.length} violation(s).`);
+  process.exit(1);
+}
+console.log(`OK — (a)–(d) green: rule ${ruleChars} chars, no hex; ${scanned} files under skills/ clean.`);
