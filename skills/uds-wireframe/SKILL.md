@@ -11,6 +11,8 @@ description: >
 # UDS Wireframe (low fidelity)
 
 Show the FEATURE, not the product. One frame, one real feature, everything else placeholder.
+A small canvas (both sides ≤ 512px) has no product frame: it draws one highlight moment per
+`rules/shared/small-format.md`.
 Kit components for every element the kit covers; text fields are drawn (see "# UDS kit").
 Spacing uses `var(--space-N)` tokens.
 

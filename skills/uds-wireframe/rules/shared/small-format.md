@@ -60,11 +60,13 @@ opening sentence:
 
 ## 3. Canvas
 
-- Opaque render: the root `<AbsoluteFill>` background is the brand gradient at 135°,
+- The root `<AbsoluteFill>` background is exactly what the `CANVAS BACKGROUND` line names: for a
+  brand with its own canvas, the brand gradient at 135°,
   `linear-gradient(135deg, var(--private-gradient-start, …), var(--private-gradient-end, …))`.
-  This render's `CANVAS BACKGROUND` line names the exact value; follow it.
+- When there is no such line, the brand has no canvas of its own: keep the render's default
+  canvas (transparent, or the surface the non-negotiables name). Never paint a gradient there.
 - Nothing wraps the composition: no frame, window, card or panel holds the cluster. Every piece
-  sits directly on the gradient. Only the canvas carries the brand gradient.
+  sits directly on the canvas. Only the canvas carries a brand gradient.
 
 ## 4. Layout
 
@@ -124,7 +126,7 @@ same drawing switches brand by switching token values.
 
 | Role | Token |
 |---|---|
-| Canvas | `--private-gradient-start` → `--private-gradient-end`, 135° |
+| Canvas (a brand with its own canvas) | `--private-gradient-start` → `--private-gradient-end`, 135° |
 | AI highlight | `--private-ai-primary-start` → `--private-ai-primary-end` |
 | Glyph on the AI highlight | `--text-semantic-ai` |
 | Satellite discs, non-AI highlight | `--text-link-default` |
@@ -149,11 +151,11 @@ the `# Available assets` catalog has its logo, that satellite is the real logo o
 `--text-link-default` disc with a filled glyph, plus the service name as a label if it matters.
 Never draw or approximate a logo.
 
-## 10. Transparent canvas
+## 10. Transparent or light canvas
 
 When the render is transparent (`transparent` is true, or the "Transparent background." cue), the
-root background is `'transparent'` and every piece stays. White-on-gradient pieces switch so they
-read on a white host page:
+root background is `'transparent'` and every piece stays. The same holds on a light default
+canvas. White-on-gradient pieces switch so they read on a light page:
 - halo rings and ghost layers take `var(--surface-subtle, …)`;
 - white objects, pills and bubbles get a soft shadow `0 8px 24px` in the ink token at ~10%
   (`color-mix(in srgb, var(--text-base, …) 10%, transparent)`);
@@ -162,13 +164,14 @@ read on a white host page:
 
 ## 11. Dark scheme
 
-The canvas is the brand's dark canvas named by the `CANVAS BACKGROUND` line. The cluster always
-renders in the light scheme, so its white objects and ink never invert into white on white. Wrap
-it in its own themed `div`. It needs `data-brand` too: the light values are declared on
-`data-brand` alone, so a scheme attribute without it changes nothing.
+The canvas is the brand's dark canvas named by the `CANVAS BACKGROUND` line, or the render's
+default canvas when there is none. The cluster always renders in the light scheme, so its white
+objects and ink never invert into white on white. Wrap it in its own themed `div`. It needs
+`data-brand` too: the light values are declared on `data-brand` alone, so a scheme attribute
+without it changes nothing.
 
 ```tsx
-// CANVAS = the value the CANVAS BACKGROUND line names
+// CANVAS = the CANVAS BACKGROUND value, else the render's default canvas
 <AbsoluteFill style={{ background: transparent ? 'transparent' : CANVAS }}>
   <div data-brand={brand} data-platform={platform} data-color-scheme="light"
        style={{ position: 'absolute', inset: '14%' }}>
