@@ -13,7 +13,8 @@ At this size the asset is ONE **highlight moment**: one central object, 0–3 sc
 dashed connectors only for a flow, and exactly one glowing highlight where the feature acts, all
 drawn directly on the canvas. It replaces every interface layout: no product window, browser bar,
 app sidebar or header, whole or cut by the canvas edge. It does not govern a device screen inside
-a photograph or a composite stage layer; those keep their own rules.
+a photograph, a composite (product-pop-out, device-mockup), a stage layer or a Figma
+reconstruction; those keep their own rules.
 
 ## 2. How the copy becomes the picture
 
@@ -37,13 +38,12 @@ The host renders that copy beside the asset. Never repeat it in the asset; read 
 
 When the copy is not structured, the request's own nouns and verb play those roles.
 
-The designers' five cards (Context "KANN SO EINIGES.", an AI phone assistant), each as its
-opening sentence:
+The designers' five cards (Context "KANN SO EINIGES.", an AI phone assistant):
 
 - **IMMER DRAN** · "Rund um die Uhr erreichbar. Ohne Wartezeit." → Highlight moment: a clock on a
   white disc in halo rings, with a speech bubble and a person disc; the moment: a live
   incoming-call wave-pill (AI); labels: none.
-- **ALLES IM BLICK** · "Nach jedem Anruf kommen die wichtigsten Details direkt per E-Mail." →
+- **ALLES IM BLICK** · "Nach jedem Anruf … Details direkt per E-Mail." →
   Highlight moment: a ghosted phone with skeleton rows, with a call pill and a mail disc linked by
   dashed connectors call pill → mail disc → summary card; the moment: the summary card arriving
   (AI); labels: none.
@@ -201,10 +201,10 @@ A still shows the end state of beat 3.
 
 ## 13. Hybrid
 
-A hybrid's generated photo (`floating-card` or `inline-asset` embed) is the central object: a
-contained rounded photo card (radius ~16px at 432, `objectFit: 'cover'`) at 55–72% of the
-shorter side with a soft static shadow, on the canvas. The satellites and the one highlight
-overlap its edges under the same grammar. No interface frame holds the photo.
+A hybrid's generated photo (any embed style) is the central object, placed via `staticFile()`,
+never redrawn: a rounded photo card (radius ~16px at 432, `objectFit: 'cover'`) at 55–72% of
+the shorter side with a soft static shadow, on the canvas, never full-bleed. The satellites and
+the one highlight overlap its edges. No interface frame holds the photo.
 
 ## 14. Anti-patterns
 

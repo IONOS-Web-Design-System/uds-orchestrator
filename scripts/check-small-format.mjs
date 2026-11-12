@@ -18,9 +18,13 @@
  *   (c) the two per-brand small-format files are gone.
  *   (d) no file under `skills/` still teaches the retired layouts or their pattern names.
  *       Matched with any whitespace between words, so a phrase split across a line wrap is
- *       still found. node_modules is skipped (vendored, never inlined).
- *   (e) both hybrid embed rules (ui-core) carry the sentence that makes the generated photo the
- *       central object of the highlight moment on a small canvas.
+ *       still found. node_modules is skipped (vendored, never inlined). The wireframe rules that
+ *       teach a product frame (the demonstration frame, the floating highlight card, the
+ *       constrained-viewport crops with their square override) open with `small: false`, so
+ *       agent-svc never inlines them on a small canvas, and the square override lives nowhere
+ *       that a small canvas can read.
+ *   (e) all four hybrid embed rules (ui-core) that can reach a small canvas carry the sentence
+ *       that makes the generated photo the central object of the highlight moment there.
  *
  * Exit codes: 0 green, 1 violation, 2 cannot determine ("read nothing" is never "clean").
  *
@@ -63,8 +67,17 @@ const REQUIRED = [
   '--text-semantic-skeleton',
 ];
 
-/** The retired layouts and their pattern names; `\s+` so a line wrap cannot hide a phrase. */
-const RETIRED = /icon-story|cropped\s+product\s+frame|small-cropped-frame|small-icon-story|CROP,\s+not/gi;
+/** The retired layouts and their pattern names; `\s+` so a line wrap cannot hide a phrase,
+ *  `[*_]*` so Markdown emphasis cannot either. */
+const RETIRED = /icon-story|cropped\s+product\s+frame|small-cropped-frame|small-icon-story|CROP,\s+not|crops[*_]*\s+the\s+frame|important\s+corner/gi;
+
+/** Frame-layout rules agent-svc must never inline on a small canvas (`small: false` = not small). */
+const NOT_SMALL = ['constrained-viewport.md', 'demonstration-frame.md', 'floating-card.md']
+  .map((name) => join(WIREFRAME_RULES, 'shared', name));
+/** Large-canvas-only teaching: allowed only in a file scoped `small: false`. */
+const NOT_SMALL_ONLY = /Square\s+canvas\s+override/gi;
+const FM = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/;
+const scopedNotSmall = (text) => /^small:\s*false\s*$/m.test(text.match(FM)?.[1] ?? '');
 const TEXT_EXT = new Set(['.md', '.ts', '.tsx', '.js', '.mjs', '.cjs', '.json', '.yml', '.yaml', '.txt', '.css']);
 
 const rel = (p) => relative(ROOT, p);
@@ -127,14 +140,24 @@ for (const file of walk(SKILLS)) {
     const line = text.slice(0, m.index).split('\n').length;
     fail('d', `${rel(file)}:${line} names a retired layout: ${JSON.stringify(m[0].replace(/\s+/g, ' '))}`);
   }
+  if (!scopedNotSmall(text)) {
+    for (const m of text.matchAll(NOT_SMALL_ONLY)) {
+      const line = text.slice(0, m.index).split('\n').length;
+      fail('d', `${rel(file)}:${line} teaches ${JSON.stringify(m[0].replace(/\s+/g, ' '))} in a file a small canvas can read (scope it \`small: false\`)`);
+    }
+  }
 }
 if (markdown === 0) cannotDetermine(`scanned ${scanned} files under ${rel(SKILLS)} but no Markdown — wrong root?`);
+for (const file of NOT_SMALL) {
+  if (!existsSync(file)) fail('d', `${rel(file)} is missing`);
+  else if (!scopedNotSmall(readFileSync(file, 'utf8'))) fail('d', `${rel(file)} lacks the \`small: false\` frontmatter (it teaches a product frame)`);
+}
 
 // ── (e): the embed rules name the photo as the central object ───────────────
 const EMBED_SENTENCE =
   'On a small canvas (both sides ≤ 512px) the generated photo is the central object of the ' +
   'highlight moment (uds-wireframe shared/small-format.md)';
-for (const name of ['embed-floating-intersect.md', 'embed-inline-asset.md']) {
+for (const name of ['embed-floating-intersect.md', 'embed-inline-asset.md', 'embed-image-backdrop-full.md', 'embed-interface-asset.md']) {
   const file = join(SKILLS, 'uds-ui-core', 'rules', 'shared', name);
   if (!existsSync(file)) {
     fail('e', `${rel(file)} is missing`);

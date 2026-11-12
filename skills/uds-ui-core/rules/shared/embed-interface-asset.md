@@ -45,3 +45,4 @@ What THIS rule adds on top:
    `<KitButton concept="ai" icon={sparkles} label={…} />` (e.g. "Seite erstellen"). The AI
    concept belongs to the kit CTA only, never to fragment chrome.
 
+**Small canvas (both sides ≤ 512px):** everything above in this style is replaced. On a small canvas (both sides ≤ 512px) the generated photo is the central object of the highlight moment (uds-wireframe shared/small-format.md). Its satellites and the one highlight overlap the photo's edges.

@@ -92,3 +92,4 @@ even when the contract includes a `Backdrop motion:` line, the image itself neve
 zoom, fade, pan, parallax, or drift). Only the floating fragments/annotations animate over
 the still backdrop.
 
+**Small canvas (both sides ≤ 512px):** everything above in this style is replaced. On a small canvas (both sides ≤ 512px) the generated photo is the central object of the highlight moment (uds-wireframe shared/small-format.md). Its satellites and the one highlight overlap the photo's edges.

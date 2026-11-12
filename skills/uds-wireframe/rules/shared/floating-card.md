@@ -1,3 +1,6 @@
+---
+small: false
+---
 # Floating Highlight Element — Always Outside the Frame, Anchored Bottom-Left
 
 The AI feature highlight is **one contextual highlight element** — not necessarily a full

@@ -1,3 +1,6 @@
+---
+small: false
+---
 # Demonstration frame (low fidelity)
 
 A demonstration wireframe shows ONE product frame and ONE real feature. Everything around the

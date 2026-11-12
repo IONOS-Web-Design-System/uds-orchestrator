@@ -1,3 +1,6 @@
+---
+small: false
+---
 # Constrained Viewport — Frame Cropping and Highlight Placement
 
 When the canvas is **wide and short** (landscape marketing banner, 3:1 card), **tall** (portrait), or the product frame is taller/wider than the available display area, do not squeeze or scale the frame to fit. The frame keeps its real window shape and the canvas crops it, with the pivot — the control acted on, everything that changes state, the highlight — kept inside the canvas (`frame-anatomy.md` "Frame shape and cropping"). Use these cropping patterns.
