@@ -135,12 +135,8 @@ only; only a story's build-up tightens them, ≤ 6 %.
   cursor or the background acts around it.
 - A story needs ≥ 5 s (durations run 4–12 s); when shorter, shorten the build-up, never the
   climax or the hold.
-- **Brand product icons.** In a story or a state, the central object or a satellite may be the
-  brand's full-colour product icon on a white disc, when the card is about a specific product or
-  process (backups, mail, the AI phone assistant). The brief says "the brand product icon for
-  <concept>"; resolve it in the product tier of the `# Icon name index`. Never recolour or redraw
-  it; a colour morph acts on its disc. An interaction keeps filled system icons, as do glyphs
-  inside discs, buttons and UI pieces.
+- **Brand product icons** (when: `small-format.md` section 5): never recolour or redraw one; a
+  colour morph acts on its disc. An interaction keeps filled system icons.
 
 ## Still renders
 

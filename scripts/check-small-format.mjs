@@ -10,11 +10,13 @@
  *
  *   (a) the shared rule exists, opens with the `small: true` scope (agent-svc's `ruleScope`
  *       key — any other frontmatter fails OPEN and inlines it on every canvas), stays under
- *       13,000 characters (the prompt budget; each deleted brand file was 13.7–14.3k), and
+ *       14,200 characters (the prompt budget; each deleted brand file was 13.7–14.3k), and
  *       carries NO hex. Fallback hex lives in agent-svc keyed by the render brand; a hex in a
  *       shared rule reaches every brand's prompt, and a negated literal gets copied.
  *   (b) it names the opening typed "Highlight moment (story|interaction|state):" sentence (verbatim, so the moderator line
- *       that copies it cannot drift unseen) and the runtime token roles.
+ *       that copies it cannot drift unseen), the runtime token roles, the four state-layout
+ *       slot texts, and the layout-test line verbatim on a line of its own (the moderator and
+ *       agent-svc lines paraphrase it, so it must not drift unseen either).
  *   (c) the two per-brand small-format files are gone.
  *   (d) no file under `skills/` still teaches the retired layouts or their pattern names.
  *       Matched with any whitespace between words, so a phrase split across a line wrap is
@@ -58,7 +60,7 @@ const DELETED = [
 ];
 
 const FRONTMATTER = '---\nsmall: true\n---';
-const MAX_CHARS = 13000;
+const MAX_CHARS = 14200;
 const HEX = /#[0-9A-Fa-f]{6}\b/g;
 
 /** The opening sentence the planner must write — copied verbatim by the moderator's line. */
@@ -75,7 +77,20 @@ const REQUIRED = [
   '--text-base',
   '--surface-subtle',
   '--text-semantic-skeleton',
+  // A state's central-object slot names its layout: badge, station, cover, centre.
+  '<icon> as a badge on <context object>',
+  '<icon> beside <context items> (station)',
+  '<icon> over <context items> (cover)',
+  '<icon> on a white disc in halo rings (centre)',
 ];
+
+/** The state-layout test — one line, word for word in `small-format.md` (planner and codegen,
+ *  stills and animations). */
+const LAYOUT_TEST =
+  'Layout (state): a claim about one named thing — compliant, verified, protected — is a **badge** ' +
+  'on that thing; a recurring action on things — backup, sync, monitoring, every night — is a ' +
+  '**station** beside them; a claim spanning several things — included, all domains, everywhere — ' +
+  'is a **cover** over them; when the body names nothing to show, **centre**.';
 
 /** The type test — one line, byte-identical in the motion rule (codegen) and `small-format.md`
  *  (planner). */
@@ -166,6 +181,9 @@ if (!existsSync(RULE)) {
   const typeLines = text.split('\n').filter((l) => l.startsWith('Type: '));
   if (!text.split('\n').includes(TYPE_TEST)) {
     fail('b', `${rel(RULE)} lacks the type-test line verbatim, on a line of its own`);
+  }
+  if (!text.split('\n').includes(LAYOUT_TEST)) {
+    fail('b', `${rel(RULE)} lacks the layout-test line verbatim, on a line of its own`);
   }
   if (existsSync(MOTION_RULE)) {
     const motionTypeLines = readFileSync(MOTION_RULE, 'utf8').split('\n').filter((l) => l.startsWith('Type: '));
