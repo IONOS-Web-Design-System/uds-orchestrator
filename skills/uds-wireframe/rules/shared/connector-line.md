@@ -1,5 +1,6 @@
 ---
 styles: [plain, reconstruct]
+small: false
 ---
 
 # Pattern 7 — Connector Line (pure illustration)

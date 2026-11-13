@@ -20,14 +20,16 @@
  *       Matched with any whitespace between words, so a phrase split across a line wrap is
  *       still found. node_modules is skipped (vendored, never inlined). The wireframe rules that
  *       teach a product frame (the demonstration frame, the floating highlight card, the
- *       constrained-viewport crops with their square override) open with `small: false`, so
- *       agent-svc never inlines them on a small canvas, and the square override lives nowhere
- *       that a small canvas can read.
+ *       constrained-viewport crops with their square override, the connector-line pattern and
+ *       the IONOS feature pop-out) open with `small: false`, so agent-svc never inlines them on a
+ *       small canvas, and the square override lives nowhere that a small canvas can read.
  *   (e) all four hybrid embed rules (ui-core) that can reach a small canvas carry the sentence
  *       that makes the generated photo the central object of the highlight moment there.
  *   (f) the motion rule `shared/small-format-motion.md` exists and opens with exactly the
- *       `small: true` + `motion: [animation]` scope (agent-svc ANDs the keys: animated small
- *       canvases only), stays at or under 8,000 characters with no hex, carries its headings,
+ *       `small: true` + `motion: [animation]` + `styles: [plain, opaque-embed]` scope (agent-svc
+ *       ANDs the keys: animated small canvases drawn as a highlight moment only — never a
+ *       composite, a device screen or a Figma reconstruction, which keep their own rules), stays
+ *       at or under 8,000 characters with no hex, carries its headings,
  *       the type-test line verbatim on a line of its own (the same line `small-format.md` gives
  *       the planner, so codegen can infer a type the brief does not name), the snap curve, the
  *       five morph moves and five background devices (each as a bold defined term), "icon
@@ -84,7 +86,7 @@ const TYPE_TEST =
   '**state**. A user action wins over a process, a process over a claim.';
 
 const MOTION_RULE = join(WIREFRAME_RULES, 'shared', 'small-format-motion.md');
-const MOTION_FRONTMATTER = '---\nsmall: true\nmotion: [animation]\n---';
+const MOTION_FRONTMATTER = '---\nsmall: true\nmotion: [animation]\nstyles: [plain, opaque-embed]\n---';
 const MOTION_MAX_CHARS = 8000;
 const MOTION_HEADINGS = [
   '# Small-format motion — three highlight-moment types',
@@ -106,7 +108,7 @@ const MOTION_REQUIRED = [
  *  elsewhere in the rule). */
 const MOTION_TERMS = [
   'unfold', 'stretch', 'split', 'settle in', 'launch',
-  'ripples', 'particles', 'dot field', 'orbit', 'light sweep',
+  'ripples', 'particles', 'dot field', 'dot orbit', 'light sweep',
 ];
 
 /** The retired layouts and their pattern names; `\s+` so a line wrap cannot hide a phrase,
@@ -114,8 +116,10 @@ const MOTION_TERMS = [
 const RETIRED = /icon-story|cropped\s+product\s+frame|small-cropped-frame|small-icon-story|CROP,\s+not|crops[*_]*\s+the\s+frame|important\s+corner/gi;
 
 /** Frame-layout rules agent-svc must never inline on a small canvas (`small: false` = not small). */
-const NOT_SMALL = ['constrained-viewport.md', 'demonstration-frame.md', 'floating-card.md']
-  .map((name) => join(WIREFRAME_RULES, 'shared', name));
+const NOT_SMALL = [
+  'shared/constrained-viewport.md', 'shared/demonstration-frame.md', 'shared/floating-card.md',
+  'shared/connector-line.md', 'ionos/feature-pop-out.md',
+].map((name) => join(WIREFRAME_RULES, ...name.split('/')));
 /** Large-canvas-only teaching: allowed only in a file scoped `small: false`. */
 const NOT_SMALL_ONLY = /Square\s+canvas\s+override/gi;
 const FM = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/;

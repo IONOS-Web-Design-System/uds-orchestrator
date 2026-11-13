@@ -38,8 +38,6 @@ The host renders that copy beside the asset: read it for meaning, never repeat i
 
 Unstructured copy: the request's own nouns and verb play those roles.
 
-Each highlight moment has a type:
-
 Type: a process — something arrives, is forwarded, is sent, or turns into something else — is a **story**; the user doing something to the product — upload, connect, add, drag, click — is an **interaction**; a lasting claim — secure, compliant, included, every night — is a **state**. A user action wins over a process, a process over a claim.
 
 Examples (Context "KANN SO EINIGES.", an AI phone assistant):
@@ -56,8 +54,8 @@ Examples (Context "KANN SO EINIGES.", an AI phone assistant):
   dashed connectors phone disc → AI node → person disc; the moment: split,
   the call node into the AI node (AI); labels: none.
 - **SCHNELL SCHLAUER** · "Dokumente hochladen und die Wissensbasis erweitern." → Highlight moment
-  (interaction): a stack of three file pills on ghost cards, with no satellites; the moment: a
-  file dragged into the slot, the upload disc lifting its arrow (AI); labels: Produktinfo.pdf,
+  (interaction): a stack of three file pills on ghost cards, with an upload slot; the moment: the
+  cursor drags Produktinfo.pdf into the slot, which checks (AI); labels: Produktinfo.pdf,
   FAQ.pdf, Preise.pdf.
 - **DIREKT IM KALENDER** · "Google Kalender verbinden und Termine automatisch eintragen." →
   Highlight moment (interaction): a calendar card on ghost cards, with no satellites; the moment:
@@ -131,8 +129,7 @@ Sizes are shares of the canvas's **shorter side** (px at 432).
 ## 7. Token roles
 
 Write every colour as `var(--token, <fallback>)`, the fallback from this render's non-negotiables
-(a bare `var(--token)` when they list none). Never pick a colour of your own: the same drawing
-switches brand by switching token values.
+(a bare `var(--token)` when they list none). Never pick a colour of your own.
 
 | Role | Token |
 |---|---|
@@ -175,12 +172,10 @@ canvas. White-on-gradient pieces switch so they read on a light page:
 ## 11. Dark scheme
 
 The canvas is the dark canvas the `CANVAS BACKGROUND` line names, else the render's default.
-The cluster always renders in the light scheme, so
-white objects and ink never invert. Wrap it in its own themed `div` with `data-brand` too: the light values
-are declared on `data-brand` alone, so a scheme attribute without it changes nothing.
+The cluster always renders in the light scheme, so white objects and ink never invert: wrap it in
+its own themed `div` with `data-brand` too (a scheme attribute without it changes nothing).
 
 ```tsx
-// CANVAS: the canvas above
 <AbsoluteFill style={{ background: transparent ? 'transparent' : CANVAS }}>
   <div data-brand={brand} data-platform={platform} data-color-scheme="light"
        style={{ position: 'absolute', inset: '14%' }}>
@@ -215,7 +210,7 @@ the one highlight overlap its edges. No interface frame holds the photo.
 ## 15. The planner sentence
 
 The planner's `illustrationBrief.feature` opens with exactly one sentence of this shape, then the
-motion beat in a few words:
+motion beat in a few words; the motion beat follows the type:
 
 ```
 Highlight moment (story|interaction|state): <central object> [in halo rings | on ghost cards], with <0–3 satellites> [linked by dashed connectors <from → to>]; the moment: <what acts> (AI|brand); labels: <0–3 real nouns from the body, or none>.
@@ -223,10 +218,12 @@ Highlight moment (story|interaction|state): <central object> [in halo rings | on
 
 - Type: the section 2 test.
 - A story's moment clause starts with its morph move: unfold, stretch, split, settle in or launch.
-  An interaction's names the control acted on and the result. A state's names its background
-  device: ripples, particles, dot field, orbit or light sweep.
+  An interaction's moment clause names the cursor, the control it acts on and the result. A
+  state's names its background device: ripples, particles, dot field, dot orbit or light sweep;
+  a state's background device moves; its icon and satellites never move (dot orbit = small dots
+  on a faint ring).
 - Write `AI` when `aiFeature` is true, `brand` otherwise. Drop the bracketed parts that do not
   apply; write "with no satellites" when there are none.
-- Nothing in `feature` describes a product window, sidebar or browser, and it does not enumerate
-  cards, segments or panels.
+- `feature` names no product window, sidebar or browser, and enumerates no cards, segments or
+  panels.
 - The generator draws exactly what that sentence names.

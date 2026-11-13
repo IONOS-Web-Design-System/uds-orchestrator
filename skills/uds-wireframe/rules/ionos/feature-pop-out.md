@@ -1,3 +1,6 @@
+---
+small: false
+---
 ## Feature-highlight composition — the IONOS pop-out
 
 **Canonical reference**: the "AI App-Builder" composition in the

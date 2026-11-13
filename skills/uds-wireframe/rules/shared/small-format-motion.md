@@ -1,6 +1,7 @@
 ---
 small: true
 motion: [animation]
+styles: [plain, opaque-embed]
 ---
 
 # Small-format motion — three highlight-moment types
@@ -59,15 +60,9 @@ const result = 0.1 + 0.9 * snap; // the copy (shown from c + 8): peaks ~1.16, la
 
 A box morph on `snap` overshoots ~18% of its size change: start it from the small disc.
 
-**Liquid neck** (split): a white capsule `div` between the two centres, thinner as they part,
-gone at 80–95% of the travel:
-
-```tsx
-const t = interpolate(frame, [c + 8, c + 24], [0, 1], { easing: Easing.out(Easing.cubic), ...clamp });
-const dx = (b.x - a.x) * t, dy = (b.y - a.y) * t, th = 0.7 * DISC * (1 - 0.8 * t);
-const neck = { left: a.x, top: a.y - th / 2, width: Math.hypot(dx, dy), height: th, borderRadius: th / 2,
-  transformOrigin: '0 50%', transform: `rotate(${Math.atan2(dy, dx)}rad)`, opacity: interpolate(t, [0.8, 0.95], [1, 0], clamp) };
-```
+**Liquid neck** (split): a white capsule `div` from one centre toward the other (its width the
+distance travelled, rotated to their angle, `transformOrigin: '0 50%'`), thinner as they part,
+gone at 80–95% of the travel.
 
 ## Interaction — a UI animation
 
@@ -76,8 +71,10 @@ const neck = { left: a.x, top: a.y - th / 2, width: Math.hypot(dx, dy), height: 
   back 6–8 (the control changes state on the press frame); it leaves after the result.
 - Beats: settle 0–15%; the cursor acts 15–50%; the results land 50–75%; hold the final ≥ 1 s.
 - One pattern:
-  - **Drag and drop:** the item may morph its box to fit the slot as it travels; the slot
-    highlights while the item is over it.
+  - **Drag and drop:** the cursor presses the item, carries it, and releases it over the slot;
+    the slot highlights while the item is over it. A non-text item may morph its box to fit the
+    slot; a text-bearing item is dragged by translate only — no scale or box morph while its
+    text shows.
   - **Press → state morph:** the label fades, the button shrinks into a spinner, the spinner
     becomes a check.
   - **Results pop into place,** staggered 5–8 frames: appointments into a grid; an upload bar
@@ -93,7 +90,7 @@ const neck = { left: a.x, top: a.y - th / 2, width: Math.hypot(dx, dy), height: 
   - **ripples**: rings expanding from behind the icon, opacity ≤ 0.16
   - **particles**: 4–8px dots drifting, opacity 0.15–0.4
   - **dot field**: a dot grid twinkling in a slow diagonal wave, opacity 0.08–0.3
-  - **orbit**: 2–3 small dots circling on a faint ring
+  - **dot orbit**: 2–3 small dots circling on a faint ring
   - **light sweep**: a large blurred white circle (not a glow), opacity ≤ 0.1; static blur, only
     its position moves
 - Seamless loop: every period divides the duration (`P = D / n`, n whole).
@@ -119,6 +116,8 @@ const ripple = (i: number) => { const p = ((frame + (i * P) / 3) % P) / P;
   Text-bearing satellites and labels never recoil.
 - On a transparent or light canvas, shock rings and background devices take `--text-base` at the
   same opacities instead of white.
+- In a hybrid the photo card is the central object of every type and holds still; the morph, the
+  cursor or the background acts around it.
 - A story needs ≥ 5 s (durations run 4–12 s); when shorter, shorten the build-up, never the
   climax or the hold.
 - **Brand product icons.** In a story or a state, the central object or a satellite may be the
