@@ -80,7 +80,7 @@ Sizes are shares of the canvas's **shorter side** (px at 432).
 | **Skeleton bars** | Rounded bars in the ink or skeleton token stand in for other text | 6–8px tall at 432 |
 
 - Glyphs are filled system icons (`icon/system/filled-<name>`); name the concept and resolve it against the `# Icon name index`.
-- In a story or a state, a brand product icon (the brand product icon for <concept>) may be the central object or a satellite — full colour on a white disc, never recoloured; system icons stay for glyphs inside discs, buttons and UI pieces.
+- In a story or a state, a brand product icon (the brand product icon for <concept>, resolved in the product tier of the `# Icon name index`) may be the central object or a satellite — full colour on a white disc, never recoloured; system icons stay for glyphs inside discs, buttons and UI pieces.
 - Label pills, satellites and discs are drawn pieces, not kit chips; an action button is a kit button (section 6).
 - A label is never the heading, the body sentence, a status word, a number, a price or a claim the brief does not make.
 
