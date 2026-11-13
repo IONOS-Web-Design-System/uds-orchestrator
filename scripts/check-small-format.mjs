@@ -10,13 +10,16 @@
  *
  *   (a) the shared rule exists, opens with the `small: true` scope (agent-svc's `ruleScope`
  *       key — any other frontmatter fails OPEN and inlines it on every canvas), stays under
- *       14,200 characters (the prompt budget; each deleted brand file was 13.7–14.3k), and
- *       carries NO hex. Fallback hex lives in agent-svc keyed by the render brand; a hex in a
- *       shared rule reaches every brand's prompt, and a negated literal gets copied.
+ *       14,900 characters (the prompt budget, ruling F4: the measured size + ~150; each deleted
+ *       brand file was 13.7–14.3k), and carries NO hex. Fallback hex lives in agent-svc keyed by
+ *       the render brand; a hex in a shared rule reaches every brand's prompt, and a negated
+ *       literal gets copied.
  *   (b) it names the opening typed "Highlight moment (story|interaction|state):" sentence (verbatim, so the moderator line
  *       that copies it cannot drift unseen), the runtime token roles, the four state-layout
- *       slot texts, and the layout-test line verbatim on a line of its own (the moderator and
- *       agent-svc lines paraphrase it, so it must not drift unseen either).
+ *       slot texts plus the hybrid badge slot, the product-icon-for-claim and verbatim-label
+ *       sentences (a size squeeze must not cut them unseen), and the layout-test line verbatim
+ *       on a line of its own (the moderator and agent-svc lines paraphrase it, so it must not
+ *       drift unseen either).
  *   (c) the two per-brand small-format files are gone.
  *   (d) no file under `skills/` still teaches the retired layouts or their pattern names.
  *       Matched with any whitespace between words, so a phrase split across a line wrap is
@@ -60,7 +63,7 @@ const DELETED = [
 ];
 
 const FRONTMATTER = '---\nsmall: true\n---';
-const MAX_CHARS = 14200;
+const MAX_CHARS = 14900;
 const HEX = /#[0-9A-Fa-f]{6}\b/g;
 
 /** The opening sentence the planner must write — copied verbatim by the moderator's line. */
@@ -82,6 +85,12 @@ const REQUIRED = [
   '<icon> beside <context items> (station)',
   '<icon> over <context items> (cover)',
   '<icon> on a white disc in halo rings (centre)',
+  // A hybrid state is a badge on the photo card, as a slot (the photo card is never the badge).
+  '<icon> as a badge on the photo card',
+  // A state's icon is the brand product icon for its claim, never a shield or lock (U1).
+  'When the brand has a product icon for the claim, a badge, station or centre uses it as its icon, never a drawn or system shield or lock',
+  // A state's context items carry the body's own words, never invented ones (U2).
+  'When the body names them one by one, they carry its own words, verbatim, as labels',
 ];
 
 /** The state-layout test — one line, word for word in `small-format.md` (planner and codegen,

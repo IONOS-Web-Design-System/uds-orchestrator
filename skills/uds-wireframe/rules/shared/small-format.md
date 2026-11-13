@@ -46,8 +46,8 @@ Examples (Context "KANN SO EINIGES.", an AI phone assistant):
 - **FLEXIBEL VERBUNDEN** · "Anrufe nach eigenen Regeln weiterleiten." → Highlight moment (story): a call node overlapping an AI node in halo rings, with phone and person discs linked by dashed connectors phone → AI node → person; the moment: split, the call node into the AI node (AI); labels: none.
 - **SCHNELL SCHLAUER** · "Dokumente hochladen und die Wissensbasis erweitern." → Highlight moment (interaction): three file pills on ghost cards, with an upload slot; the moment: the cursor drags Produktinfo.pdf into the slot, which checks (AI); labels: Produktinfo.pdf, FAQ.pdf, Preise.pdf.
 - **DIREKT IM KALENDER** · "Google Kalender verbinden und Termine automatisch eintragen." → Highlight moment (interaction): a calendar card on ghost cards, with no satellites; the moment: the cursor presses "Verbinden", appointments fill the grid (AI); labels: Google Kalender, Verbinden.
-- **100 % DSGVO-konform** · "Ihre Daten bleiben in Europa." → Highlight moment (state): a shield as a badge on a data card, with no satellites; the moment: the badge lands (brand); labels: none.
-- **TÄGLICHES BACKUP** · "Jede Nacht automatisch gesichert." → Highlight moment (state): the brand product icon for backup beside three file rows (station), with no satellites; the moment: a check badge lands on the icon (brand); labels: none.
+- **100 % DSGVO-konform** · "Ihre Daten bleiben in Europa." → Highlight moment (state): the brand product icon for data protection as a badge on a data card, with no satellites; the moment: the badge lands (brand); labels: none.
+- **STÜNDLICHE BACKUPS** · "Dateien und Datenbanken werden stündlich gesichert." → Highlight moment (state): the brand product icon for backup beside rows for Dateien and Datenbanken (station), with no other satellites; the moment: a check badge lands on the icon (brand); labels: Dateien, Datenbanken.
 - **SSL INKLUSIVE** · "Für alle Ihre Domains." → Highlight moment (state): a lock over three domain chips (cover), with no satellites; the moment: the lock clicks shut (brand); labels: none.
 
 ## 3. Canvas
@@ -71,18 +71,18 @@ Sizes are shares of the canvas's **shorter side** (px at 432).
 | Piece | Anatomy | Size |
 |---|---|---|
 | **Central object** (exactly 1) | One object the body names: a clock, phone, file stack, calendar, shield, server card, routing node, document. Drawn in white surfaces, ink details and skeleton bars; never a product UI | spans 55–72% (238–311px) with its rings or ghosts; a disc inside halo rings is ~30–35% |
-| **Halo rings** (optional) | 1–2 concentric white circles at 12–18% opacity behind a round central object | outer ring 55–65% |
+| **Halo rings** (optional) | 1–2 static concentric white circles at 12–18% opacity behind a round central object | outer ring 55–65% |
 | **Ghost layers** (optional) | 1–2 copies of the central card offset up and right, white at 25% and 40% opacity, for depth or "many" | as the card |
 | **Satellites** (0–3) | Solid `--text-link-default` discs with a white filled glyph (person, mail, phone, lock, globe), or white speech bubbles with ink bars. Scattered toward the corners | 15–21% (65–91px), glyph ~50% of the disc |
 | **Connectors** (only for a flow the body names) | White dashed lines, 2–3px, dash ~6 / gap ~7, straight or gently curved, a small arrowhead at the end | – |
 | **Highlight** (exactly 1) | The element where the feature acts. It carries the only glow (section 6) | as the object it is |
-| **Labels** (0–3) | Real domain nouns from the body: the noun, a plain instance of it (a file name for "documents"), a named service, or the moment's short action verb. On white pills or as a card title, ink text, weight 500–600 | type ≥ 14px at 432 |
+| **Labels** (0–3) | The body's own words, verbatim: a noun, a named service, or the moment's short action verb; only an interaction's objects may show a plain instance instead (a file name for "documents"). On white pills or as a card title, ink text, weight 500–600 | type ≥ 14px at 432 |
 | **Skeleton bars** | Rounded bars in the ink or skeleton token stand in for other text | 6–8px tall at 432 |
 
 - Glyphs are filled system icons (`icon/system/filled-<name>`); name the concept and resolve it against the `# Icon name index`.
-- In a story or a state, a brand product icon (the brand product icon for <concept>, resolved in the product tier of the `# Icon name index`) may be the central object or a satellite — full colour on a white disc, never recoloured; system icons stay for glyphs inside discs, buttons and UI pieces.
+- In a story or a state, a brand product icon (the brand product icon for <concept>, resolved in the product tier of the `# Icon name index`) may be the central object or a satellite — full colour on a white disc, never recoloured; system icons stay for glyphs inside discs, buttons and UI pieces. When the brand has a product icon for the claim, a badge, station or centre uses it as its icon, never a drawn or system shield or lock; a cover keeps its system glyph pair.
 - Label pills, satellites and discs are drawn pieces, not kit chips; an action button is a kit button (section 6).
-- A label is never the heading, the body sentence, a status word, a number, a price or a claim the brief does not make.
+- A label is never the heading, the body sentence, a status word, a number, a price, a claim the brief does not make, or a paraphrase, abbreviation, symbol or compound of the body's words.
 
 ### State layouts
 
@@ -92,10 +92,10 @@ Layout (state): a claim about one named thing — compliant, verified, protected
 |---|---|
 | `<icon> as a badge on <context object>` | the context object at 55–72%; the icon a badge disc ~16–20% overlapping its top corner |
 | `<icon> beside <context items> (station)` | the icon disc ~30–35% and its context (2–3 rows or pills) form the 55–72% group, a short dashed connector between |
-| `<icon> over <context items> (cover)` | the icon disc at the top centre over 2–3 context chips in a row (not equal tiles), a dashed white dome behind it |
+| `<icon> over <context items> (cover)` | the icon disc at the top centre over 2–3 context chips in one row, a dashed white dome behind it |
 | `<icon> on a white disc in halo rings (centre)` | the fallback; a small badge lands on its rim, or the glyph completes |
 
-Context items count one each against the 0–3 satellites; they carry a label only when the body names it, else glyphs and skeleton bars. A hybrid state is a badge on the photo card.
+Context items count one each against the 0–3 satellites. When the body names them one by one, they carry its own words, verbatim, as labels; otherwise glyphs and skeleton bars. A hybrid state's central object is `<icon> as a badge on the photo card`; the photo card is never the badge.
 
 ## 6. Highlight colour
 
@@ -106,7 +106,7 @@ Context items count one each against the 0–3 satellites; they carry a label on
 - An AI action button is `<KitButton concept="ai" size="small" label={…} icon={…} />` in a positioned parent `div`; its glow is the kit's `glow` prop, not a drawn blur.
 
 **Non-AI feature:**
-- The highlight is a `--text-link-default` disc or element with a white glyph.
+- The highlight is a `--text-link-default` disc or element with a white glyph; a brand product icon stays full colour on its white disc.
 - Its glow is a soft WHITE blurred circle behind it at ~45% opacity, ~1.3× its size.
 - It never uses the AI gradient, `concept="ai"` or `ai`.
 
@@ -178,7 +178,7 @@ the one highlight overlap its edges. No interface frame holds the photo.
 
 ## 14. Anti-patterns
 
-- Any product window, browser bar, app sidebar or header, whole or cut by the canvas edge; a UI shrunk to fit; a row or grid of equal tiles.
+- Any product window, browser bar, app sidebar or header, whole or cut by the canvas edge; a UI shrunk to fit; a row or grid of equal tiles (a cover's context chips excepted).
 - More than one glow; more than one highlight; more than three satellites.
 - The AI gradient on a non-AI feature; AI or brand gradients on satellites or connectors; connector lines in any colour but white on the gradient canvas.
 - Generic status chips or words; the heading or body copy in the asset, or a marketing line; a hand-drawn logo.
@@ -194,7 +194,7 @@ Highlight moment (story|interaction|state): <central object> [in halo rings | on
 ```
 
 - Type: the section 2 test.
-- A story's moment clause starts with its morph move: unfold, stretch, split, settle in or launch. An interaction's moment clause names the cursor, the control it acts on and the result. A state's central object names its layout (the four slot texts) and its moment clause names what lands; a background device, if any, goes in the motion beat; the icon never moves.
+- A story's moment clause starts with its morph move: unfold, stretch, split, settle in or launch. An interaction's moment clause names the cursor, the control it acts on and the result. A state's central object names its layout (the four slot texts) and its moment clause names what lands; a background device, if any, goes in the motion beat; the icon lands once, then never moves (in a badge layout the icon is the badge).
 - Write `AI` when `aiFeature` is true, `brand` otherwise. Drop the bracketed parts that do not apply; write "with no satellites" when there are none.
 - `feature` names no product window, sidebar or browser, and enumerates no cards, segments or panels.
 - The generator draws exactly what that sentence names.

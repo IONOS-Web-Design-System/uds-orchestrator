@@ -89,18 +89,17 @@ distance, rotated to their angle, `transformOrigin: '0 50%'`), thinning, gone at
 ## State — the icon and its context
 
 A state is an icon story: the icon on its white disc arrives once, then never moves; its context
-moves quietly. The central-object slot names the layout (`small-format.md`):
+enters quietly, then holds still. The central-object slot names the layout (`small-format.md`):
 
 | Layout | Secondary motion | The moment |
 |---|---|---|
 | **badge** | the context's details settle in | the badge lands on the corner |
-| **station** | each item's marker (check or sync dot) in sequence, scale 0.8 → 1, no overshoot (allowed beyond 5 %) | then a check badge lands on the icon |
+| **station** | the items hold still, no pulse; each one's marker (check or sync dot) appears in sequence, scale 0.8 → 1, no overshoot (allowed beyond 5 %) | then a check badge lands on the icon |
 | **cover** | the dashed dome fades in once (no stroke draw); after the moment, chip markers stagger in, no pop | the glyph completes: cross-fade `filled-lock-open` → `filled-lock`, or `filled-shield` → `filled-shield-checkmark` |
 | **centre** (fallback) | none | a small badge lands on the disc's rim, or the glyph completes |
 
 Beats: settle 0–15%, context 15–50% (any travel slow, constant), the moment ~50–60%, hold
-≥ 1 s. A badge lands with a pop; a glyph cross-fades in ≤ 6 frames; the glow holds still. A
-hybrid state is a badge on the photo card.
+≥ 1 s. A badge lands with a pop; a glyph cross-fades in ≤ 6 frames; the glow holds still.
 
 ## Background
 
@@ -126,7 +125,7 @@ only; only a story's build-up tightens them, ≤ 6 %.
   the liquid neck and halos are not glows: white, unblurred.
 - Text appears only after its shape has landed, then never moves; the one exception is an
   interaction's clamped drag. A result's text (a summary card's lines) fades in once it lands;
-  non-text bars may keep moving.
+  non-text bars may keep moving until the Hold.
 - Overshoot (pop, snap) only on non-text layers, never on a text-bearing element once its text
   shows. Nothing recoils.
 - On a transparent or light canvas, the moment's ring and the background device take
