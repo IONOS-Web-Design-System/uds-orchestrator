@@ -29,13 +29,13 @@
  *       `small: true` + `motion: [animation]` + `styles: [plain, opaque-embed]` scope (agent-svc
  *       ANDs the keys: animated small canvases drawn as a highlight moment only — never a
  *       composite, a device screen or a Figma reconstruction, which keep their own rules), stays
- *       at or under 8,000 characters with no hex, carries its headings,
+ *       at or under 8,500 characters with no hex, carries its headings,
  *       the type-test line verbatim on a line of its own (the same line `small-format.md` gives
  *       the planner, so codegen can infer a type the brief does not name), the snap curve, the
- *       five morph moves and five background devices (each as a bold defined term), "icon
- *       story", the no-recoil sentence for text and "one blurred glow". Phrases are matched
- *       with whitespace collapsed, so a line wrap cannot hide one; the type-test line must
- *       match a whole line exactly.
+ *       five morph moves, five background devices and four state layouts (each as a bold
+ *       defined term), "icon story", the four one-moment hierarchy sentences and "one blurred
+ *       glow". Phrases are matched with whitespace collapsed, so a line wrap cannot hide one;
+ *       the type-test line must match a whole line exactly.
  *
  * Exit codes: 0 green, 1 violation, 2 cannot determine ("read nothing" is never "clean").
  *
@@ -87,28 +87,34 @@ const TYPE_TEST =
 
 const MOTION_RULE = join(WIREFRAME_RULES, 'shared', 'small-format-motion.md');
 const MOTION_FRONTMATTER = '---\nsmall: true\nmotion: [animation]\nstyles: [plain, opaque-embed]\n---';
-const MOTION_MAX_CHARS = 8000;
+const MOTION_MAX_CHARS = 8500;
 const MOTION_HEADINGS = [
   '# Small-format motion — three highlight-moment types',
   '## Type test',
+  '## One moment',
   '## Story — a morph with a climax',
   '## Interaction — a UI animation',
-  '## State — an icon story with background motion',
+  '## State — the icon and its context',
+  '## Background',
   '## Shared rules',
   '## Still renders',
 ];
 const MOTION_REQUIRED = [
   'bezier(0.2, 1.8, 0.4, 1)',
   'icon story',
-  'Text-bearing satellites and labels never recoil.',
   'one blurred glow',
+  'Only the moment overshoots, bursts a ring, or carries the glow.',
+  'Everything else is secondary: no overshoot, no ring, no glow, scale changes ≤ 5 %.',
+  'Nothing recoils.',
+  'At most one background device per tile, in every type.',
 ];
-/** The five morph moves and the five background devices, each required as a bold defined term:
- *  a bare substring would survive deleting its definition ("unfolds", "press ripples" occur
- *  elsewhere in the rule). */
+/** The five morph moves, the five background devices and the four state layouts, each required
+ *  as a bold defined term: a bare substring would survive deleting its definition ("unfolds",
+ *  "press ripples", "a badge lands" occur elsewhere in the rule). */
 const MOTION_TERMS = [
   'unfold', 'stretch', 'split', 'settle in', 'launch',
   'ripples', 'particles', 'dot field', 'dot orbit', 'light sweep',
+  'badge', 'station', 'cover', 'centre',
 ];
 
 /** The retired layouts and their pattern names; `\s+` so a line wrap cannot hide a phrase,
