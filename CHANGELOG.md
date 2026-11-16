@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.7.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.6.0...v3.7.0) (2026-11-16)
+
+
+### Features
+
+* **asset-moderator,ui-core:** point every small-canvas mention at the highlight moment ([f5a7db5](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f5a7db5794de8a5ac18428ac60174d1fb1f92192))
+* **motion:** one moment per tile, a quiet background, state layouts move their context ([ab9f540](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ab9f540f4199ce3867a4e6fd31baf8d30ab28136))
+* **small-format:** a badge keeps the brand product icon; labels are the body's own words; the hybrid badge is a slot ([0de95f0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/0de95f0115a8f1bac894432bc4c57ede611818a4))
+* **small-format:** state layouts — badge, station, cover, centre — chosen from the copy ([307156d](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/307156d7967b9092f0d03e40eaa0d542326d3919))
+* **style-guide,ui-core:** STRATO AI concept from UDS core 0.42 — blue→cyan with a white label ([f544e5a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/f544e5a7dc78bb9ed9e006dcb2b0b8bd9e72b3a8))
+* **wireframe:** small canvases draw a highlight moment — one shared rule, colours from tokens ([132d37c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/132d37c1f574597d83129c8138dcb7c61beab0c2))
+* **wireframe:** small-format motion — story with a climax, UI interaction, icon story with background motion ([57c10b0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/57c10b0b818ab14f4648f3dd7c0d5138f472e146))
+* **wireframe:** the small-format sentence names its type; brand product icons as the hero ([8a47dcd](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/8a47dcdf3cf4548099fa45194436cb8a99cfae9f))
+
+
+### Bug Fixes
+
+* **skills:** small canvases stop reading the frame rules; every hybrid photo is the central object ([df3ed89](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/df3ed894366cf377f987be9fe928f74f4f867cca))
+* **small-format:** a brand product icon is resolved in the product tier of the icon index ([b06dcf3](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/b06dcf39992614f618caca15866fa51dd7a12d61))
+* **ui-core,asset-moderator:** scope the small-canvas embed paragraph; drop the image-card alternative ([a4b4220](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/a4b42205101a2bf9c6adfb58f6353e4655736220))
+* **wireframe:** motion rule only where a highlight moment is drawn; the planner names the cursor; two frame rules leave small canvases ([3d66efa](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3d66efa48523cb84a9577f2f6a44294efa11bc03))
+* **wireframe:** small canvas follows the render's canvas for brands without one; SKILL.md small-canvas exception ([dd4e40d](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/dd4e40d044c58fd61cc464aab067f18eec4af101))
+
 ## [3.6.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.5.0...v3.6.0) (2026-11-11)
 
 
