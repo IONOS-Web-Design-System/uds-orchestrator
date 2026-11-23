@@ -26,16 +26,31 @@ describe('STRATO PromptWindow', () => {
   it('brand="strato" renders the strato design, not the IONOS recolour', () => {
     const s = styles(render());
     expect(s.some((x) => x.mixBlendMode === 'hard-light')).toBe(true);
-    expect(s.some((x) => x.background === 'rgba(255,255,255,0.56)')).toBe(true);
+    expect(s.some((x) => x.background === 'rgba(255,255,255,0.7)')).toBe(true);
     // IONOS's 0.88 glass never appears on strato.
     expect(s.some((x) => x.background === 'rgba(255,255,255,0.88)')).toBe(false);
+  });
+  it('the glass is the Subtle level (white 70 %)', () => {
+    const s = styles(render());
+    expect(s.some((x) => x.background === 'rgba(255,255,255,0.7)')).toBe(true);
+    expect(s.some((x) => x.background === 'rgba(255,255,255,0.56)')).toBe(false);
+  });
+  it('the glow layer is at 40 % strength at glow=1', () => {
+    const op = (glow: number) => styles(render({ glow })).find((x) => x.mixBlendMode === 'hard-light')!.opacity;
+    expect(op(1)).toBe(0.4);
+    expect(op(0.5)).toBe(0.2);
+  });
+  it('the prompt-simple AI button halo is 20 %', () => {
+    const s = styles(render({ variant: 'prompt-simple', label: undefined, pulse: 0 }));
+    expect(s.some((x) => String(x.boxShadow ?? '').includes('rgba(0,0,0,0.2)'))).toBe(true);
+    expect(s.some((x) => String(x.boxShadow ?? '').includes('rgba(0,0,0,0.52)'))).toBe(false);
   });
   it('the wrapper creates NO stacking context so the hard-light glow blends with the canvas', () => {
     const root = render()[0]!.props.style!;
     expect(root.position).toBe('absolute');
     for (const k of ['zIndex', 'opacity', 'transform', 'filter', 'isolation', 'mixBlendMode']) expect(root[k]).toBeUndefined();
     // the glass card carries the z-index instead
-    expect(styles(render()).some((x) => x.zIndex === 100 && x.background === 'rgba(255,255,255,0.56)')).toBe(true);
+    expect(styles(render()).some((x) => x.zIndex === 100 && x.background === 'rgba(255,255,255,0.7)')).toBe(true);
   });
   it('text glow is a plus-lighter blurred white copy (Figma linear dodge)', () => {
     const s = styles(render());

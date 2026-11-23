@@ -40,10 +40,11 @@ drawn field beside the AI button.
 ## What the component paints (do not rebuild it)
 
 - A **glow**: the STRATO AI gradient (`#0000FF → #00FFFF`) behind the card,
-  `mix-blend-mode: hard-light` and heavily blurred, so it tints whatever lies under the window.
+  `mix-blend-mode: hard-light` and heavily blurred, at 40 % strength (the Subtle level), so it tints whatever lies under the window.
   Place the window over the brand canvas and the frame's edge, never inside a wrapper with its
   own `zIndex`, `opacity` or `transform` — that isolates the blend and kills the glow.
-- **Glass**: white at 56% with a backdrop blur and a light rim.
+- **Glass**: white at 70% with a backdrop blur and a light rim.
+- **AI button** (`prompt-simple`): a dark halo at 20 % alpha.
 - **Text glow**: a soft white halo behind the `#29294D` Poppins text (Figma linear dodge).
 
 Placement: a direct child of the root, straddling the frame's left or bottom edge, mostly
@@ -66,7 +67,7 @@ Never wrap the window to animate it. The standard sequence, driven from `useCurr
 |---|---|
 | `bottom` | px from the canvas bottom — the rise |
 | `promptText` | the typed slice of `texts.promptText` |
-| `glow` 0–1 | glow strength (1 = the design) |
+| `glow` 0–1 | glow strength (1 = the design, painted at 40 %) |
 | `caret` | show the typing caret |
 | `pulse` 0–1 | send-beat intensity (drive up and back down) |
 | `glowAngleDeg` | the glow's gradient angle — the thinking orbit |

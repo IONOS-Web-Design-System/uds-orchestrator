@@ -11,7 +11,7 @@
  *      It must blend with whatever is painted under the window (canvas, frame), exactly like the
  *      Figma pass-through group, so the wrapper below deliberately creates NO stacking context
  *      (no z-index, opacity, transform or filter on it). Only the glass card carries z-index.
- *   2. GLASS — white at 56% with a backdrop blur and a light rim (Figma "Glass" effect).
+ *   2. GLASS — white at 70% (the Subtle level) with a backdrop blur and a light rim (Figma "Glass" effect).
  *   3. TEXT GLOW — Figma's white LINEAR_DODGE shadow. CSS cannot blend a `text-shadow` on its
  *      own, so it is a blurred white copy of the text with `mix-blend-mode: plus-lighter`
  *      (CSS's linear dodge) underneath the crisp text.
@@ -24,13 +24,28 @@ import type { ReactNode } from 'react';
 import { PROMPT_WINDOW_BRANDS, aiGradient } from './promptWindow.brands';
 import { AI_SVG, FlatIcon, type AiIconName } from './promptWindow.icons';
 
+/** The ONE STRATO AI material, at the "Subtle" level: the prompt window and the stage card both
+ *  read it so glass, glow and button shadow cannot drift apart. `nonAi` is the quieter non-AI
+ *  variant (blue-700 glow, primary accents). */
+export const STRATO_AI_MATERIAL = {
+  glowStrength: 0.4,
+  glass: 'rgba(255,255,255,0.7)',
+  buttonHaloAlpha: 0.2,
+  badgeShadow: '0 4px 10px rgba(41,41,77,0.12)',
+  nonAi: {
+    glow: 'color-mix(in oklch, oklch(0.3979 0.2042 270.86) 75%, #29294D)',
+    glowStrength: 0.32,
+    accent: 'oklch(0.3979 0.2042 270.86)',
+  },
+} as const;
+
 /** STRATO literals (Figma variables: strato/blue-700, white, private/ai/primary-*). The glyph ON
  *  the AI gradient is the brand table's on-gradient colour (UDS text-semantic-ai), so the two
  *  cannot drift apart again. */
 export const STRATO_PROMPT = {
   ink: '#29294D',
   onGradient: PROMPT_WINDOW_BRANDS.strato.onGradient,
-  glass: 'rgba(255,255,255,0.56)',
+  glass: STRATO_AI_MATERIAL.glass,
   rim: 'inset 0 0 0 1px rgba(255,255,255,0.55), inset 0 1px 1px rgba(255,255,255,0.85)',
   face: 'Poppins',
 } as const;
@@ -160,7 +175,7 @@ export function StratoPromptWindow(p: StratoPromptProps) {
       transform: pulse > 0 ? `scale(${1 + 0.08 * pulse})` : undefined,
       boxShadow: full
         ? `0 ${w * 0.02}px ${w * 0.03}px -${w * 0.006}px rgba(0,0,0,0.10), 0 ${w * 0.008}px ${w * 0.012}px -${w * 0.008}px rgba(0,0,0,0.10)`
-        : `0 0 ${w * 0.025}px rgba(0,0,0,${0.52 * (1 - 0.4 * pulse)})${pulse > 0 ? `, 0 0 ${w * 0.06 * pulse}px ${rgba(PROMPT_WINDOW_BRANDS.strato.gradient[1], 0.8 * pulse)}` : ''}`,
+        : `0 0 ${w * 0.025}px rgba(0,0,0,${STRATO_AI_MATERIAL.buttonHaloAlpha * (1 - 0.4 * pulse)})${pulse > 0 ? `, 0 0 ${w * 0.06 * pulse}px ${rgba(PROMPT_WINDOW_BRANDS.strato.gradient[1], 0.8 * pulse)}` : ''}`,
     }}>
       <FlatIcon svg={AI_SVG[p.icon]} size={glyph} colour={STRATO_PROMPT.onGradient} />
     </div>
@@ -188,7 +203,7 @@ export function StratoPromptWindow(p: StratoPromptProps) {
       <div aria-hidden style={{
         position: 'absolute', inset: 0, borderRadius: radius,
         background: `linear-gradient(${angle}deg, ${PROMPT_WINDOW_BRANDS.strato.gradient[0]}, ${PROMPT_WINDOW_BRANDS.strato.gradient[1]})`,
-        mixBlendMode: 'hard-light', filter: `blur(${glowBlur}px)`, opacity: Math.min(1, glow),
+        mixBlendMode: 'hard-light', filter: `blur(${glowBlur}px)`, opacity: Math.min(1, glow) * STRATO_AI_MATERIAL.glowStrength,
         transform: glow > 1 ? `scale(${1 + 0.06 * (glow - 1) / 0.35})` : undefined,
       }} />
       <div style={{
