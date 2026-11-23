@@ -72,6 +72,28 @@ describe('StageBadge', () => {
   });
 });
 
+describe('non-AI badge never shows the AI sparkle', () => {
+  // Raw element tree (no function resolution), so a FlatIcon element is visible by its props.
+  const raw = (el: unknown, out: El[] = []): El[] => {
+    if (!el || typeof el !== 'object') return out;
+    if (Array.isArray(el)) { el.forEach((k) => raw(k, out)); return out; }
+    const node = el as El;
+    if (node.props) { out.push(node); raw(node.props.children, out); }
+    return out;
+  };
+  it('no glyph given: no sparkles FlatIcon anywhere, circle is empty', () => {
+    // The type forbids this call; cast to exercise the runtime fallback.
+    const b = renderStageBadge({ ai: false, slot: { w: 400, h: 300 } } as never) as El;
+    expect(raw(b).some((e) => e.props.svg === AI_SVG['filled-sparkles'])).toBe(false);
+    expect(b.props.children).toBeFalsy();
+  });
+  it('type pin: a non-AI badge requires a glyph', () => {
+    // @ts-expect-error glyph is required when ai is false
+    const call = () => renderStageBadge({ ai: false, slot: { w: 400, h: 300 } });
+    expect(typeof call).toBe('function');
+  });
+});
+
 describe('stage tokens', () => {
   it('accent fill / outline / ink', () => {
     expect(stageAccentFill(true)).toBe('linear-gradient(90deg, #0000FF, #00FFFF)');
