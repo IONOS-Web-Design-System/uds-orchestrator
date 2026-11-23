@@ -55,16 +55,20 @@ export function renderStageCard(p: { ai: boolean; children: ReactNode; slot: Slo
   );
 }
 
-export function renderStageBadge(p: { ai: boolean; glyph?: ReactNode; slot: Slot }) {
+/** The AI sparkle is the default glyph for an AI badge only; a non-AI badge must be given its glyph. */
+export type StageBadgeProps = { ai: true; glyph?: ReactNode } | { ai: false; glyph: ReactNode };
+
+export function renderStageBadge(p: StageBadgeProps & { slot: Slot }) {
   const d = BADGE_OF_W * p.slot.w;
   return (
     <div style={{
       width: d, height: d, borderRadius: '50%',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       background: p.ai ? aiGradient('strato') : PRIMARY,
+      color: '#FFFFFF',
       boxShadow: STRATO_AI_MATERIAL.badgeShadow,
     }}>
-      {p.glyph ?? <FlatIcon svg={AI_SVG['filled-sparkles']} size={d * BADGE_GLYPH_OF_BADGE} colour="#FFFFFF" />}
+      {p.ai ? (p.glyph ?? <FlatIcon svg={AI_SVG['filled-sparkles']} size={d * BADGE_GLYPH_OF_BADGE} colour="#FFFFFF" />) : p.glyph}
     </div>
   );
 }
@@ -73,6 +77,6 @@ export function StageCard(props: { ai: boolean; children: ReactNode }) {
   return renderStageCard({ ...props, slot: useStageSlot() });
 }
 
-export function StageBadge(props: { ai: boolean; glyph?: ReactNode }) {
+export function StageBadge(props: StageBadgeProps) {
   return renderStageBadge({ ...props, slot: useStageSlot() });
 }

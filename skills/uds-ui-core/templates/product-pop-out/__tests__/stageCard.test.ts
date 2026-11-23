@@ -51,7 +51,7 @@ describe('StageCard', () => {
 });
 
 describe('StageBadge', () => {
-  const badge = (ai: boolean, glyph?: unknown) => renderStageBadge({ ai, glyph: glyph as never, slot: { w: 400, h: 300 } }) as El;
+  const badge = (ai: boolean, glyph?: unknown) => renderStageBadge({ ai, glyph, slot: { w: 400, h: 300 } } as never) as El;
   it('StageBadge AI is the gradient circle with a white glyph; non-AI is primary with the given glyph', () => {
     const a = badge(true);
     expect(a.props.style!.background).toBe(AI_GRAD);
@@ -66,6 +66,9 @@ describe('StageBadge', () => {
     expect(n.props.style!.boxShadow).toBe('0 4px 10px rgba(41,41,77,0.12)');
     expect(JSON.stringify(n.props.children)).toContain('GLYPH');
     expect(JSON.stringify(n)).not.toMatch(/#0000FF|#00FFFF/i);
+    expect(JSON.stringify(n)).not.toContain(AI_SVG['filled-sparkles']);
+    expect(n.props.style!.color).toBe('#FFFFFF');
+    expect(a.props.style!.color).toBe('#FFFFFF');
   });
 });
 
