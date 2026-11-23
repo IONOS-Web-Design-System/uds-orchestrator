@@ -316,7 +316,8 @@ export type PairPlacement = { frame: Rect; background: Rect; foreground: Rect };
 /**
  * Where the stage lands. Rects are canvas px (the content box starts at the canvas origin);
  * `charScale` / `ifaceScale` are canvas px per visual unit; `portraitness` is 0 (landscape) to 1.
- * `iface` is a legacy interface's rect, `pair` the pair's; at most one is set.
+ * `iface` is a legacy interface's rect, `pair` the pair's; at most one is set (a `pair` with a
+ * degenerate character frame sets neither).
  */
 export type StagePlacement = {
   character: Rect;
@@ -492,7 +493,10 @@ function placePair(frame: Rect, area: Rect): PairPlacement {
  * the virtual frame) carries both slots (`PAIR_SLOTS`). Each slot is kept on its own inside the area
  * `[0, content width] x [0, clip line]` (off the left and top edges, out of the right safe area, out of
  * the bottom strip) by `placeSlot`, and its mount box is `layerBox`. A slot that fits keeps the frame
- * as its box, so the layout relative to the character is the Figma comps'.
+ * as its box, so the layout relative to the character is the Figma comps'. A frame that is not finite
+ * or has no height (`h <= 0`: a no-waist strip mask on a tall canvas, whose head top lands below the
+ * clip line) gives no pair (`pair` null): the stage is the character alone (controller ruling,
+ * 2026-11-23).
  *
  * At `p = 0`, with a pose that fits, the character is exactly the frame's fit applied to
  * `characterRect`, and so is the interface's x and size; its y is the fit's raised by the 588/661
@@ -536,8 +540,11 @@ export function placeStage(input: StagePlacementInput): StagePlacement {
   let pair: PairPlacement | null = null;
   if (input.iface?.kind === 'pair') {
     const frame = characterFrame({ character }, m, input.characterFramed === true, clipBottom);
+    // A degenerate frame (a nonsense mask: NaN, or a no-waist strip shrunk until its head top is
+    // below the clip line, so `h <= 0`) has no slots: the stage is then the character alone.
+    const usable = [frame.x, frame.y, frame.w, frame.h].every(Number.isFinite) && frame.h > 0;
     // `content.w` is the canvas width minus the right safe area (fitStage's exact form of it).
-    pair = placePair(frame, { x: 0, y: 0, w: f.content.w, h: clipBottom });
+    if (usable) pair = placePair(frame, { x: 0, y: 0, w: f.content.w, h: clipBottom });
   } else if (input.iface) {
     const slot = interfaceSlot(input.iface.kind, faceSafeRect(m));
     const mount = interfaceMountRect(slot, { w: input.iface.legW, h: input.iface.legH });

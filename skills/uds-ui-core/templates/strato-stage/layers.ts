@@ -5,12 +5,17 @@
  * component maps this list 1:1 onto absolutely positioned elements, so everything that can go
  * wrong (fit, order, motion) is testable here without a renderer.
  *
+ * Bottom to top. A pair (`iface.kind === 'pair'`): the leg's background, the character, the leg's
+ * foreground, the two pair layers in their mount boxes (`placeStage(...).pair`). Otherwise the
+ * character, then a legacy interface over it when there is one. A pair whose character frame is
+ * degenerate has no `pair` (geometry.ts), so it is the character alone.
+ *
  * Import specifiers carry NO file extension (see geometry.ts).
  */
 import { fitStage, placeStage, type Rect, type StagePlacementInput } from './geometry';
 import { layerMotion, type StageLayerId } from './motion';
 
-/** `placeStage`'s input (canvas, `safeArea`, `metrics`, `iface`) plus the character image. */
+/** `placeStage`'s input (canvas, `safeArea`, `metrics`, `iface`, `characterFramed`) plus the character image. */
 export type StageInput = StagePlacementInput & {
   /** Path for `staticFile()`: the character cutout. */
   srcs: { character: string };
@@ -18,7 +23,7 @@ export type StageInput = StagePlacementInput & {
 
 export type StageLayer = {
   id: StageLayerId;
-  /** `staticFile()` path of the image; absent on the interface, which is a React node. */
+  /** `staticFile()` path of the character image; absent on the interface and pair layers (the leg, a React node). */
   src?: string;
   /** Canvas px (the content box starts at the canvas origin). */
   rect: Rect;
@@ -43,8 +48,17 @@ export function buildStageLayers(input: StageInput, tMs: number): StageLayer[] {
     };
   };
 
-  // Bottom -> top: the character, then the interface (when there is one) over it.
-  const layers: StageLayer[] = [make('character', place.character, input.srcs.character)];
+  const character = make('character', place.character, input.srcs.character);
+  // Bottom -> top. The pair: the leg's background, the character, the leg's foreground.
+  if (place.pair) {
+    return [
+      make('background', place.pair.background, undefined),
+      character,
+      make('foreground', place.pair.foreground, undefined),
+    ];
+  }
+  // Legacy: the character, then the interface (when there is one) over it.
+  const layers: StageLayer[] = [character];
   if (place.iface) layers.push(make('interface', place.iface, undefined));
   return layers;
 }

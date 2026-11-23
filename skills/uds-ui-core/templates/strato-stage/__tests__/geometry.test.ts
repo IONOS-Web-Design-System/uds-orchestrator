@@ -1015,6 +1015,34 @@ describe('strato-stage pair: character frame, slots, clamping', () => {
     expect(split).toBeGreaterThan(0); // e.g. 656 x 1080: the background fits, the foreground crosses the left edge
   });
 
+  it('a degenerate character frame (no height, or not finite) drops the pair: the stage is the character alone', () => {
+    // A no-waist strip mask (the subject 30 % of the image tall and its full width) on a tall canvas:
+    // the pose shrinks to fit the width until its head top is below the clip line, so the virtual
+    // frame's height is negative and the mount boxes would be nonsense (5900 px wide on a 320 canvas).
+    const STRIP: StageMetrics = {
+      headTopFrac: 0.35, bottomFrac: 0.65, leftFrac: 0, rightFrac: 1, subjectHeightFrac: 0.3, centerXFrac: 0.5,
+      upperBodyLeftFrac: 0.1, upperBodyRightFrac: 0.9, imgW: 1536, imgH: 2048,
+    };
+    const tall = { w: 320, h: 2048 };
+    const pl = pairOf(tall, STRIP, false);
+    expect(characterFrame(pl, STRIP, false, clipOf(tall)).h).toBeLessThanOrEqual(0); // not vacuous
+    expect(pl.pair).toBeNull();
+    expect(pl.iface).toBeNull();
+    // The character is placed as it is without an interface.
+    expect(pl.character).toEqual(placeStage({ canvas: tall, safeArea: SA, metrics: STRIP }).character);
+    // The same mask on a canvas where its frame keeps a positive height keeps the pair.
+    const shorter = { w: 320, h: 1080 };
+    expect(characterFrame(pairOf(shorter, STRIP, false), STRIP, false, clipOf(shorter)).h).toBeGreaterThan(0);
+    expect(pairOf(shorter, STRIP, false).pair).not.toBeNull();
+    // An empty mask (no subject, no waist): the frame is NaN, so no pair either.
+    const EMPTY: StageMetrics = { ...STRIP, subjectHeightFrac: 0 };
+    const canvas = { w: 750, h: 570 };
+    const empty = pairOf(canvas, EMPTY, false);
+    expect(Number.isFinite(characterFrame(empty, EMPTY, false, clipOf(canvas)).h)).toBe(false); // not vacuous
+    expect(empty.pair).toBeNull();
+    expect(pairOf(canvas, EMPTY, true).pair).toBeNull(); // framed: the frame is the (NaN) image box
+  });
+
   it('placeSlot: moves a slot inside the area at its size; shrinks it uniformly about its centre only when it is larger', () => {
     const area: Rect = { x: 0, y: 0, w: 200, h: 300 };
     expect(placeSlot({ x: 10, y: 20, w: 50, h: 40 }, area)).toEqual({ x: 10, y: 20, w: 50, h: 40 }); // inside: as is

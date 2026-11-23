@@ -1,17 +1,26 @@
 # StratoStage
 
-The STRATO corporate stage as a fixed, Figma-measured template: the
-character (a cutout) sliding up, plus an optional floating interface that pops up over it (two
-layers; the fixed box and powder layers were dropped, amendment 2026-11-03). It is the `strato-stage` pattern, a sibling of `product-pop-out`:
-that one places a floating prompt over a photo, this one owns the whole stage.
+The STRATO corporate stage as a fixed, Figma-measured template in three layers, bottom to top
+(spec 2026-11-23, `uds-moderator/docs/superpowers/specs/2026-11-23-strato-stage-three-layers-design.md`):
+
+1. the **background**: the generated leg's abstract app frame of the product;
+2. the **character** (a cutout), entering with the Figma pop-in of every character component;
+3. the **foreground**: the leg's glass card with the one highlighted feature.
+
+One leg run draws both pair layers (inside `product-pop-out`'s `<StagePair>`); the stage mounts it
+twice, once per layer. Without an interface the stage is the character alone. A legacy payload
+(`live-app` / `feature-highlight`, from a moderator deployed before 2026-11-23) still renders the
+two-layer stage of 2026-11-05: the character plus one floating interface over it. It is the
+`strato-stage` pattern, a sibling of `product-pop-out`: that one places a floating prompt over a
+photo, this one owns the whole stage.
 
 | File | What it is |
 |---|---|
 | `geometry.ts` | The pure numbers: the Figma visual frame, the fit into the canvas, the character anchor, the placement on the canvas (`placeStage`), the interface slots, the interface leg sizes (mirrors of the moderator's), the pair's character frame and slots (mirrors of `product-pop-out/stagePair.layout.ts`). |
-| `motion.ts` | The option-B motion as pure functions of time (`layerMotion`), the timeline, `FPS`. |
-| `layers.ts` | `buildStageLayers(input, tMs)`: geometry + motion in canvas px, bottom to top. Pure. |
+| `motion.ts` | The motion as pure functions of time (`layerMotion`): the background entrance, the Figma character pop-in (`CHARACTER_POP`, `easeOutFigma`), the foreground entrance, the legacy interface pop-up; the timeline, the legs' release times, `FPS`, `interfacePhase`. |
+| `layers.ts` | `buildStageLayers(input, tMs)`: geometry + motion in canvas px, bottom to top (three layers for a pair, the character and a legacy interface otherwise). Pure. |
 | `styles.ts` | `stageRootStyle(canvas, content)`, `layerStyle(layer)`, `interfaceLegStyle(rect, leg)`: the inline styles of the root and the layers. Pure (a React type only). |
-| `StratoStage.tsx` | The Remotion component: maps the layer list onto `<Img>`s and mounts the interface. |
+| `StratoStage.tsx` | The Remotion component: maps the layer list onto the character `<Img>` and the interface mounts (the pair leg twice, a legacy interface once). `renderStratoStage(props, frame, fps)` is its hook-free body. |
 
 None of the first four imports the DOM or `remotion` (`styles.ts` imports one React type), so they
 are tested without a renderer (`__tests__/`). `StratoStage.tsx` renders only DOM and `<Img>` (no canvas, WebGL or
@@ -19,8 +28,9 @@ video), so a later SVG capture of the DOM sees every layer.
 
 Geometry is closed; content is open; placement is external. The fit, the paint order and
 the motion are not props: the props are enumerated, so an attempt to reach inside is a compile
-error. The content is the character image path, the character's measured bbox and the interface
-node. The placement is the canvas and `safeArea`, supplied by the caller (the moderator).
+error. The content is the character image path, the character's measured bbox (and
+`characterFramed`), and the interface: the pair's `renderInterface(layer)` or a legacy
+`interfaceNode`. The placement is the canvas and `safeArea`, supplied by the caller (the moderator).
 Import specifiers carry no file extension (Remotion's bundler cannot resolve `.js` to `.ts`;
 enforced tree-wide by `product-pop-out/__tests__/importSpecifiers.test.ts`).
 
@@ -33,15 +43,17 @@ enforced tree-wide by `product-pop-out/__tests__/importSpecifiers.test.ts`).
 | `metrics` | `StageMetrics` | Measured alpha bbox of the character cutout, plus its waist row `waistFrac` (the moderator's `CutoutMetrics`). Default: `DEFAULT_METRICS`, a plausible 3:4 portrait, not a Figma measurement. `waistFrac` is optional: without it the subject bbox is scaled as before |
 | `srcs` | `{ character }` | `staticFile()` path of the character cutout |
 | `iface` | `{ kind, legW, legH }` | Omit for no interface. `kind` is `'pair'` (one leg mounted twice: a background below the character, a foreground above it; see "The pair" under "Placement") or a legacy `'live-app'` / `'feature-highlight'` (one leg over the character, kept for an earlier moderator's payloads); `legW` x `legH` is the canvas the interface leg was rendered at, as the moderator requested it (see "Interface leg sizes") |
-| `characterFramed` | `boolean` | `true` when the character is a catalog cutout (`strato-<showroom>-stage`) whose image IS the 971 x 736 character frame. Default `false`: the pair's frame is built from `metrics` (see "The pair"). Only a `pair` reads it |
-| `interfaceNode` | `ReactNode` | The interface content, laid out at `legW` x `legH` CSS px. With `iface` but no node, nothing is painted for it |
-| `interfaceDurationInFrames` | `number` | The interface's own length in frames, what its own composition had (90 for its 3 s), for a still leg too. Inside the node `useVideoConfig().durationInFrames` is this in every phase. Must not exceed the stage's own length (120 / 150) |
-| `interfaceMotion` | `'still'` \| `'animated'` | How the interface leg was rendered. Default `'animated'`. See "The interface layer" |
+| `characterFramed` | `boolean` | `true` when the character is a catalog cutout (`strato-<showroom>-stage`) whose image IS the 971 x 736 character frame. Default `false`: the pair's frame is built from `metrics` (see "The pair"). Passed to `placeStage` as given; only a `pair` reads it |
+| `renderInterface` | `(layer: 'background' \| 'foreground') => ReactNode` | The pair (`iface.kind` `'pair'`): the leg for one of its two mounts, called once per layer. Each result is laid out at `legW` x `legH` CSS px in that layer's mount box. The caller makes each mount show only its layer (compose: the leg inside `<StageLayerContext.Provider value={layer}>`). Not called for a legacy kind or a degenerate pair. Without it a pair paints only the character |
+| `interfaceNode` | `ReactNode` | LEGACY (`'live-app'` / `'feature-highlight'`): the interface content, laid out at `legW` x `legH` CSS px, mounted once over the character. With a legacy `iface` but no node, nothing is painted for it. A pair ignores it |
+| `interfaceDurationInFrames` | `number` | The leg's own length in frames, what its own composition had (90 for its 3 s), for a still leg too. Inside every mount `useVideoConfig().durationInFrames` is this in every phase. Must not exceed the stage's own length (120 / 150) |
+| `interfaceMotion` | `'still'` \| `'animated'` | How the leg was rendered. Default `'animated'`. See "The interface mounts" |
 
 The 672 x 610 visual frame is fitted with contain into the content box (the canvas minus the
 `safeArea` margin on the right and bottom), bottom-anchored and horizontally centred (`fitStage`).
-`placeStage` then places the character and the interface on the canvas (see "Placement"). Paint
-order, bottom to top: `character`, then `interface`.
+`placeStage` then places the character and the pair (or a legacy interface) on the canvas (see
+"Placement"). Paint order, bottom to top: `background`, `character`, `foreground` for a pair;
+`character`, then `interface` for a legacy kind; the `character` alone without an interface.
 
 Every layer is styled `max-width: none; max-height: none` (`layerStyle`). The compose workspace
 imports Tailwind, whose preflight `img, video { max-width: 100%; height: auto; }` otherwise caps
@@ -84,7 +96,7 @@ amended by task C6 on 2026-11-06 (the 8 % bottom margin and the waist on it).
   keeps the Figma anchor and only shrinks. The top cannot cross: the head top is at
   `originY + 22 s` at `p = 0` and 25 % down at `p = 1`, and shrinking about the waist only lowers it.
   Never clipped beats every size and position target, the portrait "25 % down" included.
-* **The interface** keeps the frame's scale `s` (its landscape, width-fit size). Its centre keeps the
+* **A legacy interface** (`live-app` / `feature-highlight`) keeps the frame's scale `s` (its landscape, width-fit size). Its centre keeps the
   slot's offset from the character, per kind: `(character centre x - (480 - slot centre x) s,
   head top + (slot centre y - 22) charScale r)`, the slot from `interfaceSlot(kind, faceSafe)`.
   `r` is 588/661 with a measured waist and 1 without (ruling 2026-11-06): the vertical offset scales
@@ -132,16 +144,25 @@ amended by task C6 on 2026-11-06 (the 8 % bottom margin and the waist on it).
     area and shrinks.
   * **Mount boxes** (`layerBox`). `pair.background` / `pair.foreground` are where each mount of the leg
     goes. Each is the whole frame-sized leg, scaled and moved so that its slot lands on the placed
-    slot. A slot that fits keeps the frame itself as its box.
+    slot. A slot that fits keeps the frame itself as its box. `buildStageLayers` uses them as the
+    `background` / `foreground` rects, and `StratoStage` mounts the leg canvas (`legW` x `legH` CSS
+    px, the character frame's aspect) into each, scaled by `box.w / legW` (`interfaceLegStyle`).
+  * **A degenerate frame** (not finite, or `h <= 0`) gives no pair (`pair` and `iface` both `null`),
+    so the stage is the character alone (controller ruling, 2026-11-23). Only a nonsense mask gets
+    there: a no-waist strip (e.g. the subject 30 % of the image tall and its full width) on a tall
+    canvas shrinks until its head top is below the clip line (320 x 2048: frame height -48), or an
+    empty mask (subject height 0) makes everything NaN or infinite.
 * **Clipping.** The stage root (`stageRootStyle`) is the canvas from its top-left down to the
   content bottom. With the 8 % bottom margin it cuts there: exactly at the waist, so nothing of the
   character below the waist shows (the cutout itself runs on below it) and the strip stays empty.
   It never cuts at the right margin. The character is otherwise cut by nothing but the canvas.
-  With no bottom margin the root clips nothing; an older moderator's 22 % is cut the same way. The
-  interface is cut by its own leg canvas (`interfaceLegStyle`); its visible part is clamped above the
-  root's clip line, so no interface content lands in the 8 % strip.
+  With no bottom margin the root clips nothing; an older moderator's 22 % is cut the same way. Every
+  interface mount is cut by its own leg canvas (`interfaceLegStyle`). A pair mount's slot is clamped
+  above the root's clip line (the rest of its leg canvas is transparent: `<StagePair>` paints nothing
+  outside the slots), and so is a legacy interface's visible part, so no interface content lands in
+  the 8 % strip.
 * **At `p = 0`** the character keeps the Figma head top (`originY + 22 s`) and centre at 588/661
-  the size of the 2026-11-05 rule, with its waist on the content bottom. Every interface keeps the
+  the size of the 2026-11-05 rule, with its waist on the content bottom. Every legacy interface keeps the
   frame fit's x and size (`fitStage` + `interfaceMountRect`), and its y is raised by
   `(slot centre y - 22) s 73/661` (55 px for the AI prompt at 1280 x 960). Without `waistFrac`,
   both the character and the interface are exactly as before. The exceptions are:
@@ -177,7 +198,9 @@ frame); only `fitStage` knows the canvas.
 | `safeArea` `{ right: 0.16, bottom: 0.08 }` (sent by the moderator) | right: spec 2026-11-05 decision 1 (mockup option C); bottom 8 %: the user's ask after the live test, task C6 (2026-11-06), superseding `bottom: 0`. It was `{ right: 0.32, bottom: 0.22 }` as `product-pop-out` (R14, superseded 2026-11-05) |
 | Head top to waist 588 (`WAIST_SUBJECT_HEIGHT`), the waist on the frame bottom | 610 - 22, task C6 (2026-11-06): the user's "less cropped, moved up a bit, shown slightly smaller". It was 661 (the waist 73 below the frame bottom, 22 + 661 - 610, as the waist-cropped character of `663:8787`) on 2026-11-05 |
 | Portrait: 3:4, head top 25 % down | spec 2026-11-05 decision 4 (mockup B); the blend between 672:610 and 3:4 is the builder's call (linear) |
-| Motion curves, offsets (0.28 x 610, 0.043 x 610) | the picked mockup `stage-b-transparent.html`, option B; the timings are the 2026-11-03 amendment (controller's call) |
+| Character pop-in (`CHARACTER_POP`: 847.12 ms, fade 98.22 ms, scale 1.2 to 1 over 187.37 ms, `cubic-bezier(0, 0, 0.58, 1)`) | the `fadeIn` / `scaleOut` motion on all 37 character components (section `721:945`, page `persona/strato`) and the five final comps (`730:9594`), read with the Plugin API |
+| Background and foreground entrances (0 / 600 ms, drift 0.01 x 610; 1040 / 260 ms, scale 0.92 to 1), the pair's release at 1300 ms | not Figma (its background and foreground carry no motion): spec 2026-11-23 §4 and its plan (Task 5), the builder's values on the shared entrance curve |
+| Legacy interface pop-up (450 / 450 ms, 0.043 x 610, outBack s=1.7), its release at 900 ms | the picked mockup `stage-b-transparent.html`, option B; the timings are the 2026-11-03 amendment (controller's call) |
 | `DEFAULT_METRICS`, the `live-app` slot | **not Figma**: see the note below |
 | `STRATO_SIMPLE_ASPECT` 4.8404 | `STRATO_SIMPLE.aspect` of `product-pop-out/promptWindow.strato.tsx` (`587:6992`, 455 x 94), mirrored, not imported (see "Interface leg sizes") |
 | `PROMPT_WINDOW_GLOW_PAD_OF_W` 0.3 | not Figma: the room the pill's glow needs (`STRATO_SIMPLE.glowBlurOfW` 0.13, see "Interface leg sizes") |
@@ -186,9 +209,11 @@ frame); only `fitStage` knows the canvas.
 
 Only the moderator decides how big an interface leg is: it requests the leg at that size and sends
 the same `legW` x `legH` to `/compose` (src/orchestrate/stagePayloads.ts). The template never computes
-it; `interfaceLegDims` and `promptWindowLeg` here are MIRRORS of the moderator's rule, kept to
-document and test it (the moderator's tests import this file and assert the two agree). Whatever
-the size, the composite mounts the leg at half scale centred on the slot (`interfaceMountRect`),
+it. A pair leg is requested at the character frame's aspect (`CHARACTER_FRAME_ASPECT`) and mounted
+whole in each mount box (see "The pair"). For the legacy kinds below, `interfaceLegDims` and
+`promptWindowLeg` here are MIRRORS of the moderator's rule, kept to document and test it (the
+moderator's tests import this file and assert the two agree). Whatever the size, the composite
+mounts a legacy leg at half scale centred on the slot (`interfaceMountRect`),
 nudged below the face-safe band when it would cover the face, and `placeStage` keeps it at the
 slot's offset from the character (see "Placement").
 
@@ -220,42 +245,80 @@ import of `../product-pop-out/...` cannot resolve there (`selfContained.test.ts`
 
 ## Motion
 
-The settled stage carries the Figma position and nothing else: every pattern is exactly identity
-(`translateY 0, scale 1, opacity 1`) once its progress reaches 1. `translateY` is in visual
-units, scaled to px by the fit. Opacity is a ramp of the same progress `p`.
+All times are from frame 0 at 30 fps (spec 2026-11-23 §4). The settled stage carries the designed
+position and nothing else: every pattern is exactly identity (`translateY 0, scale 1, opacity 1`)
+once its progress `p` reaches 1. `translateY` is in visual units, scaled to px by the fit `s`
+(the background's 6.1 units are 5.2 px at 750 x 570). Every transform is about the layer rect's
+centre (`layerStyle`): for a pair layer that is its mount box (the frame when unclamped), for the
+character its image box (the frame, for a catalog character).
 
-| Layer | Pattern | Start / duration (ms) | Motion | Opacity |
-|---|---|---|---|---|
-| `character` | slide up | 0 / 550 | outQuart: translateY 0.28 x 610 = 170.8 to 0 | `p * 2` |
-| `interface` | pop up | 450 / 450 | outBack s=1.7: translateY 0.043 x 610 = 26.23 to 0, scale 0.72 to 1 (overshoots) | `p * 2.5` |
+| Layer | Start / duration (ms) | Motion | Opacity |
+|---|---|---|---|
+| `background` | 0 / 600 | drifts up: translateY 0.01 x 610 = 6.1 to 0, `outQuart(p)` | `outQuart(p)` |
+| `character` | 847.12 / 187.37 | the Figma pop-in: scale `1.2 - 0.2 easeOutFigma((t - 847.12) / 187.37)` | `easeOutFigma((t - 847.12) / 98.22)` |
+| `foreground` | 1040 / 260 | scale `0.92 + 0.08 outQuart(p)` | `2p`, clamped |
+| `interface` (legacy) | 450 / 450 | outBack s=1.7: translateY 0.043 x 610 = 26.23 to 0, scale 0.72 to 1 (overshoots) | `2.5p`, clamped |
 
-Everything has settled at 900 ms (the interface's pop-up, 450 + 450; frame 27). The interface's
-own animation starts then (`INTERFACE_ANIM_START_MS` = 900, frame 27). Output is 30 fps: 4 s with
-no interface or a still interface, 5 s with an animated one (its own animation is 3 s: frames 27
-to 116, 0.9 s to 3.9 s). Frame 0 is empty and transparent. The last frame is held; there is no
-loop.
+**The Figma pop-in** (`CHARACTER_POP` = `{ startMs: 847.12, fadeMs: 98.22, scaleMs: 187.37,
+fromScale: 1.2 }`) is the `fadeIn` / `scaleOut` of every character component: opacity 0 to 1 over
+98.22 ms and scale 120 % to 100 % (both axes) over 187.37 ms, both from 847.12 ms, both eased
+`cubic-bezier(0, 0, 0.58, 1)`. `easeOutFigma(p)` is that curve: `x(t) = p` solved by bisection
+(40 iterations), then `y(t)`; exactly 0 at `p <= 0` and 1 at `p >= 1`.
 
-## The interface layer
-
-`StratoStage` wraps `interfaceNode` in a `legW` x `legH` CSS px box that clips (it is the leg's
-canvas) and scales it by `rect.w / legW` (one half) from its top-left (`interfaceLegStyle`), so
-the node lays itself out exactly as it did in its own leg.
-
-Which of its own frames it shows (`interfacePhase(frame, 27, interfaceDurationInFrames,
-interfaceMotion)`, pure, `motion.ts`):
-
-| `interfaceMotion` | Stage frames | Interface frame shown |
+| Stage frame (ms) | Character opacity | Character scale |
 |---|---|---|
-| `'animated'` | 0 to 26 (pop-in) | 0, frozen |
-| `'animated'` | 27 to 27 + d - 1 (27 to 116 for d = 90) | `frame - 27`, playing |
-| `'animated'` | after that (117 on) | d - 1, held: the last frame stays, the interface never vanishes |
-| `'still'` | every frame, pop-in included | d - 1: the frame its own still gate validated (ruling R23) |
+| 0 to 25 (0 to 833.3) | 0 | 1.2 |
+| 26 (866.7) | 0.307 | 1.1666 |
+| 27 (900.0) | 0.725 | 1.1157 |
+| 28 (933.3) | 0.975 | 1.0718 |
+| 29 (966.7) | 1 | 1.0361 |
+| 30 (1000.0) | 1 | 1.0107 |
+| 31 (1033.3) | 1 | 1.0000 (0.9938 of the way) |
+| 32 on (1066.7) | 1 | 1, exactly (identity from 1034.49 ms) |
+
+The pair's sequence: the background has drifted in and rests by 600 ms (frame 18). The character
+pops in from 847 ms and has landed by 1034 ms. Then the foreground enters (1040 to 1300 ms,
+frames 32 to 39). Its leg's own animation, the one impact moment, is released at 1300 ms
+(`FOREGROUND_ANIM_START_MS`, frame 39) in both mounts.
+Output is 30 fps: 4 s with no interface or a still leg, 5 s with an animated one (its own
+animation is 3 s: frames 39 to 128, 1.3 s to 4.3 s). Frame 0 is empty and transparent (every
+opacity is 0), as the compose `stage-alpha` gate requires. The last frame is held; there is no loop.
+
+**Legacy note.** A legacy stage (`live-app` / `feature-highlight`) keeps its rects and its
+interface's pop-up (450 to 900 ms) and release (`INTERFACE_ANIM_START_MS` = 900, frame 27; its 3 s
+are frames 27 to 116). Its character gets the Figma pop-in too, like every stage character (spec
+ruling 2). So on those stages the interface has popped in before the character appears (847 ms).
+Legacy payloads only come from a moderator deployed earlier, during a deploy window.
+
+## The interface mounts
+
+`StratoStage` wraps each mount's node in a `legW` x `legH` CSS px box that clips (it is the leg's
+canvas) and scales it by `rect.w / legW` from its top-left (`interfaceLegStyle`), so the node lays
+itself out exactly as it did in its own leg. For a pair the rect is the layer's mount box (the
+whole leg canvas, at the character frame's scale); for a legacy interface it is the leg at half
+scale.
+
+| Kind | Mounts | Node | Released at (`startFrame`) |
+|---|---|---|---|
+| `pair` | two: `background` below the character, `foreground` above it | `renderInterface('background')`, `renderInterface('foreground')` | `msToFrame(FOREGROUND_ANIM_START_MS)` = 39 (1300 ms), both |
+| `live-app` / `feature-highlight` | one, over the character | `interfaceNode` | `msToFrame(INTERFACE_ANIM_START_MS)` = 27 (900 ms) |
+
+Both pair mounts show the SAME leg frame at every stage frame, so the background and the foreground
+stay one picture. Which of its own frames a mount shows (`interfacePhase(frame, startFrame,
+interfaceDurationInFrames, interfaceMotion)`, pure, `motion.ts`):
+
+| `interfaceMotion` | Stage frames | Leg frame shown |
+|---|---|---|
+| `'animated'` | 0 to `startFrame` - 1 (0 to 38 for the pair, 0 to 26 legacy) | 0, frozen |
+| `'animated'` | `startFrame` to `startFrame` + d - 1 (39 to 128 / 27 to 116 for d = 90) | `frame - startFrame`, playing |
+| `'animated'` | after that (129 / 117 on) | d - 1, held: the last frame stays, the leg never vanishes |
+| `'still'` | every frame, the entrances included | d - 1: the frame its own still gate validated (ruling R23) |
 
 d is `interfaceDurationInFrames`. Without it a still shows frame 0 and an animated one plays on
-unbounded. Nothing depends on the stage's length: in a 4 s (120-frame) stage an animated 90-frame
-interface has played out by frame 116 and holds frame 89 on the last stage frame.
+unbounded. Nothing depends on the stage's length: in a 4 s (120-frame) legacy stage an animated
+90-frame interface has played out by frame 116 and holds frame 89 on the last stage frame.
 
-It is ONE element tree in every phase, so the node never remounts:
+Each mount is ONE element tree in every phase, so the node never remounts:
 `<Freeze frame={shown}><Sequence durationInFrames={d} width={legW} height={legH} layout="none">`.
 
 * **Verified, remotion 4.0.467 (and the same in 4.0.529):** `<Sequence>` accepts `width` /
@@ -265,9 +328,9 @@ It is ONE element tree in every phase, so the node never remounts:
   `layout="none"` the Sequence adds no `AbsoluteFill` of its own.
 * The Sequence's context duration (what `useVideoConfig().durationInFrames` returns inside) is
   `max(0, min(composition duration - from, durationInFrames))` (`Sequence.js`).
-  A Sequence from the pop-in offset (27) would unmount the interface during the pop-in. So the
+  A Sequence from the release (27, or 39) would unmount the leg before it. So the
   Sequence starts at 0 (it reports d whenever the stage is at least d long), and the
-  stage frame is mapped onto the interface's own frame by the always-active `<Freeze>`, which
+  stage frame is mapped onto the leg's own frame by the always-active `<Freeze>`, which
   sets the timeline to `shown` and zeroes the cumulated offset (`freeze.js`): `useCurrentFrame()`
   inside is exactly `shown`, always within the Sequence's 0 .. d - 1, so it stays mounted.
 * d must not exceed the stage's own length: remotion clamps the timeline to the composition.
