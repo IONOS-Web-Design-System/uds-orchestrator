@@ -6,7 +6,7 @@ absolute and a direct child of the root, never inside an interface (a prompt ins
 a drawn field + an AI button). Brands: `ionos`, `strato`.
 
 **STRATO is its own design** (`promptWindow.strato.tsx`, Figma 587:6893 / 587:6992): a
-hard-light AI-gradient glow behind 56% white glass, a plus-lighter text glow, Poppins `#29294D`.
+hard-light AI-gradient glow (40 % strength) behind 70 % white glass (both from `STRATO_AI_MATERIAL`, the Subtle level), a plus-lighter text glow, Poppins `#29294D`.
 `prompt-full` = AI badge + uppercase `label` + prompt (≤ 3 lines); `prompt-simple` = pill with the
 prompt (≤ 2 lines) and a round AI button. STRATO adds the optional motion props `glow`, `caret`,
 `pulse` and `glowAngleDeg` (see `rules/strato/prompt-window.md`); `actions` and
