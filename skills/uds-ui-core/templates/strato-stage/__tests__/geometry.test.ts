@@ -1,7 +1,11 @@
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   INTERFACE_SLOTS, DEFAULT_METRICS, fitStage, characterRect, faceSafeRect, interfaceSlot,
   interfaceLegDims, interfaceMountRect, promptWindowLeg, placeStage, STRATO_SIMPLE_ASPECT, PROMPT_WINDOW_GLOW_PAD_OF_W,
+  CHARACTER_FRAME_ASPECT, PAIR_SLOTS, FRAME_HEAD_TOP_OF_H, characterFrame, placeSlot, layerBox,
   type InterfaceKind, type Rect, type StageFit, type StageMetrics,
 } from '../geometry';
 // Test-only: the stage's shipped files may not import across directories (see selfContained.test.ts).
@@ -754,5 +758,289 @@ describe('strato-stage placement (placeStage)', () => {
     // With no bottom margin the root clips nothing and the content bottom is the canvas bottom.
     const flush = placeStage({ canvas, safeArea: { right: 0.16, bottom: 0 }, metrics: VERY_WIDE, iface: LIVE_APP }).iface!;
     expect(flush.y + flush.h).toBeLessThanOrEqual(canvas.h + 1e-9);
+  });
+
+  it('legacy kinds place exactly as before: the character and interface of 815b6cb, bit for bit, and no pair', () => {
+    // Frozen from placeStage at 815b6cb, before the pair existed: [x, y, w, h] in canvas px, compared
+    // with toEqual (Object.is per number), so a change in any last bit fails. The character is the same
+    // for every kind; the interface is per leg.
+    type Frozen = [StageMetrics | undefined, number, number, number[], Record<'HIGHLIGHT' | 'AI' | 'LIVE_APP', number[]>];
+    const FROZEN: Frozen[] = [
+      [NARROW, 750, 570, [59.677377049180336, -31.635934426229504, 758.2308196721311, 1010.9744262295081], {
+        HIGHLIGHT: [103.7785573770492, 244.40387649115843, 330.5439344262295, 77.37049180327868],
+        AI: [4.486426229508197, 149.62502403214205, 529.1281967213115, 266.92819672131145],
+        LIVE_APP: [60.5370491803279, 204.08616393442622, 326.67540983606557, 245.00655737704918] }],
+      [NARROW, 1024, 1024, [68.45567649741554, 141.3616588628762, 1091.8886470051689, 1455.8515293402252], {
+        HIGHLIGHT: [115.58399999999997, 536.980794188118, 492.16, 115.2],
+        AI: [-32.25600000000003, 395.860794188118, 787.84, 397.44],
+        LIVE_APP: [51.19999999999996, 480.8127552447552, 486.40000000000003, 364.8] }],
+      [NARROW, 810, 1080, [-72.90000000000009, 173.87999999999997, 1117.8000000000002, 1490.4], {
+        HIGHLIGHT: [91.42875000000004, 592.2918721633888, 389.30625, 91.125],
+        AI: [-25.514999999999986, 480.66374716338885, 623.19375, 314.38124999999997],
+        LIVE_APP: [40.5, 521.8140601361574, 384.75, 288.5625] }],
+      [WIDE, 750, 570, [114.75228663173908, 53.84613824573262, 641.6643569376373, 855.5524759168497], {
+        HIGHLIGHT: [103.7785573770492, 261.0804559492546, 330.5439344262295, 77.37049180327868],
+        AI: [4.486426229508197, 166.30160349023822, 529.1281967213115, 266.92819672131145],
+        LIVE_APP: [60.5370491803279, 226.22250188836733, 326.67540983606557, 245.00655737704918] }],
+      [WIDE, 1024, 1024, [109.2779670109851, 264.50812371184077, 923.9616494838534, 1231.9488659784713], {
+        HIGHLIGHT: [77.06260000033106, 561.0188720684893, 492.16, 115.2],
+        AI: [-70.77739999966894, 419.89887206848925, 787.84, 397.44],
+        LIVE_APP: [12.678600000331045, 512.7206783929113, 486.40000000000003, 364.8] }],
+      [WIDE, 810, 1080, [-16.701030927835006, 381.22886597938145, 835.0515463917525, 1113.40206185567], {
+        HIGHLIGHT: [10.428750000000036, 655.702081936148, 389.30625, 91.125],
+        AI: [-106.51499999999999, 544.0739569361481, 623.19375, 314.38124999999997],
+        LIVE_APP: [0, 605.5566589522407, 384.75, 288.5625] }],
+      [undefined, 750, 570, [214.48622950819671, -10.994754098360705, 448.6131147540984, 598.1508196721311], {
+        HIGHLIGHT: [103.7785573770492, 277.2012786885245, 330.5439344262295, 77.37049180327868],
+        AI: [4.486426229508197, 182.42242622950812, 529.1281967213115, 266.92819672131145],
+        LIVE_APP: [60.5370491803279, 214.9180327868852, 326.67540983606557, 245.00655737704918] }],
+    ];
+    const legs = { HIGHLIGHT, AI, LIVE_APP };
+    const PAIR = { kind: 'pair' as const, legW: 1383, legH: 1049 };
+    const flat = (r: Rect) => [r.x, r.y, r.w, r.h];
+    for (const [m, w, h, character, ifaces] of FROZEN) {
+      const canvas = { w, h };
+      for (const name of ['HIGHLIGHT', 'AI', 'LIVE_APP'] as const) {
+        // `characterFramed` only shapes a pair: on a legacy kind it changes nothing.
+        for (const characterFramed of [undefined, false, true]) {
+          const at = `${w}x${h} ${name} characterFramed=${characterFramed}`;
+          const pl = placeStage({ canvas, safeArea: SA, metrics: m, iface: legs[name], characterFramed });
+          expect(flat(pl.character), at).toEqual(character);
+          expect(flat(pl.iface!), at).toEqual(ifaces[name]);
+          expect(pl.pair, at).toBeNull();
+        }
+      }
+      // No interface: no pair either. A pair moves no character: the same rules place it whatever the kind.
+      expect(placeStage({ canvas, safeArea: SA, metrics: m }).pair).toBeNull();
+      const paired = placeStage({ canvas, safeArea: SA, metrics: m, iface: PAIR });
+      expect(flat(paired.character)).toEqual(character);
+      expect(paired.iface).toBeNull();
+    }
+    // The pair has no legacy slot: asking for one is a caller's bug, not a silent default.
+    expect(() => interfaceSlot('pair', faceSafeRect(NARROW))).toThrow(RangeError);
+  });
+});
+
+// The pair (spec 2026-11-23 §1): ONE leg canvas at the character frame's aspect, mounted twice, below
+// the character (background) and above it (foreground). Both slots are fixed fractions of the character
+// frame (the medians of Figma 730:9594); each layer is kept inside the canvas, left of the right safe
+// area and above the clip line, on its own, at its size unless it cannot fit.
+describe('strato-stage pair: character frame, slots, clamping', () => {
+  const SA = { right: 0.16, bottom: 0.08 }; // the moderator's STRATO_STAGE safe area
+  /** A catalog character (`strato-<showroom>-stage`): the 971 x 736 frame at 2x (1942 x 1473). The
+   *  moderator sets `waistFrac := bottomFrac`, so the image bottom lands on the clip line. */
+  const CATALOG: StageMetrics = {
+    headTopFrac: 0.016, bottomFrac: 1, waistFrac: 1, centerXFrac: 0.52, leftFrac: 0.29, rightFrac: 0.75,
+    subjectHeightFrac: 0.984, upperBodyLeftFrac: 0.29, upperBodyRightFrac: 0.68, imgW: 1942, imgH: 1473,
+  };
+  /** A generated 3:4 cutout (standalone, or a missing catalog row) with a measured waist. */
+  const GENERATED: StageMetrics = {
+    headTopFrac: 0.05, waistFrac: 0.62, bottomFrac: 1, leftFrac: 0.2, rightFrac: 0.8, subjectHeightFrac: 0.95,
+    centerXFrac: 0.5, upperBodyLeftFrac: 0.3, upperBodyRightFrac: 0.7, imgW: 1536, imgH: 2048,
+  };
+  /** The same from a moderator that sends no waist: the subject-bbox path (Review Focus 3). */
+  const { waistFrac: _waist, ...noWaist } = GENERATED;
+  const GENERATED_NO_WAIST: StageMetrics = noWaist;
+  /** The leg canvas at the frame's aspect; only `kind` matters to the placement. */
+  const PAIR = { kind: 'pair' as const, legW: 1383, legH: 1049 };
+  /** The acceptance formats (spec "Acceptance"): the prod default, landscape, wide, square, portrait. */
+  const FORMATS = [{ w: 750, h: 570 }, { w: 1280, h: 960 }, { w: 1600, h: 900 }, { w: 1024, h: 1024 }, { w: 810, h: 1080 }];
+  /** Narrow, tall and flat canvases of the supported range, where slots cross an edge and move or shrink. */
+  const EXTREMES = [
+    { w: 320, h: 570 }, { w: 656, h: 1080 }, { w: 320, h: 1080 }, { w: 320, h: 2048 }, { w: 1024, h: 2048 },
+    { w: 1536, h: 2048 }, { w: 2048, h: 2048 }, { w: 2048, h: 256 }, { w: 320, h: 256 },
+  ];
+  const CHARACTERS: [string, StageMetrics, boolean][] = [
+    ['catalog', CATALOG, true], ['generated', GENERATED, false], ['generated, no waist', GENERATED_NO_WAIST, false],
+  ];
+  const LAYERS = ['background', 'foreground'] as const;
+  /** The line the stage root clips at (the content bottom, the 8 % margin line). */
+  const clipOf = (c: { w: number; h: number }) => Math.min(c.h, c.h - c.h * SA.bottom);
+  /** The room both slots must stay in: left of the right safe area, above the clip line. */
+  const areaOf = (c: { w: number; h: number }): Rect => ({ x: 0, y: 0, w: c.w * (1 - SA.right), h: clipOf(c) });
+  /** A slot (fractions of a box) in the box's own units: where the leg's own layout draws that layer. */
+  const slotIn = (box: Rect, s: Rect): Rect => ({ x: box.x + s.x * box.w, y: box.y + s.y * box.h, w: s.w * box.w, h: s.h * box.h });
+  const clampTo = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
+  const fits = (r: Rect, a: Rect) => r.x >= a.x && r.y >= a.y && r.x + r.w <= a.x + a.w && r.y + r.h <= a.y + a.h;
+  const expectRect = (a: Rect, b: Rect, digits: number, at = '') => {
+    for (const k of ['x', 'y', 'w', 'h'] as const) expect(a[k], `${at} ${k}`).toBeCloseTo(b[k], digits);
+  };
+  const expectInside = (r: Rect, a: Rect, at: string) => {
+    expect(r.x, at).toBeGreaterThanOrEqual(a.x - 1e-9);
+    expect(r.y, at).toBeGreaterThanOrEqual(a.y - 1e-9);
+    expect(r.x + r.w, at).toBeLessThanOrEqual(a.x + a.w + 1e-9);
+    expect(r.y + r.h, at).toBeLessThanOrEqual(a.y + a.h + 1e-9);
+  };
+  const pairOf = (canvas: { w: number; h: number }, m: StageMetrics, characterFramed: boolean | undefined) =>
+    placeStage({ canvas, safeArea: SA, metrics: m, iface: PAIR, characterFramed });
+
+  it('mirrors match product-pop-out/stagePair.layout.ts (read as text: strato-stage/ ships alone)', () => {
+    const src = readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../product-pop-out/stagePair.layout.ts'), 'utf8');
+    const aspect = /export const CHARACTER_FRAME_ASPECT = ([\d.]+) \/ ([\d.]+);/.exec(src);
+    expect(aspect, 'CHARACTER_FRAME_ASPECT in stagePair.layout.ts').not.toBeNull();
+    expect(CHARACTER_FRAME_ASPECT).toBe(Number(aspect![1]) / Number(aspect![2]));
+    for (const layer of LAYERS) {
+      const s = new RegExp(`${layer}: \\{ x: ([\\d.]+), y: ([\\d.]+), w: ([\\d.]+), h: ([\\d.]+) \\}`).exec(src);
+      expect(s, `PAIR_SLOTS.${layer} in stagePair.layout.ts`).not.toBeNull();
+      expect(PAIR_SLOTS[layer], layer).toEqual({ x: Number(s![1]), y: Number(s![2]), w: Number(s![3]), h: Number(s![4]) });
+    }
+    // ... and both are the plan's numbers (the 971 x 736 character frame; the slot medians of 730:9594).
+    expect(CHARACTER_FRAME_ASPECT).toBe(970.845 / 736.224);
+    expect(PAIR_SLOTS).toEqual({ background: { x: 0.14, y: 0.13, w: 0.5, h: 0.42 }, foreground: { x: 0.12, y: 0.24, w: 0.31, h: 0.4 } });
+  });
+
+  it('framed character: the frame IS the image box', () => {
+    const canvas = { w: 750, h: 570 }; // the prod default
+    const pl = pairOf(canvas, CATALOG, true);
+    expect(pl.iface).toBeNull();
+    expect(pl.pair).not.toBeNull();
+    const { frame, background, foreground } = pl.pair!;
+    expect(frame).toEqual(pl.character);
+    expect(characterFrame(pl, CATALOG, true, clipOf(canvas))).toEqual(pl.character);
+    // The image bottom (waistFrac := bottomFrac = 1) on the clip line: 570 - 8 % = 524.4.
+    expect(frame.y + frame.h).toBeCloseTo(524.4, 9);
+    expectRect(frame, { x: 86.6126, y: 10.6935, w: 677.2696, h: 513.7065 }, 3);
+    // The background slot {0.14, 0.13, 0.5, 0.42} of the frame is (181.43, 77.48) 338.63 x 215.76, inside
+    // the area [0, 630] x [0, 524.4]: it stays where it is, so its mount box is the frame itself.
+    const area = areaOf(canvas);
+    expectRect(area, { x: 0, y: 0, w: 630, h: 524.4 }, 9);
+    const bg = slotIn(background, PAIR_SLOTS.background);
+    expectRect(bg, { x: 181.4304, y: 77.4753, w: 338.6348, h: 215.7567 }, 3);
+    expectInside(bg, area, 'background');
+    expectRect(background, frame, 9, 'background box');
+    // The foreground slot {0.12, 0.24, 0.31, 0.4}: (167.88, 133.98) 209.95 x 205.48, inside too.
+    const fg = slotIn(foreground, PAIR_SLOTS.foreground);
+    expectRect(fg, { x: 167.885, y: 133.983, w: 209.9536, h: 205.4826 }, 3);
+    expectInside(fg, area, 'foreground');
+    expectRect(foreground, frame, 9, 'foreground box');
+  });
+
+  it('generated character: virtual frame has the frame aspect and its bottom on the clip line', () => {
+    expect(FRAME_HEAD_TOP_OF_H).toBe(0.015);
+    for (const m of [GENERATED, GENERATED_NO_WAIST]) {
+      for (const canvas of [...FORMATS, ...EXTREMES]) {
+        for (const characterFramed of [undefined, false]) {
+          const at = `waist ${m.waistFrac} ${canvas.w}x${canvas.h} characterFramed=${characterFramed}`;
+          const pl = pairOf(canvas, m, characterFramed);
+          const c = pl.character;
+          const { frame } = pl.pair!;
+          expect(frame.w / frame.h, at).toBeCloseTo(CHARACTER_FRAME_ASPECT, 12);
+          expect(frame.y + frame.h, at).toBeCloseTo(clipOf(canvas), 9); // where a catalog image's bottom is
+          expect(frame.y + FRAME_HEAD_TOP_OF_H * frame.h, at).toBeCloseTo(c.y + m.headTopFrac * c.h, 9); // the head top
+          expect(frame.x + frame.w / 2, at).toBeCloseTo(c.x + m.centerXFrac * c.w, 9); // centred on the subject
+          expect(characterFrame(pl, m, false, clipOf(canvas)), at).toEqual(frame);
+          expect(frame.w / frame.h, at).not.toBeCloseTo(c.w / c.h, 2); // not the 3:4 image box
+        }
+      }
+    }
+    // Not vacuous: without a waist the cutout is sized by the other rule (a different image box).
+    const canvas = { w: 750, h: 570 };
+    expect(pairOf(canvas, GENERATED_NO_WAIST, false).character.h).not.toBeCloseTo(pairOf(canvas, GENERATED, false).character.h, 0);
+    // The construction stands in for a catalog frame: a catalog cutout measured as if generated gets a
+    // virtual frame within 2.5 % of the width of its real one in x (its subject centre is at 0.52, the
+    // virtual frame's at 0.5) and within 0.2 % in y and size.
+    for (const fmt of FORMATS) {
+      const pl = pairOf(fmt, CATALOG, true);
+      const real = pl.character;
+      const v = characterFrame(pl, CATALOG, false, clipOf(fmt));
+      const at = `${fmt.w}x${fmt.h}`;
+      expect(Math.abs(v.x - real.x) / real.w, at).toBeLessThan(0.025);
+      expect(Math.abs(v.y - real.y) / real.h, at).toBeLessThan(0.002);
+      expect(Math.abs(v.w / real.w - 1), at).toBeLessThan(0.002);
+      expect(Math.abs(v.h / real.h - 1), at).toBeLessThan(0.002);
+    }
+  });
+
+  it('slots never leave the canvas or enter the safe area: moved inward at their size, shrunk only when larger than the room', () => {
+    let moved = 0;
+    let shrunk = 0;
+    for (const [name, m, framed] of CHARACTERS) {
+      for (const canvas of [...FORMATS, ...EXTREMES]) {
+        const pl = pairOf(canvas, m, framed);
+        const area = areaOf(canvas);
+        const { frame } = pl.pair!;
+        for (const layer of LAYERS) {
+          const at = `${name} ${canvas.w}x${canvas.h} ${layer}`;
+          const box = pl.pair![layer];
+          const raw = slotIn(frame, PAIR_SLOTS[layer]);
+          const placed = slotIn(box, PAIR_SLOTS[layer]);
+          // Inside [0, 0.84 W] x [0, clip line]: off the left and top edges, out of the right safe area,
+          // out of the 8 % strip.
+          expectInside(placed, area, at);
+          // The mount box is the frame scaled uniformly: the leg canvas is never distorted.
+          expect(box.w / box.h, at).toBeCloseTo(frame.w / frame.h, 12);
+          // Its size is kept unless the slot is larger than the room; then it shrinks uniformly to fit.
+          const k = Math.min(1, area.w / raw.w, area.h / raw.h);
+          expect(placed.w, at).toBeCloseTo(raw.w * k, 9);
+          expect(placed.h, at).toBeCloseTo(raw.h * k, 9);
+          // About its centre, then the least move into the room.
+          expect(placed.x, at).toBeCloseTo(clampTo(raw.x + raw.w / 2 - placed.w / 2, 0, area.w - placed.w), 9);
+          expect(placed.y, at).toBeCloseTo(clampTo(raw.y + raw.h / 2 - placed.h / 2, 0, area.h - placed.h), 9);
+          if (k < 1) shrunk += 1;
+          else if (!fits(raw, area)) moved += 1;
+        }
+      }
+    }
+    // Not vacuous: some slots crossed an edge and moved, some were larger than the room and shrank.
+    expect(moved).toBeGreaterThan(0);
+    expect(shrunk).toBeGreaterThan(0);
+  });
+
+  it('at the acceptance formats nothing crosses: both mount boxes are the frame, the relative layout as designed', () => {
+    for (const [name, m, framed] of CHARACTERS) {
+      for (const canvas of FORMATS) {
+        const pl = pairOf(canvas, m, framed);
+        for (const layer of LAYERS) expectRect(pl.pair![layer], pl.pair!.frame, 9, `${name} ${canvas.w}x${canvas.h} ${layer}`);
+      }
+    }
+  });
+
+  it('each layer is clamped on its own: a slot that fits keeps the frame as its mount box, whatever the other does', () => {
+    let split = 0;
+    for (const [name, m, framed] of CHARACTERS) {
+      for (const canvas of [...FORMATS, ...EXTREMES]) {
+        const pl = pairOf(canvas, m, framed);
+        const area = areaOf(canvas);
+        const { frame } = pl.pair!;
+        const fit = LAYERS.map((layer) => fits(slotIn(frame, PAIR_SLOTS[layer]), area));
+        LAYERS.forEach((layer, i) => {
+          const at = `${name} ${canvas.w}x${canvas.h} ${layer}`;
+          const box = pl.pair![layer];
+          if (fit[i]) expectRect(box, frame, 9, at);
+          else expect(Math.abs(box.x - frame.x) + Math.abs(box.y - frame.y) + Math.abs(box.w - frame.w), at).toBeGreaterThan(1e-6);
+        });
+        if (fit[0] !== fit[1]) split += 1;
+      }
+    }
+    expect(split).toBeGreaterThan(0); // e.g. 656 x 1080: the background fits, the foreground crosses the left edge
+  });
+
+  it('placeSlot: moves a slot inside the area at its size; shrinks it uniformly about its centre only when it is larger', () => {
+    const area: Rect = { x: 0, y: 0, w: 200, h: 300 };
+    expect(placeSlot({ x: 10, y: 20, w: 50, h: 40 }, area)).toEqual({ x: 10, y: 20, w: 50, h: 40 }); // inside: as is
+    expect(placeSlot({ x: -30, y: -5, w: 50, h: 40 }, area)).toEqual({ x: 0, y: 0, w: 50, h: 40 }); // left, top
+    expect(placeSlot({ x: 180, y: 290, w: 50, h: 40 }, area)).toEqual({ x: 150, y: 260, w: 50, h: 40 }); // right, bottom
+    // Wider: x 0.5 about its centre (150, 85) to 200 x 50, then moved in.
+    expect(placeSlot({ x: -50, y: 35, w: 400, h: 100 }, area)).toEqual({ x: 0, y: 60, w: 200, h: 50 });
+    // Taller: x 0.5 about (150, 200) to 50 x 300.
+    expect(placeSlot({ x: 100, y: -100, w: 100, h: 600 }, area)).toEqual({ x: 125, y: 0, w: 50, h: 300 });
+    // Both: the tighter axis wins (x 0.25 about (300, 200) to 200 x 150), then moved in.
+    expect(placeSlot({ x: -100, y: -100, w: 800, h: 600 }, area)).toEqual({ x: 0, y: 125, w: 200, h: 150 });
+    // An area off the origin.
+    const off: Rect = { x: 10, y: 20, w: 100, h: 100 };
+    expect(placeSlot({ x: 0, y: 0, w: 30, h: 30 }, off)).toEqual({ x: 10, y: 20, w: 30, h: 30 });
+    expect(placeSlot({ x: 100, y: 100, w: 30, h: 30 }, off)).toEqual({ x: 80, y: 90, w: 30, h: 30 });
+  });
+
+  it('layerBox: the frame under the map that takes the raw slot onto the placed one, so the leg draws the slot there', () => {
+    const frame: Rect = { x: -40, y: 10, w: 400, h: 300 };
+    const raw = slotIn(frame, PAIR_SLOTS.foreground);
+    expectRect(raw, { x: 8, y: 82, w: 124, h: 120 }, 12);
+    expectRect(layerBox(frame, raw, raw), frame, 12); // unmoved: the frame
+    expectRect(layerBox(frame, raw, { ...raw, x: 40, y: 0 }), { x: -8, y: -72, w: 400, h: 300 }, 12); // moved by (32, -82)
+    const placed: Rect = { x: 0, y: 0, w: 62, h: 60 }; // shrunk to half
+    const box = layerBox(frame, raw, placed);
+    expectRect(box, { x: -24, y: -36, w: 200, h: 150 }, 12);
+    expectRect(slotIn(box, PAIR_SLOTS.foreground), placed, 12);
   });
 });

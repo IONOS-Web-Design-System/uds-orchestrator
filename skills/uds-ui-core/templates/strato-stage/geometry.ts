@@ -1,5 +1,6 @@
 /**
- * strato-stage geometry — the pure numbers of the fixed STRATO corporate-stage template (character + optional floating interface).
+ * strato-stage geometry — the pure numbers of the fixed STRATO corporate-stage template (the character,
+ * plus an optional floating interface or the pair: a background below the character, a foreground above it).
  * No React, no DOM, no `remotion`: everything here is arithmetic, so it is testable without a
  * renderer and importable by the component, the tests and (by copy) agent-svc alike.
  *
@@ -77,15 +78,23 @@ export const DEFAULT_METRICS: StageMetrics = {
   upperBodyRightFrac: 0.7,
 };
 
-export type InterfaceKind = 'live-app' | 'feature-highlight';
+/** The interfaces of the 2026-11-05 stage: one leg, mounted once over the character. */
+export type LegacyInterfaceKind = 'live-app' | 'feature-highlight';
 
 /**
- * Fixed interface slots, in visual units.
+ * `pair` (spec 2026-11-23): one leg mounted twice, its background below the character and its
+ * foreground above it, each in its slot of the character frame (`PAIR_SLOTS`, `placeStage(...).pair`).
+ * The legacy kinds stay for payloads from an earlier moderator and place exactly as before.
+ */
+export type InterfaceKind = LegacyInterfaceKind | 'pair';
+
+/**
+ * Fixed interface slots of the legacy kinds, in visual units.
  *  feature-highlight  Figma 663:9895 (the prompt pill over the character in 663:9864).
  *  live-app           PROVISIONAL: no Figma node yet. Left of the character at chest height,
  *                     as the spec describes for 663:9864 / 663:9453; replace when 663:9453 opens.
  */
-export const INTERFACE_SLOTS: Record<InterfaceKind, Rect> = {
+export const INTERFACE_SLOTS: Record<LegacyInterfaceKind, Rect> = {
   'feature-highlight': { x: 90.2, y: 328.3, w: 384.7, h: 78.3 }, // Figma 663:9895
   'live-app': { x: 40, y: 250, w: 380, h: 285 }, // provisional, no Figma node
 };
@@ -165,9 +174,11 @@ const intersects = (a: Rect, b: Rect): boolean =>
 
 /**
  * The interface's rect: its fixed slot, nudged below the face-safe rect (+ 8) when it would
- * intersect it, then clamped to stay inside the frame. Never moves the slot sideways.
+ * intersect it, then clamped to stay inside the frame. Never moves the slot sideways. A legacy kind
+ * only: the pair has no slot here (its two are `PAIR_SLOTS`), so asking for one throws.
  */
 export function interfaceSlot(kind: InterfaceKind, faceSafe: Rect): Rect {
+  if (kind === 'pair') throw new RangeError("interfaceSlot: 'pair' has no interface slot; placeStage places it in PAIR_SLOTS");
   const slot = INTERFACE_SLOTS[kind];
   let y = slot.y;
   if (intersects(slot, faceSafe)) y = faceSafe.y + faceSafe.h + 8;
@@ -289,17 +300,28 @@ export type StagePlacementInput = {
   safeArea?: { right: number; bottom: number };
   /** Measured alpha bbox (and waist) of the character cutout. Default: `DEFAULT_METRICS`. */
   metrics?: StageMetrics;
-  /** The interface leg (the canvas the moderator rendered it at), mounted at half scale. */
+  /** The interface leg (the canvas the moderator rendered it at). A legacy kind is mounted once at
+   *  half scale; a `pair` twice, in the mount boxes of `StagePlacement.pair`. */
   iface?: { kind: InterfaceKind; legW: number; legH: number };
+  /** The character is a catalog cutout whose image IS the character frame (`strato-<showroom>-stage`,
+   *  971 x 736). Default false: the pair's frame is then the virtual frame built from `metrics`
+   *  (`characterFrame`). Only a `pair` reads it. */
+  characterFramed?: boolean;
 };
+
+/** The pair on the canvas (canvas px): the character frame, and the box each layer's leg mount
+ *  covers: the whole frame-sized leg, moved and scaled so its slot lands where it was placed. */
+export type PairPlacement = { frame: Rect; background: Rect; foreground: Rect };
 
 /**
  * Where the stage lands. Rects are canvas px (the content box starts at the canvas origin);
  * `charScale` / `ifaceScale` are canvas px per visual unit; `portraitness` is 0 (landscape) to 1.
+ * `iface` is a legacy interface's rect, `pair` the pair's; at most one is set.
  */
 export type StagePlacement = {
   character: Rect;
   iface: Rect | null;
+  pair: PairPlacement | null;
   portraitness: number;
   charScale: number;
   ifaceScale: number;
@@ -353,6 +375,87 @@ const clampCentre = (v: number, size: number, extent: number): number =>
   size >= extent ? extent / 2 : clamp(v, size / 2, extent - size / 2);
 
 /**
+ * The character frame's width / height: the 971 x 736 box of the Figma character component
+ * (`strato-<showroom>-stage`, section 721:945), which is exactly a catalog character PNG (1942 x 1473
+ * at 2x). The pair's leg is drawn at this aspect. MIRRORS `CHARACTER_FRAME_ASPECT` in
+ * `product-pop-out/stagePair.layout.ts` (the leg's own layout); geometry.test.ts reads that file and
+ * asserts the two are equal. Not imported, for the reason given at `STRATO_SIMPLE_ASPECT`.
+ */
+export const CHARACTER_FRAME_ASPECT = 970.845 / 736.224;
+
+/**
+ * The pair's two slots as fractions (x, y, w, h) of the character frame: the medians of the five
+ * final comps (Figma 730:9594), measured against each comp's `character` rectangle. MIRRORS
+ * `PAIR_SLOTS` in `product-pop-out/stagePair.layout.ts` (locked by geometry.test.ts).
+ */
+export const PAIR_SLOTS = {
+  background: { x: 0.14, y: 0.13, w: 0.5, h: 0.42 },
+  foreground: { x: 0.12, y: 0.24, w: 0.31, h: 0.4 },
+} as const;
+
+/** The head top below the character frame's top, as a fraction of the frame height: where a catalog
+ *  character's sits (0 to 2 % down on the catalog PNGs). Places a generated character's virtual frame. */
+export const FRAME_HEAD_TOP_OF_H = 0.015;
+
+/**
+ * The character frame on the canvas: the box the pair's slots are fractions of. `framed` (a catalog
+ * character, whose image IS the frame): the character's image box. Otherwise (a generated 3:4 cutout:
+ * standalone, or a missing catalog row) a virtual frame built from the metrics so that the head top,
+ * the crop line and the subject centre sit where a catalog character's would: the head top
+ * `FRAME_HEAD_TOP_OF_H` of the height below the frame top, the frame bottom on `clipBottom` (where a
+ * catalog image's bottom lands, as its `waistFrac` is its `bottomFrac`), `CHARACTER_FRAME_ASPECT` x
+ * the height wide, centred on the subject's bbox centre. Rects in canvas px.
+ */
+export function characterFrame(place: Pick<StagePlacement, 'character'>, m: StageMetrics, framed: boolean, clipBottom: number): Rect {
+  const c = place.character;
+  if (framed) return { ...c };
+  const headTop = c.y + m.headTopFrac * c.h;
+  const h = (clipBottom - headTop) / (1 - FRAME_HEAD_TOP_OF_H);
+  const w = h * CHARACTER_FRAME_ASPECT;
+  return { x: c.x + m.centerXFrac * c.w - w / 2, y: headTop - FRAME_HEAD_TOP_OF_H * h, w, h };
+}
+
+/**
+ * A slot kept inside `area`: moved inward by the least, at its size. Only when it is larger than the
+ * area on an axis is it first shrunk about its centre, by one factor on both axes (its aspect stays),
+ * until it fits; then moved.
+ */
+export function placeSlot(raw: Rect, area: Rect): Rect {
+  const k = Math.min(1, area.w / raw.w, area.h / raw.h);
+  const w = raw.w * k;
+  const h = raw.h * k;
+  return {
+    x: area.x + clampCentre(raw.x + raw.w / 2 - area.x, w, area.w) - w / 2,
+    y: area.y + clampCentre(raw.y + raw.h / 2 - area.y, h, area.h) - h / 2,
+    w,
+    h,
+  };
+}
+
+/**
+ * The mount box of one layer: `frame` under the map (a uniform scale `k` and a move) that takes the
+ * slot `raw` onto `placed`. The leg lays its layer out in the slot's fractions of its own canvas, so
+ * mounted on this box the layer lands exactly on `placed`.
+ */
+export function layerBox(frame: Rect, raw: Rect, placed: Rect): Rect {
+  const k = placed.w / raw.w;
+  return { x: placed.x + (frame.x - raw.x) * k, y: placed.y + (frame.y - raw.y) * k, w: frame.w * k, h: frame.h * k };
+}
+
+/** A slot (fractions of the frame) in the frame's units. */
+const slotOf = (frame: Rect, s: Rect): Rect =>
+  ({ x: frame.x + s.x * frame.w, y: frame.y + s.y * frame.h, w: s.w * frame.w, h: s.h * frame.h });
+
+/** Each layer's slot of `frame`, placed in `area` on its own, and its mount box. */
+function placePair(frame: Rect, area: Rect): PairPlacement {
+  const box = (s: Rect): Rect => {
+    const raw = slotOf(frame, s);
+    return layerBox(frame, raw, placeSlot(raw, area));
+  };
+  return { frame, background: box(PAIR_SLOTS.background), foreground: box(PAIR_SLOTS.foreground) };
+}
+
+/**
  * The stage on the canvas (spec 2026-11-05 §4.1, decisions 1-4).
  *
  * Character. Scale `c = lerp(s, c1, p)`: `s` is the frame's fit (`fitStage`), `c1` puts the head
@@ -382,7 +485,14 @@ const clampCentre = (v: number, size: number, extent: number): number =>
  * the canvas top and the line the stage root clips at
  * (the content bottom with a bottom margin, else the canvas bottom), centred when taller; that
  * last clamp wins over the face push. The AI prompt leg's transparent glow pad may run past the edge, as it always
- * could (controller ruling, 2026-11-05). Rulings on the C6 concerns, 2026-11-06.
+ * could (controller ruling, 2026-11-05). Rulings on the C6 concerns, 2026-11-06. A legacy kind only.
+ *
+ * Pair (`iface.kind === 'pair'`, spec 2026-11-23 §1; then `iface` is null). The character is placed
+ * as above. Its frame (`characterFrame`: the image box of a `characterFramed` catalog character, else
+ * the virtual frame) carries both slots (`PAIR_SLOTS`). Each slot is kept on its own inside the area
+ * `[0, content width] x [0, clip line]` (off the left and top edges, out of the right safe area, out of
+ * the bottom strip) by `placeSlot`, and its mount box is `layerBox`. A slot that fits keeps the frame
+ * as its box, so the layout relative to the character is the Figma comps'.
  *
  * At `p = 0`, with a pose that fits, the character is exactly the frame's fit applied to
  * `characterRect`, and so is the interface's x and size; its y is the fit's raised by the 588/661
@@ -419,8 +529,16 @@ export function placeStage(input: StagePlacementInput): StagePlacement {
     h: r.h * charScale,
   };
 
+  // The line the stage root clips at (`stageRootStyle`: the content bottom when there is a bottom
+  // margin, else the canvas bottom). Nothing of an interface or the pair goes below it.
+  const clipBottom = Math.min(canvas.h, f.content.y + f.content.h);
   let iface: Rect | null = null;
-  if (input.iface) {
+  let pair: PairPlacement | null = null;
+  if (input.iface?.kind === 'pair') {
+    const frame = characterFrame({ character }, m, input.characterFramed === true, clipBottom);
+    // `content.w` is the canvas width minus the right safe area (fitStage's exact form of it).
+    pair = placePair(frame, { x: 0, y: 0, w: f.content.w, h: clipBottom });
+  } else if (input.iface) {
     const slot = interfaceSlot(input.iface.kind, faceSafeRect(m));
     const mount = interfaceMountRect(slot, { w: input.iface.legW, h: input.iface.legH });
     const w = mount.w * s;
@@ -449,10 +567,8 @@ export function placeStage(input: StagePlacementInput): StagePlacement {
     const reach = Math.min(cx + vw / 2, face.x + face.w) - Math.max(cx - vw / 2, face.x);
     const push = clamp(reach / (8 * charScale) + 1, 0, 1);
     cy += push * Math.max(0, face.y + face.h + 8 * charScale + vh / 2 - cy);
-    // Then kept above the line the stage root clips at (`stageRootStyle`: the content bottom when
-    // there is a bottom margin, else the canvas bottom); this wins over the face nudge.
-    const clipBottom = Math.min(canvas.h, f.content.y + f.content.h);
+    // Then kept above the clip line; this wins over the face nudge.
     iface = { x: cx - w / 2, y: clampCentre(cy, vh, clipBottom) - h / 2, w, h };
   }
-  return { character, iface, portraitness: p, charScale, ifaceScale: s };
+  return { character, iface, pair, portraitness: p, charScale, ifaceScale: s };
 }

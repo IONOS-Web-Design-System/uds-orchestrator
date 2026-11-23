@@ -7,7 +7,7 @@ that one places a floating prompt over a photo, this one owns the whole stage.
 
 | File | What it is |
 |---|---|
-| `geometry.ts` | The pure numbers: the Figma visual frame, the fit into the canvas, the character anchor, the placement on the canvas (`placeStage`), the interface slots, the interface leg sizes (mirrors of the moderator's). |
+| `geometry.ts` | The pure numbers: the Figma visual frame, the fit into the canvas, the character anchor, the placement on the canvas (`placeStage`), the interface slots, the interface leg sizes (mirrors of the moderator's), the pair's character frame and slots (mirrors of `product-pop-out/stagePair.layout.ts`). |
 | `motion.ts` | The option-B motion as pure functions of time (`layerMotion`), the timeline, `FPS`. |
 | `layers.ts` | `buildStageLayers(input, tMs)`: geometry + motion in canvas px, bottom to top. Pure. |
 | `styles.ts` | `stageRootStyle(canvas, content)`, `layerStyle(layer)`, `interfaceLegStyle(rect, leg)`: the inline styles of the root and the layers. Pure (a React type only). |
@@ -32,7 +32,8 @@ enforced tree-wide by `product-pop-out/__tests__/importSpecifiers.test.ts`).
 | `safeArea` | `{ right, bottom }` | Transparent margin as canvas fractions. The moderator's `STRATO_STAGE` pattern sends `{ right: 0.16, bottom: 0.08 }` (see "Placement"). Default: none |
 | `metrics` | `StageMetrics` | Measured alpha bbox of the character cutout, plus its waist row `waistFrac` (the moderator's `CutoutMetrics`). Default: `DEFAULT_METRICS`, a plausible 3:4 portrait, not a Figma measurement. `waistFrac` is optional: without it the subject bbox is scaled as before |
 | `srcs` | `{ character }` | `staticFile()` path of the character cutout |
-| `iface` | `{ kind, legW, legH }` | Omit for no interface. `kind` is `'live-app'` or `'feature-highlight'`; `legW` x `legH` is the canvas the interface leg was rendered at, as the moderator requested it (see "Interface leg sizes") |
+| `iface` | `{ kind, legW, legH }` | Omit for no interface. `kind` is `'pair'` (one leg mounted twice: a background below the character, a foreground above it; see "The pair" under "Placement") or a legacy `'live-app'` / `'feature-highlight'` (one leg over the character, kept for an earlier moderator's payloads); `legW` x `legH` is the canvas the interface leg was rendered at, as the moderator requested it (see "Interface leg sizes") |
+| `characterFramed` | `boolean` | `true` when the character is a catalog cutout (`strato-<showroom>-stage`) whose image IS the 971 x 736 character frame. Default `false`: the pair's frame is built from `metrics` (see "The pair"). Only a `pair` reads it |
 | `interfaceNode` | `ReactNode` | The interface content, laid out at `legW` x `legH` CSS px. With `iface` but no node, nothing is painted for it |
 | `interfaceDurationInFrames` | `number` | The interface's own length in frames, what its own composition had (90 for its 3 s), for a still leg too. Inside the node `useVideoConfig().durationInFrames` is this in every phase. Must not exceed the stage's own length (120 / 150) |
 | `interfaceMotion` | `'still'` \| `'animated'` | How the interface leg was rendered. Default `'animated'`. See "The interface layer" |
@@ -107,6 +108,31 @@ amended by task C6 on 2026-11-06 (the 8 % bottom margin and the waist on it).
      clamp wins over the face nudge, so never clipped beats face-safe, as in `interfaceSlot`.
   The AI prompt leg's transparent glow pad (edge alpha at most 4/255) may run past the canvas
   edge, as it always could (controller ruling, 2026-11-05).
+* **The pair** (`iface.kind === 'pair'`, spec 2026-11-23 §1; `placeStage(...).pair`, and `iface` is
+  `null`). The character is placed exactly as above; the pair follows it.
+  * **The character frame** (`characterFrame`) is the coordinate space of both layers: the 971 x 736
+    box of the Figma character component (`CHARACTER_FRAME_ASPECT` = 970.845 / 736.224), which is
+    exactly a catalog PNG. A `characterFramed` catalog character's frame is its image box (its image
+    bottom is on the clip line, since the moderator sets its `waistFrac` to its `bottomFrac`). A
+    generated 3:4 cutout (standalone, or a missing catalog row) gets a virtual frame: its bottom on
+    the clip line, the head top `FRAME_HEAD_TOP_OF_H` (1.5 %) of its height below its top, the frame
+    aspect, centred on the subject's bbox centre. It reads only the placed head top, subject centre
+    and clip line, so it is built the same with or without a measured waist.
+  * **The slots** (`PAIR_SLOTS`, fractions of the frame; the medians of the five Figma final comps,
+    730:9594): background `{ x 0.14, y 0.13, w 0.50, h 0.42 }`, foreground `{ x 0.12, y 0.24, w 0.31,
+    h 0.40 }`. Both mirror `product-pop-out/stagePair.layout.ts`, which lays out the leg; the test
+    reads that file.
+  * **Clamping** (`placeSlot`). Each slot is kept, on its own, inside `[0, content width] x [0, clip
+    line]`: off the left and top edges, out of the right safe area, above the 8 % strip. It moves
+    inward by the least at its size. Only when it is larger than that area is it first shrunk about
+    its centre, by one factor on both axes. At the acceptance formats (750 x 570, 1280 x 960,
+    1600 x 900, 1024 x 1024, 810 x 1080) nothing crosses, so both layers sit exactly where the comps
+    put them. Below about 0.62 : 1 (width : height) the foreground crosses the left edge and moves
+    right. At about 0.55 : 1 and narrower (592 x 1080, 1024 x 2048) the background is wider than the
+    area and shrinks.
+  * **Mount boxes** (`layerBox`). `pair.background` / `pair.foreground` are where each mount of the leg
+    goes. Each is the whole frame-sized leg, scaled and moved so that its slot lands on the placed
+    slot. A slot that fits keeps the frame itself as its box.
 * **Clipping.** The stage root (`stageRootStyle`) is the canvas from its top-left down to the
   content bottom. With the 8 % bottom margin it cuts there: exactly at the waist, so nothing of the
   character below the waist shows (the cutout itself runs on below it) and the strip stays empty.
