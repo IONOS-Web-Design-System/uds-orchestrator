@@ -99,7 +99,8 @@ export function renderStageText(p: StageTextProps & { slot: Slot }) {
       style={{
         fontWeight: 700, textTransform: 'uppercase', fontSize: HEADLINE_OF_W * p.slot.w,
         lineHeight: 1.15, letterSpacing: '0.01em',
-        ...p.style, color: STAGE_INK, fontFamily: STRATO_PROMPT.face }}
+        ...p.style, color: STAGE_INK, fontFamily: STRATO_PROMPT.face,
+      }}
     >{p.children}</GlowText>
   );
 }

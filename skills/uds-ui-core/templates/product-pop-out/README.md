@@ -123,14 +123,14 @@ so the card and the window cannot drift apart, and all size in px off the slot (
 | `<StageBadge>` | the AI gradient circle; glyph defaults to the white `filled-sparkles` | primary blue circle; `glyph` is REQUIRED (a type error without it), e.g. a UDS system icon; never the AI sparkle |
 | badge shadow | `0 4px 10px rgba(41,41,77,0.12)` | the same |
 
-- `StageCard` hugs its content's height (capped at the slot height) and sits vertically centred in its slot.
-- `StageText` is the stage headline by default (bold, uppercase, sized off the card width; `style` overrides).
-- `StageCard` takes the slot width (radius, padding and blurs are ratios of the slot width); its wrapper
+- `StageCard` takes the slot width (radius, padding and blurs are ratios of the slot width), hugs its
+  content's height (capped at the slot height) and sits vertically centred in its slot; its wrapper
   creates no stacking context, so the glow blends with what lies under the card, as the window's does.
-- `StageText` is card text with the window's plus-lighter white halo: it IS the window's `GlowText`
-  (exported from `promptWindow.strato.tsx`, not copied), at the prompt-full halo ratios
-  (`STRATO_FULL.textGlowBlurOfW` of the slot width, `textGlowAlpha`). `style` carries size, weight,
-  line height and the like; colour and face are fixed to #29294D Poppins. `caret` shows the typing caret.
+- `StageText` is the stage headline and card text with the window's plus-lighter white halo: it IS the
+  window's `GlowText` (exported from `promptWindow.strato.tsx`, not copied), at the prompt-full halo
+  ratios (`STRATO_FULL.textGlowBlurOfW` of the slot width, `textGlowAlpha`). By default it is bold,
+  uppercase and sized off the card width; `style` overrides any of that. Colour and face are fixed to
+  #29294D Poppins. `caret` shows the typing caret.
 - `stageAccentFill(ai)` / `stageOutline(ai)`: the feature's accent fill (the AI gradient at 90°, or
   primary) and outline (`#0000FF`, or primary) for bars and outlines inside the card.
 - `renderStageCard` / `renderStageBadge` / `renderStageText` are the hook-free bodies (tests).

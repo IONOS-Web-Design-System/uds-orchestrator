@@ -69,6 +69,10 @@ describe('StageCard hugs its content', () => {
   it('outer wrapper is a slot-size flex box centred vertically, no stacking context', () => {
     const root = card(true, w, h).props.style!;
     expect(root).toMatchObject({ width: w, height: h, display: 'flex', alignItems: 'center' });
+    for (const k of ['position', 'transform', 'opacity', 'filter', 'zIndex', 'isolation']) expect(root[k]).toBeUndefined();
+    const inner = (card(true, w, h).props.children as El).props.style!;
+    expect(inner.position).toBe('relative');
+    for (const k of ['transform', 'opacity', 'filter', 'zIndex', 'isolation']) expect(inner[k]).toBeUndefined();
   });
   it('the card is the wrapper\'s single relative child of slot width: glow first (absolute inset 0), then glass', () => {
     const root = card(true, w, h);
