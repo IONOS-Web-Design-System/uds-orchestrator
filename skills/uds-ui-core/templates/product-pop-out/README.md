@@ -78,3 +78,57 @@ because `leadingIcon` is typed `AiIconName`, passing one will not compile.
 `filled-ai-phone` ships from UDS icon 0.43 (a handset with a sparkle) and is the AI marker for
 call / receptionist / phone-assistant scenarios; use `filled-sparkles` for general AI.
 `filled-envelope-ai` was redrawn in 0.43 (the sparkle sits smaller at the lower right); same name, same use.
+
+# The STRATO stage pair (`StagePair`, `StageCard`, `StageBadge`, `StageText`)
+
+The leg of a STRATO corporate stage with an interface draws TWO layers in one run: an abstract app
+frame of the product (the BACKGROUND, behind the character) and a glass highlight card (the
+FOREGROUND, in front of it). The stage template (`../strato-stage/`) places them around the character;
+the leg never positions itself on the stage. Spec 2026-11-23
+(`uds-moderator/docs/superpowers/specs/2026-11-23-strato-stage-three-layers-design.md`, §2 and §2b).
+
+## `stagePair.layout.ts` (pure, no Remotion)
+
+| Export | What it is |
+|---|---|
+| `CHARACTER_FRAME_ASPECT` | 970.845 / 736.224: the 971 x 736 box of the Figma character component, which is exactly a catalog character PNG. The leg canvas has this aspect. Mirrored by `strato-stage/geometry.ts` and the moderator's `pairLegDims` (both tests compare) |
+| `PAIR_SLOTS` | The two slots as fractions (x, y, w, h) of the character frame (the medians of the five Figma final comps, 730:9594): background `{ 0.14, 0.13, 0.50, 0.42 }`, foreground `{ 0.12, 0.24, 0.31, 0.40 }` |
+| `pairSlotRects(canvas)` | The slots in px on a canvas of that size |
+| `StageLayerContext` | `'background' \| 'foreground' \| 'both'`, default `'both'`: which layer a mount shows |
+| `StageSlotContext` / `useStageSlot()` | The size (px) of the box the current layer is drawn into; default 253 x 173 outside a pair |
+| `visibleLayers(layer)` | The layers a mount draws, background first |
+
+## `StagePair` (`StagePair.tsx`)
+
+`<StagePair background={…} foreground={…} layer?={…} />` is the leg composition's only child. It lays
+the two children out in their slots on the leg canvas (`useVideoConfig()` is the canvas; each child gets
+an absolutely positioned box and a `StageSlotContext` with its size) and draws only the layer it is
+asked for: the `layer` prop if given, else `StageLayerContext`. The leg's own render has no provider and
+shows both, so its preview and gates see the pair as it will stand. agent-svc's `/compose` mounts the
+same leg twice, wrapping each mount in `<StageLayerContext.Provider value="background" | "foreground">`
+(imported from `./uds/StagePair`, which re-exports the layout module's context, so it is the one
+`StagePair` reads). `renderStagePair` is the hook-free body (the tests call it with an explicit size).
+
+## `StageCard`, `StageBadge`, `StageText` (`StageCard.tsx`)
+
+The foreground's glass card and its parts. All read the ONE STRATO AI material at the Subtle level
+(`STRATO_AI_MATERIAL` in `promptWindow.strato.tsx`), the same constant the STRATO prompt window reads,
+so the card and the window cannot drift apart, and all size in px off the slot (`useStageSlot()`).
+
+| | `ai` true | `ai` false |
+|---|---|---|
+| `<StageCard ai>` glow | the AI gradient at 45°, hard-light, blurred, at 0.40 | the primary blue dimmed towards the ink (`nonAi.glow`), hard-light, at 0.32 |
+| glass | white 70 %, backdrop `blur(…) saturate(1.15)`, the window's light rim | the same |
+| content | #29294D Poppins (`STAGE_INK`, `STRATO_PROMPT.face`) | the same |
+| `<StageBadge>` | the AI gradient circle; glyph defaults to the white `filled-sparkles` | primary blue circle; `glyph` is REQUIRED (a type error without it), e.g. a UDS system icon; never the AI sparkle |
+| badge shadow | `0 4px 10px rgba(41,41,77,0.12)` | the same |
+
+- `StageCard` fills its slot (radius, padding and blurs are ratios of the slot width); its wrapper
+  creates no stacking context, so the glow blends with what lies under the card, as the window's does.
+- `StageText` is card text with the window's plus-lighter white halo: it IS the window's `GlowText`
+  (exported from `promptWindow.strato.tsx`, not copied), at the prompt-full halo ratios
+  (`STRATO_FULL.textGlowBlurOfW` of the slot width, `textGlowAlpha`). `style` carries size, weight,
+  line height and the like; colour and face are fixed to #29294D Poppins. `caret` shows the typing caret.
+- `stageAccentFill(ai)` / `stageOutline(ai)`: the feature's accent fill (the AI gradient at 90°, or
+  primary) and outline (`#0000FF`, or primary) for bars and outlines inside the card.
+- `renderStageCard` / `renderStageBadge` / `renderStageText` are the hook-free bodies (tests).

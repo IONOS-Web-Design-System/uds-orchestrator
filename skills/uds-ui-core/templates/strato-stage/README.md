@@ -16,7 +16,7 @@ photo, this one owns the whole stage.
 
 | File | What it is |
 |---|---|
-| `geometry.ts` | The pure numbers: the Figma visual frame, the fit into the canvas, the character anchor, the placement on the canvas (`placeStage`), the interface slots, the interface leg sizes (mirrors of the moderator's), the pair's character frame and slots (mirrors of `product-pop-out/stagePair.layout.ts`). |
+| `geometry.ts` | The pure numbers: the Figma visual frame, the fit into the canvas, the character anchor, the placement on the canvas (`placeStage`), the interface slots, the legacy interface leg sizes (a record of what a moderator deployed before 2026-11-23 requested, kept to place in-flight legacy payloads; no live mirror), the pair's character frame and slots (mirrors of `product-pop-out/stagePair.layout.ts`; the moderator mirrors `CHARACTER_FRAME_ASPECT`). |
 | `motion.ts` | The motion as pure functions of time (`layerMotion`): the background and foreground entrances on the shared entrance curve (`easeEntrance`; the drift capped at `BACKGROUND_DRIFT_MAX_PX`), the Figma character pop-in (`CHARACTER_POP`, `easeOutFigma`), the legacy interface pop-up; the timeline, the legs' release times, `FPS`, `interfacePhase`. |
 | `layers.ts` | `buildStageLayers(input, tMs)`: geometry + motion in canvas px, bottom to top (three layers for a pair, the character and a legacy interface otherwise). Pure. |
 | `styles.ts` | `stageRootStyle(canvas, content)`, `layerStyle(layer)`, `interfaceLegStyle(rect, leg)`: the inline styles of the root and the layers. Pure (a React type only). |
@@ -211,9 +211,11 @@ frame); only `fitStage` knows the canvas.
 Only the moderator decides how big an interface leg is: it requests the leg at that size and sends
 the same `legW` x `legH` to `/compose` (src/orchestrate/stagePayloads.ts). The template never computes
 it. A pair leg is requested at the character frame's aspect (`CHARACTER_FRAME_ASPECT`) and mounted
-whole in each mount box (see "The pair"). For the legacy kinds below, `interfaceLegDims` and
-`promptWindowLeg` here are MIRRORS of the moderator's rule, kept to document and test it (the
-moderator's tests import this file and assert the two agree). Whatever the size, the composite
+whole in each mount box (see "The pair"); the moderator mirrors `CHARACTER_FRAME_ASPECT` for that
+(`pairLegDims`), and its parity test imports `geometry.ts` and asserts the two agree. For the legacy
+kinds below, `interfaceLegDims` and `promptWindowLeg` are a RECORD of what a moderator deployed
+before 2026-11-23 requested (its `legDimsForSlot` / `promptWindowLeg`, since deleted), kept so an
+in-flight legacy payload still places as before; there is no live mirror. Whatever the size, the composite
 mounts a legacy leg at half scale centred on the slot (`interfaceMountRect`),
 nudged below the face-safe band when it would cover the face, and `placeStage` keeps it at the
 slot's offset from the character (see "Placement").
@@ -229,7 +231,7 @@ side becomes 513), capped at 1920 x 1080 (agent-svc's canvas range and small-for
 The AI prompt leg's canvas IS the floating STRATO `prompt-simple` PromptWindow (Figma `663:9864`:
 the pill over the character's chest): one pill 2x the slot wide (`width` 769) at its own aspect
 (`STRATO_SIMPLE_ASPECT`, height 769 / 4.8404), centred, with `left` 231 and `bottom` 231.06 (the
-literal props the moderator sends agent-svc as `stagePromptWindow`). Why the pad: the pill's glow
+literal props a moderator deployed before 2026-11-23 sent agent-svc as `stagePromptWindow`). Why the pad: the pill's glow
 is the pill itself blurred by 0.13 x its width (100 px at 769; `STRATO_SIMPLE.glowBlurOfW`), and
 grows to 1.06x at the send pulse, while the stage clips the leg to its canvas
 (`interfaceLegStyle`). A canvas the size of the pill would cut the glow off in a hard edge; 0.3 x

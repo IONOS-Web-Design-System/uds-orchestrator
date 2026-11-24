@@ -214,8 +214,10 @@ function fitLegCanvas(w0: number, h0: number): { w: number; h: number } {
  * Canvas size of the interface leg: 2x the slot, raised to 320 x 180, capped at 1920 x 1080,
  * and never with both sides <= 512 (agent-svc's small-format band): then scaled up so the long
  * side is 513. The composite mounts it at half scale, centred on the slot.
- * MIRROR: the moderator's `legDimsForSlot` (src/orchestrate/stagePayloads.ts) decides the size the
- * leg is actually requested at; this copy documents and tests the rule. Change both.
+ * LEGACY RECORD, no live mirror: this is the size a moderator deployed before 2026-11-23 requested
+ * a `live-app` / `feature-highlight` leg at (that moderator's `legDimsForSlot`, since deleted). It
+ * is kept so an in-flight legacy payload still places as before; the size actually mounted is
+ * always the `legW` x `legH` the payload carries.
  */
 export function interfaceLegDims(slot: Rect): { w: number; h: number } {
   return fitLegCanvas(Math.round(2 * slot.w), Math.round(2 * slot.h));
@@ -257,7 +259,9 @@ export type PromptWindowLeg = {
  * The same clamps as `interfaceLegDims`. Over 1920 x 1080 the pill and its pad shrink together
  * (the largest pill whose padded canvas fits); under 320 x 180 or inside the small band only the
  * canvas grows, around the pill. Either way the pill stays centred and the props match the canvas.
- * MIRROR: the moderator's `promptWindowLeg` (src/orchestrate/stagePayloads.ts). Change both.
+ * LEGACY RECORD, no live mirror: this is what a moderator deployed before 2026-11-23 requested the
+ * AI prompt leg at (that moderator's `promptWindowLeg`, since deleted); kept so an in-flight legacy
+ * payload still places as before.
  */
 export function promptWindowLeg(slot: { w: number; h: number }): PromptWindowLeg {
   if (!(Number.isFinite(slot.w) && Number.isFinite(slot.h) && slot.h > 0 && Math.round(2 * slot.w) >= 1)) {
@@ -381,6 +385,9 @@ const clampCentre = (v: number, size: number, extent: number): number =>
  * at 2x). The pair's leg is drawn at this aspect. MIRRORS `CHARACTER_FRAME_ASPECT` in
  * `product-pop-out/stagePair.layout.ts` (the leg's own layout); geometry.test.ts reads that file and
  * asserts the two are equal. Not imported, for the reason given at `STRATO_SIMPLE_ASPECT`.
+ * Also mirrored by the moderator, which requests the pair leg at this aspect
+ * (`src/orchestrate/stagePayloads.ts`, `pairLegDims`); its parity test (stagePayloads.test.ts)
+ * imports this file and asserts the two agree. Change all three together.
  */
 export const CHARACTER_FRAME_ASPECT = 970.845 / 736.224;
 
