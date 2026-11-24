@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import type { ReactElement } from 'react';
-import { renderStageCard, renderStageBadge, renderStageText, stageAccentFill, stageOutline, STAGE_INK } from '../StageCard';
+import { renderStageCard, renderStageBadge, renderStageTile, renderStageText, stageAccentFill, stageOutline, STAGE_INK } from '../StageCard';
 import { AI_SVG } from '../promptWindow.icons';
 import { GlowText, STRATO_AI_MATERIAL, STRATO_FULL, STRATO_PROMPT } from '../promptWindow.strato';
 
@@ -183,5 +183,60 @@ describe('stage tokens', () => {
     expect(stageOutline(true)).toBe('#0000FF');
     expect(stageOutline(false)).toBe(STRATO_AI_MATERIAL.nonAi.accent);
     expect(STAGE_INK).toBe('#29294D');
+  });
+});
+
+const URI = 'data:image/svg+xml;base64,PHN2Zy8+';
+const maskSpan = (root: El) => walk(root).map((e) => e.props.style ?? {}).find((x) => x.WebkitMaskImage !== undefined);
+
+describe('R-J: a data-URI glyph is a white masked icon, never text', () => {
+  const badge = (ai: boolean, glyph: unknown) => renderStageBadge({ ai, glyph, slot: { w: 400, h: 300 } } as never) as El;
+  const tile = (ai: boolean, glyph: unknown) => renderStageTile({ ai, glyph, slot: { w: 400, h: 300 } } as never) as El;
+  it('badge: masked span of the glyph size, URI not a child', () => {
+    for (const ai of [true, false]) {
+      const b = badge(ai, URI);
+      const m = maskSpan(b)!;
+      expect(m.backgroundColor).toBe('#FFFFFF');
+      expect(m.WebkitMaskImage).toBe(`url(${URI})`);
+      expect(m.maskImage).toBe(`url(${URI})`);
+      expect(m.maskSize).toBe('contain');
+      expect(m.maskRepeat).toBe('no-repeat');
+      expect(m.maskPosition).toBe('center');
+      expect(m.width).toBe(0.17 * 400 * 0.55);
+      expect(m.height).toBe(0.17 * 400 * 0.55);
+      expect(walk(b).some((e) => e.props.children === URI)).toBe(false);
+      expect(b.props.children).not.toBe(URI);
+    }
+  });
+  it('tile: masked span of 0.55 of the tile, URI not a child', () => {
+    const t = tile(false, URI);
+    const m = maskSpan(t)!;
+    expect(m.backgroundColor).toBe('#FFFFFF');
+    expect(m.maskImage).toBe(`url(${URI})`);
+    expect(m.width).toBeCloseTo(0.2 * 400 * 0.55, 8);
+    expect(walk(t).some((e) => e.props.children === URI)).toBe(false);
+  });
+  it('a ReactNode / non-data string glyph is unchanged', () => {
+    expect(maskSpan(badge(false, 'GLYPH'))).toBeUndefined();
+    expect(badge(false, 'GLYPH').props.children).toBe('GLYPH');
+    expect(maskSpan(tile(false, 'GLYPH'))).toBeUndefined();
+    expect(tile(false, 'GLYPH').props.children).toBe('GLYPH');
+  });
+});
+
+describe('StageTile', () => {
+  const tile = (p: Record<string, unknown>) => renderStageTile({ glyph: 'G', ...p, slot: { w: 400, h: 300 } } as never) as El;
+  it('default size 0.2 of the slot width, radius 0.26 of the tile, badge shadow', () => {
+    const t = tile({ ai: false });
+    expect(t.props.style).toMatchObject({ width: 80, height: 80, borderRadius: 0.26 * 80, boxShadow: '0 4px 10px rgba(41,41,77,0.12)', color: '#FFFFFF' });
+  });
+  it('size is a ratio of the slot width', () => {
+    expect(tile({ ai: false, size: 0.3 }).props.style).toMatchObject({ width: 120, height: 120, borderRadius: 0.26 * 120 });
+  });
+  it('ai fill is the strato AI gradient; non-AI the primary accent, no AI colours', () => {
+    expect(tile({ ai: true }).props.style!.background).toBe(AI_GRAD);
+    const n = tile({ ai: false });
+    expect(n.props.style!.background).toBe(STRATO_AI_MATERIAL.nonAi.accent);
+    expect(JSON.stringify(n)).not.toMatch(/#0000FF|#00FFFF/i);
   });
 });

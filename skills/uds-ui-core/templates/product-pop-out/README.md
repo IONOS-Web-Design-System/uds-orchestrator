@@ -79,7 +79,7 @@ because `leadingIcon` is typed `AiIconName`, passing one will not compile.
 call / receptionist / phone-assistant scenarios; use `filled-sparkles` for general AI.
 `filled-envelope-ai` was redrawn in 0.43 (the sparkle sits smaller at the lower right); same name, same use.
 
-# The STRATO stage pair (`StagePair`, `StageCard`, `StageBadge`, `StageText`)
+# The STRATO stage pair (`StagePair`, `StageCard`, `StageBadge`, `StageTile`, `StageText`)
 
 The leg of a STRATO corporate stage with an interface draws TWO layers in one run: an abstract app
 frame of the product (the BACKGROUND, behind the character) and a glass highlight card (the
@@ -109,7 +109,7 @@ same leg twice, wrapping each mount in `<StageLayerContext.Provider value="backg
 (imported from `./uds/StagePair`, which re-exports the layout module's context, so it is the one
 `StagePair` reads). `renderStagePair` is the hook-free body (the tests call it with an explicit size).
 
-## `StageCard`, `StageBadge`, `StageText` (`StageCard.tsx`)
+## `StageCard`, `StageBadge`, `StageTile`, `StageText` (`StageCard.tsx`)
 
 The foreground's glass card and its parts. All read the ONE STRATO AI material at the Subtle level
 (`STRATO_AI_MATERIAL` in `promptWindow.strato.tsx`), the same constant the STRATO prompt window reads,
@@ -131,6 +131,7 @@ so the card and the window cannot drift apart, and all size in px off the slot (
   ratios (`STRATO_FULL.textGlowBlurOfW` of the slot width, `textGlowAlpha`). By default it is bold,
   uppercase and sized off the card width; `style` overrides any of that. Colour and face are fixed to
   #29294D Poppins. `caret` shows the typing caret.
+- `<StageTile ai glyph size?>` is the comp's glass icon tile: a rounded square of `size` x the slot width (default 0.2), radius 0.26 of the tile, the AI gradient (ai) or primary fill, the badge shadow, and a white glyph at 0.55 of the tile. A `glyph` string starting with `data:image/` (a UDS icon's `svgData`) renders as a white masked icon on the tile and on `StageBadge`, never as text.
 - `stageAccentFill(ai)` / `stageOutline(ai)`: the feature's accent fill (the AI gradient at 90°, or
   primary) and outline (`#0000FF`, or primary) for bars and outlines inside the card.
 - `renderStageCard` / `renderStageBadge` / `renderStageText` are the hook-free bodies (tests).

@@ -25,6 +25,8 @@ const GLOW_BLUR_OF_W = 0.067;
 const GLASS_BLUR_OF_W = 0.0103;
 const BADGE_OF_W = 0.17;
 const BADGE_GLYPH_OF_BADGE = 0.55;
+const TILE_OF_W = 0.2;
+const TILE_RADIUS_OF_TILE = 0.26;
 const HEADLINE_OF_W = 0.068;
 
 export const stageAccentFill = (ai: boolean): string =>
@@ -62,8 +64,26 @@ export function renderStageCard(p: { ai: boolean; children: ReactNode; slot: Slo
   );
 }
 
+/** A glyph that is an icon data URI (`svgData` of a UDS icon) renders as a white masked icon of
+ *  `size` px, never as text; any other glyph renders as given. */
+function renderGlyph(glyph: ReactNode | string, size: number): ReactNode {
+  if (typeof glyph === 'string' && glyph.startsWith('data:image/')) {
+    const mask = `url(${glyph})`;
+    return (
+      <span style={{
+        display: 'block', width: size, height: size, backgroundColor: '#FFFFFF',
+        WebkitMaskImage: mask, maskImage: mask,
+        WebkitMaskSize: 'contain', maskSize: 'contain',
+        WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center', maskPosition: 'center',
+      }} />
+    );
+  }
+  return glyph;
+}
+
 /** The AI sparkle is the default glyph for an AI badge only; a non-AI badge must be given its glyph. */
-export type StageBadgeProps = { ai: true; glyph?: ReactNode } | { ai: false; glyph: ReactNode };
+export type StageBadgeProps = { ai: true; glyph?: ReactNode | string } | { ai: false; glyph: ReactNode | string };
 
 export function renderStageBadge(p: StageBadgeProps & { slot: Slot }) {
   const d = BADGE_OF_W * p.slot.w;
@@ -75,7 +95,25 @@ export function renderStageBadge(p: StageBadgeProps & { slot: Slot }) {
       color: '#FFFFFF',
       boxShadow: STRATO_AI_MATERIAL.badgeShadow,
     }}>
-      {p.ai ? (p.glyph ?? <FlatIcon svg={AI_SVG['filled-sparkles']} size={d * BADGE_GLYPH_OF_BADGE} colour="#FFFFFF" />) : p.glyph}
+      {p.ai ? (p.glyph != null ? renderGlyph(p.glyph, d * BADGE_GLYPH_OF_BADGE) : <FlatIcon svg={AI_SVG['filled-sparkles']} size={d * BADGE_GLYPH_OF_BADGE} colour="#FFFFFF" />) : renderGlyph(p.glyph, d * BADGE_GLYPH_OF_BADGE)}
+    </div>
+  );
+}
+
+/** The comp's glass icon tile: a rounded square of `size` x the slot width (default 0.2). */
+export type StageTileProps = { ai: boolean; glyph: ReactNode | string; size?: number };
+
+export function renderStageTile(p: StageTileProps & { slot: Slot }) {
+  const d = (p.size ?? TILE_OF_W) * p.slot.w;
+  return (
+    <div style={{
+      width: d, height: d, borderRadius: TILE_RADIUS_OF_TILE * d,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: p.ai ? aiGradient('strato') : PRIMARY,
+      color: '#FFFFFF',
+      boxShadow: STRATO_AI_MATERIAL.badgeShadow,
+    }}>
+      {renderGlyph(p.glyph, d * BADGE_GLYPH_OF_BADGE)}
     </div>
   );
 }
@@ -111,6 +149,10 @@ export function StageCard(props: { ai: boolean; children: ReactNode }) {
 
 export function StageBadge(props: StageBadgeProps) {
   return renderStageBadge({ ...props, slot: useStageSlot() });
+}
+
+export function StageTile(props: StageTileProps) {
+  return renderStageTile({ ...props, slot: useStageSlot() });
 }
 
 /** Card text with the prompt window's plus-lighter white halo. */
