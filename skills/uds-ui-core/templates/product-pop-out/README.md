@@ -123,7 +123,9 @@ so the card and the window cannot drift apart, and all size in px off the slot (
 | `<StageBadge>` | the AI gradient circle; glyph defaults to the white `filled-sparkles` | primary blue circle; `glyph` is REQUIRED (a type error without it), e.g. a UDS system icon; never the AI sparkle |
 | badge shadow | `0 4px 10px rgba(41,41,77,0.12)` | the same |
 
-- `StageCard` fills its slot (radius, padding and blurs are ratios of the slot width); its wrapper
+- `StageCard` hugs its content's height (capped at the slot height) and sits vertically centred in its slot.
+- `StageText` is the stage headline by default (bold, uppercase, sized off the card width; `style` overrides).
+- `StageCard` takes the slot width (radius, padding and blurs are ratios of the slot width); its wrapper
   creates no stacking context, so the glow blends with what lies under the card, as the window's does.
 - `StageText` is card text with the window's plus-lighter white halo: it IS the window's `GlowText`
   (exported from `promptWindow.strato.tsx`, not copied), at the prompt-full halo ratios

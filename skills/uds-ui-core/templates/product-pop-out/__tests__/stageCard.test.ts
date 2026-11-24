@@ -64,7 +64,46 @@ describe('StageCard', () => {
   });
 });
 
+describe('StageCard hugs its content', () => {
+  const w = 400, h = 300;
+  it('outer wrapper is a slot-size flex box centred vertically, no stacking context', () => {
+    const root = card(true, w, h).props.style!;
+    expect(root).toMatchObject({ width: w, height: h, display: 'flex', alignItems: 'center' });
+  });
+  it('the card is the wrapper\'s single relative child of slot width: glow first (absolute inset 0), then glass', () => {
+    const root = card(true, w, h);
+    const cardEl = root.props.children as El;
+    expect(cardEl.props.style).toMatchObject({ position: 'relative', width: w });
+    const [glow, glass] = cardEl.props.children as El[];
+    expect(glow.props.style).toMatchObject({ position: 'absolute', inset: 0, mixBlendMode: 'hard-light' });
+    expect(glass.props.style!.background).toBe(STRATO_AI_MATERIAL.glass);
+  });
+  it('the glass is normal flow with min and max height and unchanged padding', () => {
+    for (const ai of [true, false]) {
+      const glass = styles(walk(card(ai, w, h))).find((x) => x.background === STRATO_AI_MATERIAL.glass)!;
+      expect(glass.position).toBe('relative');
+      expect(glass.inset).toBeUndefined();
+      expect(glass.maxHeight).toBe(h);
+      expect(glass.minHeight).toBe((0.17 + 2 * 0.051) * w);
+      expect(glass.padding).toBe(0.051 * w);
+      expect(glass.overflow).toBeUndefined();
+      expect(glass.textAlign).toBeUndefined();
+    }
+  });
+});
+
 describe('StageText', () => {
+  it('defaults to the Figma headline: bold uppercase, sized off the card width', () => {
+    const [, , crisp] = walk(renderStageText({ children: 'Hi', slot: { w: 400, h: 300 } }) as El);
+    expect(crisp.props.style).toMatchObject({
+      fontWeight: 700, textTransform: 'uppercase', fontSize: 0.068 * 400, lineHeight: 1.15, letterSpacing: '0.01em',
+      color: '#29294D', fontFamily: 'Poppins',
+    });
+  });
+  it('style overrides the defaults', () => {
+    const [, , crisp] = walk(renderStageText({ children: 'Hi', style: { fontSize: 10, fontWeight: 400, textTransform: 'none' }, slot: { w: 400, h: 300 } }) as El);
+    expect(crisp.props.style).toMatchObject({ fontSize: 10, fontWeight: 400, textTransform: 'none', lineHeight: 1.15 });
+  });
   const text = (style?: Record<string, string | number>, w = 400) =>
     renderStageText({ children: 'Hello', style, slot: { w, h: 300 } }) as El;
   it('is the prompt window\'s GlowText (reused, not copied)', () => {

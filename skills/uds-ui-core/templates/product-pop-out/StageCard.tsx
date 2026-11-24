@@ -1,7 +1,8 @@
 /**
  * The STRATO corporate stage's glass card, AI and non-AI. The AI card and the STRATO prompt
  * window read the same STRATO_AI_MATERIAL constant, so glass, glow and badge shadow cannot
- * drift. The card fills its StagePair slot and sizes everything in px off the slot width.
+ * drift. The card takes its StagePair slot's width, HUGS its content's height (capped at the slot height)
+ * and sits vertically centred in the slot; everything is sized in px off the slot width.
  * The wrapper creates no stacking context (as PromptWindow does). Card text is #29294D Poppins;
  * `StageText` adds the window's plus-lighter white halo (its `GlowText`, reused).
  */
@@ -24,6 +25,7 @@ const GLOW_BLUR_OF_W = 0.067;
 const GLASS_BLUR_OF_W = 0.0103;
 const BADGE_OF_W = 0.17;
 const BADGE_GLYPH_OF_BADGE = 0.55;
+const HEADLINE_OF_W = 0.068;
 
 export const stageAccentFill = (ai: boolean): string =>
   ai ? `linear-gradient(90deg, ${AI_START}, ${AI_END})` : STRATO_AI_MATERIAL.nonAi.accent;
@@ -34,24 +36,27 @@ export function renderStageCard(p: { ai: boolean; children: ReactNode; slot: Slo
   const w = p.slot.w;
   const radius = RADIUS_OF_W * w;
   return (
-    <div style={{ position: 'relative', width: w, height: p.slot.h }}>
-      <div style={{
-        position: 'absolute', inset: 0, borderRadius: radius,
-        background: p.ai ? aiGradient('strato') : STRATO_AI_MATERIAL.nonAi.glow,
-        mixBlendMode: 'hard-light',
-        filter: `blur(${GLOW_BLUR_OF_W * w}px)`,
-        opacity: p.ai ? STRATO_AI_MATERIAL.glowStrength : STRATO_AI_MATERIAL.nonAi.glowStrength,
-      }} />
-      <div style={{
-        position: 'absolute', inset: 0, boxSizing: 'border-box', borderRadius: radius,
-        background: STRATO_AI_MATERIAL.glass,
-        backdropFilter: `blur(${GLASS_BLUR_OF_W * w}px) saturate(1.15)`,
-        boxShadow: STRATO_PROMPT.rim,
-        padding: PAD_OF_W * w,
-        color: STAGE_INK,
-        fontFamily: STRATO_PROMPT.face,
-      }}>
-        {p.children}
+    <div style={{ width: w, height: p.slot.h, display: 'flex', alignItems: 'center' }}>
+      <div style={{ position: 'relative', width: w }}>
+        <div style={{
+          position: 'absolute', inset: 0, borderRadius: radius,
+          background: p.ai ? aiGradient('strato') : STRATO_AI_MATERIAL.nonAi.glow,
+          mixBlendMode: 'hard-light',
+          filter: `blur(${GLOW_BLUR_OF_W * w}px)`,
+          opacity: p.ai ? STRATO_AI_MATERIAL.glowStrength : STRATO_AI_MATERIAL.nonAi.glowStrength,
+        }} />
+        <div style={{
+          position: 'relative', boxSizing: 'border-box', borderRadius: radius,
+          minHeight: (BADGE_OF_W + 2 * PAD_OF_W) * w, maxHeight: p.slot.h,
+          background: STRATO_AI_MATERIAL.glass,
+          backdropFilter: `blur(${GLASS_BLUR_OF_W * w}px) saturate(1.15)`,
+          boxShadow: STRATO_PROMPT.rim,
+          padding: PAD_OF_W * w,
+          color: STAGE_INK,
+          fontFamily: STRATO_PROMPT.face,
+        }}>
+          {p.children}
+        </div>
       </div>
     </div>
   );
@@ -77,7 +82,7 @@ export function renderStageBadge(p: StageBadgeProps & { slot: Slot }) {
 
 export type StageTextProps = {
   children: ReactNode;
-  /** Size, weight, line height, alignment, clamping. Colour and face are fixed (#29294D Poppins). */
+  /** Overrides the headline defaults (bold, uppercase, 6.8 % of the card width, 1.15, 0.01em): size, weight, alignment, clamping. Colour and face are fixed (#29294D Poppins). */
   style?: Record<string, string | number>;
   /** Show the typing caret after the text. */
   caret?: boolean;
@@ -91,7 +96,10 @@ export function renderStageText(p: StageTextProps & { slot: Slot }) {
       blurPx={STRATO_FULL.textGlowBlurOfW * p.slot.w}
       alpha={STRATO_FULL.textGlowAlpha}
       caret={p.caret}
-      style={{ ...p.style, color: STAGE_INK, fontFamily: STRATO_PROMPT.face }}
+      style={{
+        fontWeight: 700, textTransform: 'uppercase', fontSize: HEADLINE_OF_W * p.slot.w,
+        lineHeight: 1.15, letterSpacing: '0.01em',
+        ...p.style, color: STAGE_INK, fontFamily: STRATO_PROMPT.face }}
     >{p.children}</GlowText>
   );
 }
