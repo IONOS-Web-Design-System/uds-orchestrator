@@ -1,12 +1,26 @@
-import { describe, it, expect } from 'vitest';
-import type { ReactElement } from 'react';
+import { describe, it, expect, vi } from 'vitest';
+import { createElement, type ReactElement, type ReactNode } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import {
-  CHARACTER_FRAME_ASPECT, PAIR_SLOTS, pairSlotRects, visibleLayers, StageLayerContext, StageSlotContext,
+  CHARACTER_FRAME_ASPECT, PAIR_SLOTS, pairSlotRects, visibleLayers, StageLayerContext, useStageSlot,
 } from '../stagePair.layout';
-import { renderStagePair, StageLayerContext as ReExported } from '../StagePair';
+import { renderStagePair, StagePair, StageLayerContext as ReExported, type StageLayerName } from '../StagePair';
+
+// StagePair reads the canvas from Remotion; outside a Remotion render there is no config, so the
+// two Remotion names it uses are stubbed: the canvas is the pair leg's 1383 x 1049, the fill a div.
+vi.mock('remotion', () => ({
+  useVideoConfig: () => ({ width: 1383, height: 1049, fps: 30, durationInFrames: 90 }),
+  AbsoluteFill: ({ children }: { children?: ReactNode }) => createElement('div', { 'data-fill': '' }, children),
+}));
 
 type El = ReactElement<{ style?: Record<string, number | string>; children?: unknown; value?: unknown }>;
 const kids = (el: El): El[] => ([] as El[]).concat((el.props.children ?? []) as El[]).filter(Boolean);
+
+/** A layer child that reports which layer it is and the slot box it was given. */
+function Probe({ name }: { name: string }) {
+  const s = useStageSlot();
+  return createElement('i', { 'data-layer': name, 'data-slot': `${Math.round(s.w)}x${Math.round(s.h)}` });
+}
 
 describe('stagePair geometry', () => {
   it('frame aspect', () => expect(CHARACTER_FRAME_ASPECT).toBeCloseTo(1.31869, 4));
@@ -26,9 +40,8 @@ describe('stagePair geometry', () => {
     expect(visibleLayers('background')).toEqual(['background']);
     expect(visibleLayers('foreground')).toEqual(['foreground']);
   });
-  it('contexts default', () => {
-    expect((StageLayerContext as unknown as { _currentValue: unknown })._currentValue).toBe('both');
-    expect((StageSlotContext as unknown as { _currentValue: unknown })._currentValue).toEqual({ w: 253, h: 173 });
+  it('the slot context defaults to 253 x 173 outside a pair', () => {
+    expect(renderToStaticMarkup(createElement(Probe, { name: 'X' }))).toBe('<i data-layer="X" data-slot="253x173"></i>');
   });
 });
 
@@ -48,4 +61,28 @@ describe('StagePair', () => {
     expect(boxes.map((b) => kids(b)[0].props.children)).toEqual(['BG', 'FG']);
   });
   it('re-exports the layer context', () => expect(ReExported).toBe(StageLayerContext));
+});
+
+describe('StagePair reads the layer from StageLayerContext (as /compose mounts it)', () => {
+  const pair = createElement(StagePair, {
+    background: createElement(Probe, { name: 'BG' }),
+    foreground: createElement(Probe, { name: 'FG' }),
+  });
+  const html = (layer?: StageLayerName) =>
+    renderToStaticMarkup(layer ? createElement(StageLayerContext.Provider, { value: layer }, pair) : pair);
+  const layers = (markup: string) => [...markup.matchAll(/data-layer="(\w+)" data-slot="(\d+x\d+)"/g)].map((m) => `${m[1]}@${m[2]}`);
+
+  it('provider "foreground": only the foreground child, in its slot box', () => {
+    expect(layers(html('foreground'))).toEqual(['FG@429x420']);
+  });
+  it('provider "background": only the background child, in its slot box', () => {
+    expect(layers(html('background'))).toEqual(['BG@692x441']);
+  });
+  it('no provider: both, background first', () => {
+    expect(layers(html())).toEqual(['BG@692x441', 'FG@429x420']);
+  });
+  it('the re-exported context is the one StagePair reads (the compose source imports it from StagePair)', () => {
+    const viaReExport = renderToStaticMarkup(createElement(ReExported.Provider, { value: 'foreground' }, pair));
+    expect(layers(viaReExport)).toEqual(['FG@429x420']);
+  });
 });
