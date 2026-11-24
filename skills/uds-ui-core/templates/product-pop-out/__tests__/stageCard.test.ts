@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import type { ReactElement } from 'react';
-import { renderStageCard, renderStageBadge, stageAccentFill, stageOutline, STAGE_INK } from '../StageCard';
+import { renderStageCard, renderStageBadge, renderStageText, stageAccentFill, stageOutline, STAGE_INK } from '../StageCard';
 import { AI_SVG } from '../promptWindow.icons';
-import { STRATO_AI_MATERIAL } from '../promptWindow.strato';
+import { GlowText, STRATO_AI_MATERIAL, STRATO_FULL, STRATO_PROMPT } from '../promptWindow.strato';
 
 type El = ReactElement<{ style?: Record<string, number | string>; children?: unknown; svg?: string; colour?: string }>;
 
@@ -46,7 +46,46 @@ describe('StageCard', () => {
     expect(s.some((x) => x.borderRadius === 0.0376 * 400)).toBe(true);
     expect(0.0376 * 400).toBeCloseTo(15.04, 5);
     expect(s.some((x) => x.padding === 0.051 * 400)).toBe(true);
-    expect(s.some((x) => x.backdropFilter === `blur(${0.0103 * 400}px)`)).toBe(true);
+    expect(s.some((x) => x.backdropFilter === `blur(${0.0103 * 400}px) saturate(1.15)`)).toBe(true);
+  });
+  it('the glass is the prompt window\'s: blurred and saturate(1.15)', () => {
+    for (const ai of [true, false]) {
+      const glass = styles(walk(card(ai))).find((x) => x.background === STRATO_AI_MATERIAL.glass)!;
+      expect(glass.backdropFilter).toMatch(/^blur\([\d.]+px\) saturate\(1\.15\)$/);
+    }
+  });
+  it('card content is #29294D Poppins (the prompt window\'s face)', () => {
+    for (const ai of [true, false]) {
+      const glass = styles(walk(card(ai))).find((x) => x.background === STRATO_AI_MATERIAL.glass)!;
+      expect(glass.color).toBe('#29294D');
+      expect(glass.fontFamily).toBe(STRATO_PROMPT.face);
+      expect(glass.fontFamily).toBe('Poppins');
+    }
+  });
+});
+
+describe('StageText', () => {
+  const text = (style?: Record<string, string | number>, w = 400) =>
+    renderStageText({ children: 'Hello', style, slot: { w, h: 300 } }) as El;
+  it('is the prompt window\'s GlowText (reused, not copied)', () => {
+    expect(text().type).toBe(GlowText);
+  });
+  it('draws the plus-lighter white halo under the crisp #29294D Poppins text', () => {
+    const [outer, halo, crisp] = walk(text({ fontSize: 24, fontWeight: 600 }));
+    expect(outer.props.style).toEqual({ position: 'relative' });
+    expect(halo.props.style).toMatchObject({
+      mixBlendMode: 'plus-lighter', position: 'absolute', inset: 0,
+      color: `rgba(255,255,255,${STRATO_FULL.textGlowAlpha})`,
+      filter: `blur(${STRATO_FULL.textGlowBlurOfW * 400}px)`,
+      fontSize: 24, fontWeight: 600, fontFamily: 'Poppins',
+    });
+    expect(crisp.props.style).toMatchObject({ color: '#29294D', fontFamily: 'Poppins', fontSize: 24, fontWeight: 600 });
+    expect(halo.props.children).toBe('Hello');
+  });
+  it('the halo blur scales with the slot width; ink and face cannot be overridden', () => {
+    const [, halo, crisp] = walk(text({ color: 'red', fontFamily: 'Arial' }, 600));
+    expect(halo.props.style!.filter).toBe(`blur(${STRATO_FULL.textGlowBlurOfW * 600}px)`);
+    expect(crisp.props.style).toMatchObject({ color: '#29294D', fontFamily: 'Poppins' });
   });
 });
 

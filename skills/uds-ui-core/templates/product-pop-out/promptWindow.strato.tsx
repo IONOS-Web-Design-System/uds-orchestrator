@@ -122,8 +122,9 @@ function rgba(hex: string, alpha: number): string {
   return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
 }
 
-/** Crisp text over a blurred white copy blended with plus-lighter (Figma LINEAR_DODGE). */
-function GlowText({ children, style, blurPx, alpha, caret }: {
+/** Crisp text over a blurred white copy blended with plus-lighter (Figma LINEAR_DODGE). Exported
+ *  so the stage card's `StageText` draws the same halo (one implementation, no copy). */
+export function GlowText({ children, style, blurPx, alpha, caret }: {
   children: ReactNode; style: Record<string, string | number>; blurPx: number; alpha: number; caret?: boolean;
 }) {
   const caretEl = caret

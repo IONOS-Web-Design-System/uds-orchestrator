@@ -2,12 +2,13 @@
  * The STRATO corporate stage's glass card, AI and non-AI. The AI card and the STRATO prompt
  * window read the same STRATO_AI_MATERIAL constant, so glass, glow and badge shadow cannot
  * drift. The card fills its StagePair slot and sizes everything in px off the slot width.
- * The wrapper creates no stacking context (as PromptWindow does).
+ * The wrapper creates no stacking context (as PromptWindow does). Card text is #29294D Poppins;
+ * `StageText` adds the window's plus-lighter white halo (its `GlowText`, reused).
  */
 import type { ReactNode } from 'react';
 import { aiGradient, PROMPT_WINDOW_BRANDS } from './promptWindow.brands';
 import { AI_SVG, FlatIcon } from './promptWindow.icons';
-import { STRATO_AI_MATERIAL, STRATO_PROMPT } from './promptWindow.strato';
+import { GlowText, STRATO_AI_MATERIAL, STRATO_FULL, STRATO_PROMPT } from './promptWindow.strato';
 import { useStageSlot } from './stagePair.layout';
 
 type Slot = { w: number; h: number };
@@ -44,10 +45,11 @@ export function renderStageCard(p: { ai: boolean; children: ReactNode; slot: Slo
       <div style={{
         position: 'absolute', inset: 0, boxSizing: 'border-box', borderRadius: radius,
         background: STRATO_AI_MATERIAL.glass,
-        backdropFilter: `blur(${GLASS_BLUR_OF_W * w}px)`,
+        backdropFilter: `blur(${GLASS_BLUR_OF_W * w}px) saturate(1.15)`,
         boxShadow: STRATO_PROMPT.rim,
         padding: PAD_OF_W * w,
         color: STAGE_INK,
+        fontFamily: STRATO_PROMPT.face,
       }}>
         {p.children}
       </div>
@@ -73,10 +75,36 @@ export function renderStageBadge(p: StageBadgeProps & { slot: Slot }) {
   );
 }
 
+export type StageTextProps = {
+  children: ReactNode;
+  /** Size, weight, line height, alignment, clamping. Colour and face are fixed (#29294D Poppins). */
+  style?: Record<string, string | number>;
+  /** Show the typing caret after the text. */
+  caret?: boolean;
+};
+
+/** Hook-free body (tests call this directly with an explicit slot). The halo is the prompt
+ *  window's prompt-full halo (`STRATO_FULL.textGlow*`), its blur a ratio of the slot width. */
+export function renderStageText(p: StageTextProps & { slot: Slot }) {
+  return (
+    <GlowText
+      blurPx={STRATO_FULL.textGlowBlurOfW * p.slot.w}
+      alpha={STRATO_FULL.textGlowAlpha}
+      caret={p.caret}
+      style={{ ...p.style, color: STAGE_INK, fontFamily: STRATO_PROMPT.face }}
+    >{p.children}</GlowText>
+  );
+}
+
 export function StageCard(props: { ai: boolean; children: ReactNode }) {
   return renderStageCard({ ...props, slot: useStageSlot() });
 }
 
 export function StageBadge(props: StageBadgeProps) {
   return renderStageBadge({ ...props, slot: useStageSlot() });
+}
+
+/** Card text with the prompt window's plus-lighter white halo. */
+export function StageText(props: StageTextProps) {
+  return renderStageText({ ...props, slot: useStageSlot() });
 }
