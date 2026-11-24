@@ -197,11 +197,14 @@ describe('R-J: a data-URI glyph is a white masked icon, never text', () => {
       const b = badge(ai, URI);
       const m = maskSpan(b)!;
       expect(m.backgroundColor).toBe('#FFFFFF');
-      expect(m.WebkitMaskImage).toBe(`url(${URI})`);
-      expect(m.maskImage).toBe(`url(${URI})`);
-      expect(m.maskSize).toBe('contain');
-      expect(m.maskRepeat).toBe('no-repeat');
-      expect(m.maskPosition).toBe('center');
+      expect(m.WebkitMaskImage).toBe(`url("${URI}")`);
+      expect(m.maskImage).toBe(`url("${URI}")`);
+      for (const pre of ['', 'Webkit']) {
+        const k = (n: string) => (pre ? `${pre}${n}` : n.charAt(0).toLowerCase() + n.slice(1));
+        expect(m[k('MaskSize')]).toBe('contain');
+        expect(m[k('MaskRepeat')]).toBe('no-repeat');
+        expect(m[k('MaskPosition')]).toBe('center');
+      }
       expect(m.width).toBe(0.17 * 400 * 0.55);
       expect(m.height).toBe(0.17 * 400 * 0.55);
       expect(walk(b).some((e) => e.props.children === URI)).toBe(false);
@@ -212,9 +215,13 @@ describe('R-J: a data-URI glyph is a white masked icon, never text', () => {
     const t = tile(false, URI);
     const m = maskSpan(t)!;
     expect(m.backgroundColor).toBe('#FFFFFF');
-    expect(m.maskImage).toBe(`url(${URI})`);
+    expect(m.maskImage).toBe(`url("${URI}")`);
     expect(m.width).toBeCloseTo(0.2 * 400 * 0.55, 8);
     expect(walk(t).some((e) => e.props.children === URI)).toBe(false);
+  });
+  it('quotes the URI and escapes a double quote in it', () => {
+    const m = maskSpan(badge(false, 'data:image/svg+xml;utf8,<svg a="b"/>'))!;
+    expect(m.maskImage).toBe('url("data:image/svg+xml;utf8,<svg a=\\"b\\"/>")');
   });
   it('a ReactNode / non-data string glyph is unchanged', () => {
     expect(maskSpan(badge(false, 'GLYPH'))).toBeUndefined();

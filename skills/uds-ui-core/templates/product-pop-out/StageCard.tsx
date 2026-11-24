@@ -68,7 +68,7 @@ export function renderStageCard(p: { ai: boolean; children: ReactNode; slot: Slo
  *  `size` px, never as text; any other glyph renders as given. */
 function renderGlyph(glyph: ReactNode | string, size: number): ReactNode {
   if (typeof glyph === 'string' && glyph.startsWith('data:image/')) {
-    const mask = `url(${glyph})`;
+    const mask = `url("${glyph.replace(/"/g, '\\"')}")`;
     return (
       <span style={{
         display: 'block', width: size, height: size, backgroundColor: '#FFFFFF',
