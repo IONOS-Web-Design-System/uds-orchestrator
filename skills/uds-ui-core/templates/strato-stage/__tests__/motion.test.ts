@@ -1,13 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import {
-  layerMotion, stageDurationSec, msToFrame, easeOutFigma, TIMELINE, CHARACTER_POP, INTERFACE_ANIM_START_MS,
-  FOREGROUND_ANIM_START_MS, FPS,
+  layerMotion, stageDurationSec, msToFrame, easeOutFigma, easeEntrance, TIMELINE, CHARACTER_POP, INTERFACE_ANIM_START_MS,
+  FOREGROUND_ANIM_START_MS, FPS, BACKGROUND_DRIFT_MAX_PX,
 } from '../motion';
 import { VISUAL } from '../geometry';
 
 // motion.test.ts — three layers (spec 2026-11-23 §4): the background enters, the character pops in
-// as on every Figma character component, the foreground enters once the character has landed. The
-// legacy interface keeps its 2026-11-03 pop-up.
+// as on every Figma character component, the foreground enters once the character has landed; both
+// entrances on the shared entrance curve (motion-choreography.md). The legacy interface keeps its
+// 2026-11-03 pop-up. `translateY` is canvas px at the fit passed in (default 1: visual units).
 const IDENTITY = { translateY: 0, scale: 1, opacity: 1 };
 const atFrame = (f: number) => (f * 1000) / FPS;
 
@@ -40,6 +41,25 @@ describe('strato-stage motion', () => {
     }
   });
 
+  it('easeEntrance is the shared entrance curve, cubic-bezier(0.16, 1, 0.3, 1), pinned at both ends', () => {
+    expect(easeEntrance(0)).toBe(0);
+    expect(easeEntrance(1)).toBe(1);
+    expect(easeEntrance(-1)).toBe(0);
+    expect(easeEntrance(2)).toBe(1);
+    expect(Math.abs(easeEntrance(0.1) - 0.494)).toBeLessThanOrEqual(0.0005);
+    expect(Math.abs(easeEntrance(0.2) - 0.752)).toBeLessThanOrEqual(0.0005);
+    expect(Math.abs(easeEntrance(0.5) - 0.9718)).toBeLessThanOrEqual(0.0005);
+    // Not the Figma ease-out: the two curves share the solver, not the control points.
+    expect(Math.abs(easeEntrance(0.25) - easeOutFigma(0.25))).toBeGreaterThan(0.4);
+    let prev = 0;
+    for (let i = 1; i <= 100; i++) {
+      const y = easeEntrance(i / 100);
+      expect(y).toBeGreaterThanOrEqual(prev);
+      expect(y).toBeLessThanOrEqual(1); // y1 = y2 = 1: it never overshoots
+      prev = y;
+    }
+  });
+
   it('character: the Figma pop-in, invisible at 1.2x until 847.12 ms, landed exactly from 1034.5 ms', () => {
     // Frame 0 and frame 25 (833.3 ms): before the start.
     expect(layerMotion('character', 0)).toEqual({ translateY: 0, scale: 1.2, opacity: 0 });
@@ -62,22 +82,36 @@ describe('strato-stage motion', () => {
     for (const t of [1034.5, 1100, 5000]) expect(layerMotion('character', t)).toEqual(IDENTITY);
   });
 
-  it('background: fades in with a drift of 0.01 x 610 visual units on outQuart, at rest from 600 ms', () => {
-    expect(layerMotion('background', 0)).toEqual({ translateY: expect.closeTo(0.01 * VISUAL.h, 9), scale: 1, opacity: 0 });
-    // Half way, outQuart(0.5) = 0.9375.
-    expect(layerMotion('background', 300)).toEqual({
-      translateY: expect.closeTo(0.01 * VISUAL.h * 0.0625, 9), scale: 1, opacity: expect.closeTo(0.9375, 9),
+  it('background: fades in and drifts up 0.01 x 610 visual units, at most 6 canvas px, on the entrance curve; at rest from 600 ms', () => {
+    expect(BACKGROUND_DRIFT_MAX_PX).toBe(6);
+    // At the 750 x 570 fit (0.8597) the drift is 6.1 x 0.8597 = 5.24 px, under the cap.
+    const s750 = 524.4 / 610;
+    expect(layerMotion('background', 0, s750)).toEqual({ translateY: expect.closeTo(0.01 * VISUAL.h * s750, 9), scale: 1, opacity: 0 });
+    expect(layerMotion('background', 0, s750).translateY).toBeCloseTo(5.244, 3);
+    // Larger fits are capped at exactly 6 px (1600 x 900: 8.28 px uncapped; 2048 x 2048: 15.6 px).
+    for (const fit of [828 / 610, 2.56, 1]) expect(layerMotion('background', 0, fit).translateY, `${fit}`).toBe(6);
+    // Half way: opacity and drift from the same eased progress, easeEntrance(0.5) = 0.9718.
+    const e = easeEntrance(0.5);
+    expect(layerMotion('background', 300, s750)).toEqual({
+      translateY: expect.closeTo(0.01 * VISUAL.h * s750 * (1 - e), 9), scale: 1, opacity: expect.closeTo(e, 12),
     });
-    for (const t of [600, 1000, 5000]) expect(layerMotion('background', t)).toEqual(IDENTITY);
+    expect(layerMotion('background', 300, 2.56).translateY).toBeCloseTo(6 * (1 - e), 12);
+    for (const fit of [s750, 2.56]) {
+      for (const t of [600, 1000, 5000]) expect(layerMotion('background', t, fit)).toEqual(IDENTITY);
+      // Never more than 6 px on the way in.
+      for (let t = 0; t <= 600; t += 10) expect(layerMotion('background', t, fit).translateY).toBeLessThanOrEqual(6);
+    }
   });
 
-  it('foreground: invisible until 1040 ms, scales 0.92 -> 1 and fades in twice as fast, at rest from 1300 ms', () => {
+  it('foreground: invisible until 1040 ms, fades in and scales 0.92 -> 1 on the entrance curve, at rest from 1300 ms', () => {
     for (const t of [0, 847.12, 1000, 1039.9, 1040]) expect(layerMotion('foreground', t).opacity, `${t}`).toBe(0);
     expect(layerMotion('foreground', 1040)).toEqual({ translateY: 0, scale: 0.92, opacity: 0 });
-    // 65 ms in (p 0.25): opacity 0.5, scale 0.92 + 0.08 outQuart(0.25).
-    expect(layerMotion('foreground', 1105)).toEqual({
-      translateY: 0, scale: expect.closeTo(0.92 + 0.08 * (1 - 0.75 ** 4), 9), opacity: expect.closeTo(0.5, 9),
-    });
+    // 26 ms in (p 0.1) and 65 ms in (p 0.25): opacity and scale from the same eased progress.
+    for (const [t, p] of [[1066, 0.1], [1105, 0.25]]) {
+      const e = easeEntrance(p);
+      expect(layerMotion('foreground', t), `${t}`).toEqual({ translateY: 0, scale: expect.closeTo(0.92 + 0.08 * e, 9), opacity: expect.closeTo(e, 9) });
+    }
+    expect(layerMotion('foreground', 1066).opacity).toBeCloseTo(0.494, 3);
     // The foreground enters after the character has landed (1034.49 ms).
     expect(TIMELINE.foreground[0]).toBeGreaterThan(CHARACTER_POP.startMs + CHARACTER_POP.scaleMs);
     for (const t of [1300, 2000, 5000]) expect(layerMotion('foreground', t)).toEqual(IDENTITY);
@@ -85,6 +119,8 @@ describe('strato-stage motion', () => {
 
   it('legacy interface pops up from 0.043 x 610 at 450 ms, overshooting but <= 1.15', () => {
     expect(layerMotion('interface', 450)).toEqual({ translateY: expect.closeTo(26.23, 6), scale: 0.72, opacity: 0 });
+    // In canvas px at the fit, uncapped (it is not the background).
+    expect(layerMotion('interface', 450, 2.56).translateY).toBeCloseTo(26.23 * 2.56, 6);
     const s = Array.from({ length: 46 }, (_, i) => layerMotion('interface', 450 + i * 10).scale);
     expect(Math.max(...s)).toBeGreaterThan(1);
     expect(Math.max(...s)).toBeLessThanOrEqual(1.15);

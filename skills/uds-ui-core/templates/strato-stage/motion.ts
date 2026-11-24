@@ -4,14 +4,16 @@
  * without a renderer and the component only has to apply what it returns.
  *
  * The three layers of the stage (spec 2026-11-23 §4), bottom to top, and the legacy interface:
- *   background  from 0: fades in on outQuart while drifting up 0.01 x visual height (6.1 units);
- *               at rest from 600 ms. Quiet: it must not compete with the character.
+ *   background  from 0: fades in while drifting up 0.01 x visual height (6.1 units) at the fit,
+ *               at most 6 canvas px (spec: "drift <= ~6 px"), on the shared entrance curve
+ *               (`easeEntrance`); at rest from 600 ms. Quiet: it must not compete with the character.
  *   character   the Figma pop-in of every character component (`CHARACTER_POP`): from 847.12 ms,
  *               opacity 0 -> 1 over 98.22 ms and scale 1.2 -> 1 over 187.37 ms, both on
  *               cubic-bezier(0, 0, 0.58, 1) (`easeOutFigma`); landed at 1034.49 ms.
- *   foreground  once the character has landed: from 1040 ms over 260 ms, opacity at twice the
- *               progress, scale 0.92 -> 1 on outQuart. Its leg's own animation (the one impact
- *               moment) is released at 1300 ms (`FOREGROUND_ANIM_START_MS`).
+ *   foreground  once the character has landed: from 1040 ms over 260 ms, fades in and scales
+ *               0.92 -> 1 on the shared entrance curve (about its slot's centre: layers.ts). Its
+ *               leg's own animation (the one impact moment) is released at 1300 ms
+ *               (`FOREGROUND_ANIM_START_MS`).
  *   interface   LEGACY (`live-app` / `feature-highlight` payloads of an earlier moderator): the
  *               2026-11-03 pop-up (mockup stage-b-transparent.html, option B), outBack s=1.7 from
  *               0.043 x visual height below, scale 0.72 -> 1, 450 to 900 ms; its leg is released
@@ -53,13 +55,16 @@ export const INTERFACE_ANIM_START_MS = 900;
 /** When the pair leg's OWN animation starts (both mounts): as the foreground has entered (1040 + 260). */
 export const FOREGROUND_ANIM_START_MS = 1300;
 
+/** The background's largest drift, in canvas px (spec 2026-11-23 §4: "drift <= ~6 px"). */
+export const BACKGROUND_DRIFT_MAX_PX = 6;
+
 /**
- * What a layer adds on top of its settled pose. `translateY` is in VISUAL units (672 x 610
- * frame): the component multiplies it by the fit scale to get canvas px.
+ * What a layer adds on top of its settled pose. `translateY` is in canvas px at the fit
+ * `layerMotion` was given (canvas px per visual unit); at the default fit 1 it reads as VISUAL
+ * units (the 672 x 610 frame).
  */
 export type LayerMotion = { translateY: number; scale: number; opacity: number };
 
-const outQuart = (p: number): number => 1 - Math.pow(1 - p, 4);
 const outBack = (p: number, s: number): number => 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2);
 
 /** `p` into [0,1]. Written `p > 0`, not `Math.max(0, ..)`, so NaN and -0 both land on +0. */
@@ -70,26 +75,36 @@ const bezier = (t: number, a: number, b: number): number =>
   3 * (1 - t) * (1 - t) * t * a + 3 * (1 - t) * t * t * b + t * t * t;
 
 /**
- * Figma's ease-out, CSS `cubic-bezier(0, 0, 0.58, 1)`, at progress `p`: `x(t) = p` solved by
- * bisection (40 halvings, `t` to ~1e-12; `x` is increasing on [0, 1]), then `y(t)`. Pinned at the
- * ends: 0 at `p <= 0` (and NaN), exactly 1 at `p >= 1`.
+ * The CSS easing `cubic-bezier(x1, y1, x2, y2)` (`x1`, `x2` in [0, 1], so `x(t)` increases on
+ * [0, 1]) at progress `p`: `x(t) = p` solved by bisection (40 halvings, `t` to ~1e-12), then
+ * `y(t)`. Pinned at the ends: 0 at `p <= 0` (and NaN), exactly 1 at `p >= 1`.
  */
-export function easeOutFigma(p: number): number {
+const cubicBezier = (x1: number, y1: number, x2: number, y2: number) => (p: number): number => {
   if (!(p > 0)) return 0;
   if (p >= 1) return 1;
   let lo = 0;
   let hi = 1;
   for (let i = 0; i < 40; i++) {
     const mid = (lo + hi) / 2;
-    if (bezier(mid, 0, 0.58) < p) lo = mid;
+    if (bezier(mid, x1, x2) < p) lo = mid;
     else hi = mid;
   }
-  return bezier((lo + hi) / 2, 0, 1);
-}
+  return bezier((lo + hi) / 2, y1, y2);
+};
 
-/** Background: fades in on outQuart while it drifts up from `dist` below. */
+/** Figma's ease-out, `cubic-bezier(0, 0, 0.58, 1)`: the character pop-in (`CHARACTER_POP`). */
+export const easeOutFigma: (p: number) => number = cubicBezier(0, 0, 0.58, 1);
+
+/**
+ * The shared entrance curve, `cubic-bezier(0.16, 1, 0.3, 1)` (uds-wireframe
+ * `rules/shared/motion-choreography.md`, "One entrance curve"): the background and foreground
+ * entrances, opacity and transform from the same eased progress. It never overshoots.
+ */
+export const easeEntrance: (p: number) => number = cubicBezier(0.16, 1, 0.3, 1);
+
+/** Background: fades in while it drifts up from `dist` canvas px below. */
 const drift = (p: number, dist: number): LayerMotion => {
-  const e = outQuart(p);
+  const e = easeEntrance(p);
   return { translateY: dist * (1 - e), scale: 1, opacity: e };
 };
 /** Character: the Figma pop-in at `tMs`, its fade and its scale each on its own duration. */
@@ -99,32 +114,40 @@ const figmaPop = (tMs: number): LayerMotion => {
   const grow = easeOutFigma(t / CHARACTER_POP.scaleMs);
   return { translateY: 0, scale: CHARACTER_POP.fromScale - (CHARACTER_POP.fromScale - 1) * grow, opacity: fade };
 };
-/** Foreground: scales up from 0.92 on outQuart, opaque by half way. */
-const enter = (p: number): LayerMotion => ({ translateY: 0, scale: 0.92 + 0.08 * outQuart(p), opacity: clamp01(p * 2) });
-/** Legacy interface: the 2026-11-03 pop-up. */
-const popUp = (p: number, dist: number): LayerMotion => {
+/** Foreground: fades in while it scales up from 0.92. */
+const enter = (p: number): LayerMotion => {
+  const e = easeEntrance(p);
+  return { translateY: 0, scale: 0.92 + 0.08 * e, opacity: e };
+};
+/** Legacy interface: the 2026-11-03 pop-up, from `dist` visual units below, in canvas px at `fit`. */
+const popUp = (p: number, dist: number, fit: number): LayerMotion => {
   // `p <= 0` is pinned to 0: outBack(0, s) is mathematically 0 but not bit-exactly so.
   const e = p <= 0 ? 0 : outBack(p, 1.7);
-  return { translateY: dist * (1 - e), scale: 0.72 + 0.28 * e, opacity: clamp01(p * 2.5) };
+  // `dist * (1 - e) * fit`: the product of 2026-11-05 (visual units, then times the fit), bit for bit.
+  return { translateY: dist * (1 - e) * fit, scale: 0.72 + 0.28 * e, opacity: clamp01(p * 2.5) };
 };
 
 /** A fresh identity each call, so no caller can mutate a shared object. */
 const identity = (): LayerMotion => ({ translateY: 0, scale: 1, opacity: 1 });
 
-/** What `id` adds to its settled pose at `tMs` after frame 0. Exact identity from its end on. */
-export function layerMotion(id: StageLayerId, tMs: number): LayerMotion {
+/**
+ * What `id` adds to its settled pose at `tMs` after frame 0, its `translateY` in canvas px at `fit`
+ * (canvas px per visual unit: `fitStage(...).scale`; default 1, visual units). Exact identity from
+ * its end on.
+ */
+export function layerMotion(id: StageLayerId, tMs: number, fit = 1): LayerMotion {
   const [start, dur] = TIMELINE[id];
   const p = clamp01((tMs - start) / dur);
   if (p >= 1) return identity();
   switch (id) {
     case 'background':
-      return drift(p, 0.01 * VISUAL.h);
+      return drift(p, Math.min(BACKGROUND_DRIFT_MAX_PX, 0.01 * VISUAL.h * fit));
     case 'character':
       return figmaPop(tMs);
     case 'foreground':
       return enter(p);
     case 'interface':
-      return popUp(p, 0.043 * VISUAL.h);
+      return popUp(p, 0.043 * VISUAL.h, fit);
   }
 }
 

@@ -23,9 +23,12 @@ export function stageRootStyle(canvas: { w: number; h: number }, content: Rect):
   return height < canvas.h ? { ...root, overflow: 'hidden' } : root;
 }
 
+/** A fraction as a CSS percentage, rounded to 1e-6 % (0.275 -> '27.5%', not '27.500000000000004%'). */
+const pct = (f: number): string => `${Math.round(f * 1e8) / 1e6}%`;
+
 /**
- * One placed layer: its rect (canvas px), its motion transform
- * about the rect's centre, its opacity.
+ * One placed layer: its rect (canvas px), its motion transform about its origin (the rect's centre,
+ * or the foreground's slot centre: `StageLayer.origin`), its opacity.
  *
  * `maxWidth` / `maxHeight: 'none'` are load-bearing. The compose workspace's `src/index.css`
  * imports Tailwind, whose preflight sets `img, video { max-width: 100%; height: auto; }` on every
@@ -47,16 +50,17 @@ export function layerStyle(l: StageLayer): CSSProperties {
     maxWidth: 'none',
     maxHeight: 'none',
     transform: l.transform,
-    transformOrigin: '50% 50%',
+    transformOrigin: l.origin ? `${pct(l.origin.x)} ${pct(l.origin.y)}` : '50% 50%',
     opacity: l.opacity,
     ...(l.id === 'character' ? { objectFit: 'contain', objectPosition: '50% 0' } : {}),
   };
 }
 
 /**
- * The interface's leg canvas inside its layer: `legW` x `legH` CSS px, scaled down onto the
- * layer's rect (half scale) from its top-left. It is a canvas, so it crops: overflow is clipped
- * here, before the scale, as in the leg's own render.
+ * An interface leg's canvas inside its layer: `legW` x `legH` CSS px, scaled onto the layer's rect
+ * (by `rect.w / legW`) from its top-left: half scale for a legacy interface, the whole mount box
+ * (the leg at the character frame's scale) for a pair layer. It is a canvas, so it crops: overflow
+ * is clipped here, before the scale, as in the leg's own render.
  */
 export function interfaceLegStyle(rect: Rect, leg: { legW: number; legH: number }): CSSProperties {
   return {

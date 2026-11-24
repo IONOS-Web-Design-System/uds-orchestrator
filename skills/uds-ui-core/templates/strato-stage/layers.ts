@@ -12,7 +12,7 @@
  *
  * Import specifiers carry NO file extension (see geometry.ts).
  */
-import { fitStage, placeStage, type Rect, type StagePlacementInput } from './geometry';
+import { PAIR_SLOTS, fitStage, placeStage, type Rect, type StagePlacementInput } from './geometry';
 import { layerMotion, type StageLayerId } from './motion';
 
 /** `placeStage`'s input (canvas, `safeArea`, `metrics`, `iface`, `characterFramed`) plus the character image. */
@@ -27,23 +27,37 @@ export type StageLayer = {
   src?: string;
   /** Canvas px (the content box starts at the canvas origin). */
   rect: Rect;
-  /** CSS transform about the rect's centre: motion on top of the settled pose. */
+  /** CSS transform about `origin`: motion on top of the settled pose. */
   transform: string;
+  /** The transform origin, as fractions of the rect. Absent: its centre. */
+  origin?: { x: number; y: number };
   opacity: number;
 };
 
+/**
+ * The foreground grows in place: its mount box is the whole leg canvas, and the leg draws the card
+ * in the foreground slot (`PAIR_SLOTS.foreground`, fractions of the box whether or not the slot was
+ * clamped), so the card scales about that slot's centre, not the box's (which would slide it).
+ */
+const FOREGROUND_ORIGIN = {
+  x: PAIR_SLOTS.foreground.x + PAIR_SLOTS.foreground.w / 2,
+  y: PAIR_SLOTS.foreground.y + PAIR_SLOTS.foreground.h / 2,
+} as const;
+
 export function buildStageLayers(input: StageInput, tMs: number): StageLayer[] {
   const place = placeStage(input);
-  // The motion offsets are visual units at the frame's fit, as before.
-  const scale = fitStage(input.canvas, input.safeArea).scale;
+  // The motion's offsets are visual units at the frame's fit, as before (the background's drift
+  // capped in canvas px: motion.ts).
+  const fit = fitStage(input.canvas, input.safeArea).scale;
 
-  const make = (id: StageLayerId, rect: Rect, src: string | undefined): StageLayer => {
-    const m = layerMotion(id, tMs);
+  const make = (id: StageLayerId, rect: Rect, src: string | undefined, origin?: StageLayer['origin']): StageLayer => {
+    const m = layerMotion(id, tMs, fit);
     return {
       id,
       ...(src === undefined ? {} : { src }),
       rect,
-      transform: `translateY(${m.translateY * scale}px) scale(${m.scale})`,
+      transform: `translateY(${m.translateY}px) scale(${m.scale})`,
+      ...(origin === undefined ? {} : { origin }),
       opacity: m.opacity,
     };
   };
@@ -54,7 +68,7 @@ export function buildStageLayers(input: StageInput, tMs: number): StageLayer[] {
     return [
       make('background', place.pair.background, undefined),
       character,
-      make('foreground', place.pair.foreground, undefined),
+      make('foreground', place.pair.foreground, undefined, FOREGROUND_ORIGIN),
     ];
   }
   // Legacy: the character, then the interface (when there is one) over it.

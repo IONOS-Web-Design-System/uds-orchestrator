@@ -17,7 +17,7 @@ photo, this one owns the whole stage.
 | File | What it is |
 |---|---|
 | `geometry.ts` | The pure numbers: the Figma visual frame, the fit into the canvas, the character anchor, the placement on the canvas (`placeStage`), the interface slots, the interface leg sizes (mirrors of the moderator's), the pair's character frame and slots (mirrors of `product-pop-out/stagePair.layout.ts`). |
-| `motion.ts` | The motion as pure functions of time (`layerMotion`): the background entrance, the Figma character pop-in (`CHARACTER_POP`, `easeOutFigma`), the foreground entrance, the legacy interface pop-up; the timeline, the legs' release times, `FPS`, `interfacePhase`. |
+| `motion.ts` | The motion as pure functions of time (`layerMotion`): the background and foreground entrances on the shared entrance curve (`easeEntrance`; the drift capped at `BACKGROUND_DRIFT_MAX_PX`), the Figma character pop-in (`CHARACTER_POP`, `easeOutFigma`), the legacy interface pop-up; the timeline, the legs' release times, `FPS`, `interfacePhase`. |
 | `layers.ts` | `buildStageLayers(input, tMs)`: geometry + motion in canvas px, bottom to top (three layers for a pair, the character and a legacy interface otherwise). Pure. |
 | `styles.ts` | `stageRootStyle(canvas, content)`, `layerStyle(layer)`, `interfaceLegStyle(rect, leg)`: the inline styles of the root and the layers. Pure (a React type only). |
 | `StratoStage.tsx` | The Remotion component: maps the layer list onto the character `<Img>` and the interface mounts (the pair leg twice, a legacy interface once). `renderStratoStage(props, frame, fps)` is its hook-free body. |
@@ -199,7 +199,8 @@ frame); only `fitStage` knows the canvas.
 | Head top to waist 588 (`WAIST_SUBJECT_HEIGHT`), the waist on the frame bottom | 610 - 22, task C6 (2026-11-06): the user's "less cropped, moved up a bit, shown slightly smaller". It was 661 (the waist 73 below the frame bottom, 22 + 661 - 610, as the waist-cropped character of `663:8787`) on 2026-11-05 |
 | Portrait: 3:4, head top 25 % down | spec 2026-11-05 decision 4 (mockup B); the blend between 672:610 and 3:4 is the builder's call (linear) |
 | Character pop-in (`CHARACTER_POP`: 847.12 ms, fade 98.22 ms, scale 1.2 to 1 over 187.37 ms, `cubic-bezier(0, 0, 0.58, 1)`) | the `fadeIn` / `scaleOut` motion on all 37 character components (section `721:945`, page `persona/strato`) and the five final comps (`730:9594`), read with the Plugin API |
-| Background and foreground entrances (0 / 600 ms, drift 0.01 x 610; 1040 / 260 ms, scale 0.92 to 1), the pair's release at 1300 ms | not Figma (its background and foreground carry no motion): spec 2026-11-23 §4 and its plan (Task 5), the builder's values on the shared entrance curve |
+| Background and foreground entrances (0 / 600 ms, drift 0.01 x 610 at most 6 px; 1040 / 260 ms, scale 0.92 to 1 about the slot centre), the pair's release at 1300 ms | not Figma (its background and foreground carry no motion): spec 2026-11-23 §4 (drift <= ~6 px) and its plan (Task 5), with the controller's rulings of 2026-11-24 (curve, cap, origin) |
+| Entrance curve `easeEntrance`, `cubic-bezier(0.16, 1, 0.3, 1)` | the shared entrance curve, `Easing.bezier(0.16, 1, 0.3, 1)`, of `uds-wireframe/rules/shared/motion-choreography.md` ("One entrance curve") |
 | Legacy interface pop-up (450 / 450 ms, 0.043 x 610, outBack s=1.7), its release at 900 ms | the picked mockup `stage-b-transparent.html`, option B; the timings are the 2026-11-03 amendment (controller's call) |
 | `DEFAULT_METRICS`, the `live-app` slot | **not Figma**: see the note below |
 | `STRATO_SIMPLE_ASPECT` 4.8404 | `STRATO_SIMPLE.aspect` of `product-pop-out/promptWindow.strato.tsx` (`587:6992`, 455 x 94), mirrored, not imported (see "Interface leg sizes") |
@@ -247,17 +248,29 @@ import of `../product-pop-out/...` cannot resolve there (`selfContained.test.ts`
 
 All times are from frame 0 at 30 fps (spec 2026-11-23 §4). The settled stage carries the designed
 position and nothing else: every pattern is exactly identity (`translateY 0, scale 1, opacity 1`)
-once its progress `p` reaches 1. `translateY` is in visual units, scaled to px by the fit `s`
-(the background's 6.1 units are 5.2 px at 750 x 570). Every transform is about the layer rect's
-centre (`layerStyle`): for a pair layer that is its mount box (the frame when unclamped), for the
-character its image box (the frame, for a catalog character).
+once its progress `p` reaches 1. `layerMotion(id, tMs, fit)` returns `translateY` in canvas px at
+the fit `s` (`fitStage(...).scale`): its visual units times `s`. The background's drift is
+`min(6, 0.01 x 610 x s)` px (`BACKGROUND_DRIFT_MAX_PX`, spec "drift <= ~6 px"). That is 5.24 px at
+750 x 570, and exactly 6 px whenever `s` > 6 / 6.1 = 0.984: every other acceptance format, e.g.
+1600 x 900 (8.28 px uncapped) and 2048 x 2048 (15.6 px uncapped). Both pair entrances run on the shared entrance curve `easeEntrance`,
+`cubic-bezier(0.16, 1, 0.3, 1)` (`motion-choreography.md`, "One entrance curve"), with opacity and
+transform from the same eased progress `e = easeEntrance(p)`. It never overshoots.
+
+Transform origins (`StageLayer.origin`, `layerStyle`):
+- **The foreground** scales about its SLOT's centre within its mount box: `PAIR_SLOTS.foreground`
+  `x + w / 2`, `y + h / 2` = 27.5 %, 44 %, where the leg draws the card even when the slot was
+  clamped. So the card grows in place. About the box centre it would slide about 12 px toward the
+  frame centre at 750 x 570.
+- **The background and the character** scale about their rect's centre. For the background that is
+  its mount box (it only drifts). For the character it is its image box, which is the frame for a
+  catalog character.
 
 | Layer | Start / duration (ms) | Motion | Opacity |
 |---|---|---|---|
-| `background` | 0 / 600 | drifts up: translateY 0.01 x 610 = 6.1 to 0, `outQuart(p)` | `outQuart(p)` |
+| `background` | 0 / 600 | drifts up: translateY `min(6, 6.1 s) x (1 - e)` px to 0 | `e` |
 | `character` | 847.12 / 187.37 | the Figma pop-in: scale `1.2 - 0.2 easeOutFigma((t - 847.12) / 187.37)` | `easeOutFigma((t - 847.12) / 98.22)` |
-| `foreground` | 1040 / 260 | scale `0.92 + 0.08 outQuart(p)` | `2p`, clamped |
-| `interface` (legacy) | 450 / 450 | outBack s=1.7: translateY 0.043 x 610 = 26.23 to 0, scale 0.72 to 1 (overshoots) | `2.5p`, clamped |
+| `foreground` | 1040 / 260 | scale `0.92 + 0.08 e`, about its slot centre | `e` |
+| `interface` (legacy) | 450 / 450 | outBack s=1.7: translateY 0.043 x 610 = 26.23 visual units (x `s` px) to 0, scale 0.72 to 1 (overshoots) | `2.5p`, clamped |
 
 **The Figma pop-in** (`CHARACTER_POP` = `{ startMs: 847.12, fadeMs: 98.22, scaleMs: 187.37,
 fromScale: 1.2 }`) is the `fadeIn` / `scaleOut` of every character component: opacity 0 to 1 over

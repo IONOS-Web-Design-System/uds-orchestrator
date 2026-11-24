@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { buildStageLayers } from '../layers';
-import { DEFAULT_METRICS, VISUAL, characterRect, fitStage, placeStage, type StageMetrics } from '../geometry';
+import { buildStageLayers, type StageLayer } from '../layers';
+import { DEFAULT_METRICS, PAIR_SLOTS, VISUAL, characterRect, fitStage, placeStage, type StageMetrics } from '../geometry';
+import { layerStyle } from '../styles';
 
 // layers.test.ts — the pure layer list StratoStage maps onto <Img>s
 describe('strato-stage layers', () => {
@@ -115,6 +116,60 @@ describe('strato-stage layers: the pair', () => {
     const at1040 = buildStageLayers(input, 1040);
     expect(at1040.map((l) => l.opacity)).toEqual([1, 1, 0]);
     expect(at1040[2].transform).toBe('translateY(0px) scale(0.92)');
+  });
+
+  it('the background drift is at most 6 canvas px: 5.24 px at 750 x 570, exactly 6 px at 1600 x 900 and 2048 x 2048', () => {
+    const at0 = (canvas: { w: number; h: number }) =>
+      buildStageLayers({ canvas, safeArea: SA, metrics: CATALOG, srcs, iface: PAIR, characterFramed: true }, 0)[0];
+    const drift = (l: StageLayer) => Number(/^translateY\((.+)px\) scale\(1\)$/.exec(l.transform)![1]);
+    expect(drift(at0({ w: 750, h: 570 }))).toBeCloseTo(5.244, 3);
+    expect(at0({ w: 1600, h: 900 }).transform).toBe('translateY(6px) scale(1)');
+    expect(at0({ w: 2048, h: 2048 }).transform).toBe('translateY(6px) scale(1)');
+    // Uncapped these would be 8.28 and 15.6 px: the cap is not vacuous.
+    expect(0.01 * VISUAL.h * fitStage({ w: 1600, h: 900 }, SA).scale).toBeGreaterThan(8);
+    expect(0.01 * VISUAL.h * fitStage({ w: 2048, h: 2048 }, SA).scale).toBeGreaterThan(15);
+  });
+
+  it('the foreground grows in place: its transform origin is its slot centre in the mount box, which stays put', () => {
+    // The slot centre in fractions of the mount box (the leg lays the slot out there), from the mirror.
+    const fx = PAIR_SLOTS.foreground.x + PAIR_SLOTS.foreground.w / 2;
+    const fy = PAIR_SLOTS.foreground.y + PAIR_SLOTS.foreground.h / 2;
+    /** Canvas position of the box point (u, v) (fractions) under the layer's CSS transform and origin. */
+    const mapped = (l: StageLayer, u: number, v: number, origin?: string) => {
+      const st = layerStyle(l);
+      const [, ty, sc] = /^translateY\((.+)px\) scale\((.+)\)$/.exec(String(st.transform))!.map(Number);
+      const [ox, oy] = String(origin ?? st.transformOrigin).split(' ').map((p) => parseFloat(p) / 100);
+      const w = Number(st.width);
+      const h = Number(st.height);
+      return {
+        x: Number(st.left) + ox * w + sc * (u - ox) * w,
+        y: Number(st.top) + oy * h + ty + sc * (v - oy) * h,
+      };
+    };
+    let moved = 0;
+    for (const [name, metrics, characterFramed] of CASES) {
+      // 1024 x 2048: the foreground slot crosses the left edge, so its box is moved and shrunk.
+      for (const canvas of [...CANVASES, { w: 656, h: 1080 }]) {
+        const input = { canvas, safeArea: SA, metrics, srcs, iface: PAIR, characterFramed };
+        const at = `${name} ${canvas.w}x${canvas.h}`;
+        const [bg, ch, fg] = buildStageLayers(input, 2000);
+        expect(layerStyle(bg).transformOrigin, at).toBe('50% 50%');
+        expect(layerStyle(ch).transformOrigin, at).toBe('50% 50%');
+        expect(layerStyle(fg).transformOrigin, at).toBe('27.5% 44%');
+        const rest = mapped(fg, fx, fy);
+        for (const t of [1040, 1066.7, 1105, 1170, 1299]) {
+          const l = buildStageLayers(input, t)[2];
+          expect(l.transform, `${at} ${t}`).not.toBe('translateY(0px) scale(1)'); // mid-entrance
+          const p = mapped(l, fx, fy);
+          expect(Math.abs(p.x - rest.x), `${at} ${t} x`).toBeLessThan(0.01);
+          expect(Math.abs(p.y - rest.y), `${at} ${t} y`).toBeLessThan(0.01);
+          // Not vacuous: about the box centre the slot centre slides (about 12 px at 750 x 570).
+          const centred = mapped(l, fx, fy, '50% 50%');
+          if (Math.hypot(centred.x - rest.x, centred.y - rest.y) > 1) moved += 1;
+        }
+      }
+    }
+    expect(moved).toBeGreaterThan(0);
   });
 
   it('characterFramed reaches placeStage: a catalog cutout framed by its image box, else a virtual frame', () => {
