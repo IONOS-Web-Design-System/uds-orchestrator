@@ -11,6 +11,7 @@ stageType: "Bento-Stage"
 stageScene: "Animiertes STRATO-GPT-Fenster: Dokument „Energieberatung Hartmann & Partner“ (Werbebrief-Vorlage), Prompt „Schreibe einen klassischen Werbebrief für einen kostenlosen Energiekosten-Check.“. Prompts und Ergebnisse wechseln im Loop. Label „KI-unterstützt“"
 stageImage: "https://www.strato.de/_assets/img/svg/strato_gpt_stage-template-DE.svg"
 stageCard: chat
+stageMoment: "a prompt bubble asking for an invitation letter, then the answer as a gradient document card with a heading bar and text lines"
 ---
 ## strato-strato-gpt-persona-1
 Signature: short, tousled dark pixie cut and black round glasses.

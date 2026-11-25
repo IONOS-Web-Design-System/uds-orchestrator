@@ -10,7 +10,7 @@ tagline: "Firmendaten in deutscher Cloud speichern"
 stageType: "Klassische Stage"
 stageScene: "Lächelnder Mann mit Brille und hellblauem Hemd sitzt mit Tablet auf Stufen vor einer Glasfassade, Gegenlicht"
 stageImage: "https://www.strato.de/img/xqXBqdgyi5-1060.webp"
-stageCard: icons
+stageCard: none
 ---
 ## strato-hidrive-business-persona-1
 Signature: short dark hair greying at the temples, clean-shaven.

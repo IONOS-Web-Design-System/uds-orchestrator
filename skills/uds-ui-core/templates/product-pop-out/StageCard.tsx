@@ -105,12 +105,33 @@ export function renderStageBadge(p: StageBadgeProps & { slot: Slot }) {
 }
 
 /** The comp's glass icon tile: a rounded square. `size` is the tile's side in PIXELS, clamped to
- *  [0.08, 0.3] x the slot width; absent, it is 0.2 x the slot width. */
-export type StageTileProps = { ai: boolean; glyph: ReactNode | string; size?: number };
+ *  [0.08, 0.3] x the slot width; absent, it is 0.2 x the slot width. `glow`: the tile FLOATS on its
+ *  own (the icons foreground, no card around it) and carries the card's glow, blurred behind it. */
+export type StageTileProps = { ai: boolean; glyph: ReactNode | string; size?: number; glow?: boolean };
+
+const TILE_GLOW_SPREAD_OF_TILE = 0.12;
+const TILE_GLOW_BLUR_OF_TILE = 0.28;
 
 export function renderStageTile(p: StageTileProps & { slot: Slot }) {
   const w = p.slot.w;
   const d = Math.min(TILE_MAX_OF_W * w, Math.max(TILE_MIN_OF_W * w, p.size ?? TILE_OF_W * w));
+  const tile = renderTileFace(p, d);
+  if (!p.glow) return tile;
+  return (
+    <div style={{ position: 'relative', width: d, height: d }}>
+      <div style={{
+        position: 'absolute', inset: -TILE_GLOW_SPREAD_OF_TILE * d, borderRadius: TILE_RADIUS_OF_TILE * d,
+        background: p.ai ? aiGradient('strato') : STRATO_AI_MATERIAL.nonAi.glow,
+        mixBlendMode: 'hard-light',
+        filter: `blur(${TILE_GLOW_BLUR_OF_TILE * d}px)`,
+        opacity: p.ai ? STRATO_AI_MATERIAL.glowStrength : STRATO_AI_MATERIAL.nonAi.glowStrength,
+      }} />
+      <div style={{ position: 'relative' }}>{tile}</div>
+    </div>
+  );
+}
+
+function renderTileFace(p: StageTileProps, d: number) {
   return (
     <div style={{
       width: d, height: d, borderRadius: TILE_RADIUS_OF_TILE * d,

@@ -23,11 +23,16 @@ generated for its stage assets. Personas live in `rules/<brand>/<showroom>.md`:
     `stageType`, `stageScene` (the source stage description, verbatim), `stageImage`. The moderator
     reads `tagline` and `stageScene` to offer a STRATO stage the platforms' logos it shows.
   - STRATO stage design (read by the moderator; one value per product, never chosen per run):
-    - `stageCard` — the highlight card's type: `icons`, `chat`, `reaction` or `connector`
-      (`uds-wireframe` rule `strato/stage-foreground.md`).
+    - `stageCard` — the foreground's type: `icons`, `chat`, `reaction` or `connector`
+      (`uds-wireframe` rule `strato/stage-foreground.md`), or `none` when the product has no key
+      moment to highlight: the foreground stays empty.
+    - `stageMoment` — the product's KEY MOMENT the foreground shows, in one sentence of objects
+      ("an order comes in: an order card with the skateboard thumbnail …"): it is what makes two
+      products of one type differ. Absent when `stageCard` is `none`.
     - `stageFrame` — the catalog slug of the ONE photo or website template the app frame behind
       the person shows, e.g. `"strato-webshop-stage-image"` (made for this product on the Figma
-      page `asset/strato`). Absent = a pure wireframe, which is the default.
+      page `asset/strato`). Absent = a pure wireframe, which is the default; `"none"` = no frame
+      (with `stageCard: none`, the character stands alone).
 - The **body** is a plain-language description of the character's identity ONLY: face, age, gender,
   ethnicity, hair, build, and wardrobe/personal style. A frontmatter-only file (empty body) is a
   *registered* showroom that resolves but injects no persona. The body has one section per

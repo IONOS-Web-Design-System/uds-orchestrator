@@ -11,6 +11,7 @@ stageType: "Bento-Stage"
 stageScene: "Lachende Friseurin mit Locken und orangefarbenem Halstuch zeigt auf ein Tablet mit der Website „Hair & Style“; dahinter lila Angebotsrechner-Oberfläche mit Preisen (z. B. 320 €), unten orangefarbene Farbpulver-Explosion"
 stageImage: "https://www.strato.de/_assets/img/webp/img_ai_appsitebuiler_stage_hairdesser+calculation_de.webp"
 stageCard: chat
+stageMoment: "the founder's prompt bubble asking for a website, then the AI's answer as a small website thumbnail with the grain-bowl photo and a gradient check"
 stageFrame: "strato-ki-app-site-builder-stage-image"
 ---
 ## strato-ki-app-site-builder-persona-1

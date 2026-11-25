@@ -10,6 +10,7 @@ tagline: "Bestehende Domain bequem umziehen"
 stageType: "Klassische Stage"
 stageScene: "Kein Bild in der Stage – nur orangefarbene Polygon-Flächen (CSS) neben Headline und Text"
 stageCard: connector
+stageMoment: "the domain moves: the old provider card links to the STRATO card and the domain chip ticks as moved"
 ---
 ## strato-domain-umzug-persona-1
 Signature: long silver-grey hair in a loose fishtail braid over one shoulder.

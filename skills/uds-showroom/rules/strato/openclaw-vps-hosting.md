@@ -10,7 +10,8 @@ tagline: "Der persönliche KI-Agent auf Ihrem eigenen VPS"
 stageType: "Klassische Stage"
 stageScene: "Nahaufnahme von Server-Einschüben mit blau leuchtenden Lichtern im Rechenzentrum"
 stageImage: "https://www.strato.de/img/uURbFLrq97-1060.webp"
-stageCard: chat
+stageCard: connector
+stageMoment: "the personal agent's tile linked to mail, calendar and messenger tiles, each ticking as the agent takes the task"
 ---
 ## strato-openclaw-vps-hosting-persona-1
 Signature: straight, shoulder-length blond hair worn loose, with grey over-ear headphones around the neck.

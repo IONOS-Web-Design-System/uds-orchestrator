@@ -11,6 +11,7 @@ stageType: "Klassische Stage"
 stageScene: "Lächelnde Geschäftsfrau mit dunklem Haar, grauem Blazer und hellblauer Bluse in einem Büro mit unscharfen Aktenregalen"
 stageImage: "https://www.strato.de/img/oOC4ZJN8Af-1060.webp"
 stageCard: icons
+stageMoment: "four floating tiles in a column: Outlook, Teams, Word and Excel (their supplied logos on white tiles)"
 ---
 ## strato-microsoft-365-persona-1
 Signature: dark-brown hair in a neat swept-back side part, clean-shaven.

@@ -11,6 +11,7 @@ stageType: "Klassische Stage"
 stageScene: "Lächelnde Modedesignerin mit Locken am Laptop im Atelier; Schneiderpuppe mit gelbem Hemd, Garnrollen und Nähmaschine"
 stageImage: "https://www.strato.de/img/hvI0cCeqEX-1060.webp"
 stageCard: connector
+stageMoment: "the WooCommerce shop connects payment and shipping: card payment, wallet and parcel tiles tick one by one"
 stageFrame: "strato-woocommerce-stage-image"
 ---
 ## strato-woocommerce-persona-1

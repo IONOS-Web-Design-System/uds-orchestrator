@@ -6,12 +6,14 @@ styles: [strato-stage-pair]
 
 ## 1. When it applies
 
-Only the STRATO corporate stage's pair: the abstract app frame behind the person and the glass highlight card in front of them. The brief names the card's type ("Foreground type: …") and the frame's kind ("Background kind: …"). Draw exactly that type and kind; never mix two types.
+Only the STRATO corporate stage's pair: the abstract app frame behind the person and the highlight in front of them. The brief names the foreground's type ("Foreground type: …") and the frame's kind ("Background kind: …"). Draw exactly that type and kind; never mix two types.
 
-## 2. Every card
+The foreground highlights the product's KEY MOMENT, named in the brief's "Key moment" line: the foreground is built from exactly those objects, so no two products share a card. The type gives the composition, the key moment gives the objects. A product without a key moment has none: "Foreground type: none" means the foreground stays EMPTY (`foreground={null}`), and "Background kind: none" means the background stays empty (`background={null}`). An empty layer is a complete answer, never a gap to fill.
 
-- The card is `<StageCard ai={…}>`: it hugs its content and clips anything beyond, so everything sits inside it.
-- It is built from the product's own key objects, at most four of one kind, aligned on one grid.
+## 2. Every foreground
+
+- Chat, reaction and connector draw a card, `<StageCard ai={…}>`: it hugs its content and clips anything beyond, so everything sits inside it. Icons draw NO card: the tiles float (3.1).
+- It is built from the key moment's objects, at most four of one kind, aligned on one grid. Two products of one type still differ: their objects, glyphs and their order come from their own key moments.
 - The AI mark appears once, and the type decides where: on an icons or chat card the objects ARE the mark (gradient tiles, the assistant's gradient bubble) and there is no `<StageBadge>`; a reaction or connector card carries its one `<StageBadge>`. A non-AI product uses the primary blue instead of the AI gradient (`StageTile ai={false}`, `stageAccentFill(false)`), and its badge is `<StageBadge ai={false} glyph={…}>`.
 - A headline is optional, at most four words, in `<StageText>`, and only where the type below allows it. Every other text is a skeleton bar, except labels the brief gives verbatim.
 - A glyph from `@ionos-web-design-system/icon` is passed as its `svgData` string (`glyph={svgData}`); a supplied catalog logo is an `<Img>` at full colour.
@@ -23,14 +25,14 @@ Only the STRATO corporate stage's pair: the abstract app frame behind the person
 
 When: a complex context that refers to several products, channels or processes at once — a suite, listings across Google, Maps and directories, an all-in-one plan.
 
-Picture: two to four `<StageTile>` tiles stacked in ONE column, each holding exactly ONE white glyph that names a channel, product or discipline:
+Picture: NO card and no glass container. Two to four floating `<StageTile glow>` tiles stacked in ONE column at the foreground slot's left edge, so the column hangs over the app frame's left edge as if attached to it (a small stagger of the middle tile is allowed). Each tile holds exactly ONE white glyph that names a channel, product or discipline of the key moment:
 - a platform is its UDS social icon: `import { svgData as googleSvg } from '@ionos-web-design-system/icon/social/google'` (also `social/instagram`, `social/facebook`, `social/linkedin`, `social/wordpress`, `social/youtube`);
 - a discipline is a UDS system icon: `system/filled-star` for reviews, `system/filled-chat` for messages and posts, `system/filled-location` for listings, `system/filled-search` for search, `system/filled-globe` for a website, `system/filled-lock` for security;
-- `<StageTile ai glyph={googleSvg} size={56}>` for an AI product (AI gradient, white glyph), `<StageTile ai={false} …>` otherwise (primary blue).
+- `<StageTile ai glow glyph={googleSvg} size={…}>` for an AI product (AI gradient, white glyph, its own glow), `<StageTile ai={false} glow …>` otherwise (primary blue); a size of about a quarter of the slot width.
 
-Beside the column, optionally ONE small bar card that the tiles overlap at its left edge, with two or three bars in the same fill (`stageAccentFill`). A supplied catalog logo is full colour and belongs in the frame, never on a tile; a tile never holds two glyphs, or a glyph next to a logo. No headline and no `<StageBadge>`: the tiles are the mark.
+The foreground is just the column: `<div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap }}>` with the tiles. A supplied catalog logo is full colour and belongs in the frame, never on a tile; a tile never holds two glyphs, or a glyph next to a logo. No card, no headline, no bars and no `<StageBadge>`: the tiles are the mark.
 
-Motion: the tiles fade in one after another, top to bottom (about 120 ms apart, at most a 6 px rise); then the bar card's first bar fills once from its left edge.
+Motion: the tiles fade in one after another, top to bottom (about 120 ms apart, at most a 6 px rise), then hold.
 
 ### 3.2 chat — chat-related (example: Chat Assistant)
 
@@ -65,11 +67,14 @@ The frame shows the product as the person on stage uses it for their own busines
 - **frame** — skeleton content plus the product's cue: third-party logos at full colour where the product shows that platform.
 - **hero** — the same frame with ONE supplied stock photo embedded as the page's hero image, or as the images of posts or a gallery (`<Img>`, objectFit cover, its own colours).
 - **template** — the supplied website or app template fills the frame's viewport (`<Img>`, objectFit cover, objectPosition top, its own colours, never redrawn); only the frame's bar stays light grey.
+- **none** — no frame: the background stays empty (`background={null}`).
 
 ## 5. Anti-patterns
 
 - A generic badge + headline + bars card; two types mixed on one card.
-- An icons card with a badge, a row of logo chips, or a logo and a glyph sharing a tile.
+- The same card for two products: objects that are not the key moment's.
+- A card, tile or placeholder when the Foreground type is none; a frame when the Background kind is none.
+- Icons inside a glass card, a row of logo chips, or a logo and a glyph sharing a tile.
 - More than four objects of one kind; anything outside the card.
 - The brief's Foreground sentence printed as copy.
 - Tiles, chips or bubbles that resize, travel, morph or bounce; a cursor or typing.

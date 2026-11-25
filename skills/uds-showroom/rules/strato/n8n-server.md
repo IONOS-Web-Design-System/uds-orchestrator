@@ -11,6 +11,7 @@ stageType: "Klassische Stage"
 stageScene: "Futuristisches Server-Panel „Quantum Node 1 / Data Core Alpha“ mit grün/blau leuchtenden Anzeigen und Touch-Interfaces"
 stageImage: "https://www.strato.de/img/ZesI3MbSr--1060.webp"
 stageCard: connector
+stageMoment: "a workflow runs: three app nodes linked by one line, each ticking as the run passes"
 ---
 ## strato-n8n-server-persona-1
 Signature: sleek, chin-length black bob and mint-teal rectangular glasses.

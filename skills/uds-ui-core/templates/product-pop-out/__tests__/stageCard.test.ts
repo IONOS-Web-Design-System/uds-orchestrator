@@ -219,6 +219,18 @@ describe('R-J: a data-URI glyph is a white masked icon, never text', () => {
     expect(m.width).toBeCloseTo(0.2 * 400 * 0.55, 8);
     expect(walk(t).some((e) => e.props.children === URI)).toBe(false);
   });
+  it('a floating tile (glow) carries the card glow blurred behind it; the plain tile is unchanged', () => {
+    const plain = tile(true, URI);
+    const floating = renderStageTile({ ai: true, glyph: URI, glow: true, slot: { w: 400, h: 300 } }) as El;
+    const halo = (floating.props.children as El[])[0]!;
+    expect(halo.props.style!.background).toBe(AI_GRAD);
+    expect(String(halo.props.style!.filter)).toMatch(/^blur\(/);
+    expect(halo.props.style!.opacity).toBe(STRATO_AI_MATERIAL.glowStrength);
+    expect(floating.props.style).toMatchObject({ position: 'relative', width: 80, height: 80 });
+    expect(JSON.stringify(walk((floating.props.children as El[])[1]).slice(1).map((e) => e.props.style))).toBe(JSON.stringify(walk(plain).map((e) => e.props.style)));
+    const nonAi = renderStageTile({ ai: false, glyph: URI, glow: true, slot: { w: 400, h: 300 } }) as El;
+    expect((nonAi.props.children as El[])[0]!.props.style!.background).toBe(STRATO_AI_MATERIAL.nonAi.glow);
+  });
   it('quotes the URI and escapes a double quote in it', () => {
     const m = maskSpan(badge(false, 'data:image/svg+xml;utf8,<svg a="b"/>'))!;
     expect(m.maskImage).toBe('url("data:image/svg+xml;utf8,<svg a=\\"b\\"/>")');

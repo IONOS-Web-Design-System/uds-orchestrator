@@ -10,7 +10,8 @@ tagline: "Server zu günstigen Preisen & in limitierter Stückzahl"
 stageType: "Klassische Stage"
 stageScene: "Reihe dunkelblauer Serverschrank-Türen mit LED-Lichtern im Rechenzentrum"
 stageImage: "https://www.strato.de/img/iLM3LskEnc-1060.webp"
-stageCard: icons
+stageCard: none
+stageFrame: "none"
 ---
 ## strato-limited-hardware-persona-1
 Signature: short strawberry-blond hair with a ginger stubble beard and a charcoal beanie.

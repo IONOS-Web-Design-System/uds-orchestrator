@@ -11,6 +11,7 @@ stageType: "Klassische Stage"
 stageScene: "Digitale Figur aus leuchtenden Polygon-Linien mit Schild vor einer blauen Wand aus Binärcode (Symbolbild Cyberschutz)"
 stageImage: "https://www.strato.de/img/VjU5mDoLrp-1060.webp"
 stageCard: icons
+stageMoment: "three floating tiles in a column, one per threat it stops: virus, malware, ransomware, each with a small shield check"
 ---
 ## strato-cyber-protect-defender-persona-1
 Signature: short dark-brown hair, longer and textured on top, with thin round silver-rimmed glasses.

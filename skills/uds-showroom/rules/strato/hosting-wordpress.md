@@ -10,7 +10,8 @@ tagline: "Website und Shop – einfach erstellt"
 stageType: "Klassische Stage"
 stageScene: "Junger Mann mit Locken, Brille und rosa Hoodie stützt sich lächelnd auf einen Tisch; im Hintergrund Kolleginnen mit Unterlagen und ein Whiteboard im Kreativbüro"
 stageImage: "https://www.strato.de/img/8ay6zhHJpw-1060.webp"
-stageCard: icons
+stageCard: connector
+stageMoment: "the travel blog goes live: WordPress, a theme and an SSL lock tile tick one by one"
 stageFrame: "strato-hosting-wordpress-stage-image"
 ---
 ## strato-hosting-wordpress-persona-1

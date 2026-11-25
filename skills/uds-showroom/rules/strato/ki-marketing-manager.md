@@ -11,6 +11,7 @@ stageType: "Bento-Stage"
 stageScene: "Frau mit Haarknoten und dunkelblauer Bluse; daneben animierte Social-Media-Posts (Instagram, LinkedIn, Facebook) mit Foto von Holzkochlöffeln. Label „KI-generiert“"
 stageImage: "https://www.strato.de/_assets/img/svg/hero_ki_socialmedia_manager_animated_de.svg"
 stageCard: connector
+stageMoment: "the coffee post goes out: the badge, the headline 'MARKETING MANAGER', then Facebook, Instagram, LinkedIn and X logos ticking one by one, one left unticked"
 stageFrame: "strato-ki-marketing-manager-stage-image"
 ---
 ## strato-ki-marketing-manager-persona-1

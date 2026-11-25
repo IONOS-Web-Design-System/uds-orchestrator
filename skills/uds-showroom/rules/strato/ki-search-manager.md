@@ -11,6 +11,7 @@ stageType: "Bento-Stage"
 stageScene: "Lächelnder Mann im neongrünen Poloshirt mit verschränkten Armen; daneben Google-Suchfenster mit ChatGPT-/Google-Icons und ein KI-Textfeld, das sich animiert füllt. Label „KI-generiert“"
 stageImage: "https://www.strato.de/_assets/img/svg/hero_ki_search_manager_animated_de.svg"
 stageCard: icons
+stageMoment: "three floating tiles in a column: Google, a map pin and an AI chat glyph, each with a small rank-one dot: the shop is found wherever people search"
 ---
 ## strato-ki-search-manager-persona-1
 Signature: short, textured dark-brown hair and round tortoiseshell glasses, clean-shaven.

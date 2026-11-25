@@ -11,6 +11,7 @@ stageType: "Klassische Stage"
 stageScene: "Lächelnde blonde Frau mit Brille, dunklem Blazer und rotem Shirt in hellem Büro; im Hintergrund ein Kollege am Rechner"
 stageImage: "https://www.strato.de/img/pQ7ueyOTcq-1060.webp"
 stageCard: reaction
+stageMoment: "an invoice mail arrives and is archived: a lock and a timestamp seal settle on it"
 ---
 ## strato-e-mail-archivierung-persona-1
 Signature: dark-brown hair in a sleek low bun.

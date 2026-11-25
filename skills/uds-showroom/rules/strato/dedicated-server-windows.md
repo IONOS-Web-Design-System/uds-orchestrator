@@ -10,7 +10,7 @@ tagline: "Voller Administrator-Zugriff auf eigene Marken-Hardware"
 stageType: "Klassische Stage"
 stageScene: "Reihe dunkelblauer Serverschrank-Türen mit LED-Lichtern im Rechenzentrum"
 stageImage: "https://www.strato.de/img/iLM3LskEnc-1060.webp"
-stageCard: icons
+stageCard: none
 ---
 ## strato-dedicated-server-windows-persona-1
 Signature: long dark-brown hair pulled into a high, straight ponytail.

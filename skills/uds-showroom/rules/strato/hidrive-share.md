@@ -10,7 +10,8 @@ tagline: "Kostenlos große Dateien versenden"
 stageType: "Klassische Stage"
 stageScene: "Lächelnde Frau mit rotbraunen Haaren und orangefarbenem Oberteil schaut aufs Smartphone, Laptop auf dem Schoß, draußen in der Stadt"
 stageImage: "https://www.strato.de/img/-93nYT8a6J-1060.webp"
-stageCard: icons
+stageCard: connector
+stageMoment: "a large video file card gets a share link; two recipients tick as received"
 ---
 ## strato-hidrive-share-persona-1
 Signature: long, wavy black hair worn half-up in a small top bun.

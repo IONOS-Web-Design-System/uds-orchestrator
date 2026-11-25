@@ -11,6 +11,7 @@ stageType: "Bento-Stage"
 stageScene: "Lächelnder blonder Mann mit Bart im roten T-Shirt, Hände in den Hüften; daneben Google-Bewertungskarte (4 Sterne) und KI-Antwort „Herzlichen Dank für Ihre Bewertung!“. Label „KI-generiert“"
 stageImage: "https://www.strato.de/_assets/img/svg/hero_ki_reputation_manager_animated_DE.svg"
 stageCard: reaction
+stageMoment: "a Google review with five stars lands; below it the AI reply in caps, 'VIELEN DANK FÜR IHRE BEWERTUNG.'"
 ---
 ## strato-ki-reputationsmanager-persona-1
 Signature: shaved bald head with a full, grey-blond beard.

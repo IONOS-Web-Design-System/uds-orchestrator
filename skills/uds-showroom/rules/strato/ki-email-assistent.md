@@ -11,6 +11,7 @@ stageType: "Bento-Stage"
 stageScene: "Lächelnde Frau mit Brille und beiger Schürze (Catering-Inhaberin); daneben animiertes E-Mail-Fenster „Büro Weigand – Catering für Feier mit 14 Personen?“, die KI markiert „Fehlende Angaben: Datum, Uhrzeit“ und tippt eine Rückfrage. Label „KI-generiert“"
 stageImage: "https://www.strato.de/_assets/img/svg/illu_ai_mailassistant_hero_animation_de.svg"
 stageCard: reaction
+stageMoment: "a customer's booking request mail arrives; the AI outlines the two missing details on it, then its drafted reply settles below as gradient bars"
 ---
 ## strato-ki-email-assistent-persona-1
 Signature: glossy chestnut-brown bob with a straight full fringe.

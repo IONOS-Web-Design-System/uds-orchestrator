@@ -11,6 +11,7 @@ stageType: "Klassische Stage"
 stageScene: "Lächelnde Frau mit roten Locken tippt in einer hellen Wohnung (Bücherregal im Hintergrund) auf ein Tablet"
 stageImage: "https://www.strato.de/img/AgejpXCCj_-1060.webp"
 stageCard: reaction
+stageMoment: "a flower order mail lands in the inbox with a shield check on it; a spam mail below it stays greyed and held back"
 ---
 ## strato-e-mail-persona-1
 Signature: short, neatly side-parted brown hair and black rectangular glasses, clean-shaven.

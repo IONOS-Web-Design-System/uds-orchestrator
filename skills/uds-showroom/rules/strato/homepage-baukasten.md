@@ -11,6 +11,7 @@ stageType: "Bento-Stage"
 stageScene: "Lachende Frau mit Locken und orangefarbenem Halstuch vor einem Website-Editor; Laptop zeigt Website „Studio Cobre – Dein Haar. Dein Moment.“, Prompt-Box „Anforderung KI Website-Generator: Schlichte, moderne Website für meinen Frisörsalon.“, orangefarbene Farbpulver-Explosion"
 stageImage: "https://www.strato.de/img/f87-JzpFe3-688.webp"
 stageCard: icons
+stageMoment: "three floating building-block tiles in a column (header, image, text) as the gym site comes together"
 stageFrame: "fitness-studio-desktop"
 ---
 ## strato-homepage-baukasten-persona-1

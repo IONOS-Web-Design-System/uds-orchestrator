@@ -10,7 +10,8 @@ tagline: "Lassen Sie sich Ihre Website professionell erstellen"
 stageType: "Klassische Stage"
 stageScene: "Mann im Jeanshemd zeigt einer lächelnden Frau etwas auf einem iMac-Bildschirm, warm beleuchtetes Büro"
 stageImage: "https://www.strato.de/img/ULsGe04Y5F-1060.webp"
-stageCard: icons
+stageCard: chat
+stageMoment: "the boatbuilder's bubble asking for new photos on the homepage, then the STRATO web designer's blue reply with a check (a person, not AI)"
 stageFrame: "strato-website-design-pflege-stage-image"
 ---
 ## strato-website-design-pflege-persona-1
