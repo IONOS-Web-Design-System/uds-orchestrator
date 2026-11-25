@@ -1,7 +1,8 @@
 /**
  * The STRATO corporate stage's glass card, AI and non-AI. The AI card and the STRATO prompt
  * window read the same STRATO_AI_MATERIAL constant, so glass, glow and badge shadow cannot
- * drift. The card takes its StagePair slot's width, HUGS its content's height (capped at the slot height)
+ * drift. The card takes its StagePair slot's width, HUGS its content's height (capped at the slot height, and CLIPS
+ * anything beyond: the glass is overflow hidden)
  * and sits vertically centred in the slot; everything is sized in px off the slot width.
  * The wrapper creates no stacking context (as PromptWindow does). Card text is #29294D Poppins;
  * `StageText` adds the window's plus-lighter white halo (its `GlowText`, reused).
@@ -27,6 +28,8 @@ const BADGE_OF_W = 0.17;
 const BADGE_GLYPH_OF_BADGE = 0.55;
 const TILE_OF_W = 0.2;
 const TILE_RADIUS_OF_TILE = 0.26;
+const TILE_MIN_OF_W = 0.08;
+const TILE_MAX_OF_W = 0.3;
 const HEADLINE_OF_W = 0.068;
 
 export const stageAccentFill = (ai: boolean): string =>
@@ -54,6 +57,7 @@ export function renderStageCard(p: { ai: boolean; children: ReactNode; slot: Slo
           backdropFilter: `blur(${GLASS_BLUR_OF_W * w}px) saturate(1.15)`,
           boxShadow: STRATO_PROMPT.rim,
           padding: PAD_OF_W * w,
+          overflow: 'hidden',
           color: STAGE_INK,
           fontFamily: STRATO_PROMPT.face,
         }}>
@@ -100,11 +104,13 @@ export function renderStageBadge(p: StageBadgeProps & { slot: Slot }) {
   );
 }
 
-/** The comp's glass icon tile: a rounded square of `size` x the slot width (default 0.2). */
+/** The comp's glass icon tile: a rounded square. `size` is the tile's side in PIXELS, clamped to
+ *  [0.08, 0.3] x the slot width; absent, it is 0.2 x the slot width. */
 export type StageTileProps = { ai: boolean; glyph: ReactNode | string; size?: number };
 
 export function renderStageTile(p: StageTileProps & { slot: Slot }) {
-  const d = (p.size ?? TILE_OF_W) * p.slot.w;
+  const w = p.slot.w;
+  const d = Math.min(TILE_MAX_OF_W * w, Math.max(TILE_MIN_OF_W * w, p.size ?? TILE_OF_W * w));
   return (
     <div style={{
       width: d, height: d, borderRadius: TILE_RADIUS_OF_TILE * d,

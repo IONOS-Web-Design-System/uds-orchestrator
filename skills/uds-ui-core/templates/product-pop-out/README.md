@@ -124,14 +124,14 @@ so the card and the window cannot drift apart, and all size in px off the slot (
 | badge shadow | `0 4px 10px rgba(41,41,77,0.12)` | the same |
 
 - `StageCard` takes the slot width (radius, padding and blurs are ratios of the slot width), hugs its
-  content's height (capped at the slot height) and sits vertically centred in its slot; its wrapper
+  content's height (up to the slot height; anything beyond is clipped, the glass is `overflow: hidden`, its own shadow and rim stay visible; satellites go OUTSIDE the card as siblings, never inside it) and sits vertically centred in its slot; its wrapper
   creates no stacking context, so the glow blends with what lies under the card, as the window's does.
 - `StageText` is the stage headline and card text with the window's plus-lighter white halo: it IS the
   window's `GlowText` (exported from `promptWindow.strato.tsx`, not copied), at the prompt-full halo
   ratios (`STRATO_FULL.textGlowBlurOfW` of the slot width, `textGlowAlpha`). By default it is bold,
   uppercase and sized off the card width; `style` overrides any of that. Colour and face are fixed to
   #29294D Poppins. `caret` shows the typing caret.
-- `<StageTile ai glyph size?>` is the comp's glass icon tile: a rounded square of `size` x the slot width (default 0.2), radius 0.26 of the tile, the AI gradient (ai) or primary fill, the badge shadow, and a white glyph at 0.55 of the tile. A `glyph` string starting with `data:image/` (a UDS icon's `svgData`) renders as a white masked icon on the tile and on `StageBadge`, never as text.
+- `<StageTile ai glyph size?>` is the comp's glass icon tile: a rounded square whose `size` is its side in px, clamped to 0.08-0.3 x the slot width (default 0.2 x the slot width), radius 0.26 of the tile, the AI gradient (ai) or primary fill, the badge shadow, and a white glyph at 0.55 of the tile. A `glyph` string starting with `data:image/` (a UDS icon's `svgData`) renders as a white masked icon on the tile and on `StageBadge`, never as text.
 - `stageAccentFill(ai)` / `stageOutline(ai)`: the feature's accent fill (the AI gradient at 90°, or
   primary) and outline (`#0000FF`, or primary) for bars and outlines inside the card.
 - `renderStageCard` / `renderStageBadge` / `renderStageText` are the hook-free bodies (tests).

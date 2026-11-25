@@ -90,7 +90,7 @@ describe('StageCard hugs its content', () => {
       expect(glass.maxHeight).toBe(h);
       expect(glass.minHeight).toBe((0.17 + 2 * 0.051) * w);
       expect(glass.padding).toBe(0.051 * w);
-      expect(glass.overflow).toBeUndefined();
+      expect(glass.overflow).toBe('hidden');
       expect(glass.textAlign).toBeUndefined();
     }
   });
@@ -232,13 +232,17 @@ describe('R-J: a data-URI glyph is a white masked icon, never text', () => {
 });
 
 describe('StageTile', () => {
-  const tile = (p: Record<string, unknown>) => renderStageTile({ glyph: 'G', ...p, slot: { w: 400, h: 300 } } as never) as El;
+  const tile = (p: Record<string, unknown>) => renderStageTile({ glyph: 'G', slot: { w: 400, h: 300 }, ...p } as never) as El;
   it('default size 0.2 of the slot width, radius 0.26 of the tile, badge shadow', () => {
     const t = tile({ ai: false });
     expect(t.props.style).toMatchObject({ width: 80, height: 80, borderRadius: 0.26 * 80, boxShadow: '0 4px 10px rgba(41,41,77,0.12)', color: '#FFFFFF' });
   });
-  it('size is a ratio of the slot width', () => {
-    expect(tile({ ai: false, size: 0.3 }).props.style).toMatchObject({ width: 120, height: 120, borderRadius: 0.26 * 120 });
+  it('size is the side in px, clamped to [0.08, 0.3] x the slot width (R-S)', () => {
+    const w = (size?: number) => tile({ ai: false, size, slot: { w: 430, h: 300 } }).props.style;
+    expect(w(48)).toMatchObject({ width: 48, height: 48, borderRadius: 0.26 * 48 });
+    expect(w(4000)).toMatchObject({ width: 0.3 * 430, height: 0.3 * 430 });
+    expect(w(2)).toMatchObject({ width: 0.08 * 430, height: 0.08 * 430 });
+    expect(w(undefined)).toMatchObject({ width: 0.2 * 430, height: 0.2 * 430 });
   });
   it('ai fill is the strato AI gradient; non-AI the primary accent, no AI colours', () => {
     expect(tile({ ai: true }).props.style!.background).toBe(AI_GRAD);
