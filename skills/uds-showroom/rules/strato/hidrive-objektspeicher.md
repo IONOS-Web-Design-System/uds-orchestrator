@@ -10,6 +10,7 @@ tagline: "Für sensible Firmendaten"
 stageType: "Klassische Stage"
 stageScene: "Lächelnder Mann mit Bart in bordeauxfarbenem Pullover hält ein Tablet, sitzt in einem offenen Büro/Loft"
 stageImage: "https://www.strato.de/img/vVzmAd65HT-1060.webp"
+stageCard: icons
 ---
 ## strato-hidrive-objektspeicher-persona-1
 Signature: dark undercut slicked back with a full, groomed dark beard.

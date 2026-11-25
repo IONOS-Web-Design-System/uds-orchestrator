@@ -10,6 +10,7 @@ tagline: "GPT made in Europe: Analysieren, recherchieren, schreiben – mit voll
 stageType: "Bento-Stage"
 stageScene: "Animiertes STRATO-GPT-Fenster: Dokument „Energieberatung Hartmann & Partner“ (Werbebrief-Vorlage), Prompt „Schreibe einen klassischen Werbebrief für einen kostenlosen Energiekosten-Check.“. Prompts und Ergebnisse wechseln im Loop. Label „KI-unterstützt“"
 stageImage: "https://www.strato.de/_assets/img/svg/strato_gpt_stage-template-DE.svg"
+stageCard: chat
 ---
 ## strato-strato-gpt-persona-1
 Signature: short, tousled dark pixie cut and black round glasses.

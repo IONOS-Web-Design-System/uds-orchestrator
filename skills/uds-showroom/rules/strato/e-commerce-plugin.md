@@ -10,6 +10,8 @@ tagline: "Shop-Integration für bestehende Webseiten"
 stageType: "Klassische Stage"
 stageScene: "Junge Frau mit Brille, Haarknoten und gelbem T-Shirt steht mit verschränkten Armen in einem Lager-/Büroraum mit Monstera-Pflanzen, Kartons und Kleiderstange"
 stageImage: "https://www.strato.de/img/5GTcybIBKf-1060.webp"
+stageCard: connector
+stageFrame: "strato-e-commerce-plugin-stage-image"
 ---
 ## strato-e-commerce-plugin-persona-1
 Signature: short curly fade haircut with a neatly trimmed beard.

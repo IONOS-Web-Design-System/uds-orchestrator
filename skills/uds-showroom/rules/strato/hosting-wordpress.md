@@ -10,6 +10,8 @@ tagline: "Website und Shop – einfach erstellt"
 stageType: "Klassische Stage"
 stageScene: "Junger Mann mit Locken, Brille und rosa Hoodie stützt sich lächelnd auf einen Tisch; im Hintergrund Kolleginnen mit Unterlagen und ein Whiteboard im Kreativbüro"
 stageImage: "https://www.strato.de/img/8ay6zhHJpw-1060.webp"
+stageCard: icons
+stageFrame: "strato-hosting-wordpress-stage-image"
 ---
 ## strato-hosting-wordpress-persona-1
 Signature: shoulder-length, wavy dark-brown hair tucked behind his ears, clean-shaven.

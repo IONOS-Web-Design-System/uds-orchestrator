@@ -10,6 +10,7 @@ tagline: "Nie wieder einen Anruf verpassen – auch nachts, am Wochenende, im Ur
 stageType: "Bento-Stage"
 stageScene: "Lachende Frau mit Locken hält ein Smartphone, umgeben von orangefarbener Farbpulver-Explosion und konzentrischen Signalkreisen mit Telefon-Icon (eingehender Anruf)"
 stageImage: "https://www.strato.de/img/TSC8MsQvxY-688.webp"
+stageCard: chat
 ---
 ## strato-ki-telefonassistent-persona-1
 Signature: straight, platinum-blonde shoulder-length hair.

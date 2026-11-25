@@ -12,7 +12,7 @@ Only the STRATO corporate stage's pair: the abstract app frame behind the person
 
 - The card is `<StageCard ai={…}>`: it hugs its content and clips anything beyond, so everything sits inside it.
 - It is built from the product's own key objects, at most four of one kind, aligned on one grid.
-- The AI mark appears once: either the objects carry the AI gradient (`StageTile ai`, `stageAccentFill(true)` bars, a gradient bubble) or one small `<StageBadge ai>` sits at a corner of the card. A non-AI product uses the primary blue instead of the AI gradient and at most one small `<StageBadge ai={false} glyph={…}>` corner mark.
+- The AI mark appears once, and the type decides where: on an icons or chat card the objects ARE the mark (gradient tiles, the assistant's gradient bubble) and there is no `<StageBadge>`; a reaction or connector card carries its one `<StageBadge>`. A non-AI product uses the primary blue instead of the AI gradient (`StageTile ai={false}`, `stageAccentFill(false)`), and its badge is `<StageBadge ai={false} glyph={…}>`.
 - A headline is optional, at most four words, in `<StageText>`, and only where the type below allows it. Every other text is a skeleton bar, except labels the brief gives verbatim.
 - A glyph from `@ionos-web-design-system/icon` is passed as its `svgData` string (`glyph={svgData}`); a supplied catalog logo is an `<Img>` at full colour.
 - Motion is subtle and tiny: frame 0 already holds the final layout; only the accent the type names moves; nothing travels, resizes, morphs, bounces or overshoots; no cursor, click, press or typing.
@@ -23,9 +23,14 @@ Only the STRATO corporate stage's pair: the abstract app frame behind the person
 
 When: a complex context that refers to several products, channels or processes at once — a suite, listings across Google, Maps and directories, an all-in-one plan.
 
-Picture: two to four `<StageTile>` tiles in one column (or one row on a wide card), each with ONE glyph that names a channel or a product: a supplied logo or a UDS system icon (Google G, stars, map pin, globe, mail). Optionally ONE small bar card beside or under the tiles, with two or three gradient bars. No headline and no badge: the tiles are the mark.
+Picture: two to four `<StageTile>` tiles stacked in ONE column, each holding exactly ONE white glyph that names a channel, product or discipline:
+- a platform is its UDS social icon: `import { svgData as googleSvg } from '@ionos-web-design-system/icon/social/google'` (also `social/instagram`, `social/facebook`, `social/linkedin`, `social/wordpress`, `social/youtube`);
+- a discipline is a UDS system icon: `system/filled-star` for reviews, `system/filled-chat` for messages and posts, `system/filled-location` for listings, `system/filled-search` for search, `system/filled-globe` for a website, `system/filled-lock` for security;
+- `<StageTile ai glyph={googleSvg} size={56}>` for an AI product (AI gradient, white glyph), `<StageTile ai={false} …>` otherwise (primary blue).
 
-Motion: the tiles fade in one after another (about 120 ms apart, at most a 6 px rise); then the bar card's first bar fills once from its left edge.
+Beside the column, optionally ONE small bar card that the tiles overlap at its left edge, with two or three bars in the same fill (`stageAccentFill`). A supplied catalog logo is full colour and belongs in the frame, never on a tile; a tile never holds two glyphs, or a glyph next to a logo. No headline and no `<StageBadge>`: the tiles are the mark.
+
+Motion: the tiles fade in one after another, top to bottom (about 120 ms apart, at most a 6 px rise); then the bar card's first bar fills once from its left edge.
 
 ### 3.2 chat — chat-related (example: Chat Assistant)
 
@@ -64,6 +69,7 @@ The frame shows the product as the person on stage uses it for their own busines
 ## 5. Anti-patterns
 
 - A generic badge + headline + bars card; two types mixed on one card.
+- An icons card with a badge, a row of logo chips, or a logo and a glyph sharing a tile.
 - More than four objects of one kind; anything outside the card.
 - The brief's Foreground sentence printed as copy.
 - Tiles, chips or bubbles that resize, travel, morph or bounce; a cursor or typing.

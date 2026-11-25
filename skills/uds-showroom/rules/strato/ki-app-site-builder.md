@@ -10,6 +10,8 @@ tagline: "Professionelle Websites oder Apps prompten mit voller KI-Power"
 stageType: "Bento-Stage"
 stageScene: "Lachende Friseurin mit Locken und orangefarbenem Halstuch zeigt auf ein Tablet mit der Website „Hair & Style“; dahinter lila Angebotsrechner-Oberfläche mit Preisen (z. B. 320 €), unten orangefarbene Farbpulver-Explosion"
 stageImage: "https://www.strato.de/_assets/img/webp/img_ai_appsitebuiler_stage_hairdesser+calculation_de.webp"
+stageCard: chat
+stageFrame: "strato-ki-app-site-builder-stage-image"
 ---
 ## strato-ki-app-site-builder-persona-1
 Signature: voluminous dark-brown curly hair, clean-shaven.

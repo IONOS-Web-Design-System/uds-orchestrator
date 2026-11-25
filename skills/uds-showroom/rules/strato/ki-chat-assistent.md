@@ -10,6 +10,8 @@ tagline: "Ihre Website beantwortet Service-Anfragen rund um die Uhr"
 stageType: "Bento-Stage"
 stageScene: "Animiertes Tablet mit der Website „Posh Paws“ (Hundesalon); ein KI-Chatfenster begrüßt als virtueller Assistent, die Kundin fragt „Was kostet das Schneiden & Scheren?“. Label „KI-unterstützt“"
 stageImage: "https://www.strato.de/_assets/img/svg/img_ai_web_chat_assistent_stage-template-DE.svg"
+stageCard: chat
+stageFrame: "buehnenblut-music-school-website"
 ---
 ## strato-ki-chat-assistent-persona-1
 Signature: short, tight brown curls with light stubble.

@@ -10,6 +10,8 @@ tagline: "Alle Disziplinen, ein Auftritt: Reputation, Marketing, Sichtbarkeit"
 stageType: "Bento-Stage"
 stageScene: "Animierter Szenenwechsel: (1) lächelnder Mann im neongrünen Poloshirt mit Google-/ChatGPT-Suchfenster und KI-Textfeld, (2) Frau mit Haarknoten und dunkelblauer Bluse mit Social-Media-Posts (Instagram, LinkedIn, Facebook), (3) Bewertungs-Szene. Label „KI-generiert“"
 stageImage: "https://www.strato.de/_assets/img/svg/hero_ki_marketing_suite_animated_de.svg"
+stageCard: icons
+stageFrame: "static-object"
 ---
 ## strato-ki-marketing-suite-persona-1
 Signature: long dark-brown hair in a thick braid over one shoulder.

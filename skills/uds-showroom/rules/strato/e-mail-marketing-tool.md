@@ -10,6 +10,7 @@ tagline: "Schnell & einfach Newsletter versenden"
 stageType: "Klassische Stage"
 stageScene: "Blonde Frau in orangefarbenem Strickpullover sitzt lächelnd mit gefalteten Händen vor einem Laptop am Küchentisch"
 stageImage: "https://www.strato.de/img/jQmKtUYxMI-1060.webp"
+stageCard: icons
 ---
 ## strato-e-mail-marketing-tool-persona-1
 Signature: long, wavy light-brown hair worn loose under a cream twisted headband.

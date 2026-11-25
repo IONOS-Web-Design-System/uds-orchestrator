@@ -19,9 +19,15 @@ generated for its stage assets. Personas live in `rules/<brand>/<showroom>.md`:
     `["strato-ai-app-builder-persona-1", "strato-ai-app-builder-persona-2"]`. Each slug is the name of
     a character turnaround sheet in the Figma catalog (see "Persona sheets" below) and has exactly
     one matching `## <slug>` section in the body. Absent key = no sheets.
-  - Optional provenance keys (read by no service; they record where the persona came from):
-    `pageUrl`, `tagline`, `stageType`, `stageScene` (the source stage description, verbatim),
-    `stageImage`.
+  - Optional provenance keys (they record where the persona came from): `pageUrl`, `tagline`,
+    `stageType`, `stageScene` (the source stage description, verbatim), `stageImage`. The moderator
+    reads `tagline` and `stageScene` to offer a STRATO stage the platforms' logos it shows.
+  - STRATO stage design (read by the moderator; one value per product, never chosen per run):
+    - `stageCard` — the highlight card's type: `icons`, `chat`, `reaction` or `connector`
+      (`uds-wireframe` rule `strato/stage-foreground.md`).
+    - `stageFrame` — the catalog slug of the ONE photo or website template the app frame behind
+      the person shows, e.g. `"strato-webshop-stage-image"` (made for this product on the Figma
+      page `asset/strato`). Absent = a pure wireframe, which is the default.
 - The **body** is a plain-language description of the character's identity ONLY: face, age, gender,
   ethnicity, hair, build, and wardrobe/personal style. A frontmatter-only file (empty body) is a
   *registered* showroom that resolves but injects no persona. The body has one section per

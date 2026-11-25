@@ -10,6 +10,7 @@ tagline: "Persönliche Internetadresse mit Top-Endungen wie .de & .com"
 stageType: "Klassische Stage"
 stageScene: "Junge Frau mit Locken und gelbem Pullover sitzt lächelnd auf einem braunen Ledersofa am Fenster und schaut aufs Smartphone"
 stageImage: "https://www.strato.de/img/aHqvZM0t8t-1060.webp"
+stageCard: icons
 ---
 ## strato-domain-persona-1
 Signature: tousled, side-swept dark-blond hair, clean-shaven.

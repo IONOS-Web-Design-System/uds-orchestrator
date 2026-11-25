@@ -10,6 +10,7 @@ tagline: "Backup-Funktionalität & Schutz gegen Mal- & Ransomware"
 stageType: "Klassische Stage"
 stageScene: "Blaues Wabennetz mit leuchtenden Vorhängeschloss-Symbolen auf dunklem Hintergrund"
 stageImage: "https://www.strato.de/img/yjhfi3VZTC-1060.webp"
+stageCard: icons
 ---
 ## strato-cyber-protect-persona-1
 Signature: tousled salt-and-pepper hair swept back, with a short grey stubble beard.

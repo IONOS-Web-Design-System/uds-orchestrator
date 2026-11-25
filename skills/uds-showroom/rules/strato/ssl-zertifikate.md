@@ -10,6 +10,7 @@ tagline: "Website durch optimale Verschlüsselung schützen"
 stageType: "Klassische Stage"
 stageScene: "Lächelnder Mann mit Brille und Jeanshemd vor einem Laptop in einem hellen Raum"
 stageImage: "https://www.strato.de/img/NQA7f8Bwuy-1060.webp"
+stageCard: icons
 ---
 ## strato-ssl-zertifikate-persona-1
 Signature: light-brown hair in a high top bun.

@@ -10,6 +10,7 @@ tagline: "Daten sicher in deutscher Cloud speichern"
 stageType: "Klassische Stage"
 stageScene: "Lächelnde junge Frau mit Zopf sitzt im Schneidersitz auf einem grauen Sofa und hält ein Tablet, Pflanzen im Hintergrund"
 stageImage: "https://www.strato.de/img/4hSJBqQ3CB-1060.webp"
+stageCard: icons
 ---
 ## strato-hidrive-persona-1
 Signature: straight, shoulder-length auburn-brown hair.

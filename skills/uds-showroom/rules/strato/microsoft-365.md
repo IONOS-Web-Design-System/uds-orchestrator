@@ -10,6 +10,7 @@ tagline: "Business-Lösung für Postfächer & Office-Tools"
 stageType: "Klassische Stage"
 stageScene: "Lächelnde Geschäftsfrau mit dunklem Haar, grauem Blazer und hellblauer Bluse in einem Büro mit unscharfen Aktenregalen"
 stageImage: "https://www.strato.de/img/oOC4ZJN8Af-1060.webp"
+stageCard: icons
 ---
 ## strato-microsoft-365-persona-1
 Signature: dark-brown hair in a neat swept-back side part, clean-shaven.

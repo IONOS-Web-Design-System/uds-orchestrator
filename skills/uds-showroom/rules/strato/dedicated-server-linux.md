@@ -10,6 +10,7 @@ tagline: "Root-Server mit Top-Performance für jeden Anspruch"
 stageType: "Klassische Stage"
 stageScene: "Nahaufnahme einer Server-Front mit Wabengitter und grün leuchtenden LEDs in blauem Licht"
 stageImage: "https://www.strato.de/img/ARXzKjhOgA-1060.webp"
+stageCard: icons
 ---
 ## strato-dedicated-server-linux-persona-1
 Signature: closely shaved head with a long full brown beard.

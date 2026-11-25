@@ -10,6 +10,7 @@ tagline: "Die Lösung für Viren, Malware und Ransomware mit zusätzlicher Backu
 stageType: "Klassische Stage"
 stageScene: "Digitale Figur aus leuchtenden Polygon-Linien mit Schild vor einer blauen Wand aus Binärcode (Symbolbild Cyberschutz)"
 stageImage: "https://www.strato.de/img/VjU5mDoLrp-1060.webp"
+stageCard: icons
 ---
 ## strato-cyber-protect-defender-persona-1
 Signature: short dark-brown hair, longer and textured on top, with thin round silver-rimmed glasses.

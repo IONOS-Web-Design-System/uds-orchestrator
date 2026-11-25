@@ -10,6 +10,7 @@ tagline: "Sicheres Hosting mit Serverstandort Deutschland"
 stageType: "Bento-Stage"
 stageScene: "Lächelnde Frau mit Locken und Khaki-Hemd hält ein Tablet mit STRATO-Dashboard (99,99 %, „ACTIVE“, Tacho-Icon), orangefarbene Farbpulver-Explosion"
 stageImage: "https://www.strato.de/img/dDgaw6T8z4-688.webp"
+stageCard: icons
 ---
 ## strato-hosting-persona-1
 Signature: wavy light-brown hair in a high ponytail with a few loose strands.

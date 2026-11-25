@@ -10,6 +10,7 @@ tagline: "Maximale Sicherheit & volle Administrationsrechte"
 stageType: "Klassische Stage"
 stageScene: "Server-Racks mit türkis/blau leuchtenden Einschüben, seitliche Perspektive mit Tiefenunschärfe"
 stageImage: "https://www.strato.de/img/9589H_mAtk-1060.webp"
+stageCard: icons
 ---
 ## strato-v-server-windows-persona-1
 Signature: thinning, receding light-brown hair with a neat moustache.

@@ -10,6 +10,8 @@ tagline: "Lassen Sie sich Ihre Website professionell erstellen"
 stageType: "Klassische Stage"
 stageScene: "Mann im Jeanshemd zeigt einer lächelnden Frau etwas auf einem iMac-Bildschirm, warm beleuchtetes Büro"
 stageImage: "https://www.strato.de/img/ULsGe04Y5F-1060.webp"
+stageCard: icons
+stageFrame: "strato-website-design-pflege-stage-image"
 ---
 ## strato-website-design-pflege-persona-1
 Signature: short silver-platinum pixie cut with a long side-swept fringe.

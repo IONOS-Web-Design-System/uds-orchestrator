@@ -10,6 +10,8 @@ tagline: "Ohne Vorkenntnisse zur eigenen Website"
 stageType: "Bento-Stage"
 stageScene: "Lachende Frau mit Locken und orangefarbenem Halstuch vor einem Website-Editor; Laptop zeigt Website „Studio Cobre – Dein Haar. Dein Moment.“, Prompt-Box „Anforderung KI Website-Generator: Schlichte, moderne Website für meinen Frisörsalon.“, orangefarbene Farbpulver-Explosion"
 stageImage: "https://www.strato.de/img/f87-JzpFe3-688.webp"
+stageCard: icons
+stageFrame: "fitness-studio-desktop"
 ---
 ## strato-homepage-baukasten-persona-1
 Signature: very long, straight light-brown hair with a thin braid along one side.

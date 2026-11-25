@@ -10,6 +10,7 @@ tagline: "Günstig & in Europa gehostet"
 stageType: "Klassische Stage"
 stageScene: "Nahaufnahme von Server-Einschüben mit blau leuchtenden Lichtern im Rechenzentrum"
 stageImage: "https://www.strato.de/img/uURbFLrq97-1060.webp"
+stageCard: icons
 ---
 ## strato-v-server-linux-persona-1
 Signature: tousled dark-brown hair, light stubble and thick black round glasses.

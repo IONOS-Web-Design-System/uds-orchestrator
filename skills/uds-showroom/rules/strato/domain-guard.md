@@ -9,6 +9,7 @@ pageUrl: "https://www.strato.de/domains/domainguard/"
 tagline: "Schutz vor Cyber-Hacking"
 stageType: "Klassische Stage"
 stageScene: "Kein Bild in der Stage – nur orangefarbene Polygon-Flächen (CSS) neben Headline und Text"
+stageCard: icons
 ---
 ## strato-domain-guard-persona-1
 Signature: long, loosely wavy light-brown hair.

@@ -10,6 +10,8 @@ tagline: "Onlineshop-Plugin für WordPress"
 stageType: "Klassische Stage"
 stageScene: "Lächelnde Modedesignerin mit Locken am Laptop im Atelier; Schneiderpuppe mit gelbem Hemd, Garnrollen und Nähmaschine"
 stageImage: "https://www.strato.de/img/hvI0cCeqEX-1060.webp"
+stageCard: connector
+stageFrame: "strato-woocommerce-stage-image"
 ---
 ## strato-woocommerce-persona-1
 Signature: short, textured black pixie cut and a tailor's tape measure around the neck.
