@@ -55,6 +55,8 @@ Motion: the checks tick in one after another, left to right (each a 150 ms fade 
 
 The frame's chrome (window, bar, sidebar, panels) is always light grey, low contrast, with no brand colour, and its text is skeleton bars. The frame is static.
 
+The frame shows the product as the person on stage uses it for their own business, named in the brief's "Person on stage" line: a travel blogger's WordPress hosting runs their travel blog, a coffee roaster's social planner holds coffee posts, a florist's mailbox holds flower orders. That business shows in the frame's one cue and in at most two UDS glyphs of it (a map pin and a camera for the travel blog); a supplied photo or template was chosen for it. Without that line, the frame shows the product alone.
+
 - **frame** — skeleton content plus the product's cue: third-party logos at full colour where the product shows that platform.
 - **hero** — the same frame with ONE supplied stock photo embedded as the page's hero image, or as the images of posts or a gallery (`<Img>`, objectFit cover, its own colours).
 - **template** — the supplied website or app template fills the frame's viewport (`<Img>`, objectFit cover, objectPosition top, its own colours, never redrawn); only the frame's bar stays light grey.
@@ -66,3 +68,4 @@ The frame's chrome (window, bar, sidebar, panels) is always light grey, low cont
 - The brief's Foreground sentence printed as copy.
 - Tiles, chips or bubbles that resize, travel, morph or bounce; a cursor or typing.
 - A hero photo or template redrawn as skeleton, or tinted grey.
+- A frame that shows another business than the person on stage's.
