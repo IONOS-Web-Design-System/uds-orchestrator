@@ -1,5 +1,37 @@
 # Changelog
 
+## [3.8.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.7.0...v3.8.0) (2026-11-26)
+
+
+### Features
+
+* **stage:** character frame + pair slots placed and clamped on any canvas ([ba87648](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ba87648c9c7203c546a0cc6e9f7a815765bb23cb))
+* **stage:** each product's key moment drives its foreground; no moment = empty; icons float ([720aead](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/720aead933737732db5af16ed05c63fb52f1cf0b))
+* **stage:** each STRATO product pins its stage card type and frame image; the icons card is spelled out ([e476f5a](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/e476f5a30238b0c90d068011f02fb8b41fcc44de))
+* **stage:** StageCard/StageBadge — the stage glass card on the shared AI material ([1a8ed5f](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/1a8ed5f7fb8065c70ef2d25510e6220cdfe06823))
+* **stage:** StagePair — the pair's two boxes in the character frame ([cccbed6](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/cccbed6f2dd475a0c5d5434d8186adbd64f3ee1d))
+* **stage:** StageTile and a data-URI glyph renders as a white masked icon, not text ([3a3426e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/3a3426ecda3c353849029d7ffb7d25dbd33303e7))
+* **stage:** the stage frame shows the product in use for the person on stage's business ([4928457](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/492845798634ae4464c311f9243940d9cab5ed4e))
+* **stage:** the STRATO stage foreground rule (four types, three background kinds) ([d64be16](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d64be16f734e7de723baeaa432d8c7ddc43e897e))
+* **stage:** three layers and the Figma character pop-in ([d513cd8](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d513cd83490cba2aa9dfeb8f1e436322fc5aa84b))
+* **strato-ai:** one AI material at the Subtle level; the prompt window reads it ([6cfb4cc](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/6cfb4cc558f465f880bfeba78ed9dc121c0cc5d5))
+
+
+### Bug Fixes
+
+* **stage:** a non-AI badge never shows the AI sparkle; badge glyphs are white ([b808c45](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/b808c45f612ed434c264af3bdda1650d3d77a96b))
+* **stage:** entrances on the shared curve, 6 px drift cap, the card grows in place ([ae52446](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ae52446bf6d52a872796e01f1771dfa70d1dbaf4))
+* **stage:** quote the data-URI mask url; pin every mask property ([afffe0c](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/afffe0c9a14b9e2f6434f9ebfc8825c95af802ef))
+* **stage:** StageTile size is px, clamped; the glass card clips its content ([7958224](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/79582248cef07908733c366fce1084094fafdc4c))
+* **stage:** the card hugs its content and centres in its slot; StageText defaults to the Figma headline ([9c9b36e](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/9c9b36ee8671eb89c1db701601d83da34e2abbd9))
+* **stage:** the card's text is Poppins with the window's halo; its glass saturates ([676e2e3](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/676e2e3feda4933e26cb8ebd6f6260361b1c0e71))
+
+
+### Documentation
+
+* **stage:** legacy leg sizes are a record, not a mirror; document the pair ([ae06352](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/ae0635212977d36ad283089e7ea5de88c84de1f2))
+* **strato-ai:** README describes the Subtle material ([d0d6196](https://github.com/IONOS-Web-Design-System/uds-orchestrator/commit/d0d6196ef4703b61985654bf7540c83c01cc444c))
+
 ## [3.7.0](https://github.com/IONOS-Web-Design-System/uds-orchestrator/compare/v3.6.0...v3.7.0) (2026-11-16)
 
 
